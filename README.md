@@ -44,7 +44,7 @@ both in you home directory.
 	+ #### 2. Install plplot library
 	+ #### 3. Install pgplot library
 	+ #### 4. git clone https://github.com/vankampen92/CPGPLOT
-	+ #### 5. git clone https://github.com/vankampen92/PROJECT_AB-COVID19_MODEL.git
+	+ #### 5. git clone https://github.com/vankampen92/PROJECT_STOCHASTIC_DIFFUSION.git
 	+ #### 6. Tests: 
 	In order to test if pgplot, plplot and CPGPLOT are correctly installed in your machine, you can expand the tar file PROJECT_CPGPLOT_EXAMPLES.tar, which is in the project root directory on your home directory. Then you will get the directory ~/PROJECT_CPGPLOT_EXAMPLES. In that directory, there is a simple example of how to use the CPGPLOT library. You build it by typing:
 	
