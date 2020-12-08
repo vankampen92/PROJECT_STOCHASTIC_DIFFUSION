@@ -38,7 +38,7 @@ EXTRA_LIBRARY_PATH+=-L${CPGPLOT}library/###########
 EXTRA_LIBRARY_PATH+=-L${CPGPLOT}library_basic_UTL/#
 EXTRA_LIBRARY_PATH+=-L${C_NR}######################
 EXTRA_LIBRARY_PATH+=-L${GSL_DA}####################
-EXTRA_LIBRARY_PATH+=-Wl,-rpath=${IO_DIR} -L${IO_DIR}
+EXTRA_LIBRARY_PATH+=-L${IO_DIR}
 EXTRA_LIBRARY_PATH+=-L${ERROR_DIR}
 # Directories where headers files are located:
 # (required at the precompilation step, when building 

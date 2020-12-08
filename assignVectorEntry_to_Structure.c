@@ -47,7 +47,7 @@ void AssignVectorEntry_to_Structure(Parameter_Table * P, int j, double value)
       break;
     case  4: P->No_of_CELLS_Y = value;  
       break;
-    case  5: P->No_of_SPECIES;  
+    case  5: P->No_of_SPECIES = value;  
       break;
     
     default:
