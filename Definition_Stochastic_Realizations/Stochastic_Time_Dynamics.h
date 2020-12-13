@@ -4,6 +4,9 @@ void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 
 void Initial_Conditions_Stochastic_Dynamics( Parameter_Table * Table, double * y_INI );
 
+void Get_Initial_y_INI_Random_Vector_into_Integer_Values(Parameter_Table * Table,
+							 double * y_INI); 
+
 void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, double * y_INI);
 
 int Advance_Current_Time( Parameter_Table * Table, 

@@ -104,8 +104,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
     Table->Metapop_Connectivity_Matrix[a] = (double **)calloc(No_of_CELLS,
 							      sizeof(double *) );
     for(i=0; i<No_of_CELLS; i++) {
-      Table->Metapop_Connectivity_Matrix[a][i] = (double *)calloc(No_of_NEIGHBORS+1,
-								  sizeof(double) );
+      Table->Metapop_Connectivity_Matrix[a][i] = (double *)calloc(No_of_NEIGHBORS+1, 						  sizeof(double) );
     }
   }
   /* END: Allocating and Setting up Connectivity Matrix */

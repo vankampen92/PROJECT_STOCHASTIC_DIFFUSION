@@ -34,48 +34,55 @@ void Execute_One_Step(Community ** SP,
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
 
-  if(Table->TOTAL_No_of_EVENTS > 1){ 
+  if(Table->TOTAL_No_of_EVENTS > 1){
     n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 99 */
-    n_Event_Sp = n_Event%Table->No_of_SPECIES; 
-    Sp         = n_Event/Table->No_of_EVENTS;
+    n_Event_Sp = n_Event/Table->No_of_SPECIES;
+    Sp         = n_Event%Table->No_of_SPECIES;
   }
   else {
     n_Event    = 0;
     n_Event_Sp = 0;
     Sp         = 0;
-    assert(Table->No_of_SPECIES == 1); 
   }
- 
+
   j          = x*Table->No_of_SPECIES + Sp;
+
+  assert( n_Event == 0 || n_Event == 1);
+  assert( n_Event_Sp == 0);
+
+  
+  // Print_Meta_Community_Patch_System (Table);
+
   
   switch( n_Event_Sp )
-    {  
+    {
     case  0:  /* Out-Migration (A --> A-1) and some other patch gains one */       /* Out S */
       Positivity_Control( 0, Table, x, j, Y[j], J[j] );
+
       Y[j]--; J[j]--;  Patch->n[Sp]--;
 
       Some_Other_Patch_Population_Increase(x, Sp, Table);
-      
+
       break;
     /* case  1:  /\* In-Migration (A --> A+1) and some other patch loses one *\/ /\* In S *\/ */
     /*   Y[j]++; J[j]++;  Patch->n[Sp]++;                                                     */
 
     /*   Some_Other_Patch_Population_Decrease(x, Sp, Table);                                  */
-      
+
     /*   break;                                                                               */
-    
+
     default:
     /* Something is very very wrong!!! */
-      printf("The number of event occurring should be between 0 and 24\n");
+      printf("The number of event occurring should be between 0 and 0\n");
       printf("Event to Occur = %d\n", n_Event);
       Press_Key();
       exit(0);
     }
-  
+
 #if defined ASSERTION_TRUE
-  assert_Total_Population (Table, Y); 
+  assert_Total_Population (Table, Y);
 #endif
-  
+
   (*Event) = n_Event;  (*x_Patch) = x;
 }
 
@@ -98,7 +105,7 @@ void Some_Other_Patch_Population_Decrease(int x, int Sp,
   double * Y = Table->Vector_Model_Variables;
 
   assert(Patch[x]->Total_Imm_Rate_Preassure[Sp] > 0.0);
-  
+
   n_Patch = Discrete_Sampling(Patch[x]->Imm_Rates_Preassure[Sp], Patch[x]->No_NEI) - 1;
 
   assert(Patch[Patch[x]->Patch_Connections[n_Patch]] == Patch[x]->NEI[n_Patch]);
@@ -141,7 +148,7 @@ void Positivity_Control( int Event, Parameter_Table * Table,
   Community ** Patch = Table->Patch_System;
 
 #if defined ASSERTION_TRUE
-  
+
   nS = jS%Table->No_of_SPECIES;
 
   Non_Positive = 0;
@@ -153,24 +160,28 @@ void Positivity_Control( int Event, Parameter_Table * Table,
   if ( Patch[x]->n[nS] <= 0) Non_Positive = 1;
 
   if( Non_Positive == 1 ) {
-    printf (" Event No %d:", Event);  
-    printf (" Y[%s] = %g\t", Table->Model_Variable_Symbol[jS], Y);
-    printf ("J[%s] = %d\t",  Table->Model_Variable_Symbol[jS], J);
-    printf ("n[%s] = %d\n",  Table->Model_Variable_Symbol[jS], Patch[x]->n[nS]);
+    printf (" Event No %d:", Event);
+    printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
+    printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
+    printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
     exit(0);
   }
-  
+
 #endif
 }
 
 void assert_Total_Population (Parameter_Table * Table, double * Y)
 {
   double N, N_Time_0;
-  
-  N = Total_Population (Y, Table );
-  
-  N_Time_0 = Table->No_of_INDIVIDUALS;
+
+  N = Total_Population (Y, Table ); /* Total Population is, in fact, Total Community Size */
+
+  N_Time_0 = Table->No_of_SPECIES * Table->No_of_INDIVIDUALS;
+
+  if(N != N_Time_0)
+    printf( "Total Community Size: %g\t S(%d) * No_of_INDIVIDUALS(%g) = %g\n",
+	    N, Table->No_of_SPECIES, Table->INITIAL_TOTAL_POPULATION, N_Time_0);
 
   assert(N == N_Time_0);
-  
+
 }

@@ -15,9 +15,15 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Exectution:
 
-   . ~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 58 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
+   . ~$ 
 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 -n 1 -v0 5053 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
+   . ~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 60 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
+
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 -n 1 -v0 5055 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
+
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 5055 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 5 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
+
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 100 -HX 10 -HY 10 -Hu 0.5 -n 1 -v0 115 -G0 1 -G1 1 -tn 20 -t0 0.0 -t1 5.0 -t4 0 -tR 5 -xn 0 -xN 98 -HN 98 -G2 1 -G3 0.0 -G4 5.0 -G5 1 -G6 0.0 -G7 100.0
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variable 
    and plain model variables): 
@@ -98,13 +104,15 @@ int main(int argc, char **argv)
   Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0,
 							 SUB_OUTPUT_VARIABLES, I_Time,
 							 0, CPG_DRIVER_NAME);
-  printf(" Two Parameter_CPGPLOT plotting structures have been correctly allocated and initiated\n");
+  printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
   printf(" These will open two windows (or two ploting devices of the same kind)\n"); 
   printf(" Table.CPG will store deterministic dynamic variables to plot\n");
   printf(" Table.CPG_STO will store stochastic dynamic variables to plot\n");
   printf(" As a consquence, deterministic and stochastic dynamics can be plotted\n");
-  printf(" on the same device to compare (as it is done here), or on the two different\n");
-  printf(" devices (two different pdf files, for instance) if required.\n"); 
+  printf(" on the same device to compare (as it is done here, indicated by the first\n");
+  printf(" input argument of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function), or\n");
+  printf(" alternatively, two different devices (two different pdf files, for instance)\n");
+  printf(" if required.\n"); 
 #endif
   
   /* Deterministic Time Dynamics */

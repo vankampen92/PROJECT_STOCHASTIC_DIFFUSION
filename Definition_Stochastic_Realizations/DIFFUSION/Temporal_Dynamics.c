@@ -44,17 +44,11 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
 
       assert( 4 * Table->Mu ==  OutMigration ); 
         
-      /* Probability rate for each of the events */
-     
+      /* Probability rate for each of the events */     
       /* 0: Out-Migration (S --> S-1) and some other patch gains one */ 
-      P->rate[0] = OutMigration;     P->rToI[0]  = OutMigration * (double)P->n[j];
+      P->rate[j] = OutMigration;     P->rToI[j]  = OutMigration * (double)P->n[j];
 
-      /* 1: In-Migration (S --> S+1) and some other patch loses one                      */
-      /* P->rate[1] = pa->Mu;             P->rToI[1]  = P->Total_Imm_Rate_Preassure[j];  */
-      
-      /* P->ratePatch += (P->rToI[0] + P->rToI[1]);                                      */
-
-      P->ratePatch += P->rToI[0]; 
+      P->ratePatch += P->rToI[j]; 
     }    
 
     Rate->Total_Rate += P->ratePatch;

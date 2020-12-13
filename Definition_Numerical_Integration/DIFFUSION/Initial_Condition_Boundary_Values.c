@@ -7,7 +7,7 @@ void Initial_Condition_Boundary_Values(int j, double *value_0, double *value_1,
    #include <Model_Variables_Code.Include.c>
   
    if ( j < Table->MODEL_STATE_VARIABLES ) {
-     (*value_1) = 1000000.0; /* 1000000 individual in this class */
+     (*value_1) = Table->INITIAL_TOTAL_POPULATION; /* Total Initial Population per Sp */
      (*value_0) = 0.0;       /* 0 */
    }
    else{

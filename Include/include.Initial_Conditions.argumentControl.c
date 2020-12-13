@@ -22,8 +22,7 @@
         break;
 
 	case 'i':
-              
-		
+              	
 		if(argv[argcount][2]=='P')        sscanf(argv[argcount+1], "%d", &No_of_IC);
 		
 		else if(argv[argcount][2]=='0')    sscanf(argv[argcount+1], "%d", &IC_0);

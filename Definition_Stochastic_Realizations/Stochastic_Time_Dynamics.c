@@ -133,9 +133,7 @@ void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 						       1+i, j_Good, Table );
 
       /* GRID REPRESENTATION */
-      Community_Scatter_Plot_Representation(Table, 0, 0);
-      for(Sp = 1; Sp<Table->No_of_SPECIES; Sp++)
-	Community_Scatter_Plot_Representation(Table, 1, Sp);   
+      Community_Scatter_Plot_Representation(Table, i, j);   
       // Press_Key(); 
       /*   END: Grafical Representation per time step */
 #endif
