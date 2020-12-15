@@ -17,7 +17,7 @@ void Execute_One_Step(Community ** SP,
 		      double max_Probability,
 		      int * Event, int * x_Patch)
 {
-  int x, n_Event, n, n_Event_Sp, Sp, j;
+  int x, y, n_Event, n, n_Event_Sp, Sp, j;
   Community * Patch;
   Parameter_Model * P = Table->P;
 
@@ -47,12 +47,10 @@ void Execute_One_Step(Community ** SP,
 
   j          = x*Table->No_of_SPECIES + Sp;
 
-  assert( n_Event == 0 || n_Event == 1);
+  assert( n_Event < Table->No_of_SPECIES );
   assert( n_Event_Sp == 0);
 
-  
   // Print_Meta_Community_Patch_System (Table);
-
   
   switch( n_Event_Sp )
     {
@@ -61,7 +59,7 @@ void Execute_One_Step(Community ** SP,
 
       Y[j]--; J[j]--;  Patch->n[Sp]--;
 
-      Some_Other_Patch_Population_Increase(x, Sp, Table);
+      y = Some_Other_Patch_Population_Increase(x, Sp, Table);
 
       break;
     /* case  1:  /\* In-Migration (A --> A+1) and some other patch loses one *\/ /\* In S *\/ */
@@ -83,49 +81,21 @@ void Execute_One_Step(Community ** SP,
   assert_Total_Population (Table, Y);
 #endif
 
-  (*Event) = n_Event;  (*x_Patch) = x;
+  (*Event) = n_Event;  x_Patch[0] = x;  x_Patch[1] = y;  
 }
 
-
-void Some_Other_Patch_Population_Decrease(int x, int Sp,
-					  Parameter_Table * Table)
+int Some_Other_Patch_Population_Increase(int x, int Sp,
+					 Parameter_Table * Table)
 {
   /* Input:
 
-     .  x: Patch label
-     .  a: Age Class;
-     . nS: Diseasea Status  (0, ..., 43)
+     .  x: Patch label of the patch from which the individuals goes out
+     . Sp: Species;
      . Table: Parameter Table
 
-  */
-  int Q, i, j, n_Patch;
-  Community ** Patch = Table->Patch_System;
-
-  int    * J = Table->Vector_Model_Int_Variables;
-  double * Y = Table->Vector_Model_Variables;
-
-  assert(Patch[x]->Total_Imm_Rate_Preassure[Sp] > 0.0);
-
-  n_Patch = Discrete_Sampling(Patch[x]->Imm_Rates_Preassure[Sp], Patch[x]->No_NEI) - 1;
-
-  assert(Patch[Patch[x]->Patch_Connections[n_Patch]] == Patch[x]->NEI[n_Patch]);
-
-  j = Sp + Patch[x]->Patch_Connections[n_Patch]*Table->No_of_SPECIES;
-
-  Positivity_Control( 100, Table, Patch[x]->Patch_Connections[n_Patch], j, Y[j], J[j]);
-
-  Y[j]--; J[j]--;  Patch[x]->NEI[n_Patch]->n[Sp]--;
-}
-
-void Some_Other_Patch_Population_Increase(int x, int Sp,
-					  Parameter_Table * Table)
-{
-  /* Input:
-
-     .  x: Patch label
-     .  a: Age Class;
-     . nS: Diseasea Status  (0, ..., 43)
-     . Table: Parameter Table
+     Output:
+     
+     . y: Patch label of the patch receiving the immigrant
 
   */
   int k, j, n_Patch;
@@ -139,6 +109,8 @@ void Some_Other_Patch_Population_Increase(int x, int Sp,
   j = Sp + Patch[x]->Patch_Connections[n_Patch]*Table->No_of_SPECIES;
 
   Y[j]++; J[j]++;  Patch[x]->NEI[n_Patch]->n[Sp]++;
+
+  return(Patch[x]->Patch_Connections[n_Patch]);
 }
 
 void Positivity_Control( int Event, Parameter_Table * Table,

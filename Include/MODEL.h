@@ -16,14 +16,14 @@
 
 #define No_of_CELLS_MAXIMUM 10000
 
-#define No_of_SPECIES_MAXIMUM 2             /* S *//* Number of local states */
+#define No_of_SPECIES_MAXIMUM 3             /* S *//* Number of local states */
 
-#define MODEL_STATE_VARIABLES_MAXIMUM 20000   /* M */ /* Dimension maximum: 2 * 10000 cells */
+#define MODEL_STATE_VARIABLES_MAXIMUM 30000   /* M */ /* Dimension maximum: 2 * 10000 cells */
                                             /* S * M */
 #define OUTPUT_VARIABLES_GENUINE 5          /* Number Output Variables (other than MODEL_STATE_VARIABLES)*/
                                             /* See definition_OutPut_Variables.c */
 
-#define OUTPUT_VARIABLES_MAXIMUM 20005  /* MODEL_STATE_VARIABLES_MAXIMUM +
+#define OUTPUT_VARIABLES_MAXIMUM 30005  /* MODEL_STATE_VARIABLES_MAXIMUM +
 					       OUTPUT_VARIABLES_GENUINE */
 
 typedef struct totalRateinfo

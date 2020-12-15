@@ -20,9 +20,10 @@ int Advance_Current_Time( Parameter_Table * Table,
   /* (*New) counts the number of infection events */ 
   int k;
   double inter_event_time; 
-  int Event, Patch;
+  int Event; 
   double Max_Probability     = Rate->max_Probability;     
   int no_Patch               = Table->No_of_CELLS;
+  int * Patch                = (int *)calloc(2, sizeof(int)); 
   
   Parameter_Model * P        = Table->P; 
   Community ** Village       = Table->Patch_System;   
@@ -39,7 +40,7 @@ int Advance_Current_Time( Parameter_Table * Table,
     (*Time_Current) += inter_event_time;
     
     /* BEGIN : Stochastic Dynamic is actually performed : Village is updated accoundingly */
-    Execute_One_Step( Village, Table, Max_Probability, &Event, &Patch );
+    Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
     if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
@@ -60,9 +61,10 @@ int Advance_Current_Time( Parameter_Table * Table,
     // Trend_Time_Dependence( Table, (*Time_Current) );
   }
 
-  Temporal_Dynamics(Village, Table, Rate); 
-  // Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
+  // Temporal_Dynamics(Village, Table, Rate); 
+  Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
 
+  free(Patch); 
   /*   END: Calculation of Total Rate of Change */
 
 #if defined VERBOSE
@@ -71,6 +73,7 @@ int Advance_Current_Time( Parameter_Table * Table,
   
   Print_Meta_Community_Patch_System (Table);
 #endif
+
   
   return(0);
 }
