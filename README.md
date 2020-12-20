@@ -48,15 +48,15 @@ both in you home directory.
 	+ #### 6. Tests:
 	In order to test if pgplot, plplot and CPGPLOT are correctly installed in your machine, you can expand the tar file PROJECT_CPGPLOT_EXAMPLES.tar, which is in the project root directory on your home directory. Then you will get the directory ~/PROJECT_CPGPLOT_EXAMPLES. In that directory, there is a simple example of how to use the CPGPLOT library. You build it by typing:
 
-		+ ~/PROJECT_CPGPLOT_EXAMPLES/make
+		+ ~/PROJECT/CPGPLOT_EXAMPLES/make
 
 		and you will get the exectutable file PLOT. You may run the example with some command arguments (see main.c). You should get a graph with four different subplots. You may also type:
 
-		+ ~/PROJECT_CPGPLOT_EXAMPLES/PLOT -h
+		+ ~/PROJECT/CPGPLOT_EXAMPLES/PLOT -h
 
 		and see other available command line arguments. You may also type:
 
-		+ ~/PROJECT_CPGPLOT_EXAMPLES/PLOT -G29 ?
+		+ ~/PROJECT/CPGPLOT_EXAMPLES/PLOT -G29 ?
 
 	and see the different avaiable graphic formats in whcodeich plots can be saved. Notice that sometimes the value for these input arguments is overriden by the internal program code. When this happens, it is for a good reason. Please check the code to understand why and make moodgodfications at your own risk. Be creative.   
 

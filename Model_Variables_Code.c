@@ -18,9 +18,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	       for(j=0; j<P->No_of_SPECIES; j++)
-	        //P->n[i] = n++;
-	         n++;
+	for(j=0; j<P->No_of_SPECIES; j++)
+	  n++;
 	    
       /* Conventions */
       P->K   = n-1;     /* Label last class            */

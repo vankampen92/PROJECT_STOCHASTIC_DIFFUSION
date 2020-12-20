@@ -7,7 +7,7 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    case  0:  p = strcat(Label, "-Hu");  
+    case  0:  p = strcat(Label, "-Hu");   /* Mu Per Capita Movement Rate */  
 	break;
     case  1:  p = strcat(Label, "-HN");  
       break;
