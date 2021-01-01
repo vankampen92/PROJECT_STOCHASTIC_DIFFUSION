@@ -45,7 +45,7 @@ void Execute_One_Step(Community ** SP,
     Sp         = 0;
   }
 
-  j          = x*Table->No_of_SPECIES + Sp;
+  j = x*Table->No_of_SPECIES + Sp;
 
   assert( n_Event < Table->No_of_SPECIES );
   assert( n_Event_Sp == 0);

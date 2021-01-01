@@ -45,9 +45,10 @@ void Temporal_Dynamics_Update( Community ** My_Community,
         
   Pa->rate[Sp] = OutMigration;   Pa->rToI[Sp]  -= OutMigration;
     
-  Pa->ratePatch -= OutMigration;
+                                 Pa->ratePatch -= OutMigration;
 
-  Rate->Total_Rate -= OutMigration;
+                              Rate->Total_Rate -= OutMigration;
+			      
   Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
   
   /* Patch receiving one individual in (x ---> y) */
@@ -59,9 +60,10 @@ void Temporal_Dynamics_Update( Community ** My_Community,
         
   Pa->rate[Sp] = OutMigration;   Pa->rToI[Sp]  += OutMigration;
     
-  Pa->ratePatch += OutMigration; 
+                                 Pa->ratePatch += OutMigration; 
 
-  Rate->Total_Rate += OutMigration;
+                              Rate->Total_Rate += OutMigration;
+			      
   Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
  
   if(Rate->Total_Rate <= 0.0){

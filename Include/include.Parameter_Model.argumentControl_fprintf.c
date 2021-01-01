@@ -26,4 +26,4 @@
 	      skip++;
 	      break;
 
-              #include <include.Type_of_Model.argumentControl.c>
+              #include <include.Type_of_Model.argumentControl_fprintf.c>

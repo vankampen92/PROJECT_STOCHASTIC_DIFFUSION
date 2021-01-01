@@ -28,8 +28,8 @@ gsl_rng * r; /* Global generator defined in main.c */
    3 species example:  
    .~$ ./DIFFUSION -y0 0 -y2 1 -HS 3 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 15155 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
 
-   See denition_OutPut_Variables.c to understand the difference between Genuine Output Variable
-   and plain model variables):
+   See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
+   and plain model variables.
 */
 
 int main(int argc, char **argv)

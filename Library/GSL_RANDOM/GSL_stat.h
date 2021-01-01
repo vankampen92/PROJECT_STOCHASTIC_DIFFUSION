@@ -26,6 +26,7 @@ void GSL_Init_Random_Seed_from_File(const gsl_rng *);
 int Discrete_Sampling_Rejection_Method(double p_max, double * a, int NoEvents);
 int Discrete_Sampling_Old(double * a, int NoEvents);
 int Discrete_Sampling(double *a, int NoEvents);
+int Discrete_Sampling_BackUp(double *a, int NoEvents);
 int Discrete_Sampling_Cummulative(double rate, double *R_A_T_E, int NoEvents);
 int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents); 
   

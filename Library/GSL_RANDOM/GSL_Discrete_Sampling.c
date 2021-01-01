@@ -57,9 +57,49 @@ int Discrete_Sampling_Old(double * a, int NoEvents)
 
 int Discrete_Sampling(double *a, int NoEvents)
 {
+  int j, n, n_0, kount;
+  double * R_A_T_E= (double *)calloc( NoEvents, sizeof(double) );
+  int * Index     = (int *)calloc( NoEvents, sizeof(int) );
+
+  n = 0; 
+  while (a[n] == 0.0 && n < NoEvents ) {
+    n++;
+  }
+  Index[0] = n-1; 
+  n_0 = n;
+  
+  R_A_T_E[0] = a[n_0-1];
+  n = 1; 
+  for (j=n_0; j<NoEvents; j++)
+    if (a[j] > 0.0) {
+      R_A_T_E[n]= R_A_T_E[n-1] + a[j];
+      Index[n]  = j; 
+      n++;
+    }
+  
+  kount = Discret_Sampling_High_Performance(R_A_T_E[n-1], R_A_T_E, n);
+
+  kount = Index[kount-1] + 1; 
+  
+  free(R_A_T_E);
+  free(Index);
+  
+  return kount;
+}
+
+int Discrete_Sampling_BackUp(double *a, int NoEvents)
+{
   int j, kount;
   double * R_A_T_E= (double *)calloc( NoEvents, sizeof(double) );
-
+  /* This is exactly the same function as the function above:
+    
+                 int Discrete_Sampling(...)
+     
+     but without optimizing, this is, considering all events 
+     even those with rate 0.0 (which have zero probability to
+     occur)
+  */
+  
   R_A_T_E[0] = a[0];
   for (j=1; j<NoEvents; j++)
     R_A_T_E[j]= R_A_T_E[j-1] + a[j];
@@ -70,32 +110,6 @@ int Discrete_Sampling(double *a, int NoEvents)
   return kount;
 }
 
-int Discrete_Sampling_Cummulative(double rate, double *R_A_T_E, int NoEvents)
-{
-  /* . rate is the normalization constant.
-     . r[] must store the NON-NORMALIZED cummulative distribution probability,
-     where $rate$ is the normalizing factor. If rate=1., the algorithm could be
-     improved but actually works quite well too.
-     . If r[] stores the discret probabililty distribution function, this algorithm 
-     does not work at all. Then, the Discret_Sampling() algorith must be used instead.
-  */
-  int j, kount;
-  double x_1, x_2, xr;
-  
-  xr = RANDOM;
-  kount = 1;
-  x_2 = 0.;
-  for (j=0; j<NoEvents; j++){/* Deciding elemetary event to occur */
-    x_1 = x_2;
-    x_2 = R_A_T_E[j]/rate;
-    if((xr > x_1) && (xr <= x_2)) {
-      kount = j+1;
-      return kount;
-    }
-  }
-  return(0);
-}
-
 int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents)
 {
   /* . rate is the normalization constant.
@@ -104,7 +118,8 @@ int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents
      improved but actually works quite well too.
      . If R_A_T_E[] stores the discret probabililty distribution function, 
      rather than the cummulative probability distribution, this algorithm 
-     does not work at all. Then, the Discret_Sampling() algorith must be used instead.
+     does not work at all. In this case, the Discret_Sampling() algorith must be used 
+     first to create the cummulative probability distribution.
   */
   int j1,j2,jm, kount;
   int stat_Bool;
@@ -157,3 +172,28 @@ int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents
   return (j2+1);
 }
 
+int Discrete_Sampling_Cummulative(double rate, double *R_A_T_E, int NoEvents)
+{
+  /* . rate is the normalization constant.
+     . r[] must store the NON-NORMALIZED cummulative distribution probability,
+     where $rate$ is the normalizing factor. If rate=1., the algorithm could be
+     improved but actually works quite well too.
+     . If r[] stores the discret probabililty distribution function, this algorithm 
+     does not work at all. Then, the Discret_Sampling() algorith must be used instead.
+  */
+  int j, kount;
+  double x_1, x_2, xr;
+  
+  xr = RANDOM;
+  kount = 1;
+  x_2 = 0.;
+  for (j=0; j<NoEvents; j++){/* Deciding elemetary event to occur */
+    x_1 = x_2;
+    x_2 = R_A_T_E[j]/rate;
+    if((xr > x_1) && (xr <= x_2)) {
+      kount = j+1;
+      return kount;
+    }
+  }
+  return(0);
+}
