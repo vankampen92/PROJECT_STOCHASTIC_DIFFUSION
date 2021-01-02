@@ -21,8 +21,8 @@ double Error_Model_into_Vector_Entry_Table(int j, Parameter_Table * Table)
 {
   double value;
   
-  if (j >= OUTPUT_VARIABLES_GENUINE) {
-    j -= OUTPUT_VARIABLES_GENUINE;
+  if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
+    j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     switch(j)
       {
@@ -89,8 +89,8 @@ double Error_Model_into_Vector_Entry_Model(int j, Parameter_Model * Table)
 {
   double value;
   
-  if (j >= OUTPUT_VARIABLES_GENUINE) {
-    j -= OUTPUT_VARIABLES_GENUINE;
+  if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
+    j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     switch(j)
       {

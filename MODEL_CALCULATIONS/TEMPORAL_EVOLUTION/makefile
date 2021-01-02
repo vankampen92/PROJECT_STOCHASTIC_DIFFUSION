@@ -74,7 +74,7 @@ TYPE_of_INDEX=_5p#   '_X2-Y_5p' /
 RANDOM_SEED=CURRENT_TIME_RDN_SEED####### 'CURRENT_TIME_RDN_SEED' / 'FILE_RND_SIDE'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   M O D E L   D E F I N I T I O N #############
-MODEL=DIFFUSION#  ######################################
+MODEL=DIFFUSION_S_RESOURCES#  ######################################
 ODE_MODEL=${MODEL}####################
 ################################################### (see rainTemperature.c) ##################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   N U M E R I C A L   I N T E G R A T I O N  ##

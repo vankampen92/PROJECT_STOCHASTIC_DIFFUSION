@@ -1,7 +1,7 @@
 typedef struct Communityinfo
 {
   /* Total population of each age class */
-  int No_of_SPECIES;          
+  int No_of_RESOURCES;          
     
   int No_of_CELLS;   /* Number of patches of the system the single patch is embedded in         */
   int No_of_CELLS_X; /* Number of patches of the system the single patch is embedded in (X Dim) */

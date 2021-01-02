@@ -12,9 +12,6 @@
 #include <include.Error_Control.extern.h>
 #include <include.Type_of_Model.extern.h>
 
-// #include "./Include/include.Stochastic_Control.extern.h"
-extern int Realizations;
-
 void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
 {
   int i, j, a;
@@ -96,142 +93,23 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
     printf(" The program will exit\n");
     exit(0); 
   }
+
+  Table->Lambda_R    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Delta_R     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
-  Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_SPECIES,
+  Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES,
 							  sizeof(double **) );
-  for(a=0; a<No_of_SPECIES; a++) { 
+  for(a=0; a<No_of_RESOURCES; a++) { 
     Table->Metapop_Connectivity_Matrix[a] = (double **)calloc(No_of_CELLS,
 							      sizeof(double *) );
     for(i=0; i<No_of_CELLS; i++) {
-      Table->Metapop_Connectivity_Matrix[a][i] = (double *)calloc(No_of_NEIGHBORS+1, 						  sizeof(double) );
+      Table->Metapop_Connectivity_Matrix[a][i] = (double *)calloc(No_of_NEIGHBORS+1,
+								  sizeof(double) );
     }
   }
   /* END: Allocating and Setting up Connectivity Matrix */
 }
-
-void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int * Index_Output_Variables )
-{
-  int i, j, a;
-  
-  /* Stochastic Realizations */
-  Table->Realizations = Realizations;
-
-  /* Total number of potential input paramters */
-  Table->MODEL_INPUT_PARAMETERS = MODEL_PARAMETERS_MAXIMUM;
-
-  Table->No_of_CELLS       = No_of_CELLS; 
-  Table->No_of_INDIVIDUALS = No_of_INDIVIDUALS;
-  Table->No_of_CELLS_X     = No_of_CELLS_X;
-  Table->No_of_CELLS_Y     = No_of_CELLS_Y;
-  
-  /* Parameter Model Upload */
-  Parameter_Values_into_Parameter_Table(Table);
-
-  /* Type of Model upload  */
-  Table->TYPE_of_MODEL = TYPE_of_MODEL;  assert_right_model_definition( Table );
-  Model_Variables_Code_into_Parameter_Table (Table);
-  /* Total number of potential state variables */
-  /* Total number of potential state variables */
-  Table->MODEL_STATE_VARIABLES = Table->K + 1;
-  /* Total number of potential output variables */
-  Table->MODEL_OUTPUT_VARIABLES = OUTPUT_VARIABLES_GENUINE + Table->MODEL_STATE_VARIABLES;
-
-  /* Total number of actual model output variables */
-  Table->SUB_OUTPUT_VARIABLES   = SUB_OUTPUT_VARIABLES;
-  /* Parameter Space Upload: PARAMETER SPACE             */
-  /* Total number of actual input paramters              */
-  /* Table->No_of_PARAMETERS = MODEL_PARAMETERS_MAXIMUM; */
-  /* Table->A_n = A_n;                                   */
-  /* Table->A_d = A_d;                                   */
-  /* Table->No_of_POINTS    = No_of_POINTS;              */
-  /* Table->Input_Parameter = Input_Parameter;           */
-  /* Table->Value_0         = Value_0;                   */
-  /* Table->Value_1         = Value_1;                   */
-
-  /// Setting MODEL INPUT PARAMETERS up !!!
-  Table->Growth_Function_Type = Growth_Function_Type;
-  /* BEGIN: Parameter default values into vector structure */
-  for(i = 0; i<Table->MODEL_INPUT_PARAMETERS; i++){
-    Table->Default_Vector_Parameters[i] = AssignStructValue_to_VectorEntry(i, Table);
-  }
-  /*   END: Parameter default values into vector structure */
-
-  /* BEGIN: Names and codes for model parameters */
-  for(i = 0; i<Table->MODEL_INPUT_PARAMETERS; i++){
-    AssignLabel_to_Model_Parameters(i, Table->Name_Parameters[i], Table);
-    AssignCodes_to_Model_Parameters(i, Table->Code_Parameters[i], Table);
-    AssignSymbol_to_Model_Parameters(i, Table->Symbol_Parameters[i], Table);
-    AssignCPGPLOT_Symbol_to_Model_Parameters(i, Table->Symbol_Parameters_Greek_CPGPLOT[i], Table); 
-  }
-  /*   END: Names and codes for model parameter  */
-
-  /* Default model input parameters */
-  for (i=0; i < MODEL_PARAMETERS_MAXIMUM; i++) Table->Index[i] = i;
-  
-  // This assignation will be overwritten when Parameter_Space structure is setup
-
-  /// Setting MODEL STATE VARIABLES up !!!  
-  int MODEL_STATE_VARIABLES    = Table->K + 1;
-  Table->Model_Variable_Name   = (char **)malloc( MODEL_STATE_VARIABLES * sizeof(char *) );
-  Table->Model_Variable_Symbol = (char **)malloc( MODEL_STATE_VARIABLES * sizeof(char *) );
-  for (i=0; i<MODEL_STATE_VARIABLES; i++){
-     Table->Model_Variable_Name[i] = (char *)malloc( 100 * sizeof(char) );
-     Table->Model_Variable_Symbol[i] = (char *)malloc( 100 * sizeof(char) );
-  }
-  /* BEGIN: Names and symbols for model state variables */
-  for(i = 0; i<Table->MODEL_STATE_VARIABLES; i++){
-    AssignLabel_to_Model_Variables(i, Table->Model_Variable_Name[i], Table);
-    AssignSymbol_to_Model_Variables(i, Table->Model_Variable_Symbol[i], Table);
-  }
-  /*   END: Names and codes for model variables  */
-
-  /// Setting MODEL OUTPUT VARIABLES up !!!  
-  /* BEGIN: Names and symbol for output variables           */
-  for(i = 0; i<Table->MODEL_OUTPUT_VARIABLES; i++){
-    AssignLabel_to_Output_Variables(i, Table->Output_Variable_Name[i], Table);
-    // AssignSymbol_to_Output_Variables(i, Table->Output_Variable_Symbol[i], Table);
-    AssignCPGPLOT_Symbol_to_Output_Variables(i, Table->Output_Variable_Symbol[i], Table);
-  }
-  /*   END: Names for output variables */
-  for(i=0; i < SUB_OUTPUT_VARIABLES; i++)
-    Table->OUTPUT_VARIABLE_INDEX[i] = Index_Output_Variables[i];
-    // Up to i=(SUB_OUTPUT_VARIABLES-1) are set through command line values:
-    // -n [SUB_OUTPUT_VARIABLES] 
-  
-  /* Some implementations of this code require to alloc memmory according to
-     a number of state variables that can change dynamically. In that case, this
-     3 lines of code should be commented out. Notice alse the corresponding lines
-     in the function below:
-     void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * T )
-     Only if the number of dynamic state model variables never cange during execution,
-     these lines of code make sense here
-  */
-  /* Initial Conditions: MODEL STATE VARIABLES */
-  // for (i=0; i < MODEL_STATE_VARIABLES; i++){
-  //    AssignLabel_to_Model_Variables(i, Table->Model_Variable_Name[i], Table);
-  // }
-
-  if(Table->TYPE_of_NETWORK == 0) {
-    /// Setting up Constant Metapopulation Connectivity Matrix:
-    for(a=0; a<Table->No_of_SPECIES; a++) 
-      for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_CELLS; j++)
-	  if (j != i) 
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-	  else
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
-  }
-  else {
-    for(a=0; a<Table->No_of_SPECIES; a++) 
-      for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-	  
-  }
-  /* END -------------------------------------------------*/
-}
-      
 
 void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
 {
@@ -293,8 +171,11 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
   free(Table->Matrix_Output_Variables);
 
   free(Table->Default_Vector_Output_Variables);
+
+  free(Table->Lambda_R);
+  free(Table->Delta_R);
  
-  for(a=0; a<Table->No_of_SPECIES; a++) {  
+  for(a=0; a<Table->No_of_RESOURCES; a++) {  
     for(i=0; i<Table->No_of_CELLS; i++) 
       free(Table->Metapop_Connectivity_Matrix[a][i]); 
     
@@ -303,11 +184,157 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
   free(Table->Metapop_Connectivity_Matrix); 
 }
 
-void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P)
+void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int * Index_Output_Variables )
+{
+  int i, j, a;
+  
+  /* Stochastic Realizations */
+  Table->Realizations = Realizations;
+
+  /* Total number of potential input paramters */
+  Table->MODEL_INPUT_PARAMETERS   = MODEL_PARAMETERS_MAXIMUM;
+  Table->OUTPUT_VARIABLES_GENUINE = No_of_RESOURCES + 3;   
+  
+  Table->No_of_CELLS       = No_of_CELLS; 
+  Table->No_of_INDIVIDUALS = No_of_INDIVIDUALS;
+  Table->No_of_CELLS_X     = No_of_CELLS_X;
+  Table->No_of_CELLS_Y     = No_of_CELLS_Y;
+  
+  /* Parameter Model Upload */
+  Parameter_Values_into_Parameter_Table(Table);
+
+  /* Type of Model upload  */
+  Table->TYPE_of_MODEL = TYPE_of_MODEL;  assert_right_model_definition( Table );
+  Model_Variables_Code_into_Parameter_Table (Table);
+  /* Total number of potential state variables */
+  /* Total number of potential state variables */
+  Table->MODEL_STATE_VARIABLES = Table->K + 1;
+  /* Total number of potential output variables */
+  Table->MODEL_OUTPUT_VARIABLES = Table->OUTPUT_VARIABLES_GENUINE + Table->MODEL_STATE_VARIABLES;
+
+  /* Total number of actual model output variables */
+  Table->SUB_OUTPUT_VARIABLES   = SUB_OUTPUT_VARIABLES;
+  
+  /* Parameter Space Upload: PARAMETER SPACE             */
+  /* Total number of actual input paramters              */
+  /* Table->No_of_PARAMETERS = MODEL_PARAMETERS_MAXIMUM; */
+  /* Table->A_n = A_n;                                   */
+  /* Table->A_d = A_d;                                   */
+  /* Table->No_of_POINTS    = No_of_POINTS;              */
+  /* Table->Input_Parameter = Input_Parameter;           */
+  /* Table->Value_0         = Value_0;                   */
+  /* Table->Value_1         = Value_1;                   */
+
+  /// Setting MODEL INPUT PARAMETERS up !!!
+  Table->Growth_Function_Type = Growth_Function_Type;
+  /* BEGIN: Parameter default values into vector structure */
+  for(i = 0; i<Table->MODEL_INPUT_PARAMETERS; i++){
+    Table->Default_Vector_Parameters[i] = AssignStructValue_to_VectorEntry(i, Table);
+  }
+  /*   END: Parameter default values into vector structure */
+
+  /* BEGIN: Names and codes for model parameters */
+  for(i = 0; i<Table->MODEL_INPUT_PARAMETERS; i++){
+    AssignLabel_to_Model_Parameters(i, Table->Name_Parameters[i], Table);
+    AssignCodes_to_Model_Parameters(i, Table->Code_Parameters[i], Table);
+    AssignSymbol_to_Model_Parameters(i, Table->Symbol_Parameters[i], Table);
+    AssignCPGPLOT_Symbol_to_Model_Parameters(i, Table->Symbol_Parameters_Greek_CPGPLOT[i], Table); 
+  }
+  /*   END: Names and codes for model parameter  */
+
+  /// Setting MODEL STATE VARIABLES up !!!  
+  int MODEL_STATE_VARIABLES    = Table->K + 1;
+  Table->Model_Variable_Name   = (char **)malloc( MODEL_STATE_VARIABLES * sizeof(char *) );
+  Table->Model_Variable_Symbol = (char **)malloc( MODEL_STATE_VARIABLES * sizeof(char *) );
+  for (i=0; i<MODEL_STATE_VARIABLES; i++){
+     Table->Model_Variable_Name[i] = (char *)malloc( 100 * sizeof(char) );
+     Table->Model_Variable_Symbol[i] = (char *)malloc( 100 * sizeof(char) );
+  }
+  /* BEGIN: Names and symbols for model state variables */
+  for(i = 0; i<Table->MODEL_STATE_VARIABLES; i++){
+    AssignLabel_to_Model_Variables(i, Table->Model_Variable_Name[i], Table);
+    AssignSymbol_to_Model_Variables(i, Table->Model_Variable_Symbol[i], Table);
+  }
+  /*   END: Names and codes for model variables  */
+
+  /// Setting MODEL OUTPUT VARIABLES up !!!  
+  /* BEGIN: Names and symbol for output variables           */
+  for(i = 0; i<Table->MODEL_OUTPUT_VARIABLES; i++){
+    AssignLabel_to_Output_Variables(i, Table->Output_Variable_Name[i], Table);
+    // AssignSymbol_to_Output_Variables(i, Table->Output_Variable_Symbol[i], Table);
+    AssignCPGPLOT_Symbol_to_Output_Variables(i, Table->Output_Variable_Symbol[i], Table);
+  }
+  /*   END: Names for output variables */
+  for(i=0; i < SUB_OUTPUT_VARIABLES; i++)
+    Table->OUTPUT_VARIABLE_INDEX[i] = Index_Output_Variables[i];
+    // Up to i=(SUB_OUTPUT_VARIABLES-1) are set through command line values:
+    // -n [SUB_OUTPUT_VARIABLES] 
+  
+  /* Some implementations of this code require to alloc memmory according to
+     a number of state variables that can change dynamically. In that case, this
+     3 lines of code should be commented out. Notice alse the corresponding lines
+     in the function below:
+     void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * T )
+     Only if the number of dynamic state model variables never cange during execution,
+     these lines of code make sense here
+  */
+  /* Initial Conditions: MODEL STATE VARIABLES */
+  // for (i=0; i < MODEL_STATE_VARIABLES; i++){
+  //    AssignLabel_to_Model_Variables(i, Table->Model_Variable_Name[i], Table);
+  // }
+
+  if(Table->TYPE_of_NETWORK == 0) {
+    /// Setting up Constant Metapopulation Connectivity Matrix:
+    for(a=0; a<Table->No_of_RESOURCES; a++) 
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->No_of_CELLS; j++)
+	  if (j != i) 
+	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	  else
+	    Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
+  }
+  else {
+    for(a=0; a<Table->No_of_RESOURCES; a++) 
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+  }
+
+  /* This function should be called always after having called 
+     void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
+  */
+  Resetting_Lambda_Delta_Vectors (Table); 
+  
+  /* END -------------------------------------------------*/
+}
+
+void Resetting_Lambda_Delta_Vectors (Parameter_Table * Table)
 {
   int i;
-  for(i=0; i<N; i++) P->Index[i] = Index[i];
+
+  if (Table->No_of_RESOURCES > 0 ) {
+    Table->Lambda_R[0] = Table->Lambda_R_0;
+    Table->Delta_R[0]  = Table->Delta_R_0;
+  }
+  if (Table->No_of_RESOURCES > 1 ) {
+    Table->Lambda_R[1] = Table->Lambda_R_1;
+    Table->Delta_R[1]  = Table->Delta_R_1;
+    
+  }
+  if (Table->No_of_RESOURCES > 2 ) {
+    for(i=2; i < Table->No_of_RESOURCES; i++) {
+      Table->Lambda_R[i] = Table->Lambda_R_0;
+      Table->Delta_R[i]  = Table->Delta_R_0;
+    }
+  }
+  
 }
+
+/* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
+/* {                                                                          */
+/*   int i;                                                                   */
+/*   for(i=0; i<N; i++) P->Index[i] = Index[i];                               */
+/* }                                                                          */
 
 /*
    The purpose of this simple function is just to upload
@@ -316,27 +343,17 @@ void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P)
    into the corresponding Parameter_Table Structure
 */
 void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
-{
-  int i_POP; 
+{ 
   
-  /* Setting up local populations */
-  // for(i_POP = 0; i_POP<No_of_CELLS; i_POP++) {
-  //  P->N_0[i_POP] = INITIAL_TOTAL_POPULATION;
-  //  P->N_1[i_POP] = INITIAL_TOTAL_POPULATION;
-  //  P->N_2[i_POP] = INITIAL_TOTAL_POPULATION;
-  //  P->N_3[i_POP] = INITIAL_TOTAL_POPULATION;
-  // }
-  
-  P->Mu                = Mu; 
-  
-  /* P->Beta     = Beta;     /\*  1 *\/     */
-  /* P->Delta_0  = Delta_0;  /\*  2 *\/ */
-  /* P->Alpha    = Alpha;    /\*  3 *\/      */
-  /* P->Delta_1  = Delta_1;  /\*  4 *\/     */
-  /* P->Gamma_1  = Gamma_1;  /\*  5 *\/ */
-  /* P->Tau_1    = Tau_1;    /\*  6 *\/     */
-  /* P->Y_P      = Y_P;      /\*  7 *\/ */
-  /* P->Imm      = Imm;      /\*  8 *\/ */
+  P->Mu          = Mu;
+
+  P->Lambda_R_0 = Lambda_R_0; 
+  P->Delta_R_0  = Delta_R_0; 
+
+  P->Lambda_R_1 = Lambda_R_1; 
+  P->Delta_R_1  = Delta_R_1;
+
+  P->K_R        = K_R; 
   
   P->No_of_IC = No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = TYPE_of_INITIAL_CONDITION;
@@ -376,5 +393,5 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 			       */
   P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
 
-  P->No_of_SPECIES      = No_of_SPECIES; 
+  P->No_of_RESOURCES      = No_of_RESOURCES; 
 }

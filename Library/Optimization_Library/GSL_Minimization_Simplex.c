@@ -115,7 +115,7 @@ double GSL_Minimization_Simplex (Parameter_Fitting * F,
 	}
 	for( i = (P_0+P_1); i < (P_0+P_1+P_2); i++ ) {
 	  key = Table->E_Space->Parameter_Index[i-P_0-P_1];
-	  if(key < OUTPUT_VARIABLES_GENUINE)
+	  if(key < Table->OUTPUT_VARIABLES_GENUINE)
 	    printf("Err(%s)=%10.3e   ",
 		   Table->Output_Variable_Symbol[key], gsl_vector_get (s->x, i) );
 	  else

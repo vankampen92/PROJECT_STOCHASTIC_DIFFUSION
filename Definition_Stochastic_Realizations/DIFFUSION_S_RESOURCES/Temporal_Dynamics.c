@@ -5,7 +5,7 @@
 
 void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stochastic_Rate * Rate)
 {
-  int i,j,k, Sp;
+  int i,j,k,n, Sp;
   Community * P;
   int MODEL_STATE_VARIABLES;
   int No_of_CELLS;
@@ -36,21 +36,42 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   for(i=0; i<No_of_CELLS; i++){
 
     P = My_Community[i];
-
+    
     P->ratePatch = 0; 
+    n = 0; 
     for(j=0; j<Sp; j++) {
     
+      /* 0: Out-Migration (S --> S-1) and some other patch gains one */ 
       OutMigration = P->Total_Per_Capita_Out_Migration_Rate[j];
 
       assert( 4 * Table->Mu ==  OutMigration ); 
         
       /* Probability rate for each of the events */     
-      /* 0: Out-Migration (S --> S-1) and some other patch gains one */ 
-      P->rate[j] = OutMigration;     P->rToI[j]  = OutMigration * (double)P->n[j];
+      P->rate[n] = OutMigration;     P->rToI[n]  = OutMigration * (double)P->n[j];
+      
+      P->ratePatch += P->rToI[n];
 
-      P->ratePatch += P->rToI[j]; 
+      n++;
+      
+      /* 1 : External Immigration event of species j */
+      
+      P->rate[n] = Table->Lambda_R[j];  P->rToI[n]  = Table->Lambda_R[j]; 
+      
+      P->ratePatch += P->rToI[n];
+
+      n++;
+
+      /* 2 : Exponential Decaly of Resource j */
+      
+      P->rate[n] = Table->Delta_R[j];  P->rToI[n]  = Table->Delta_R[j] * (double)P->n[j];
+      
+      P->ratePatch += P->rToI[n];
+
+      n++;
     }    
 
+    assert( n == Table->TOTAL_No_of_EVENTS );
+    
     Rate->Total_Rate += P->ratePatch;
     Rate->max_Probability = MAX( Rate->max_Probability, P->ratePatch );
   }

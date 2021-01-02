@@ -47,7 +47,18 @@ void AssignVectorEntry_to_Structure(Parameter_Table * P, int j, double value)
       break;
     case  4: P->No_of_CELLS_Y = value;  
       break;
-    case  5: P->No_of_SPECIES = value;  
+    case  5: P->No_of_RESOURCES = value;  
+      break;
+
+    case  6: P->Lambda_R_0 = value; 
+      break;
+    case  7: P->Delta_R_0  = value; 
+      break;
+    case  8: P->Lambda_R_1 = value; 
+      break;
+    case  9: P->Delta_R_1  = value; 
+      break;
+    case 10: P->K_R        = value;              /* Resource Carrying Capacity */ 
       break;
     
     default:

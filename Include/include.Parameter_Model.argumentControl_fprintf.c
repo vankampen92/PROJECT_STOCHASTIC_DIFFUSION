@@ -17,7 +17,22 @@
 							 Table->No_of_CELLS_Y);    /* 1 */
 
 	      else if(argv[argcount][2]=='S')    fprintf(fp,"-HS  %d  ",
-							 Table->No_of_SPECIES);    /* 1 */
+							 Table->No_of_RESOURCES);    /* 1 */
+
+              else if(argv[argcount][2]=='0')   fprintf(fp, "-H0 %g  ",
+							&Lambda_R_0);                 /* 6 */
+
+              else if(argv[argcount][2]=='1')   fprintf(fp, "-H1 %g  ",
+							&Delta_R_0);                 /* 7 */
+
+	      else if(argv[argcount][2]=='2')   fprintf(fp, "-H2 %g  ",
+						        &Lambda_R_1);                /* 8 */
+		
+	      else if(argv[argcount][2]=='3')   fprintf(fp, "-H3 %g  ",
+							&Delta_R_1);                /* 9 */
+
+              else if(argv[argcount][2]=='K')   fprintf(fp, "-HK %d  ",
+							&K_R);                      /* 10 */
 	      
 	      else {
 		printf(" Error at reading input arguments: -  %s  \n", argv[argcount]);

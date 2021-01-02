@@ -17,7 +17,22 @@
 							&No_of_INDIVIDUALS);             /* 4 */
 
               else if(argv[argcount][2]=='S')   sscanf(argv[argcount+1],"%d",
-							&No_of_SPECIES);                 /* 5 */
+							&No_of_RESOURCES);                 /* 5 */
+
+              else if(argv[argcount][2]=='0')   sscanf(argv[argcount+1],"%lf",
+							&Lambda_R_0);                 /* 6 */
+
+              else if(argv[argcount][2]=='1')   sscanf(argv[argcount+1],"%lf",
+							&Delta_R_0);                 /* 7 */
+
+	      else if(argv[argcount][2]=='2')   sscanf(argv[argcount+1],"%lf",
+						        &Lambda_R_1);                /* 8 */
+		
+	      else if(argv[argcount][2]=='3')   sscanf(argv[argcount+1],"%lf",
+							&Delta_R_1);                /* 9 */
+
+              else if(argv[argcount][2]=='K')   sscanf(argv[argcount+1],"%d",
+							&K_R);                      /* 10 */
 
 	      else {
 		printf(" Error at reading input arguments: -  %s  \n", argv[argcount]);

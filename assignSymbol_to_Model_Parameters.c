@@ -19,6 +19,19 @@ void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Tab
       break;
     case  4: p=strcat(Label,"M\\dy\\u");       
       break; 
+    case  5: p=strcat(Label,"S\\dR\\u");       
+      break; 
+      
+    case  6: p=strcat(Label, "\\gl\\u(R)\\d\\d0\\u");    
+      break;
+    case  7: p=strcat(Label, "\\gd\\u(R)\\d\\d0\\u");    
+      break; 
+    case  8: p=strcat(Label, "\\gl\\u(R)\\d\\d1\\u");        
+      break;
+    case  9: p=strcat(Label, "\\gd\\u(R)\\d\\d1\\u");    
+      break; 
+    case 10: p=strcat(Label, "K\\dR\\u");       
+      break; 
     
     default:
       printf(".... INVALID PARAMETER KEY [key=%d]\n", j);
@@ -49,7 +62,20 @@ void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case  4: p=strcat(Label,"M_y");       
       break; 
-      
+    case  5: p=strcat(Label,"S_R");       
+      break; 
+
+    case  6: p=strcat(Label,"Lambda_R_0");    
+      break;
+    case  7: p=strcat(Label,"Delta_R_0");       
+      break; 
+    case  8: p=strcat(Label,"Lambda_R_1");    
+      break;
+    case  9: p=strcat(Label,"Delta_R_1");       
+      break; 
+    case 10: p=strcat(Label,"K_R");       
+      break; 
+    
     default:
       printf(".... INVALID PARAMETER KEY [key=%d]\n", j);
       printf(".... The permited correspondences are (0 to 12)\n");

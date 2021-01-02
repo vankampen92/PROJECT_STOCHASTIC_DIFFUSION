@@ -1,3 +1,5 @@
+double Total_Population_Resource_Species (double * Y, Parameter_Table * Table); 
+
 double Total_Population_Species_0(double * Y, Parameter_Table * Table); 
 
 double Total_Population_Species_1(double * Y, Parameter_Table * Table);

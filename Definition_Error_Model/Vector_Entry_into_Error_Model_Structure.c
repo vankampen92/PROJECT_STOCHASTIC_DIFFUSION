@@ -21,8 +21,8 @@ void Vector_Entries_into_Parameter_Table_Error_Model ( const gsl_vector * X,
 void Vector_Entry_into_Error_Model_Table(double value, int j, Parameter_Table * Table)
 {
   
-  if (j >= OUTPUT_VARIABLES_GENUINE) {
-    j -= OUTPUT_VARIABLES_GENUINE;
+  if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
+    j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     switch(j)
       {
@@ -87,8 +87,8 @@ void Vector_Entry_into_Error_Model_Table(double value, int j, Parameter_Table * 
 void Vector_Entry_into_Error_Model_Model(double value, int j, Parameter_Model * Table)
 {
   
-  if (j >= OUTPUT_VARIABLES_GENUINE) {
-    j -= OUTPUT_VARIABLES_GENUINE;
+  if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
+    j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     switch(j)
       {

@@ -6,14 +6,27 @@ double Total_Population(double * Y, Parameter_Table * Table)
   int i;
 
   /* This total population is calculated over all species in the system.
-     It is rather a total community size if the number of species is larger than 1 
+     It is rather a total community size if the number of species considered
+     is larger than 1 
   */
-  if (Table->TYPE_of_MODEL == 0) {
-    x = 0.0;
-    for(i=0; i<Table->MODEL_STATE_VARIABLES; i++) x += Y[i]; 
-  }
+
+  x = 0.0;
+  for(i=0; i<Table->MODEL_STATE_VARIABLES; i++) x += Y[i]; 
 
   return(x); 
+}
+
+double Total_Population_Resource_Species (double * Y, Parameter_Table * Table)
+{
+  double x;
+  int i, j;
+
+  j = Table->Focal_Resource;
+  x = 0.0;
+  for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
+    if(i%Table->No_of_RESOURCES == j) x += Y[i]; 
+  
+  return(x);
 }
 
 double Total_Population_Species_0(double * Y, Parameter_Table * Table)
@@ -63,7 +76,8 @@ double Average_Individual_Density  ( double * y, Parameter_Table * Table )
       x = Average_double_Vector(y, Table->No_of_CELLS);
    }
    else {
-     printf(" Type of Model is ill-defined. Check input arguments. TYPE of MODEL is %d\n",
+     printf(" Type of Model is ill-defined (in Average_Individual_Density (...))\n");  
+     printf(" Check input arguments. TYPE of MODEL is %d\n",
 	    Table->TYPE_of_MODEL);
      printf(" The program will exit\nm");
      exit(0);

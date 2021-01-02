@@ -21,6 +21,11 @@ typedef struct Parameter_Modelinfo
 
   int K;
 
+  int TOTAL_No_of_MODEL_PARAMETERS;
+
+  double * Lambda_R;
+  double * Delta_R; 
+  
   int TOTAL_No_of_EVENTS;
   /* Total Number of Events within a patch, i.e., 25 * 4 = 100 */
   int No_of_EVENTS;

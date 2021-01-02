@@ -65,10 +65,12 @@ int Discrete_Sampling(double *a, int NoEvents)
   while (a[n] == 0.0 && n < NoEvents ) {
     n++;
   }
-  Index[0] = n-1; 
-  n_0 = n;
+  if( n == 0 )   Index[0] = 0; 
+  else           Index[0] = n-1;
   
-  R_A_T_E[0] = a[n_0-1];
+  n_0 = Index[0] + 1;
+  
+  R_A_T_E[0] = a[Index[0]];
   n = 1; 
   for (j=n_0; j<NoEvents; j++)
     if (a[j] > 0.0) {

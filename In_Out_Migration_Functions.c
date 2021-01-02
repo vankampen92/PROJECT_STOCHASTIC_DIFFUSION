@@ -27,14 +27,14 @@ double In_Mu(Parameter_Table * Table, int m, int Sp, int J, const double * y)
      K: Index for the K-th population 
   */
   
-  k = m%Table->No_of_SPECIES;
+  k = m%Table->No_of_RESOURCES;
   assert(k == Sp); 
 
   Mu = 0.0;
   
   for( j=0; j<Table->No_of_NEIGHBORS; j++) {
     K = P[J]->Patch_Connections[j];
-    n   = k + Table->No_of_SPECIES*K;
+    n   = k + Table->No_of_RESOURCES*K;
 
     assert(Table->Mu == P[j]->In_Migration_Vector[Sp][j]);
     

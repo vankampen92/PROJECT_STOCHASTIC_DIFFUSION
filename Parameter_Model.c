@@ -1,37 +1,14 @@
 #include "./Include/MODEL.h"
 
-/* void Parameter_Model_Initialization( Parameter_Model * P,    */
-/* 				      double * p_Delta,         */
-/* 				      double * p_Alpha_0,       */
-/* 				      double * p_Alpha_1,       */
-/* 				      double * p_Lambda_0,      */
-/* 				      double * p_Lambda_1,      */
-/* 				      double * p_f,             */
-/* 				      double * p_gap )          */
-/* { */
-/*   P->Delta    = * p_Delta;       /\* Key 0 *\/               */
-/*   P->Alpha_0  = * p_Alpha_0;     /\* Key 1 *\/               */
-/*   P->Alpha_1  = * p_Alpha_1;     /\* Key 2 *\/               */
-/*   P->Lambda_0 = * p_Lambda_0;    /\* Key 3 *\/               */
-/*   P->Lambda_1 = * p_Lambda_1;    /\* Key 4 *\/               */
-/*   P->f        = * p_f;           /\* Key 5 *\/               */
-/*   P->gap      = * p_gap;         /\* Key 6 *\/               */
-
-/*   P->MODEL_PARAMETERS = No_of_True_Parameters;               */
-/* } */
-
 void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_Source)
 {
 
-  P_Destination->Mu      = P_Source->Mu;      /*  0 */ 
-  /* P_Destination->Beta    = P_Source->Beta;    /\*  1 *\/      */
-  /* P_Destination->Delta_0 = P_Source->Delta_0; /\*  2 *\/     */
-  /* P_Destination->Alpha   = P_Source->Alpha;   /\*  3 *\/      */
-  /* P_Destination->Delta_1 = P_Source->Delta_1; /\*  4 *\/     */
-  /* P_Destination->Gamma_1 = P_Source->Gamma_1; /\*  5 *\/      */
-  /* P_Destination->Tau_1   = P_Source->Tau_1;   /\*  6 *\/ */
-  /* P_Destination->Y_P     = P_Source->Y_P;     /\*  7 *\/ */
-  /* P_Destination->Imm     = P_Source->Imm;     /\*  7 *\/ */
+  P_Destination->Mu         = P_Source->Mu;      /*  0 */ 
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
+  P_Destination->Delta_R_1 = P_Source->Delta_R_1;
+  P_Destination->K_R        = P_Source->K_R; 
   
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -86,7 +63,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
 
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
-  P_Destination->No_of_SPECIES = P_Source->No_of_SPECIES; 
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
 }
 
 void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
@@ -97,15 +74,12 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
      control the dynamical model.
   */
 
-  P->Mu      = Table->Mu;       /*  0 */ 
-  /* P->Beta    = Table->Beta;    /\*  1 *\/      */
-  /* P->Delta_0 = Table->Delta_0; /\*  2 *\/     */
-  /* P->Alpha   = Table->Alpha;   /\*  3 *\/      */
-  /* P->Delta_1 = Table->Delta_1; /\*  4 *\/     */
-  /* P->Gamma_1 = Table->Gamma_1; /\*  5 *\/      */
-  /* P->Tau_1   = Table->Tau_1;   /\*  6 *\/ */
-  /* P->Y_P     = Table->Y_P;     /\*  7 *\/ */
-  /* P->Imm     = Table->Imm;     /\*  8 *\/ */
+  P->Mu         = Table->Mu;       /*  0 */ 
+  P->Lambda_R_0 = Table->Lambda_R_0; 
+  P->Delta_R_0  = Table->Delta_R_0; 
+  P->Lambda_R_1 = Table->Lambda_R_1; 
+  P->Delta_R_1  = Table->Delta_R_1;
+  P->K_R        = Table->K_R; 
   
   P->No_of_IC = Table->No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = Table->TYPE_of_INITIAL_CONDITION;
@@ -159,20 +133,18 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 
   P->Metapop_Connectivity_Matrix = Table->Metapop_Connectivity_Matrix;
 
-  P->No_of_SPECIES = Table->No_of_SPECIES; 
+  P->No_of_RESOURCES = Table->No_of_RESOURCES; 
 }
 
 void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, Parameter_Model * P_Source)
 {
   P_Destination->Mu      = P_Source->Mu;       /*  0 */ 
-  /* P_Destination->Beta    = P_Source->Beta;    /\*  1 *\/      */
-  /* P_Destination->Delta_0 = P_Source->Delta_0; /\*  2 *\/     */
-  /* P_Destination->Alpha   = P_Source->Alpha;   /\*  3 *\/      */
-  /* P_Destination->Delta_1 = P_Source->Delta_1; /\*  4 *\/     */
-  /* P_Destination->Gamma_1 = P_Source->Gamma_1; /\*  5 *\/      */
-  /* P_Destination->Tau_1   = P_Source->Tau_1;   /\*  6 *\/ */
-  /* P_Destination->Y_P     = P_Source->Y_P;     /\*  7 *\/ */
-  /* P_Destination->Imm     = P_Source->Imm;     /\*  7 *\/ */
+
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
+  P_Destination->Delta_R_1  = P_Source->Delta_R_1;
+  P_Destination->K_R        = P_Source->K_R; 
   
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -226,22 +198,20 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
 
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
-  P_Destination->No_of_SPECIES = P_Source->No_of_SPECIES; 
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
 }
 
 void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
 {
 
   P_Destination->Mu      = P_Source->Mu;       /*  0 */ 
-  /* P_Destination->Beta    = P_Source->Beta;    /\*  1 *\/      */
-  /* P_Destination->Delta_0 = P_Source->Delta_0; /\*  2 *\/     */
-  /* P_Destination->Alpha   = P_Source->Alpha;   /\*  3 *\/      */
-  /* P_Destination->Delta_1 = P_Source->Delta_1; /\*  4 *\/     */
-  /* P_Destination->Gamma_1 = P_Source->Gamma_1; /\*  5 *\/      */
-  /* P_Destination->Tau_1   = P_Source->Tau_1;   /\*  6 *\/ */
-  /* P_Destination->Y_P     = P_Source->Y_P;     /\*  7 *\/ */
-  /* P_Destination->Imm     = P_Source->Imm;     /\*  8 *\/ */
-  
+
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
+  P_Destination->Delta_R_1  = P_Source->Delta_R_1;
+  P_Destination->K_R        = P_Source->K_R; 
+
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
   P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
@@ -293,7 +263,7 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
-  P_Destination->No_of_SPECIES = P_Source->No_of_SPECIES; 
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
 }
 
 void Vector_Entries_into_Parameter_Model ( const gsl_vector * X, Parameter_Model * P,
@@ -325,9 +295,20 @@ void Vector_Entry_into_Parameter_Model ( double value, int key, Parameter_Model 
     break;
   case  4: P->No_of_CELLS_Y     = (int)value;  
     break;
-  case  5: P->No_of_SPECIES     = (int)value;  
+  case  5: P->No_of_RESOURCES     = (int)value;  
     break;
-  
+    
+  case  6: P->Lambda_R_0 = value; 
+    break;
+  case  7: P->Delta_R_0  = value; 
+    break;
+  case  8: P->Lambda_R_1 = value; 
+    break;
+  case  9: P->Delta_R_1  = value; 
+    break;
+  case 10: P->K_R        = (int)value;              /* Resource Carrying Capacity */ 
+    break;
+    
   default:
     printf(".... INVALID PARAMETER KEY (key = %d)\n", key);
     printf(" The maximum number of parameters is Number_PAR_MAX\n");
@@ -367,25 +348,19 @@ double Parameter_Model_into_Vector_Entry ( int key, Parameter_Model * P )
     break;
   case  4: value = (double)P->No_of_CELLS_Y;  
     break;
-  case  5: value = (double)P->No_of_SPECIES;  
+  case  5: value = (double)P->No_of_RESOURCES;  
     break;
   
-  /* case  1: value = P->Beta;  */
-  /*   break; */
-  /* case  2: value = P->Delta_0;  */
-  /*   break; */
-  /* case  3: value = P->Alpha;     */
-  /*   break; */
-  /* case  4: value = P->Delta_1;  */
-  /*   break; */
-  /* case  5: value = P->Gamma_1;  */
-  /*   break; */
-  /* case  6: value = P->Tau_1;  */
-  /*   break; */
-  /* case  7: value = P->Y_P;  */
-  /*   break; */
-  /* case  8: value = P->Imm;  */
-  /*   break; */
+  case  6: value = P->Lambda_R_0; 
+      break;
+  case  7: value = P->Delta_R_0; 
+    break;
+  case  8: value = P->Lambda_R_1; 
+    break;
+  case  9: value = P->Delta_R_1; 
+    break;
+  case 10: value = (double)P->K_R;              /* Resource Carrying Capacity */ 
+    break;
     
   default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", key);

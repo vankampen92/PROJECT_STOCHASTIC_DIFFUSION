@@ -8,23 +8,25 @@
 
 #define INTEGER_CODE_FOR_TIME_DIMENSION 0
 
-#define DEPENDENT_PARAMETERS_MAXIMUM 5   /* Maximum number of potentially forced parameters */
+#define DEPENDENT_PARAMETERS_MAXIMUM 11   /* Maximum number of potentially forced parameters */
 
-#define MODEL_PARAMETERS_MAXIMUM 5       /* Maximum No of MODEL (input) PARAMETERS */
+#define MODEL_PARAMETERS_MAXIMUM 11       /* Maximum No of MODEL (input) PARAMETERS */
 
-#define MODEL_PARAMETER_SPACE_MAXIMUM 5  /* Maximum Dimension for Parameter Space */
+#define MODEL_PARAMETER_SPACE_MAXIMUM 11  /* Maximum Dimension for Parameter Space */
 
 #define No_of_CELLS_MAXIMUM 10000
 
-#define No_of_SPECIES_MAXIMUM 3             /* S *//* Number of local states */
+#define No_of_RESOURCES_MAXIMUM 3             /* S *//* Number of local states */
 
 #define MODEL_STATE_VARIABLES_MAXIMUM 30000   /* M */ /* Dimension maximum: 2 * 10000 cells */
                                             /* S * M */
-#define OUTPUT_VARIABLES_GENUINE 5          /* Number Output Variables (other than MODEL_STATE_VARIABLES)*/
-                                            /* See definition_OutPut_Variables.c */
+#define OUTPUT_VARIABLES_GENUINE_MAXIMUM 6  /* Number Output Variables            */
+                                            /* (other than MODEL_STATE_VARIABLES) */
+                                            /* 3 (Resources Maximum) + 3          */
+                                            /* See definition_OutPut_Variables.c  */
 
-#define OUTPUT_VARIABLES_MAXIMUM 30005  /* MODEL_STATE_VARIABLES_MAXIMUM +
-					       OUTPUT_VARIABLES_GENUINE */
+#define OUTPUT_VARIABLES_MAXIMUM 30006  /* MODEL_STATE_VARIABLES_MAXIMUM +
+					       OUTPUT_VARIABLES_GENUINE_MAXIMUM */
 
 typedef struct totalRateinfo
 {

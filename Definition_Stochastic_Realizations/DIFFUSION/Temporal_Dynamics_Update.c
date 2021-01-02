@@ -24,7 +24,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 		    Patch[1] is the patch receiving the individual. 
 
      Output arguments: 
-     . Rate         Stochastic Rate is updated from previous value 
+     . Rate         Stochastic Rate is updated from previous value (without recalculating)
   */
   
   int x, y; 
@@ -34,7 +34,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   double OutMigration; 
   
   x = Patch[0]; y = Patch[1];
-  Sp = Type_of_Event%Table->No_of_SPECIES;
+  Sp = Type_of_Event%Table->No_of_RESOURCES;
   
   /* Patch sending one individual out (x ---> y) */
   Pa    = My_Community[x];

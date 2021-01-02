@@ -23,8 +23,15 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
   /* Genuine output variables are those that derive from the state of the system and,
    * therefore, should be evaluated as a funcion of system state variables
    */
-  if (j < OUTPUT_VARIABLES_GENUINE) {
+
+  if (j < Table->No_of_RESOURCES ) {
+    Table->Focal_Resource = j;
+    x = Total_Population_Resource_Species (y, Table);
+  }
+  else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     /* Derived output variables from model dynamic variables and parameters */
+    j -= Table->No_of_RESOURCES;
+   
     switch(j)
     {
     
@@ -46,7 +53,7 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
   }
   /* The last MODEL_STATE_VARIABLES output variables are the MODEL_STATE_VARIABLES */
   else {
-    j -= OUTPUT_VARIABLES_GENUINE; /* #defined in MODEL.h */
+    j -= Table->OUTPUT_VARIABLES_GENUINE; /* #defined in MODEL.h */
     assert( j < Table->MODEL_STATE_VARIABLES );
     x = y[j];
   }

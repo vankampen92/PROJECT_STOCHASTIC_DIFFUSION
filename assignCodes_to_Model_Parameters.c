@@ -17,7 +17,17 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case  4:  p = strcat(Label, "-HY");
       break;
-    case  5:  p = strcat(Label, "-HS");
+    case  5:  p = strcat(Label, "-HS");   /* Number of Resource Species */
+      break;
+    case  6:  p = strcat(Label, "-H0");  
+      break;
+    case  7:  p = strcat(Label, "-H1");
+      break;
+    case  8:  p = strcat(Label, "-H2");  
+      break;
+    case  9:  p = strcat(Label, "-H3");
+      break;
+    case 10:  p = strcat(Label, "-HK");   /* Patch Carrying Capacity */
       break;
       
     default:

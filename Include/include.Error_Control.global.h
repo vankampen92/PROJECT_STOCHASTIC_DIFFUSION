@@ -1,5 +1,5 @@
 /* Each Output Variable may be controled by a different error, this is, the number of
-   OUTPUT_VARIABLES_GENUINE should match then number of Err_n variales */
+   Table->OUTPUT_VARIABLES_GENUINE should match then number of Err_n variales */
 
 int MY_ERROR_HANDLER; 
 

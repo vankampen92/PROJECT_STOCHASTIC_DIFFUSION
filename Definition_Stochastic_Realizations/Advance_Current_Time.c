@@ -23,6 +23,13 @@ int Advance_Current_Time( Parameter_Table * Table,
   int Event; 
   double Max_Probability     = Rate->max_Probability;     
   int no_Patch               = Table->No_of_CELLS;
+  /* Patch[0] and Patch[1] recover two patch labels of either: 
+     1. Patch[0] suffers from outmigration and Patch[1] received an immigrated individual 
+     or 
+     2. When Patch[0] is equal to Patch[1], the event occured in this patch does not 
+     involved any movement between patches
+  */
+  
   int * Patch                = (int *)calloc(2, sizeof(int)); 
   
   Parameter_Model * P        = Table->P; 

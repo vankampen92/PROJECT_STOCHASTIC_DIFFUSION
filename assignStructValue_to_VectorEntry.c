@@ -46,9 +46,19 @@ double AssignStructValue_to_VectorEntry(int j, Parameter_Table * P)
       break;
     case  4: value = P->No_of_CELLS_Y; 
       break;
-    case  5: value = P->No_of_SPECIES; 
+    case  5: value = P->No_of_RESOURCES; 
       break;
-    
+    case  6: value = P->Lambda_R_0; 
+      break;
+    case  7: value = P->Delta_R_0; 
+      break;
+    case  8: value = P->Lambda_R_1; 
+      break;
+    case  9: value = P->Delta_R_1; 
+      break;
+    case 10: value = P->K_R;              /* Resource Carrying Capacity */ 
+      break;
+
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", j);
 

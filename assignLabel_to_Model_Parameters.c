@@ -17,8 +17,19 @@ void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case  4:  p = strcat(Label, "No of CELLS (in vertical dimension)");  
       break;
-    case  5:  p = strcat(Label, "No of SPECIES");  
+    case  5:  p = strcat(Label, "No of (Resource) SPECIES");  /* Number of Resource Species */
       break;
+    case  6:  p = strcat(Label, "External Immigration Rate (0)");  
+      break;
+    case  7:  p = strcat(Label, "Decaying Rate (0)");
+      break;
+    case  8:  p = strcat(Label, "External Immigration Rate (1)");  
+      break;
+    case  9:  p = strcat(Label, "Decaying Rate (1)");
+      break;
+    case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */
+      break;
+    
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);

@@ -11,7 +11,7 @@ int function (double t, const double y[], double dydt[], void *params)
  
   Parameter_Table * Table = (Parameter_Table *)params;
 
-  Sp = Table->No_of_SPECIES; 
+  Sp = Table->No_of_RESOURCES; 
 
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>

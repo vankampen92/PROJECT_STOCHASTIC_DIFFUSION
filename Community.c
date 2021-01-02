@@ -9,7 +9,7 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
   int i, j, a;
   int no, Sp;
 
-  Sp    = P->No_of_SPECIES; 
+  Sp    = P->No_of_RESOURCES; 
   no    = P->No_of_CELLS;
 
   for(i=0; i<no; i++){
@@ -46,7 +46,7 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
 {
   int Sp, K, i, j, a;
 
-  Sp  = P->No_of_SPECIES; /* Ex: 11 times 4 */
+  Sp  = P->No_of_RESOURCES; /* Ex: 11 times 4 */
 
   /* BEGIN: Patch Total Destruction */
   for (i=0; i<P->No_of_CELLS; i++){
@@ -88,12 +88,12 @@ void Community_Initialization (Community ** PATCH,
 {
   int i, j, Sp, no;
   
-  Sp  = P->No_of_SPECIES;
+  Sp  = P->No_of_RESOURCES;
   no  = P->No_of_CELLS;
     
   for(i=0; i<no; i++){
     
-    PATCH[i]->No_of_SPECIES = P->No_of_SPECIES;
+    PATCH[i]->No_of_RESOURCES = P->No_of_RESOURCES;
 
     PATCH[i]->No_of_CELLS   = P->No_of_CELLS;
     PATCH[i]->No_of_CELLS_X = P->No_of_CELLS_X;
@@ -155,7 +155,7 @@ void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
   double Imm_Rate;
 
   /* Sp is the number of variables required to define the state of a single patch */
-  Sp = P->No_of_SPECIES;
+  Sp = P->No_of_RESOURCES;
 
   for(j=0; j < Sp ; j++) {
     
@@ -188,7 +188,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
     case 0: /* Fully Connected Graph */
 
       no        = PATCH[0]->No_of_CELLS;
-      Sp        = PATCH[0]->No_of_SPECIES;
+      Sp        = PATCH[0]->No_of_RESOURCES;
 
    
       for(i=0; i<no; i++){
@@ -224,7 +224,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
     case 1: /* Squared Grid with Von Neuman neighborhood */
 
       no        = PATCH[0]->No_of_CELLS;
-      Sp        = PATCH[0]->No_of_SPECIES;
+      Sp        = PATCH[0]->No_of_RESOURCES;
       N_X       = PATCH[0]->No_of_CELLS_X;
       N_Y       = PATCH[0]->No_of_CELLS_Y;
 
@@ -311,7 +311,7 @@ void Writing_Adjacency_List(Community ** PATCH)
   int i,j, a, no, n_Sp;
 
   no    = PATCH[0]->No_of_CELLS;
-  n_Sp  = PATCH[0]->No_of_SPECIES;
+  n_Sp  = PATCH[0]->No_of_RESOURCES;
 
   for(a=0; a<n_Sp; a++){
     printf("%s %d\n", "Species", a);
@@ -336,7 +336,7 @@ void Writing_Adjacency_List_VonNeumann(Community ** PATCH)
 
   no    = PATCH[0]->No_of_CELLS;
   N_X   = PATCH[0]->No_of_CELLS_X;
-  n_Sp  = PATCH[0]->No_of_SPECIES;
+  n_Sp  = PATCH[0]->No_of_RESOURCES;
 
   for(a=0; a<n_Sp; a++){
     printf("%s %d\n", "Species", a);
@@ -364,7 +364,7 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 
   Community ** Village = Table->Patch_System;
   
-  Sp = Table->No_of_SPECIES; /* 'The number of state variables that fully define 
+  Sp = Table->No_of_RESOURCES; /* 'The number of state variables that fully define 
 				 the configuration of any given patch'
 				 This coincides with the number of different species
 				 if there are not interspecific compounds. 

@@ -17,13 +17,14 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
   int type_of_Width = 2;
   int type_of_Symbol = 1;
 
+  Community * Patch; 
   Community ** P = Table->Patch_System;
   double * Y = Table->Vector_Model_Variables;
 
   N =  Total_Population(Y, Table);
 
   if (Table->TYPE_of_MODEL == 0 )
-    assert( N == (Table->No_of_SPECIES * Table->No_of_INDIVIDUALS) );
+    assert( N == (Table->No_of_RESOURCES * Table->No_of_INDIVIDUALS) );
 
   float * x_Data = (float *)calloc( N, sizeof(float) );
   float * y_Data = (float *)calloc( N, sizeof(float) );
@@ -37,18 +38,20 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
       cpgask( 0 );
   }
 
-  for(Sp = 0; Sp<Table->No_of_SPECIES; Sp++) {
+  for(Sp = 0; Sp<Table->No_of_RESOURCES; Sp++) {
 
     n=0;
-    for(i = 0; i<Table->No_of_CELLS; i++)
-      for(j = 0; j<P[i]->n[Sp]; j++) {
-	x_Data[n] = (float)(P[i]->center.x - 0.5 + gsl_rng_uniform(r));
+    for(i = 0; i<Table->No_of_CELLS; i++) {
+      Patch = P[i]; 
+      for(j = 0; j<Patch->n[Sp]; j++) {
+	x_Data[n] = (float)(Patch->center.x - 0.5 + gsl_rng_uniform(r));
 	/* This is because STEP is 1.0 */
-	y_Data[n] = (float)(P[i]->center.y - 0.5 + gsl_rng_uniform(r));
+	y_Data[n] = (float)(Patch->center.y - 0.5 + gsl_rng_uniform(r));
 	/* This is because STEP is 1.0 */
 	n++;
       }
-
+    }
+    
     type_of_Line = 1;
     type_of_Width = 2;
     cpgsls(type_of_Line);
@@ -77,7 +80,8 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
   /* n: Total number of individuals across species */
   // Print_Meta_Community_Patch_System (Table);
 
-  if(Table->TYPE_of_INITIAL_CONDITION == 0) assert( n == Table->No_of_INDIVIDUALS );
+  if(Table->TYPE_of_INITIAL_CONDITION == 0 && Table->TYPE_of_MODEL == 0)
+    assert( n == Table->No_of_INDIVIDUALS );
 
 
   free(x_Data);

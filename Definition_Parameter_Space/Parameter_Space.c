@@ -230,7 +230,7 @@ void Parameter_Space_Write_Min_Max_Error_Values (Parameter_Space * S, Parameter_
     /* hi_P = Model_Variable_Initial_Condition_into_Vector_Entry_Model( key, S->Parameter_MAX ); */
     lo_P = gsl_vector_get(S->P_min, i);
     hi_P = gsl_vector_get(S->P_MAX, i);
-    if(key < OUTPUT_VARIABLES_GENUINE)
+    if(key < Table->OUTPUT_VARIABLES_GENUINE)
     printf("%s\t\t%g\t%g\n", Table->Output_Variable_Symbol[key], lo_P, hi_P);
     else
     printf("%s\t\t%g\t%g\n", "Error Parameter", lo_P, hi_P);

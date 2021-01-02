@@ -18,8 +18,20 @@ void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table
       break;
     case  4:  p = strcat(Label , "No_of_CELLS (Y Dimension)"); /*  4 */
       break;
-    case  5:  p = strcat(Label , "No_of_SPECIES"); /*  4 */
+    case  5:  p = strcat(Label , "No_of_RESOURCES"); /*  4 */
       break;
+    case  6:  p = strcat(Label, "External Immigration Rate (0)");  
+      break;
+    case  7:  p = strcat(Label, "Decaying Rate (0)");
+      break;
+    case  8:  p = strcat(Label, "External Immigration Rate (1)");  
+      break;
+    case  9:  p = strcat(Label, "Decaying Rate (1)");
+      break;
+    case 10:  p = strcat(Label, "Patch Carrying Capacity");   /* Patch Carrying Capacity */
+      break;
+    
+    
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
@@ -38,7 +50,7 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
   switch(j)
     {
 
-    case  0:  p = strcat(Label, "$\\Mu$");
+    case  0:  p = strcat(Label, "$\\mu$");
       break;
     case  1:  p = strcat(Label, "$N$");      
       break;
@@ -48,9 +60,19 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
       break;
     case  4:  p = strcat(Label, "$M_Y$");        
       break;
-    case  5:  p = strcat(Label, "$S$");        
+    case  5:  p = strcat(Label, "$S_R$");        
       break;
-      
+    case  6:  p = strcat(Label, "$\\lambda^{(R)}_0");  
+      break;
+    case  7:  p = strcat(Label, "$\\delta^{(R)}_0");
+      break;
+    case  8:  p = strcat(Label, "$\\lambda^{(R)}_1");  
+      break;
+    case  9:  p = strcat(Label, "$\\delta^{(R)}_1");
+      break;
+    case 10:  p = strcat(Label, "$K_R$");   /* Patch Carrying Capacity */
+      break;
+    
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);

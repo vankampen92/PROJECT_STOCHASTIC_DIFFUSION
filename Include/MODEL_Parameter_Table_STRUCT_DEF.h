@@ -4,6 +4,8 @@
 */
 typedef struct Parameter_Tableinfo
 {
+  int Focal_Resource;  /* Only for between-function communication purposes */
+
   /* Boolean Variable (see Time_Dependence_Control.c) */
   bool x_Bool; 
 
@@ -53,6 +55,7 @@ typedef struct Parameter_Tableinfo
   /* * * * * * * * * */
 
   /* Total Number of Model Output Variables (in defintion_OutPut_Variables.c file) */
+  int OUTPUT_VARIABLES_GENUINE; 
   int MODEL_OUTPUT_VARIABLES;
   char ** Output_Variable_Name;
   char ** Output_Variable_Symbol;
@@ -87,6 +90,11 @@ typedef struct Parameter_Tableinfo
   double DETERMINISTIC_CASES; // Need by Error_Function.c 
   /* * * C P G   P L O T * * */
 
+  int TOTAL_No_of_MODEL_PARAMETERS;
+  
+  double * Lambda_R;
+  double * Delta_R; 
+  
 #if defined CPGPLOT_REPRESENTATION
 #include <include.CPG.global.h>
   Parameter_CPGPLOT * CPG;
@@ -103,7 +111,7 @@ typedef struct Parameter_Tableinfo
   /* Number of events that can occur to one Species: */
   int No_of_EVENTS;                               /* Stochastic Dynamics */
 
-  /* TOTAL_No_of_EVENTS = No_of_EVENTS * No_of_SPECIES if all species can undergo 
+  /* TOTAL_No_of_EVENTS = No_of_EVENTS * No_of_RESOURCES if all species can undergo 
      exactly the same processes */
  
 }Parameter_Table;

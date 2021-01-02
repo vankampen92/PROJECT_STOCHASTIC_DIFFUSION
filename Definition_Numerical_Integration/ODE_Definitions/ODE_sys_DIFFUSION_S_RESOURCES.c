@@ -16,11 +16,16 @@ int function (double t, const double y[], double dydt[], void *params)
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
 
+  Resetting_Lambda_Delta_Vectors (Table); 
+
   n= 0; 
   for (j=0; j<Table->No_of_CELLS; j++) 
-    for(i=0; i<Sp; i++)
-      dydt[n++] = 0.0;
-  
+    for(i=0; i<Sp; i++) {
+      n = j*Sp + i; 
+      dydt[n] = Table->Lambda_R[i] - Table->Delta_R[i] * y[n];
+      n++;
+    }
+       
   n= 0; 
   for (j=0; j<Table->No_of_CELLS; j++) { 
    

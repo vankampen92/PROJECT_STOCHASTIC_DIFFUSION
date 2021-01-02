@@ -49,7 +49,7 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
     for(i=0; i<Table->No_of_ERROR_PARAMETERS; i++ ) {
       key = Table->E_Space->Parameter_Index[i];
       pTitle = strcat(Title_Parameters, "Err(");
-      if(key < OUTPUT_VARIABLES_GENUINE)
+      if(key < Table->OUTPUT_VARIABLES_GENUINE)
 	pTitle = strcat(Title_Parameters, Table->Output_Variable_Symbol[key]);
       pTitle = strcat(Title_Parameters, ") = ");
       Parameter_Value  = Error_Model_into_Vector_Entry_Table( key, Table );
