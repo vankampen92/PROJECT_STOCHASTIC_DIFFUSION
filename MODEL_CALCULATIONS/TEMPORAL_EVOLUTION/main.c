@@ -38,6 +38,12 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.5 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
    Notice that the 2nd species (in green) does not die or externally immigrate.
 
+   10 species (with external immigration and death) example (OUTPUT_VARIABLES_GENUINE will be 13) 
+   .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 10 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.5 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
+
+   Important notice: MODEL.h contains a 'define' of No_of_RESOURCES_MAXIMUM. If you overcome that
+   limit, program crashes. 
+
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
 */

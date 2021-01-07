@@ -16,16 +16,16 @@
 
 #define No_of_CELLS_MAXIMUM 10000
 
-#define No_of_RESOURCES_MAXIMUM 3             /* S *//* Number of local states */
+#define No_of_RESOURCES_MAXIMUM 10            /* S *//* Number of local states */
 
-#define MODEL_STATE_VARIABLES_MAXIMUM 30000   /* M */ /* Dimension maximum: 2 * 10000 cells */
+#define MODEL_STATE_VARIABLES_MAXIMUM 100000  /* M */ /* Dimension maximum: 2 * 10000 cells */
                                             /* S * M */
-#define OUTPUT_VARIABLES_GENUINE_MAXIMUM 6  /* Number Output Variables            */
+#define OUTPUT_VARIABLES_GENUINE_MAXIMUM 13 /* Number Output Variables            */
                                             /* (other than MODEL_STATE_VARIABLES) */
                                             /* 3 (Resources Maximum) + 3          */
                                             /* See definition_OutPut_Variables.c  */
 
-#define OUTPUT_VARIABLES_MAXIMUM 30006  /* MODEL_STATE_VARIABLES_MAXIMUM +
+#define OUTPUT_VARIABLES_MAXIMUM 100013 /* MODEL_STATE_VARIABLES_MAXIMUM +
 					       OUTPUT_VARIABLES_GENUINE_MAXIMUM */
 
 typedef struct totalRateinfo
