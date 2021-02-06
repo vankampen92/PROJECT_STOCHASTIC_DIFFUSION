@@ -1,6 +1,8 @@
 typedef struct Parameter_Modelinfo
 {
+  
   int MODEL_INPUT_PARAMETERS;
+  int OUTPUT_VARIABLES_GENUINE; 
   int MODEL_OUTPUT_VARIABLES;
   int MODEL_STATE_VARIABLES;
 

@@ -39,6 +39,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Err_15 = P_Source->Err_15;
   P_Destination->Err_16 = P_Source->Err_16;
   
+  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
@@ -109,6 +110,7 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Err_15 = Table->Err_15;
   P->Err_16 = Table->Err_16;
 
+  P->OUTPUT_VARIABLES_GENUINE = Table->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
   P->MODEL_OUTPUT_VARIABLES = Table->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P->MODEL_INPUT_PARAMETERS = Table->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P->MODEL_STATE_VARIABLES  = Table->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
@@ -173,7 +175,8 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->Err_14 = P_Source->Err_14;
   P_Destination->Err_15 = P_Source->Err_15;
   P_Destination->Err_16 = P_Source->Err_16; 
-  
+
+  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
@@ -240,6 +243,7 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->Err_15 = P_Source->Err_15;
   P_Destination->Err_16 = P_Source->Err_16;
 
+  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
