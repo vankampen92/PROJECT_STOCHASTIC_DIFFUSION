@@ -23,10 +23,11 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   P->CPG    = Table->CPG_STO; 
   printf(" Parameter_Model structure has been correctly allocated and initiated\n");
   I_Time    = Table->T->I_Time;
+
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */  
   int MODEL_STATE_VARIABLES = Table->MODEL_STATE_VARIABLES;
   Table->Vector_Model_Variables = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double) );
-  Table->Vector_Model_Variables_Time_0 = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double) );
+  Table->Vector_Model_Variables_Time_0 = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double));
   Table->Vector_Model_Int_Variables = (int *)calloc( MODEL_STATE_VARIABLES, sizeof(int) );  
   Table->Vector_Model_Int_Variables_Time_0 = (int *)calloc( MODEL_STATE_VARIABLES, sizeof(int) );
   P->Vector_Model_Variables            = Table->Vector_Model_Variables;
@@ -37,7 +38,12 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector): 
    */
-  Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+  if (Table->No_of_CELLS > 4)
+    Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+  else 
+    Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
+								 Table->INITIAL_TOTAL_POPULATION);
+  
   for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
     Table->Vector_Model_Int_Variables_Time_0[i] = (int)Table->Vector_Model_Variables_Time_0[i];
   /* END ----------------------------------------------------------------------------
@@ -50,7 +56,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   Community_Allocation( PATCH, P ); 
   Community_Initialization (PATCH, P);
   /* The Parameter Model structure also keeps the three memmory addresses pointing to 
-   *   the Patch System, the Time Control structure, and the CPG structure to plot   
+   * the Patch System, the Time Control structure, and the CPG structure to plot   
    */
   Table->Patch_System = PATCH;
   /* END ----------------------------------------------------------------------------

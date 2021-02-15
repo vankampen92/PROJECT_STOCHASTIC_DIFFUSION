@@ -3,6 +3,8 @@
 void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
   char * p;
+  char * L[] = {"R", "A", "RA", "ARA"}; 
+
   Label[0] = '\0';
 
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
@@ -10,17 +12,15 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
     /* The first output variables are the model variables */
     AssignLabel_to_Model_Variables(j, Label, Table);
   }
-  else if (j < Table->No_of_RESOURCES ) {
-    char * n_Label = (char *)calloc(10, sizeof(char) );
-    p = strcat(Label, "n_R[");
-    n_Label[0]='\0';
-    sprintf(n_Label, "%d", j);
-    p = strcat(Label, n_Label);
+  else if (j < Table->LOCAL_STATE_VARIABLES ) {
+    // char * n_Label = (char *)calloc(10, sizeof(char) );
+    p = strcat(Label, "n[");
+    p = strcat(Label, L[j]);
     p = strcat(Label, "]");
-    free(n_Label);   
+    // free(n_Label);   
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
-    j -= Table->No_of_RESOURCES;
+    j -= Table->LOCAL_STATE_VARIABLES;
        
     switch(j) {
       
@@ -47,23 +47,22 @@ void AssignCPGPLOT_Symbol_to_Output_Variables(int j, char * Label, Parameter_Tab
 {
   char * p;
   Label[0] = '\0';
+  char * L[] = {"R", "A", "RA", "ARA"}; 
 
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     AssignSymbol_to_Model_Variables(j, Label, Table);
   }
-  else if (j < Table->No_of_RESOURCES ) {
-    char * n_Label = (char *)calloc(10, sizeof(char) );
-    p = strcat(Label, "n\\dR\\u[");
-    n_Label[0]='\0';
-    sprintf(n_Label, "%d", j);
-    p = strcat(Label, n_Label);
+  else if (j < Table->LOCAL_STATE_VARIABLES ) {
+    // char * n_Label = (char *)calloc(10, sizeof(char) );
+    p = strcat(Label, "n[");
+    p = strcat(Label, L[j]);
     p = strcat(Label, "]");
-    free(n_Label);   
+    // free(n_Label); 
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
-    j -= Table->No_of_RESOURCES;
+    j -= Table->LOCAL_STATE_VARIABLES;
     
     switch(j) {
       

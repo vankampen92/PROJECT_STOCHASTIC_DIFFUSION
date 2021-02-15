@@ -15,10 +15,11 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* Number of events that can occur to a single Species: */
       Table->No_of_EVENTS       = 1;  /* (Only Diffusion)         */
       Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES;
+      Table->LOCAL_STATE_VARIABLES = Table->No_of_RESOURCES;
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_RESOURCES; j++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
 	  n++;
 	    
       /* Conventions */
@@ -37,10 +38,11 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* Number of events that can occur to a single Species: */
       Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
       Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES;
+      Table->LOCAL_STATE_VARIABLES = Table->No_of_RESOURCES;
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_RESOURCES; j++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
 	  n++;
 	    
       /* Conventions */
@@ -65,6 +67,55 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       break;
 
+    case 2: /* DIFFUSION_1R1C * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
+      Table->LOCAL_STATE_VARIABLES = 4; /* 1 R + 1 C + 1 D + 1 T        */
+                                        /* D \equiv RC and T \equiv CRC */
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->A = 1; Table->RA = 2; Table->ARA = 3; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0; /* Resource Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+
+      if ( Table->No_of_RESOURCES > 0 ) {
+	Table->Index[n++] = 6; /* External Immigration Rate (0) */
+	Table->Index[n++] = 7; /* Death Rate (0) */
+      }
+      if ( Table->No_of_RESOURCES > 1 ) {
+	Table->Index[n++] = 8;  
+	Table->Index[n++] = 9; 
+      }
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 11; /* Resource Local Growth Rate */
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      Table->Index[n++]   = 13; /* Consumer Death Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      Table->Index[n++]   = 18; /* Trimer Formation Rate */
+      Table->Index[n++]   = 19; /* Trimer Destruction Rate */
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      
+      break;
+      
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
       printf(" Check input argument list\n");

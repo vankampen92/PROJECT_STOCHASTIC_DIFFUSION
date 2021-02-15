@@ -24,13 +24,13 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
    * therefore, should be evaluated as a funcion of system state variables
    */
 
-  if (j < Table->No_of_RESOURCES ) {
+  if (j < Table->LOCAL_STATE_VARIABLES) {
     Table->Focal_Resource = j;
     x = Total_Population_Resource_Species (y, Table);
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     /* Derived output variables from model dynamic variables and parameters */
-    j -= Table->No_of_RESOURCES;
+    j -= Table->LOCAL_STATE_VARIABLES;
    
     switch(j)
     {
@@ -51,7 +51,7 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
       exit(0);
     }
   }
-  /* The last MODEL_STATE_VARIABLES output variables are the MODEL_STATE_VARIABLES */
+  /* The last output variables are the MODEL_STATE_VARIABLES */
   else {
     j -= Table->OUTPUT_VARIABLES_GENUINE; /* #defined in MODEL.h */
     assert( j < Table->MODEL_STATE_VARIABLES );

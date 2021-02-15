@@ -9,11 +9,11 @@ typedef struct Communityinfo
   double X_DIMENSION;
   double Y_DIMENSION; 
   
-  int no_VARIABLES;  /* Number of variables needed to describe the state
+  int LOCAL_STATE_VARIABLES;  /* Number of variables needed to describe the state
 			of the patch at any given time. This only coicides with the 
 			total MODEL_STATE_VARIABLES when the we have only one patch          */
 
-  int * n;           /* n[0], ..., n[no_VARIABLES-1] defines the state
+  int * n;           /* n[0], ..., n[LOCAL_STATE_VARIABLES-1] defines the state
 			of the patch completely                                              */
   double * rate;     /* Transition probability for an individual of each species               */
   double * rToI;     /* Transition probability for all individuals of a spcies              */ 
@@ -34,6 +34,10 @@ typedef struct Communityinfo
   int * Patch_Connections; 
 
   double *** Metapop_Connectivity_Matrix; 
+
+  int ** Event_Adjacence_List;
+
+  double **Event_Delta_Matrix; 
   
   struct Communityinfo ** NEI; /* An array of pointers to the neighbors the focal patch 
 				  is connected to                                            */

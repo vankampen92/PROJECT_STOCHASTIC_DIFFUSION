@@ -87,20 +87,20 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   // Table->Vector_Model_Variables_Stationarity = (double *)malloc( MODEL_STATE_VARIABLES * sizeof(double) );
 
   if(     TYPE_of_NETWORK == 0) No_of_NEIGHBORS = No_of_CELLS - 1;
-  else if(TYPE_of_NETWORK == 1) No_of_NEIGHBORS = 4;               /* Von Neumann */
+  else if(TYPE_of_NETWORK == 1) No_of_NEIGHBORS = 4;            /* Von Neumann */
   else {
     printf(" No more network types have been defined so far\n");
     printf(" The program will exit\n");
     exit(0); 
   }
-
+  
   Table->Lambda_R    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Delta_R     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
-  Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES,
+  Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES_MAXIMUM,
 							  sizeof(double **) );
-  for(a=0; a<No_of_RESOURCES; a++) { 
+  for(a=0; a<No_of_RESOURCES_MAXIMUM; a++) { 
     Table->Metapop_Connectivity_Matrix[a] = (double **)calloc(No_of_CELLS,
 							      sizeof(double *) );
     for(i=0; i<No_of_CELLS; i++) {
@@ -175,7 +175,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
   free(Table->Lambda_R);
   free(Table->Delta_R);
  
-  for(a=0; a<Table->No_of_RESOURCES; a++) {  
+  for(a=0; a<No_of_RESOURCES_MAXIMUM; a++) {  
     for(i=0; i<Table->No_of_CELLS; i++) 
       free(Table->Metapop_Connectivity_Matrix[a][i]); 
     
@@ -189,12 +189,8 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   int i, j, a;
   
   /* Stochastic Realizations */
-  Table->Realizations = Realizations;
+  Table->Realizations      = Realizations;
 
-  /* Total number of potential input paramters */
-  Table->MODEL_INPUT_PARAMETERS   = MODEL_PARAMETERS_MAXIMUM;
-  Table->OUTPUT_VARIABLES_GENUINE = No_of_RESOURCES + 3;   
-  
   Table->No_of_CELLS       = No_of_CELLS; 
   Table->No_of_INDIVIDUALS = No_of_INDIVIDUALS;
   Table->No_of_CELLS_X     = No_of_CELLS_X;
@@ -206,6 +202,12 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   /* Type of Model upload  */
   Table->TYPE_of_MODEL = TYPE_of_MODEL;  assert_right_model_definition( Table );
   Model_Variables_Code_into_Parameter_Table (Table);
+
+  /* Total number of potential input paramters */
+  Table->MODEL_INPUT_PARAMETERS   = MODEL_PARAMETERS_MAXIMUM;
+  Table->OUTPUT_VARIABLES_GENUINE = Table->LOCAL_STATE_VARIABLES + 3;
+  /* Three are the different cases in definition_OutPut_Variables.c */
+
   /* Total number of potential state variables */
   /* Total number of potential state variables */
   Table->MODEL_STATE_VARIABLES = Table->K + 1;
@@ -215,16 +217,6 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   /* Total number of actual model output variables */
   Table->SUB_OUTPUT_VARIABLES   = SUB_OUTPUT_VARIABLES;
   
-  /* Parameter Space Upload: PARAMETER SPACE             */
-  /* Total number of actual input paramters              */
-  /* Table->No_of_PARAMETERS = MODEL_PARAMETERS_MAXIMUM; */
-  /* Table->A_n = A_n;                                   */
-  /* Table->A_d = A_d;                                   */
-  /* Table->No_of_POINTS    = No_of_POINTS;              */
-  /* Table->Input_Parameter = Input_Parameter;           */
-  /* Table->Value_0         = Value_0;                   */
-  /* Table->Value_1         = Value_1;                   */
-
   /// Setting MODEL INPUT PARAMETERS up !!!
   Table->Growth_Function_Type = Growth_Function_Type;
   /* BEGIN: Parameter default values into vector structure */
@@ -285,7 +277,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 
   if(Table->TYPE_of_NETWORK == 0) {
     /// Setting up Constant Metapopulation Connectivity Matrix:
-    for(a=0; a<Table->No_of_RESOURCES; a++) 
+    for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++) 
       for(i=0; i<Table->No_of_CELLS; i++)
 	for(j=0; j<Table->No_of_CELLS; j++)
 	  if (j != i) 
@@ -294,12 +286,35 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	    Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
   }
   else {
-    for(a=0; a<Table->No_of_RESOURCES; a++) 
-      for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-  }
+    assert(Table->TYPE_of_NETWORK == 1) ;
 
+    if( Table->TYPE_of_MODEL == 0 || Table->TYPE_of_MODEL == 1 )
+      for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++) 
+	for(i=0; i<Table->No_of_CELLS; i++)
+	  for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+    else if (Table->TYPE_of_MODEL == 2 )
+      for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
+	if(a == 0)
+	  for(i=0; i<Table->No_of_CELLS; i++)
+	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	else if (a == 1)
+	  for(i=0; i<Table->No_of_CELLS; i++)
+	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C;
+        else if (a == 2)
+	  for(i=0; i<Table->No_of_CELLS; i++)
+	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0 * Table->Mu_C;
+	else 
+	  for(i=0; i<Table->No_of_CELLS; i++)
+	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
+    else
+      printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
+	     Table->TYPE_of_MODEL);
+  }
   /* This function should be called always after having called 
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   */
@@ -344,17 +359,30 @@ void Resetting_Lambda_Delta_Vectors (Parameter_Table * Table)
 */
 void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 { 
-  
-  P->Mu          = Mu;
 
+  P->Mu_C        = Mu_C; 
+  P->Mu          = Mu;
+  
   P->Lambda_R_0 = Lambda_R_0; 
   P->Delta_R_0  = Delta_R_0; 
 
   P->Lambda_R_1 = Lambda_R_1; 
   P->Delta_R_1  = Delta_R_1;
 
-  P->K_R        = K_R; 
+  P->K_R        = K_R;
+  P->Beta_R     = Beta_R;        /* -H5 */ 
   
+  P->Lambda_C_0 = Lambda_C_0;     /* -H5 */
+  P->Delta_C_0  = Delta_C_0;      /* -H6 */
+  P->Lambda_C_1 = Lambda_C_1;     /* -H7 */
+  P->Delta_C_1  = Delta_C_1;      /* -H8 */ 
+      
+  P->Alpha_C_0  = Alpha_C_0;      /* -H9 */
+  P->Nu_C_0     = Nu_C_0;         /* -H10 */
+  
+  P->Chi_C_0    = Chi_C_0;        /* -H11 */
+  P->Eta_C_0    = Eta_C_0;        /* -H12 */
+
   P->No_of_IC = No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = TYPE_of_INITIAL_CONDITION;
   P->INITIAL_TOTAL_POPULATION  = INITIAL_TOTAL_POPULATION;
@@ -393,5 +421,5 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 			       */
   P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
 
-  P->No_of_RESOURCES      = No_of_RESOURCES; 
+  P->No_of_RESOURCES    = No_of_RESOURCES; 
 }

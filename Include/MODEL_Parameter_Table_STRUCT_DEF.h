@@ -69,11 +69,16 @@ typedef struct Parameter_Tableinfo
   double ** Matrix_Output_Variables;
   /* * * * * * * * * */
   
+  int LOCAL_STATE_VARIABLES;
   int MODEL_STATE_VARIABLES;
   char ** Model_Variable_Name;
   char ** Model_Variable_Symbol;
 
   int K;
+  int R;
+  int A;
+  int RA;
+  int ARA; 
 
   double * Vector_Model_Variables; 
   double * Vector_Model_Variables_Time_0;
@@ -108,7 +113,7 @@ typedef struct Parameter_Tableinfo
   Community ** Patch_System;                      /* Stochastic Dynamics */
 
   int TOTAL_No_of_EVENTS;                         /* Stochastic Dynamics */
-  /* Number of events that can occur to one Species: */
+  /* Number of common events that can occur to every Species: */
   int No_of_EVENTS;                               /* Stochastic Dynamics */
 
   /* TOTAL_No_of_EVENTS = No_of_EVENTS * No_of_RESOURCES if all species can undergo 

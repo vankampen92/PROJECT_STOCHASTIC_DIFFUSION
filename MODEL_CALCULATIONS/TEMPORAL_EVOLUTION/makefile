@@ -125,7 +125,7 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Comm
 	assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o               \
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o  \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                            \
-	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o                                                                                   \
+	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o         \
 	Model_Variables_Code.o definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o \
 	stat.o                                                                               \
 	CPGPLOT___X_Y___Parameter_Table.o                                                    \
@@ -297,6 +297,12 @@ Temporal_Dynamics.o: ${STO_DIR}Temporal_Dynamics.c ${HEAD.H}
 
 Execute_One_Step.o: ${STO_DIR}Execute_One_Step.c ${HEAD.H}
 	${CC} -c ${STO_DIR}Execute_One_Step.c $(CXXFLAGS)
+
+Event_Delta_Matrix_Initialization.o: ${STO_DIR}Event_Delta_Matrix_Initialization.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Event_Delta_Matrix_Initialization.c $(CXXFLAGS)
+
+Event_Adjacence_List_Initialization.o: ${STO_DIR}Event_Adjacence_List_Initialization.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Event_Adjacence_List_Initialization.c $(CXXFLAGS)
 
 Force_of_Infection_Sto.o: ${STO_DIR}Force_of_Infection_Sto.c ${HEAD.H}
 	${CC} -c ${STO_DIR}Force_of_Infection_Sto.c $(CXXFLAGS)

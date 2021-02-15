@@ -8,3 +8,5 @@ void R_E_S_C_A_L_I_N_G___I_N_I_T_I_A_L___C_O_N_D_I_T_I_O_N_S ( Parameter_Table *
 							       double * Y);
 
 void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table, double Value);
+
+void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Table * Table, double Value); 

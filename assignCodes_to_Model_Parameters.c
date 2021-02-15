@@ -19,16 +19,40 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case  5:  p = strcat(Label, "-HS");   /* Number of Resource Species */
       break;
-    case  6:  p = strcat(Label, "-H0");  
+    case  6:  p = strcat(Label, "-H0");   /* Lambda_R_0 */ 
       break;
-    case  7:  p = strcat(Label, "-H1");
+    case  7:  p = strcat(Label, "-H1");   /* Delta_R_0 */
+      break; 
+    case  8:  p = strcat(Label, "-H2");   /* Lambda_R_1 */  
       break;
-    case  8:  p = strcat(Label, "-H2");  
-      break;
-    case  9:  p = strcat(Label, "-H3");
+    case  9:  p = strcat(Label, "-H3");   /* Delta_R_1 */
       break;
     case 10:  p = strcat(Label, "-HK");   /* Patch Carrying Capacity */
       break;
+    case 11:  p = strcat(Label, "-H4");   /* Beta_R */
+      break;
+
+    case 12:  p = strcat(Label, "-H5");   /* Lambda_C_0 */ 
+      break;
+    case 13:  p = strcat(Label, "-H6");    /* Delta_C_0 */   
+      break;
+    case 14:  p = strcat(Label, "-H7");    /* Lambda_C_1 */     
+      break;
+    case 15:  p = strcat(Label, "-H8");    /* Delta_C_1 */   
+      break; 
+      
+    case 16:  p = strcat(Label, "-H9");    /* Alpha_C_0 */
+      break;
+    case 17:  p = strcat(Label, "-H10");   /* Nu_C_0    */
+      break;
+
+    case 18:  p = strcat(Label, "-H11");   /* Xhi_C_0 */
+      break;
+    case 19:  p = strcat(Label, "-H12");   /* Eta_C_0 */
+      break;
+
+    case 20:  p = strcat(Label, "-H13");   /* Mu_C */
+      break; 
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);

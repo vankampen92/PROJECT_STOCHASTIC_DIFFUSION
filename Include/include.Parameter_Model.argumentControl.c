@@ -2,40 +2,79 @@
 
 	    case 'H': /* Maximum and Minimum Transmission Rate */
               if(argv[argcount][2]=='M')        sscanf(argv[argcount+1],"%d",
-							&No_of_CELLS);                   /* 0 */
+							&No_of_CELLS);                   /* M */
 
               else if(argv[argcount][2]=='X')   sscanf(argv[argcount+1],"%d",
-							&No_of_CELLS_X);                 /* 1 */
+							&No_of_CELLS_X);                 /* X */
 
               else if(argv[argcount][2]=='Y')   sscanf(argv[argcount+1],"%d",
-							&No_of_CELLS_Y);                 /* 2 */
+							&No_of_CELLS_Y);                 /* Y */
 
 	      else if(argv[argcount][2]=='u')   sscanf(argv[argcount+1],"%lf",
-						       &Mu);                             /* 3 */
+						       &Mu);                             /* u */
 		
 	      else if(argv[argcount][2]=='N')   sscanf(argv[argcount+1],"%d",
-							&No_of_INDIVIDUALS);             /* 4 */
+							&No_of_INDIVIDUALS);             /* N */
 
               else if(argv[argcount][2]=='S')   sscanf(argv[argcount+1],"%d",
-							&No_of_RESOURCES);                 /* 5 */
+							&No_of_RESOURCES);               /* S */
 
               else if(argv[argcount][2]=='0')   sscanf(argv[argcount+1],"%lf",
-							&Lambda_R_0);                 /* 6 */
+						       &Lambda_R_0);                /* 0 */
 
-              else if(argv[argcount][2]=='1')   sscanf(argv[argcount+1],"%lf",
-							&Delta_R_0);                 /* 7 */
-
-	      else if(argv[argcount][2]=='2')   sscanf(argv[argcount+1],"%lf",
-						        &Lambda_R_1);                /* 8 */
+              else if(argv[argcount][2]=='1')  {
+		if(argv[argcount][3]=='\0')   sscanf(argv[argcount+1],"%lf",
+						        &Delta_R_0);                /* 1 */
 		
-	      else if(argv[argcount][2]=='3')   sscanf(argv[argcount+1],"%lf",
-							&Delta_R_1);                /* 9 */
+		else if(argv[argcount][3]=='0')   sscanf(argv[argcount+1],"%lf",
+						        &Nu_C_0);                   /* 10 */
+		
+		else if(argv[argcount][3]=='1')   sscanf(argv[argcount+1],"%lf",
+							&Chi_C_0);                  /* 11 */
 
-              else if(argv[argcount][2]=='K')   sscanf(argv[argcount+1],"%d",
-							&K_R);                      /* 10 */
+		else if(argv[argcount][3]=='2')   sscanf(argv[argcount+1],"%lf",
+							 &Eta_C_0);                 /* 12 */
 
+		else if(argv[argcount][3]=='3')   sscanf(argv[argcount+1],"%lf",
+							 &Mu_C);                    /* 13 */
+		else {
+		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
+		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);
+		  printf(" The program will exit\n");
+		  exit(0); 
+		}
+	      }
+	      else if(argv[argcount][2]=='2')   sscanf(argv[argcount+1],"%lf",      /* 2 */
+						        &Lambda_R_1);                 
+		
+	      else if(argv[argcount][2]=='3')   sscanf(argv[argcount+1],"%lf",      /* 3 */
+							&Delta_R_1);                
+
+              else if(argv[argcount][2]=='K')   sscanf(argv[argcount+1],"%d",       /* K */
+							&K_R);                      
+
+              else if(argv[argcount][2]=='4')   sscanf(argv[argcount+1],"%lf",
+							&Beta_R);                   /* 4 */
+
+              else if(argv[argcount][2]=='5')   sscanf(argv[argcount+1],"%lf",
+							&Lambda_C_0);               /* 5 */
+
+	      else if(argv[argcount][2]=='6')   sscanf(argv[argcount+1],"%lf",
+						        &Delta_C_0);                /* 6 */
+		
+	      else if(argv[argcount][2]=='7')   sscanf(argv[argcount+1],"%lf",
+							&Lambda_C_1);                /* 7 */
+
+              else if(argv[argcount][2]=='8')   sscanf(argv[argcount+1],"%lf",
+							&Delta_C_1);                 /* 8 */
+
+              else if(argv[argcount][2]=='9')   sscanf(argv[argcount+1],"%lf",
+							&Alpha_C_0);                 /* 9 */
+
+	      
 	      else {
-		printf(" Error at reading input arguments: -  %s  \n", argv[argcount]);
+		printf(" Error in include.Parameter_Model.argumentControl.c\n");
+		printf(" Error at reading input arguments: %s  \n", argv[argcount]);
 		exit(0);
 	      }
 	      skip++;

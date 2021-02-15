@@ -34,5 +34,11 @@ void Some_Other_Patch_Population_Decrease(int , int , Parameter_Table * );
 int Some_Other_Patch_Population_Increase(int , int , Parameter_Table * );
 
 void Positivity_Control( int Event, Parameter_Table * Table,
-			 int x, int jS, double Y, int J); 
+			 int x, int jS, double Y, int J);
 
+
+void Event_Adjacence_List_Initialization(Community ** PATCH,
+					 Parameter_Model * P); 
+
+void Event_Delta_Matrix_Initialization(Community ** PATCH,
+				       Parameter_Model * P); 

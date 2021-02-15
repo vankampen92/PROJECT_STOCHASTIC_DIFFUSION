@@ -30,7 +30,30 @@ void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table
       break;
     case 10:  p = strcat(Label, "Patch Carrying Capacity");   /* Patch Carrying Capacity */
       break;
-    
+    case 11: p=strcat(Label,  "Resource Local Reproduction Rate");        /* -H5 */
+      break;
+
+    case 12: p=strcat(Label,  "Consumer External Immigration Rate (0)");     /* -H5 */
+      break;
+    case 13: p=strcat(Label,  "Consumer Death Rate (0)");      /* -H6 */
+      break;
+    case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");     /* -H7 */
+      break;
+    case 15: p=strcat(Label,  "Consumer Death Rate (1)");      /* -H8 */ 
+      break; 
+      
+    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");      /* -H9 */
+      break;
+    case 17: p=strcat(Label,  "Nu = 1/Tau (One over the handling time)");  /* -H10 */
+      break;
+
+    case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
+      break;
+    case 19: p=strcat(Label,  "Triplet desintegration (0)");        /* -H12 */
+      break;
+
+    case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
+      break;
     
       
     default:
@@ -62,18 +85,41 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
       break;
     case  5:  p = strcat(Label, "$S_R$");        
       break;
-    case  6:  p = strcat(Label, "$\\lambda^{(R)}_0");  
+    case  6:  p = strcat(Label, "$\\lambda^{(R)}_0$");  
       break;
-    case  7:  p = strcat(Label, "$\\delta^{(R)}_0");
+    case  7:  p = strcat(Label, "$\\delta^{(R)}_0$");
       break;
-    case  8:  p = strcat(Label, "$\\lambda^{(R)}_1");  
+    case  8:  p = strcat(Label, "$\\lambda^{(R)}_1$");  
       break;
-    case  9:  p = strcat(Label, "$\\delta^{(R)}_1");
+    case  9:  p = strcat(Label, "$\\delta^{(R)}_1$");
       break;
     case 10:  p = strcat(Label, "$K_R$");   /* Patch Carrying Capacity */
       break;
-    
+    case 11: p=strcat(Label,"$\\beta_R$");        /* -H5 */
+      break;
+
+    case 12: p=strcat(Label,"$\\lambda^{(C)}_0$");     /* -H5 */
+      break;
+    case 13: p=strcat(Label,"$\\delta^{(C)}_0$");     /* -H6 */
+      break;
+    case 14: p=strcat(Label,"$\\lambda^{(C)}_1$");    /* -H7 */
+      break;
+    case 15: p=strcat(Label,"$\\delta^{(C)}_1$");     /* -H8 */ 
+      break; 
       
+    case 16: p=strcat(Label,"$\\alpha^{(C)}_0$");     /* -H9 */
+      break;
+    case 17: p=strcat(Label,"$\\nu^{(C)}_0$");        /* -H10 */
+      break;
+
+    case 18: p=strcat(Label,"$\\chi^{(C)}_0$");        /* -H11 */
+      break;
+    case 19: p=strcat(Label,"$\\eta^{(C)}_0$");        /* -H12 */
+      break; 
+
+    case 20: p=strcat(Label,"$\\mu^{(C)}$");           /* -H13 */
+      break; 
+   
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
       printf(".... The permited correspondences are:\n");

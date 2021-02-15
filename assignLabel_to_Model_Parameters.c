@@ -29,8 +29,31 @@ void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */
       break;
-    
+    case 11: p=strcat(Label,  "Resource Local Reproduction Rate");        /* -H5 */
+      break;
+
+    case 12: p=strcat(Label,  "Consumer External Immigration Rate (0)");     /* -H5 */
+      break;
+    case 13: p=strcat(Label,  "Consumer Death Rate (0)");      /* -H6 */
+      break;
+    case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");     /* -H7 */
+      break;
+    case 15: p=strcat(Label,  "Consumer Death Rate (1)");      /* -H8 */ 
+      break; 
       
+    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");      /* -H9 */
+      break;
+    case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");  /* -H10 */
+      break;
+
+    case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
+      break;
+    case 19: p=strcat(Label,  "Triplet desintegration (0)");        /* -H12 */
+      break;
+
+    case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
+      break;
+    
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
       printf(".... The permited correspondences are (0 to 6):\n");

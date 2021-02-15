@@ -1,5 +1,6 @@
 #include <MODEL.h>
 
+
 double In_Mu(Parameter_Table * Table, int m, int Sp, int J, const double * y)
 {
   /* Input: 
@@ -27,17 +28,28 @@ double In_Mu(Parameter_Table * Table, int m, int Sp, int J, const double * y)
      K: Index for the K-th population 
   */
   
-  k = m%Table->No_of_RESOURCES;
+  k = m%Table->LOCAL_STATE_VARIABLES;
   assert(k == Sp); 
 
   Mu = 0.0;
-  
-  for( j=0; j<Table->No_of_NEIGHBORS; j++) {
-    K = P[J]->Patch_Connections[j];
-    n   = k + Table->No_of_RESOURCES*K;
 
-    assert(Table->Mu == P[j]->In_Migration_Vector[Sp][j]);
+  if(Table->TYPE_of_NETWORK == 1) 
+    assert( Table->No_of_NEIGHBORS == P[J]->No_NEI ); 
+              
+  for( j=0; j<P[J]->No_NEI; j++) {
     
+    K = P[J]->Patch_Connections[j];
+    n   = k + Table->LOCAL_STATE_VARIABLES*K;
+
+    if (Table->TYPE_of_MODEL == 0 || Table->TYPE_of_MODEL == 1 )
+      assert(Table->Mu == P[j]->In_Migration_Vector[Sp][j]);
+
+    if (Sp == 0)
+      assert(Table->Mu   == P[j]->In_Migration_Vector[Sp][j]);
+    
+    if (Sp == 1 && Table->TYPE_of_MODEL == 2)
+      assert(Table->Mu_C == P[j]->In_Migration_Vector[Sp][j]);
+
     Mu += P[J]->In_Migration_Vector[Sp][j] * y[n]; 
 
     /* Mu += Table->Metapop_Connectivity_Matrix[Sp][J][K] * y[n]; */
@@ -52,7 +64,7 @@ double Out_Mu_Per_Capita(Parameter_Table * Table, int Sp, int J)
   
   /* Input: 
      ------
-     . Sp: Age group
+     . Sp: Species or Type
      . J: Index of the population exporting individuals over all its local neighboring 
      populations. 
      
@@ -64,8 +76,11 @@ double Out_Mu_Per_Capita(Parameter_Table * Table, int Sp, int J)
   int j, K; 
   Community ** P = Table->Patch_System;
 
+  if(Table->TYPE_of_NETWORK == 1) 
+    assert( Table->No_of_NEIGHBORS == P[J]->No_NEI ); 
+  
   Mu = 0.0;
-  for( j=0; j<Table->No_of_NEIGHBORS; j++) {
+  for( j=0; j < P[J]->No_NEI; j++) {
 
     K = P[J]->Patch_Connections[j];
     
@@ -78,7 +93,15 @@ double Out_Mu_Per_Capita(Parameter_Table * Table, int Sp, int J)
     
   }
 
-  assert( 4 * Table->Mu == Mu ); 
+  if (Table->TYPE_of_MODEL == 0 || Table->TYPE_of_MODEL == 1) 
+    assert( (P[J]->No_NEI * Table->Mu) == Mu );
+
+  if (Table->TYPE_of_MODEL == 2) { 
+    if (Sp == 0)      assert( (P[J]->No_NEI * Table->Mu)   == Mu );
+    else if (Sp == 1) assert( (P[J]->No_NEI * Table->Mu_C) == Mu );
+    else if (Sp == 2) assert( (P[J]->No_NEI * 0.0 * Table->Mu_C) == Mu );
+    else              assert(                          0.0 == Mu ); 
+  }
   
   return (Mu);
 }

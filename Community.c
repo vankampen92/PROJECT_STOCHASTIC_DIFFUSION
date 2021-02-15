@@ -7,10 +7,17 @@ extern gsl_rng * r; /* Global generator defined in main.c */
 void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
 {
   int i, j, a;
-  int no, Sp;
+  int N, no, Sp;
 
-  Sp    = P->No_of_RESOURCES; 
+  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species 
+					potentially coexisting locally,
+					and, therefore, also the 
+					Total Number of State Variables 
+					fully determining the local state 
+				     */
   no    = P->No_of_CELLS;
+
+  N     = P->TOTAL_No_of_EVENTS; 
 
   for(i=0; i<no; i++){
     PATCH[i] = (Community *)calloc( 1, sizeof(Community) );
@@ -39,6 +46,14 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
     PATCH[i]->Imm_Rates_Preassure = (double **)calloc(Sp, sizeof( double *));
     for(a=0; a<Sp; a++)
       PATCH[i]->Imm_Rates_Preassure[a] = (double *)calloc(P->No_of_NEIGHBORS, sizeof( double ));
+
+    PATCH[i]->Event_Delta_Matrix = (double **)calloc(N, sizeof(double *) );
+    for(a=0; a<N; a++) 
+      PATCH[i]->Event_Delta_Matrix[a] = (double *)calloc(N, sizeof(double) );
+
+    PATCH[i]->Event_Adjacence_List = (int **)calloc(N, sizeof(int *) );
+    for(a=0; a<N; a++) 
+      PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(N+1, sizeof(int) );
   }
 }
 
@@ -93,7 +108,7 @@ void Community_Initialization (Community ** PATCH,
     
   for(i=0; i<no; i++){
     
-    PATCH[i]->No_of_RESOURCES = P->No_of_RESOURCES;
+    PATCH[i]->No_of_RESOURCES = Sp;
 
     PATCH[i]->No_of_CELLS   = P->No_of_CELLS;
     PATCH[i]->No_of_CELLS_X = P->No_of_CELLS_X;
@@ -101,7 +116,7 @@ void Community_Initialization (Community ** PATCH,
     PATCH[i]->X_DIMENSION = (double)P->No_of_CELLS_Y;
     PATCH[i]->Y_DIMENSION = (double)P->No_of_CELLS_X;
 
-    PATCH[i]->no_VARIABLES  = Sp;
+    PATCH[i]->LOCAL_STATE_VARIABLES  = P->LOCAL_STATE_VARIABLES;
     /* This is the number of dynamic state variables             */
     /* (required to defined the state of the patch)              */
     /* Total Number of Events within a patch: TOTAL_No_of_EVENTS */
@@ -113,6 +128,7 @@ void Community_Initialization (Community ** PATCH,
     }
 
     PATCH[i]->Metapop_Connectivity_Matrix = P->Metapop_Connectivity_Matrix;
+
   }
 
   /* When PATCH represents a multi-patch network, patch connections
@@ -127,6 +143,14 @@ void Community_Initialization (Community ** PATCH,
   if (P->TYPE_of_NETWORK == 1) Writing_Adjacency_List_VonNeumann(PATCH);
 
   Immigration_Preassure_on_Focal_Patch_Initialization( PATCH, P );
+
+  #if defined DIFFUSION_1R1C
+  if( P->TYPE_of_MODEL == 2) { 
+    Event_Delta_Matrix_Initialization(PATCH, P);
+    
+    Event_Adjacence_List_Initialization(PATCH, P);
+  }
+  #endif 
 }
 
 void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
@@ -155,7 +179,7 @@ void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
   double Imm_Rate;
 
   /* Sp is the number of variables required to define the state of a single patch */
-  Sp = P->No_of_RESOURCES;
+  Sp = P->LOCAL_STATE_VARIABLES;
 
   for(j=0; j < Sp ; j++) {
     
@@ -188,7 +212,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
     case 0: /* Fully Connected Graph */
 
       no        = PATCH[0]->No_of_CELLS;
-      Sp        = PATCH[0]->No_of_RESOURCES;
+      Sp        = PATCH[0]->LOCAL_STATE_VARIABLES;
 
    
       for(i=0; i<no; i++){
@@ -224,7 +248,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
     case 1: /* Squared Grid with Von Neuman neighborhood */
 
       no        = PATCH[0]->No_of_CELLS;
-      Sp        = PATCH[0]->No_of_RESOURCES;
+      Sp        = PATCH[0]->LOCAL_STATE_VARIABLES;
       N_X       = PATCH[0]->No_of_CELLS_X;
       N_Y       = PATCH[0]->No_of_CELLS_Y;
 
@@ -311,7 +335,7 @@ void Writing_Adjacency_List(Community ** PATCH)
   int i,j, a, no, n_Sp;
 
   no    = PATCH[0]->No_of_CELLS;
-  n_Sp  = PATCH[0]->No_of_RESOURCES;
+  n_Sp  = PATCH[0]->LOCAL_STATE_VARIABLES;
 
   for(a=0; a<n_Sp; a++){
     printf("%s %d\n", "Species", a);
@@ -336,7 +360,7 @@ void Writing_Adjacency_List_VonNeumann(Community ** PATCH)
 
   no    = PATCH[0]->No_of_CELLS;
   N_X   = PATCH[0]->No_of_CELLS_X;
-  n_Sp  = PATCH[0]->No_of_RESOURCES;
+  n_Sp  = PATCH[0]->LOCAL_STATE_VARIABLES;
 
   for(a=0; a<n_Sp; a++){
     printf("%s %d\n", "Species", a);
@@ -364,11 +388,9 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 
   Community ** Village = Table->Patch_System;
   
-  Sp = Table->No_of_RESOURCES; /* 'The number of state variables that fully define 
-				 the configuration of any given patch'
-				 This coincides with the number of different species
-				 if there are not interspecific compounds. 
-			     */
+  Sp = Table->LOCAL_STATE_VARIABLES; /* 'The number of state variables that fully define 
+					the configuration of any given patch
+				     */
   printf(" Total population on local populations (checking local pointers, Y and J vectors):\n");
   
   for(Patch=0; Patch<Table->No_of_CELLS; Patch++) {

@@ -30,7 +30,7 @@ int function (double t, const double y[], double dydt[], void *params)
   for (j=0; j<Table->No_of_CELLS; j++) { 
    
     for(i=0; i<Sp; i++) { 
-      dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, 0, j) * y[n];;
+      dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, i, j) * y[n];;
       n++;
     }
   }

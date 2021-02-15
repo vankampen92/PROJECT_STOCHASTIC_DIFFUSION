@@ -5,7 +5,8 @@ typedef struct Parameter_Modelinfo
   int OUTPUT_VARIABLES_GENUINE; 
   int MODEL_OUTPUT_VARIABLES;
   int MODEL_STATE_VARIABLES;
-
+  int LOCAL_STATE_VARIABLES;
+  
   /* * * Model Parameters  * * */
 #include <include.Parameter_Model.global.h>
 

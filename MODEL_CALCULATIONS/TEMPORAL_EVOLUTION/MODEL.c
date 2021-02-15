@@ -30,7 +30,11 @@ int M_O_D_E_L( Parameter_Table * Table )
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
-  Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+  if(Table->No_of_CELLS > 4)
+    Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+  else 
+    Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
+								 Table->INITIAL_TOTAL_POPULATION);
   /* END ----------------------------------------------------------------------------
    */
   /* BEGIN : -------------------------------------------------------------------------

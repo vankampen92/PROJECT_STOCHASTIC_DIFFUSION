@@ -7,7 +7,7 @@
 
 gsl_rng * r; /* Global generator defined in main.c */
 
-/* This code calculates ODE model temporal evolution for a range COVID19 models
+/* This code calculates the stochastic and determinisitic temporal evolution of several resource-consumer models 
 
    Compilation (see makefile variable MODEL):
 
@@ -43,6 +43,9 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Important notice: MODEL.h contains a 'define' of No_of_RESOURCES_MAXIMUM. If you overcome that
    limit, program crashes. 
+
+   4 species (4 different species ---R, A, RA, ARA---, therefore OUTPUT_VARIABLES_GENUINE is 7) 
+   .~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100  -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
@@ -141,13 +144,6 @@ int main(int argc, char **argv)
   M_O_D_E_L___S_T_O( &Table );
 
   /* BEGIN : -------------------------------------------------------------------------
-   *  You may need to redimension Index vector to include and save the full list of
-   *  model parameters.
-   *  Redefinition of Parameter Space structure to allocate the whole parameter space
-   *  Important note:
-   *  This operation can only be done at the end of a main file before freeing all mem-
-   *  mory and ending.
-   *  (See also ./TEMPORAL_EVOLUTION_DETERMINISTIC/main.c)
    */
   char boundary_File[80];
   sprintf(boundary_File, "boundary_Model_Parameter.c");

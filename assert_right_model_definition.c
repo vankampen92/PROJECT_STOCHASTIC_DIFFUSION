@@ -13,5 +13,9 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 1 );
   
 #endif
-
+#if defined DIFFUSION_1R1C
+  
+    assert ( P->TYPE_of_MODEL == 2 );
+  
+#endif
 }

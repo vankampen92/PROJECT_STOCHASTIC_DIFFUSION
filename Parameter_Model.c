@@ -2,14 +2,29 @@
 
 void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_Source)
 {
+  P_Destination->Mu_C       = P_Source->Mu_C;
+  P_Destination->Mu         = P_Source->Mu;      /*  0 */
 
-  P_Destination->Mu         = P_Source->Mu;      /*  0 */ 
-  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
-  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
-  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0;
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0;
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1;
   P_Destination->Delta_R_1 = P_Source->Delta_R_1;
-  P_Destination->K_R        = P_Source->K_R; 
-  
+  P_Destination->K_R        = P_Source->K_R;
+
+  P_Destination->Beta_R     = P_Source->Beta_R;        /* -H5 */
+
+  P_Destination->Lambda_C_0 = P_Source->Lambda_C_0;     /* -H5 */
+  P_Destination->Delta_C_0  = P_Source->Delta_C_0;      /* -H6 */
+  P_Destination->Lambda_C_1 = P_Source->Lambda_C_1;     /* -H7 */
+  P_Destination->Delta_C_1  = P_Source->Delta_C_1;      /* -H8 */
+
+  P_Destination->Alpha_C_0  = P_Source->Alpha_C_0;      /* -H9 */
+  P_Destination->Nu_C_0     = P_Source->Nu_C_0;         /* -H10 */
+
+  P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
+  P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
+
+
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
   P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
@@ -38,22 +53,23 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Err_14 = P_Source->Err_14;
   P_Destination->Err_15 = P_Source->Err_15;
   P_Destination->Err_16 = P_Source->Err_16;
-  
-  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
+
+  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of GENUINE (output) VARIABLES */
   P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
+  P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
 
   P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
   P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
 
   //P_Destination->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
 
-  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS; 
+  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS;
   P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
   P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
   P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
-  
+
   /* Ex: 8 (without acummulating variables) */
   P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
   P_Destination->TYPE_of_NETWORK            = P_Source->TYPE_of_NETWORK;
@@ -64,7 +80,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
 
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
-  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
 }
 
 void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
@@ -75,13 +91,28 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
      control the dynamical model.
   */
 
-  P->Mu         = Table->Mu;       /*  0 */ 
-  P->Lambda_R_0 = Table->Lambda_R_0; 
-  P->Delta_R_0  = Table->Delta_R_0; 
-  P->Lambda_R_1 = Table->Lambda_R_1; 
+  P->Mu_C       = Table->Mu_C;
+  P->Mu         = Table->Mu;       /*  0 */
+
+  P->Lambda_R_0 = Table->Lambda_R_0;
+  P->Delta_R_0  = Table->Delta_R_0;
+  P->Lambda_R_1 = Table->Lambda_R_1;
   P->Delta_R_1  = Table->Delta_R_1;
-  P->K_R        = Table->K_R; 
-  
+  P->K_R        = Table->K_R;
+
+  P->Beta_R     = Table->Beta_R;        /* -H5 */
+
+  P->Lambda_C_0 = Table->Lambda_C_0;     /* -H5 */
+  P->Delta_C_0  = Table->Delta_C_0;      /* -H6 */
+  P->Lambda_C_1 = Table->Lambda_C_1;     /* -H7 */
+  P->Delta_C_1  = Table->Delta_C_1;      /* -H8 */
+
+  P->Alpha_C_0  = Table->Alpha_C_0;      /* -H9 */
+  P->Nu_C_0     = Table->Nu_C_0;         /* -H10 */
+
+  P->Chi_C_0    = Table->Chi_C_0;        /* -H11 */
+  P->Eta_C_0    = Table->Eta_C_0;        /* -H12 */
+
   P->No_of_IC = Table->No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = Table->TYPE_of_INITIAL_CONDITION;
   P->INITIAL_TOTAL_POPULATION  = Table->INITIAL_TOTAL_POPULATION;
@@ -91,7 +122,7 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->No_of_ERROR_PARAMETERS = Table->No_of_ERROR_PARAMETERS;
   P->Error_Parameter_0 = Table->Error_Parameter_0;
   P->Error_Parameter_1 = Table->Error_Parameter_1;
-  
+
   P->Err_0 = Table->Err_0;
   P->Err_1 = Table->Err_1;
   P->Err_2 = Table->Err_2;
@@ -114,6 +145,7 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->MODEL_OUTPUT_VARIABLES = Table->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P->MODEL_INPUT_PARAMETERS = Table->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P->MODEL_STATE_VARIABLES  = Table->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
+  P->LOCAL_STATE_VARIABLES  = Table->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
 
   P->TYPE_of_MODEL        = Table->TYPE_of_MODEL;
   P->Growth_Function_Type = Table->Growth_Function_Type;
@@ -121,11 +153,11 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   //P->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
 
   P->No_of_CELLS = Table->No_of_CELLS;
-  P->No_of_CELLS       = Table->No_of_CELLS; 
+  P->No_of_CELLS       = Table->No_of_CELLS;
   P->No_of_INDIVIDUALS = Table->No_of_INDIVIDUALS;
   P->No_of_CELLS_X     = Table->No_of_CELLS_X;
   P->No_of_CELLS_Y     = Table->No_of_CELLS_Y;
-  
+
   P->No_of_NEIGHBORS            = Table->No_of_NEIGHBORS;
   P->TYPE_of_NETWORK            = Table->TYPE_of_NETWORK;
   P->TOTAL_No_of_EVENTS         = Table->TOTAL_No_of_EVENTS;
@@ -135,85 +167,33 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 
   P->Metapop_Connectivity_Matrix = Table->Metapop_Connectivity_Matrix;
 
-  P->No_of_RESOURCES = Table->No_of_RESOURCES; 
+  P->No_of_RESOURCES = Table->No_of_RESOURCES;
 }
 
 void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, Parameter_Model * P_Source)
 {
-  P_Destination->Mu      = P_Source->Mu;       /*  0 */ 
+  P_Destination->Mu_C       = P_Source->Mu_C;
+  P_Destination->Mu         = P_Source->Mu;       /*  0 */
 
-  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
-  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
-  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0;
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0;
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1;
   P_Destination->Delta_R_1  = P_Source->Delta_R_1;
-  P_Destination->K_R        = P_Source->K_R; 
-  
-  P_Destination->No_of_IC = P_Source->No_of_IC;
-  P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
-  P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
-  P_Destination->RESCALING_INITIAL_TOTAL_POPULATION = P_Source->RESCALING_INITIAL_TOTAL_POPULATION;
+  P_Destination->K_R        = P_Source->K_R;
 
-  P_Destination->TYPE_of_ERROR_FUNCTION = P_Source->TYPE_of_ERROR_FUNCTION;
-  P_Destination->No_of_ERROR_PARAMETERS = P_Source->No_of_ERROR_PARAMETERS;
-  P_Destination->Error_Parameter_0 = P_Source->Error_Parameter_0;
-  P_Destination->Error_Parameter_1 = P_Source->Error_Parameter_1;
-  
-  P_Destination->Err_0 = P_Source->Err_0;
-  P_Destination->Err_1 = P_Source->Err_1;
-  P_Destination->Err_2 = P_Source->Err_2;
-  P_Destination->Err_3 = P_Source->Err_3;
-  P_Destination->Err_4 = P_Source->Err_4;
-  P_Destination->Err_5 = P_Source->Err_5;
-  P_Destination->Err_6 = P_Source->Err_6;
-  P_Destination->Err_7 = P_Source->Err_7;
-  P_Destination->Err_8 = P_Source->Err_8;
-  P_Destination->Err_9 = P_Source->Err_9;
-  P_Destination->Err_10 = P_Source->Err_11;
-  P_Destination->Err_11 = P_Source->Err_11;
-  P_Destination->Err_12 = P_Source->Err_12;
-  P_Destination->Err_13 = P_Source->Err_13;
-  P_Destination->Err_14 = P_Source->Err_14;
-  P_Destination->Err_15 = P_Source->Err_15;
-  P_Destination->Err_16 = P_Source->Err_16; 
+  P_Destination->Beta_R     = P_Source->Beta_R;        /* -H5 */
 
-  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
-  P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
-  P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
-  P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
+  P_Destination->Lambda_C_0 = P_Source->Lambda_C_0;     /* -H5 */
+  P_Destination->Delta_C_0  = P_Source->Delta_C_0;      /* -H6 */
+  P_Destination->Lambda_C_1 = P_Source->Lambda_C_1;     /* -H7 */
+  P_Destination->Delta_C_1  = P_Source->Delta_C_1;      /* -H8 */
 
-  P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
-  P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
+  P_Destination->Alpha_C_0  = P_Source->Alpha_C_0;      /* -H9 */
+  P_Destination->Nu_C_0     = P_Source->Nu_C_0;         /* -H10 */
 
-  //P->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
-  
-  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS; 
-  P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
-  P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
-  P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
+  P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
+  P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
 
-  /* Ex: 8 (without acummulating variables) */
-  P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
-  P_Destination->TYPE_of_NETWORK            = P_Source->TYPE_of_NETWORK;
-  P_Destination->TOTAL_No_of_EVENTS         = P_Source->TOTAL_No_of_EVENTS;
-  /* Total Number of Events within a patch, i.e., 18 * 4 = 72 */
-  P_Destination->No_of_EVENTS               = P_Source->No_of_EVENTS;
-  /* Number of Events within an age class, i.e., 18           */
-
-  P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
-
-  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
-}
-
-void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
-{
-
-  P_Destination->Mu      = P_Source->Mu;       /*  0 */ 
-
-  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0; 
-  P_Destination->Delta_R_0  = P_Source->Delta_R_0; 
-  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1; 
-  P_Destination->Delta_R_1  = P_Source->Delta_R_1;
-  P_Destination->K_R        = P_Source->K_R; 
 
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -247,6 +227,91 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
+  P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
+
+
+  P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
+  P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
+
+  //P->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
+
+  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS;
+  P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
+  P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
+  P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
+
+  /* Ex: 8 (without acummulating variables) */
+  P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
+  P_Destination->TYPE_of_NETWORK            = P_Source->TYPE_of_NETWORK;
+  P_Destination->TOTAL_No_of_EVENTS         = P_Source->TOTAL_No_of_EVENTS;
+  /* Total Number of Events within a patch, i.e., 18 * 4 = 72 */
+  P_Destination->No_of_EVENTS               = P_Source->No_of_EVENTS;
+  /* Number of Events within an age class, i.e., 18           */
+
+  P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
+
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
+}
+
+void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
+{
+  P_Destination->Mu_C       = P_Source->Mu_C;
+  P_Destination->Mu         = P_Source->Mu;       /*  0 */
+
+  P_Destination->Lambda_R_0 = P_Source->Lambda_R_0;
+  P_Destination->Delta_R_0  = P_Source->Delta_R_0;
+  P_Destination->Lambda_R_1 = P_Source->Lambda_R_1;
+  P_Destination->Delta_R_1  = P_Source->Delta_R_1;
+  P_Destination->K_R        = P_Source->K_R;
+
+  P_Destination->Beta_R     = P_Source->Beta_R;        /* -H5 */
+
+  P_Destination->Lambda_C_0 = P_Source->Lambda_C_0;     /* -H5 */
+  P_Destination->Delta_C_0  = P_Source->Delta_C_0;      /* -H6 */
+  P_Destination->Lambda_C_1 = P_Source->Lambda_C_1;     /* -H7 */
+  P_Destination->Delta_C_1  = P_Source->Delta_C_1;      /* -H8 */
+
+  P_Destination->Alpha_C_0  = P_Source->Alpha_C_0;      /* -H9 */
+  P_Destination->Nu_C_0     = P_Source->Nu_C_0;         /* -H10 */
+
+  P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
+  P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
+
+
+  P_Destination->No_of_IC = P_Source->No_of_IC;
+  P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
+  P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
+  P_Destination->RESCALING_INITIAL_TOTAL_POPULATION = P_Source->RESCALING_INITIAL_TOTAL_POPULATION;
+
+  P_Destination->TYPE_of_ERROR_FUNCTION = P_Source->TYPE_of_ERROR_FUNCTION;
+  P_Destination->No_of_ERROR_PARAMETERS = P_Source->No_of_ERROR_PARAMETERS;
+  P_Destination->Error_Parameter_0 = P_Source->Error_Parameter_0;
+  P_Destination->Error_Parameter_1 = P_Source->Error_Parameter_1;
+
+  P_Destination->Err_0 = P_Source->Err_0;
+  P_Destination->Err_1 = P_Source->Err_1;
+  P_Destination->Err_2 = P_Source->Err_2;
+  P_Destination->Err_3 = P_Source->Err_3;
+  P_Destination->Err_4 = P_Source->Err_4;
+  P_Destination->Err_5 = P_Source->Err_5;
+  P_Destination->Err_6 = P_Source->Err_6;
+  P_Destination->Err_7 = P_Source->Err_7;
+  P_Destination->Err_8 = P_Source->Err_8;
+  P_Destination->Err_9 = P_Source->Err_9;
+  P_Destination->Err_10 = P_Source->Err_11;
+  P_Destination->Err_11 = P_Source->Err_11;
+  P_Destination->Err_12 = P_Source->Err_12;
+  P_Destination->Err_13 = P_Source->Err_13;
+  P_Destination->Err_14 = P_Source->Err_14;
+  P_Destination->Err_15 = P_Source->Err_15;
+  P_Destination->Err_16 = P_Source->Err_16;
+
+  P_Destination->OUTPUT_VARIABLES_GENUINE = P_Source->OUTPUT_VARIABLES_GENUINE;/* Actual no of MODEL (output) VARIABLES */
+  P_Destination->MODEL_OUTPUT_VARIABLES = P_Source->MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
+  P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
+  P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
+  P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
+
 
   P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
   P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
@@ -254,20 +319,20 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
 
   //P->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
 
-  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS; 
+  P_Destination->No_of_CELLS       = P_Source->No_of_CELLS;
   P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
   P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
   P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
   P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
-  
+
   P_Destination->TOTAL_No_of_EVENTS         = P_Source->TOTAL_No_of_EVENTS;
   /* Total Number of Events within a patch, i.e., 18 * 4 = 72 */
   P_Destination->No_of_EVENTS               = P_Source->No_of_EVENTS;
   /* Number of Events within an age class, i.e., 18           */
-  
+
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
-  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES; 
+  P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
 }
 
 void Vector_Entries_into_Parameter_Model ( const gsl_vector * X, Parameter_Model * P,
@@ -289,35 +354,59 @@ void Vector_Entry_into_Parameter_Model ( double value, int key, Parameter_Model 
 
   switch (key) {
 
-  case  0: P->Mu = value;     
+  case  0: P->Mu = value;
     break;
-  case  1: P->No_of_INDIVIDUALS = (int)value;   
+  case  1: P->No_of_INDIVIDUALS = (int)value;
     break;
-  case  2: P->No_of_CELLS       = (int)value;  
+  case  2: P->No_of_CELLS       = (int)value;
     break;
-  case  3: P->No_of_CELLS_X     = (int)value;  
+  case  3: P->No_of_CELLS_X     = (int)value;
     break;
-  case  4: P->No_of_CELLS_Y     = (int)value;  
+  case  4: P->No_of_CELLS_Y     = (int)value;
     break;
-  case  5: P->No_of_RESOURCES     = (int)value;  
+  case  5: P->No_of_RESOURCES     = (int)value;
     break;
-    
-  case  6: P->Lambda_R_0 = value; 
+
+  case  6: P->Lambda_R_0 = value;
     break;
-  case  7: P->Delta_R_0  = value; 
+  case  7: P->Delta_R_0  = value;
     break;
-  case  8: P->Lambda_R_1 = value; 
+  case  8: P->Lambda_R_1 = value;
     break;
-  case  9: P->Delta_R_1  = value; 
+  case  9: P->Delta_R_1  = value;
     break;
-  case 10: P->K_R        = (int)value;              /* Resource Carrying Capacity */ 
+  case 10: P->K_R        = (int)value;              /* Resource Carrying Capacity */
     break;
-    
+  case 11: P->Beta_R = value;        /* -H4 */
+    break;
+
+  case 12: P->Lambda_C_0 = value;     /* -H5 */
+    break;
+  case 13: P->Delta_C_0 = value;      /* -H6 */
+    break;
+  case 14: P->Lambda_C_1 = value;     /* -H7 */
+    break;
+  case 15: P->Delta_C_1 = value;      /* -H8 */
+    break;
+
+  case 16: P->Alpha_C_0 = value;      /* -H9 */
+    break;
+  case 17: P->Nu_C_0 = value;         /* -H10 */
+    break;
+
+  case 18: P->Chi_C_0 = value;        /* -H11 */
+    break;
+  case 19: P->Eta_C_0 = value;        /* -H12 */
+    break;
+
+  case 20: P->Mu_C = value;           /* -H13 */
+    break;
+
   default:
     printf(".... INVALID PARAMETER KEY (key = %d)\n", key);
     printf(" The maximum number of parameters is Number_PAR_MAX\n");
     printf(" The permited number of keys go from 0, to %d\n", MODEL_PARAMETERS_MAXIMUM-1);
-    
+
     exit(0);
   }
 }
@@ -342,30 +431,54 @@ double Parameter_Model_into_Vector_Entry ( int key, Parameter_Model * P )
 
   switch (key) {
 
-  case  0: value = P->Mu;    
+  case  0: value = P->Mu;
     break;
-  case  1: value = (double)P->No_of_INDIVIDUALS;   
+  case  1: value = (double)P->No_of_INDIVIDUALS;
     break;
-  case  2: value = (double)P->No_of_CELLS;  
+  case  2: value = (double)P->No_of_CELLS;
     break;
   case  3: value = (double)P->No_of_CELLS_X;
     break;
-  case  4: value = (double)P->No_of_CELLS_Y;  
+  case  4: value = (double)P->No_of_CELLS_Y;
     break;
-  case  5: value = (double)P->No_of_RESOURCES;  
+  case  5: value = (double)P->No_of_RESOURCES;
     break;
-  
-  case  6: value = P->Lambda_R_0; 
+
+  case  6: value = P->Lambda_R_0;
       break;
-  case  7: value = P->Delta_R_0; 
+  case  7: value = P->Delta_R_0;
     break;
-  case  8: value = P->Lambda_R_1; 
+  case  8: value = P->Lambda_R_1;
     break;
-  case  9: value = P->Delta_R_1; 
+  case  9: value = P->Delta_R_1;
     break;
-  case 10: value = (double)P->K_R;              /* Resource Carrying Capacity */ 
+  case 10: value = (double)P->K_R;   /* Resource Carrying Capacity */
     break;
-    
+  case 11: value = P->Beta_R;        /* -H4 */
+    break;
+
+  case 12: value = P->Lambda_C_0;     /* -H5 */
+    break;
+  case 13: value = P->Delta_C_0;      /* -H6 */
+    break;
+  case 14: value = P->Lambda_C_1;     /* -H7 */
+    break;
+  case 15: value = P->Delta_C_1;      /* -H8 */
+    break;
+
+  case 16: value = P->Alpha_C_0;      /* -H9 */
+    break;
+  case 17: value = P->Nu_C_0;         /* -H10 */
+    break;
+
+  case 18: value = P->Chi_C_0;        /* -H11 */
+    break;
+  case 19: value = P->Eta_C_0;        /* -H12 */
+    break;
+
+  case 20: value = P->Mu_C;           /* -H13 */
+    break;
+
   default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", key);
       printf(" The maximum number of parameters is Number_PAR_MAX\n");

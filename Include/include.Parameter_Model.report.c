@@ -14,5 +14,19 @@ fprintf(fp, " Resource Decaying Rate (0)            ...> -H1   %g\n", Delta_R_0)
 fprintf(fp, " External Immigration Rate (1)         ...> -H2   %g\n", Lambda_R_1);
 fprintf(fp, " Resource Decaying Rate (1)            ...> -H3   %g\n", Delta_R_1);
 fprintf(fp, " Resource Patch Carrying Capicity      ...> -HK   %d\n", K_R);
+fprintf(fp, " Resource Patch Carrying Capicity      ...> -H4   %g\n", Beta_R);         /* -H4 */
+
+fprintf(fp, "Consumer External Immigration Rate (0) ---> -H5   %g\n", Lambda_C_0);     /* -H5 */
+fprintf(fp, "Consumer Death Rate (0)                ---> -H6   %g\n", Delta_C_0);      /* -H6 */
+fprintf(fp, "Consumer External Immigration Rate (0) ---> -H7   %g\n", Lambda_C_1);     /* -H7 */
+fprintf(fp, "Consumer Death Rate (0)                ---> -H8   %g\n", Delta_C_1);      /* -H8 */
+
+fprintf(fp, "Comsumer Attack Rate (0)              ---> -H9    %g\n", Alpha_C_0);      /* -H9 */
+fprintf(fp, "Nu (One over the handling time)       ---> -H10   %g\n", Nu_C_0);         /* -H10 */
+fprintf(fp, "Triplet formation rate (0)            ---> -H11   %g\n", Chi_C_0);        /* -H11 */
+fprintf(fp, "Triplet desintegration rate (0)       ---> -H12   %g\n", Eta_C_0);        /* -H12 */
+
+fprintf(fp, "Consumer movement rate (0)            ---> -H13   %g\n", Mu_C);           /* -H13 */
+
 
 

@@ -24,7 +24,7 @@ double Total_Population_Resource_Species (double * Y, Parameter_Table * Table)
   j = Table->Focal_Resource;
   x = 0.0;
   for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-    if(i%Table->No_of_RESOURCES == j) x += Y[i]; 
+    if(i%Table->LOCAL_STATE_VARIABLES == j) x += Y[i]; 
   
   return(x);
 }
