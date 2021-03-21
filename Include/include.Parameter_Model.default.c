@@ -14,7 +14,7 @@ Mu_C    = 0.0;        /* -H13 *//* Consumers: Movement Per Capita Rate Between P
 Lambda_R_0 = 0.0;      /* -H0 */
 Delta_R_0  = 0.5;      /* -H1 */
 
-K_R        = 5000.0;    /* -HK */ /* Resource Carrying Capacity */ 
+K_R        = 500.0;    /* -HK */ /* Resource Carrying Capacity */ 
 Beta_R     = 1.5;      /* -H4 */ 
   
 Lambda_C_0 = 10.0;     /* -H5 */

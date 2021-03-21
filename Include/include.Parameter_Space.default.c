@@ -244,6 +244,23 @@ Acc_P39 = 0.01;
 TOLERANCE = 1.0E-3;
 MAX_No_of_ITERATIONS = 100;
 
+#if defined DIFFUSION_1R1C
+No_of_PARAMETERS = 13;
+I0 =   0;  min_P0 =  0.0;   MAX_P0 =    1.0;    /* Resource Moviment Rate */
+I1 =   5;  min_P1 =  1.0;   MAX_P1 =    1.0;    /* Number of Species Resource */
+I2 =   6;  min_P2 =  0.0;   MAX_P2 =    0.001;  /* External Resource Immigration Rate */
+I3 =   7;  min_P3 =  0.0;   MAX_P3 =    1.0;    /* Resource Death Rate */
+I4 =  10;  min_P4 =  0.0;   MAX_P4 = 1000.0;    /* Resource Carrying Capacity */
+I5 =  11;  min_P5 =  0.0;   MAX_P5 =    5.0;    /* Resource Local Growth Rate */
+I6 =  12;  min_P6 =  0.0;   MAX_P6 =    0.001;  /* External Consumer Immigration Rate */
+I7 =  13;  min_P7 =  0.0;   MAX_P7 =    0.5;    /* Consumer Death Rate */ 
+I8 =  16;  min_P8 =  0.0;   MAX_P8 =    5.0;    /* Consumer Attack Rate */
+I9 =  17;  min_P9 =  0.0;   MAX_P9 =    5.0;    /* Nu = 1/Tau, where Tau is the Handling Time */
+I10 = 18;  min_P10 = 0.0;   MAX_P10 =   5.0;    /* Trimer Formation */
+I11 = 19 ; min_P11 = 0.0;   MAX_P11 =   5.0;    /* Trimer Degration */
+I12 = 20 ; min_P12 = 0.0;   MAX_P12 =   5.0;    /* Consumer Movement Rata */
+#endif
+
 /* Ranges = (double **)calloc(2, sizeof(double *)); */
 /* Ranges[0] = (double *)calloc(MODEL_PARAMETER_SPACE_MAXIMUM, sizeof(double)); */
 /* Ranges[1] = (double *)calloc(MODEL_PARAMETER_SPACE_MAXIMUM, sizeof(double)); */
