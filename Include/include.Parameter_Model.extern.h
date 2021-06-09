@@ -26,4 +26,13 @@ extern double Eta_C_0;        /* -H12 */
 
 extern double Mu_C;           /* -H13 */
 
+extern int N_E;               /* -H14 */ /* Number of Energy Levels */
+extern int f;                 /* -H15 */ /* Fecundity: Number of Offspring Individuals */
+extern int i_0;               /* -H16 */ /* Energy Level at Maturity  */
+extern double Beta_C;         /* -H17 */ /* Consummer Reproduction Rate */
+extern int k_E;               /* -H18 */ /* 2* k_E is the resourse value in energy units */
+extern double Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
+extern double p_1;     /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
+extern double p_2;     /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
+
 #include <include.Type_of_Model.extern.h>

@@ -18,7 +18,7 @@
               else if(argv[argcount][2]=='E')
 		fprintf(fp,"-tE  %g  ",Table->T->EPSILON);
               else if(argv[argcount][2]=='D')
-		fprintf(fp,"-tD  %d  ", argv[argcount+1], DISCARTING_EXTINCTIONS);
+		fprintf(fp,"-tD  %d  ", Table->T->DISCARTING_EXTINCTIONS);
               else exit(0);
 	      skip++;
 	      break;

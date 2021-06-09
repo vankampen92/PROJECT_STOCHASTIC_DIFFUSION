@@ -24,6 +24,14 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
   P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
 
+  P_Destination->N_E        = P_Source->N_E;   /* -H14 */ /* Number of Energy Levels */
+  P_Destination->f          = P_Source->f;     /* -H15 */ /* Fecundity: No of Offspring Ind */ 
+  P_Destination->i_0        = P_Source->i_0;   /* -H16 */ /* Energy Level at Maturity  */
+  P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+  P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
+  P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
+  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
 
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -59,6 +67,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
   P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
+  P_Destination->SUM_LOCAL_STATE_VARIABLES  = P_Source->SUM_LOCAL_STATE_VARIABLES;  
 
   P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
   P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
@@ -113,6 +122,15 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Chi_C_0    = Table->Chi_C_0;        /* -H11 */
   P->Eta_C_0    = Table->Eta_C_0;        /* -H12 */
 
+  P->N_E        = Table->N_E;   /* -H14 */ /* Number of Energy Levels */
+  P->f          = Table->f;     /* -H15 */ /* Fecundity: No of Offspring Ind */ 
+  P->i_0        = Table->i_0;   /* -H16 */ /* Energy Level at Maturity  */
+  P->Beta_C     = Table->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+  P->k_E        = Table->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
+  P->Theta_C    = Table->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
+  P->p_1        = Table->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
+  P->p_2        = Table->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  
   P->No_of_IC = Table->No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = Table->TYPE_of_INITIAL_CONDITION;
   P->INITIAL_TOTAL_POPULATION  = Table->INITIAL_TOTAL_POPULATION;
@@ -146,7 +164,8 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->MODEL_INPUT_PARAMETERS = Table->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P->MODEL_STATE_VARIABLES  = Table->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
   P->LOCAL_STATE_VARIABLES  = Table->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
-
+  P->SUM_LOCAL_STATE_VARIABLES  = Table->SUM_LOCAL_STATE_VARIABLES;  
+  
   P->TYPE_of_MODEL        = Table->TYPE_of_MODEL;
   P->Growth_Function_Type = Table->Growth_Function_Type;
 
@@ -194,7 +213,15 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
   P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
 
-
+  P_Destination->N_E        = P_Source->N_E;   /* -H14 */ /* Number of Energy Levels */
+  P_Destination->f          = P_Source->f;     /* -H15 */ /* Fecundity: No of Offspring Ind */ 
+  P_Destination->i_0        = P_Source->i_0;   /* -H16 */ /* Energy Level at Maturity  */
+  P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+  P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
+  P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
+  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
   P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
@@ -228,7 +255,7 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
   P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
-
+  P_Destination->SUM_LOCAL_STATE_VARIABLES  = P_Source->SUM_LOCAL_STATE_VARIABLES;  
 
   P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
   P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
@@ -277,6 +304,14 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->Chi_C_0    = P_Source->Chi_C_0;        /* -H11 */
   P_Destination->Eta_C_0    = P_Source->Eta_C_0;        /* -H12 */
 
+  P_Destination->N_E        = P_Source->N_E;   /* -H14 */ /* Number of Energy Levels */
+  P_Destination->f          = P_Source->f;     /* -H15 */ /* Fecundity: No of Offspring Ind */ 
+  P_Destination->i_0        = P_Source->i_0;   /* -H16 */ /* Energy Level at Maturity  */
+  P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+  P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
+  P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
+  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
 
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -311,7 +346,7 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->MODEL_INPUT_PARAMETERS = P_Source->MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
   P_Destination->MODEL_STATE_VARIABLES  = P_Source->MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES  */
   P_Destination->LOCAL_STATE_VARIABLES  = P_Source->LOCAL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES in every local population */
-
+  P_Destination->SUM_LOCAL_STATE_VARIABLES  = P_Source->SUM_LOCAL_STATE_VARIABLES;  
 
   P_Destination->TYPE_of_MODEL        = P_Source->TYPE_of_MODEL;
   P_Destination->Growth_Function_Type = P_Source->Growth_Function_Type;
@@ -402,6 +437,30 @@ void Vector_Entry_into_Parameter_Model ( double value, int key, Parameter_Model 
   case 20: P->Mu_C = value;           /* -H13 */
     break;
 
+  case 21: P->N_E        = value; //N_E;  /* -H14 */ /* Number of Energy Levels */
+    break;
+    
+  case 22: P->f          = value; //f;    /* -H15 */ /* Fecundity: Number of Offspring  */
+    break;
+    
+  case 23: P->i_0        = value; //i_0;  /* -H16 */ /* Energy Level at Maturity  */
+    break;
+    
+  case 24: P->Beta_C     = value; //Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+    break;
+    
+  case 25: P->k_E        = value; /* -H18 */ /* 2* k_E is the resourse value in energy units */
+    break;
+    
+  case 26: P->Theta_C    = value; /* -H19 */ /* Energy loss rate for maintenance */
+    break;
+    
+  case 27: P->p_1        = value; /* Cooperation probability 1st position in the triplet */
+    break;
+    
+  case 28: P->p_2        = value; /* Cooperation probability 2on position in the triplet */  
+    break;
+
   default:
     printf(".... INVALID PARAMETER KEY (key = %d)\n", key);
     printf(" The maximum number of parameters is Number_PAR_MAX\n");
@@ -477,6 +536,30 @@ double Parameter_Model_into_Vector_Entry ( int key, Parameter_Model * P )
     break;
 
   case 20: value = P->Mu_C;           /* -H13 */
+    break;
+
+  case 21: value = P->N_E        ; //N_E;  /* -H14 */ /* Number of Energy Levels */
+    break;
+    
+  case 22: value = P->f          ; //f;    /* -H15 */ /* Fecundity: Number of Offspring  */
+    break;
+    
+  case 23: value = P->i_0        ; //i_0;  /* -H16 */ /* Energy Level at Maturity  */
+    break;
+    
+  case 24: value = P->Beta_C     ; //Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+    break;
+    
+  case 25: value = P->k_E        ; /* -H18 */ /* 2* k_E is the resourse value in energy units */
+    break;
+    
+  case 26: value = P->Theta_C    ; /* -H19 */ /* Energy loss rate for maintenance */
+    break;
+    
+  case 27: value = P->p_1        ; /* Cooperation probability 1st position in the triplet */
+    break;
+    
+  case 28: value = P->p_2        ; /* Cooperation probability 2on position in the triplet */  
     break;
 
   default:

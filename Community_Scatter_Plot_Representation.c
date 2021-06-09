@@ -2,7 +2,9 @@
 
 extern gsl_rng * r; /* Global generator defined in main.c */
 
-#if defined DIFFUSION_1R1C
+// #define SCATTERED_4SP
+
+#if defined SCATTERED_4SP
 void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 					    int i_Replicate, int j_Time )
 {
@@ -61,7 +63,7 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 	break;
       default:
 	printf(" This plotting funciton does not work if the\n");
-	printf(" number of species is greater than 4!!!\n");
+	printf(" number of local state variables is greater than 4!!!\n");
 	printf(" Here, the species index is %d,\n", Sp);
 	printf(" which means that the number of species is\n");
 	printf(" at least %d\n", Sp+1);

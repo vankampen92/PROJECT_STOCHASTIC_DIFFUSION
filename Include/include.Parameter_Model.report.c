@@ -28,5 +28,13 @@ fprintf(fp, "Triplet desintegration rate (0)       ---> -H12   %g\n", Eta_C_0); 
 
 fprintf(fp, "Consumer movement rate (0)            ---> -H13   %g\n", Mu_C);           /* -H13 */
 
+fprintf(fp, "Number of Energy Levels (0)           ---> -H14    %d\n", N_E);      /* -H14 */
+fprintf(fp, "Fecundity: Per Capita Offspring No    ---> -H15   %d\n",  f);         /* -H15 */
+fprintf(fp, "Energy Level at Maturity              ---> -H16   %d\n",  i_0);        /* -H16 */
+fprintf(fp, "Consummer Reproduction Rate           ---> -H17   %g\n",   Beta_C);        /* -H17 */
+fprintf(fp, "2* k_E: resourse value in energy units ---> -H18    %d\n", k_E);     /* -H18 */
+fprintf(fp, "Maintenance Energy Loss Rate           ---> -H19   %g\n",  Theta_C); /* -H19 */
+fprintf(fp, "Cooperation probability 1st position   ---> -H20   %g\n", p_1);        /* -H20 */
+fprintf(fp, "Cooperation probability 2on position   ---> -H21   %g\n", p_2);        /* -H21 */
 
 

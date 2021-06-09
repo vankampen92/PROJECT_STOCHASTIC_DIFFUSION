@@ -49,7 +49,15 @@ double GSL_Minimization_Driver( Parameter_Fitting * F )
 
   if( F->Minimization == 1 )       Value = GSL_Minimization_Simplex( F, x, x, F->Function );
   
-  else if ( F->Minimization == 0 ) Value =  ( * F->Function )( x, F );
+  else if ( F->Minimization == 0 ) {
+    Value =  ( * F->Function )( x, F );
+    #if defined VERBOSE
+    #if defined CPGPLOT_REPRESENTATION
+       GSL_CPGPLOT_Minimization_Simplex (F, x, 0, F->Function);
+    #endif
+    #endif 
+    return(Value);
+  }
   
   else     printf(" Error in 1/0 Minimization input argument!\n ---> Minimization = %d\n",
            F->Minimization );

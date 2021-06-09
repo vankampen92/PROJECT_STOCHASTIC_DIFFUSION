@@ -18,7 +18,7 @@
 	      else if(argv[argcount][2]=='E')
 		sscanf(argv[argcount+1],"%lf",&EPSILON);
 	      else if(argv[argcount][2]=='D')
-		sscanf(argv[argcount+1],"%d",&DISCARTING_EXTINCTIONS);
+		sscanf(argv[argcount+1],"%d", &DISCARTING_EXTINCTIONS);
               else exit(0);
 	      skip++;
 	      break;

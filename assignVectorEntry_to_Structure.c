@@ -33,8 +33,11 @@ void Vector_Entries_into_Parameter_Table_Initial_Condition ( const gsl_vector * 
 
 void AssignVectorEntry_to_Structure(Parameter_Table * P, int j, double value)
 {
-
-  switch(j)
+  int i,k; 
+ 
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+  
+    switch(j)
     {
    
     case  0: P->Mu = value;     
@@ -84,8 +87,31 @@ void AssignVectorEntry_to_Structure(Parameter_Table * P, int j, double value)
 
     case 20: P->Mu_C = value;        /* -H12 */
       break;
+
+    case 21: P->N_E        = value; //N_E;  /* -H14 */ /* Number of Energy Levels */
+    break;
     
-    
+    case 22: P->f          = value; //f;    /* -H15 */ /* Fecundity: Number of Offspring  */
+      break;
+      
+    case 23: P->i_0        = value; //i_0;  /* -H16 */ /* Energy Level at Maturity  */
+      break;
+      
+    case 24: P->Beta_C     = value; //Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
+      break;
+      
+    case 25: P->k_E        = value; /* -H18 */ /* 2* k_E is the resourse value in energy units */
+      break;
+      
+    case 26: P->Theta_C    = value; /* -H19 */ /* Energy loss rate for maintenance */
+      break;
+      
+    case 27: P->p_1        = value; /* Cooperation probability 1st position in the triplet */
+      break;
+      
+    case 28: P->p_2        = value; /* Cooperation probability 2on position in the triplet */  
+      break;
+
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", j);
 
@@ -98,4 +124,12 @@ void AssignVectorEntry_to_Structure(Parameter_Table * P, int j, double value)
 
       exit(0);
     }
+  }
+  else {
+    assert( P->TDC->TYPE_2_PARAMETERS > 0 && P->x_Bool == 0 );
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    P->TDC->TDC_Function_Params[k][i] = value; 
+  } 
 }

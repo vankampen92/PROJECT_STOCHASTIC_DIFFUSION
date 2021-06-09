@@ -8,25 +8,29 @@
 
 #define INTEGER_CODE_FOR_TIME_DIMENSION 0
 
-#define DEPENDENT_PARAMETERS_MAXIMUM 21   /* Maximum number of potentially forced parameters */
+/* Model parameters are drawn from a pool. Only the most complex model defined uses them all */
+/* Simpler models only use a subset from the whole pool. The maximum number of model parameters 
+   for each specific model is defined in the corresponding MODEL_DEFINE_MAX_VARIABLES_[MODEL].h 
+   file, which defines the dinension of the whole parameter space for that particular model 
+*/
 
-#define MODEL_PARAMETERS_MAXIMUM 21       /* Maximum No of MODEL (input) PARAMETERS */
+#define No_of_TDC_FUNC_AUX_PARAM_MAX 10   /* Maximum No of Time Dependence Function Auxiliary
+                                             Parameters required to define the potential time 
+                                             dependence in each true model parametes 
+                                          */
+#define DEPENDENT_PARAMETERS_MAXIMUM 29   /* Maximum number of potentially forced parameters */
 
-#define MODEL_PARAMETER_SPACE_MAXIMUM 21  /* Maximum Dimension for Parameter Space */
-
-#define No_of_CELLS_MAXIMUM 10000
-
-#define No_of_RESOURCES_MAXIMUM 10        /* S *//* Number of local states */
-
-#define MODEL_STATE_VARIABLES_MAXIMUM 100000  /* M */ /* Dimension maximum: 2 * 10000 cells */
-                                              /* S * M */
-#define OUTPUT_VARIABLES_GENUINE_MAXIMUM 13 /* Number Output Variables            */
-                                            /* (other than MODEL_STATE_VARIABLES) */
-                                            /* 3 (Resources Maximum) + 3          */
-                                            /* See definition_OutPut_Variables.c  */
-
-#define OUTPUT_VARIABLES_MAXIMUM 100013 /* MODEL_STATE_VARIABLES_MAXIMUM +
-					       OUTPUT_VARIABLES_GENUINE_MAXIMUM */
+#define MODEL_PARAMETERS_MAXIMUM 29      /* Maximum No of MODEL (input) PARAMETERS */
+                                         /* The total number of parameters in 
+					    model-paramaters-related assign functions 
+					 */
+#ifdef DIFFUSION_1RnC_E
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
+#elif defined DIFFUSION_1R1C
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1R1C.h"
+#elif defined DIFFUSION_1R1C_2D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1R1C_2D.h"
+#endif
 
 typedef struct totalRateinfo
 {
@@ -56,6 +60,8 @@ typedef struct totalRateinfo
 #include "MODEL_Parameter_Fitting_STRUCT_DEF.h"
 
 #include <Time_Control.h>
+
+#include <Observed_Data.h>
 
 #include <Parameter_Model.h>
 

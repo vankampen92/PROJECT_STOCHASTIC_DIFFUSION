@@ -1,6 +1,6 @@
 #include "./Include/MODEL.h"
 
-void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
+void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 {
   char * p;
   Label[0] = '\0';
@@ -53,7 +53,24 @@ void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
     case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
       break;
-    
+
+    case 21:  p = strcat(Label, "Number of Energy Levels ");   
+      break;
+    case 22:  p = strcat(Label, "Per Capita Fecundity: No of Offspring ");   
+      break;
+    case 23:  p = strcat(Label, "Energy Level at Maturity ");   
+      break; 
+    case 24:  p = strcat(Label, "Consummer Reproduction Rate");   
+      break;
+    case 25:  p = strcat(Label, "2*k_E is the resourse value in energy units ");   
+      break;
+    case 26:  p = strcat(Label, "Maintainance Energy loss rate");   
+      break;
+    case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
+      break; 
+    case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
+      break;
+      
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
       printf(".... The permited correspondences are (0 to 6):\n");
@@ -61,4 +78,28 @@ void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       fprintf_Model_Parameters(stdout, P);
       exit(0);
     }
+}
+
+void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table * P)
+{
+  int i, k;
+  char * p;
+  
+  Label[0] = '\0';
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+    Label_to_Model_Parameters(j, Label, P);
+  }
+  else{
+    
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    Label_to_Model_Parameters(k, Label, P);
+    char * I_P = (char *)calloc(10, sizeof(char)); 
+    sprintf(I_P, "%d", i); 
+    p = strcat(Label, " (t)[");
+    p = strcat(Label, I_P);
+    p = strcat(Label, "]");
+    free(I_P); 
+  }
 }

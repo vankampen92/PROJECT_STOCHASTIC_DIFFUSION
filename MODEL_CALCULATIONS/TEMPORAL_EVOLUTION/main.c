@@ -49,6 +49,11 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
+
+   Coarse-grained 2D system (two species 1R and 1C):
+   .~ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 4 -HX 2 -HY 2 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 50 -HN 50 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 100.0 -H0 0.01 -H5 0.01 -H6 0.5
+
+   More examples in ./command_line_examples.txt.
 */
 
 int main(int argc, char **argv)
@@ -64,7 +69,8 @@ int main(int argc, char **argv)
   /* Command line arguments */
   if(argc>1) ArgumentControl(argc,argv);
 
-#include "include.Output_Variables.default.aux.c"
+#include <include.Output_Variables.default.aux.c>
+  
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C(   &Table );
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( &Table, Index_Output_Variables );
   printf(" Parameter_Table structure has been correctly allocated and initiated\n");
@@ -72,6 +78,11 @@ int main(int argc, char **argv)
 
   /* B E G I N : Reserving memmory for Parameter Space */
 #include <include.Parameter_Space.default.aux.c>
+  if( No_of_PARAMETERS == Table.TOTAL_No_of_MODEL_PARAMETERS ) {
+    /* Full parameter space is in place. See also Model_Variables_Code.c */
+    for(i=0; i<Table.TOTAL_No_of_MODEL_PARAMETERS; i++) Index[i] = Table.Index[i];
+    No_of_PARAMETERS = Table.TOTAL_No_of_MODEL_PARAMETERS;
+  }
   Parameter_Space * Space = (Parameter_Space *)calloc(1, sizeof(Parameter_Space));
   Parameter_Space_Alloc( Space, No_of_PARAMETERS, d);
   Parameter_Space_Initialization( Space, No_of_PARAMETERS, TOLERANCE, MAX_No_of_ITERATIONS,
@@ -81,15 +92,15 @@ int main(int argc, char **argv)
   /*     E N D : ------------------------------------- */
 
 #include <gsl_random_number_Setup.c>
-#if defined VERBOSE
+  // #if defined VERBOSE
   /* BEGIN: Checking Random Number Generator Setup */
   for(i=0; i<10; i++){
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n");//Press_Key();
+  printf("\n"); Press_Key();
   /*   END: Checking Random Number Generator Setup */
-#endif
+  // #endif
 
   if (TYPE_of_TIME_DEPENDENCE == 0) {
     printf(" Time_Control structure will be allocated: \n");
@@ -131,18 +142,21 @@ int main(int argc, char **argv)
   printf(" Table.CPG_STO will store stochastic dynamic variables to plot\n");
   printf(" As a consquence, deterministic and stochastic dynamics can be plotted\n");
   printf(" on the same device to compare (as it is done here, indicated by the first\n");
-  printf(" input argument of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function), or\n");
-  printf(" alternatively, two different devices (two different pdf files, for instance)\n");
-  printf(" if required.\n");
+  printf(" input argument (0) of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function).\n");
+  printf(" Alternatively, two different devices (two different pdf files, for instance)\n");
+  printf(" can be used, if required (1).\n");
 #endif
-
+  
   /* Deterministic Time Dynamics */
   M_O_D_E_L( &Table );
 
+  // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic
+  // counter-part implemented yet!
+#ifndef DIFFUSION_1R1C_2D 
   /* Stochastic Time Dynamics: A number of stochastic realizations     */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
-
+#endif
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];

@@ -1,6 +1,6 @@
 #include "./Include/MODEL.h"
 
-void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
+void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 {
   /* Short Labels for Model Parameters */
 
@@ -56,7 +56,25 @@ void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Tab
 
     case 20: p=strcat(Label, "\\gm\\u(C)\\d");
       break; 
-    
+
+    case 21:  p = strcat(Label, "N\\d_E\\u");   
+      break;
+    case 22:  p = strcat(Label, "f");   
+      break;
+    case 23:  p = strcat(Label, "i\\d0\\u");   
+      break; 
+    case 24:  p = strcat(Label, "\\gb\\d(C)\\u");   
+      break;
+    case 25:  p = strcat(Label, "k\\dE\\u");   
+      break;
+    case 26:  p = strcat(Label, "\\gz\\d(C)\\u");   
+      break;
+    case 27:  p = strcat(Label, "p\\d1\\u");   
+      break; 
+    case 28:  p = strcat(Label, "p\\d2\\u");   
+      break;
+      
+      
     default:
       printf(".... INVALID PARAMETER KEY [key=%d]\n", j);
       printf(".... The permited correspondences are (0 to 12):\n");
@@ -66,8 +84,31 @@ void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Tab
     }
 }
 
+void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table * P)
+{
+  int i, k;
+  char * p;
+  
+  Label[0] = '\0';
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+    CPGPLOT_Symbol_to_Model_Parameters(j, Label, P);
+  }
+  else{
+    
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    CPGPLOT_Symbol_to_Model_Parameters(k, Label, P);
+    char * I_P = (char *)calloc(10, sizeof(char)); 
+    sprintf(I_P, "%d", i); 
+    p = strcat(Label, "(t)\\d");
+    p = strcat(Label, I_P);
+    p = strcat(Label, "\\u");
+    free(I_P); 
+  }
+}
 
-void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
+void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 {
   /* Short Labels for Model Parameters */
 
@@ -123,6 +164,31 @@ void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
     case 20: p=strcat(Label, "Mu_C");          /* -H13 */
       break;
+
+      
+    case 21:  p = strcat(Label, "N_E");   
+      break;
+      
+    case 22:  p = strcat(Label, "f");   
+      break;
+      
+    case 23:  p = strcat(Label, "i_0");   
+      break;
+      
+    case 24:  p = strcat(Label, "Beta_C");   
+      break;
+      
+    case 25:  p = strcat(Label, "k_E");   
+      break;
+      
+    case 26:  p = strcat(Label, "Theta_C");   
+      break;
+      
+    case 27:  p = strcat(Label, "p_1");   
+      break;
+      
+    case 28:  p = strcat(Label, "p_2");   
+      break;
       
     default:
       printf(".... INVALID PARAMETER KEY [key=%d]\n", j);
@@ -131,4 +197,30 @@ void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       fprintf_Model_Parameters(stdout, P);
       exit(0);
     }
+}
+
+void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
+{
+  /* Short Labels for Model Parameters */
+  Label[0] = '\0';
+  int i, k;
+  char * p;
+  
+  Label[0] = '\0';
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+    Symbol_to_Model_Parameters(j, Label, P);
+  }
+  else {
+    
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    Symbol_to_Model_Parameters(k, Label, P);
+    char * I_P = (char *)calloc(10, sizeof(char)); 
+    sprintf(I_P, "%d", i); 
+    p = strcat(Label, "(t)[");
+    p = strcat(Label, I_P);
+    p = strcat(Label, "]");
+    free(I_P); 
+  }
 }

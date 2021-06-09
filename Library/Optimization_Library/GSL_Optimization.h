@@ -1,3 +1,13 @@
+int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
+                                          int No_of_POINTS_1, int Input_Parameter_1,
+                                          int No_of_POINTS_2, int Input_Parameter_2,
+                                          double (* GENERIC_FUNCTION) (Parameter_Table *),
+                                          double * W_GRID,
+                                          char * generic_Function_Parameter_Scan_Output_File );
+
+double Function_to_Minimize( Parameter_Table * );
+
+
 double GSL_Function_to_Minimize( const gsl_vector * x, void * Par );
 
 double GSL_Function_to_Minimize_AIDS( const gsl_vector * x, void * Par );

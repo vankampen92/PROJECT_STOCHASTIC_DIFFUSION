@@ -48,12 +48,30 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
     case 18:  p = strcat(Label, "-H11");   /* Xhi_C_0 */
       break;
+      
     case 19:  p = strcat(Label, "-H12");   /* Eta_C_0 */
       break;
 
-    case 20:  p = strcat(Label, "-H13");   /* Mu_C */
+    case 20:  p = strcat(Label, "-H13");   
+      break;
+
+    case 21:  p = strcat(Label, "-H14");   
+      break;
+    case 22:  p = strcat(Label, "-H15");   
+      break;
+    case 23:  p = strcat(Label, "-H16");   
       break; 
-      
+    case 24:  p = strcat(Label, "-H17");   
+      break;
+    case 25:  p = strcat(Label, "-H18");   
+      break;
+    case 26:  p = strcat(Label, "-H19");   
+      break;
+    case 27:  p = strcat(Label, "-Hp1");   
+      break; 
+    case 28:  p = strcat(Label, "-Hp2");   
+      break; 
+
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
       printf(".... The permited correspondences are 0 to 6:\n");

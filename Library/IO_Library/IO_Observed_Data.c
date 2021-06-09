@@ -1,5 +1,5 @@
 #include <MODEL.h>
-#include "IO_Procedures_AIDS.h"
+#include "IO_Procedures_Aux.h"
 
 void Reading_Observed_Data(char * OBSERVED_DATA_FILE, double ** Data_Matrix,
 			   int No_of_OBSERVED_VARIABLES_MAX, int No_of_COLUMNS,

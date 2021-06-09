@@ -17,28 +17,30 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   int i, j, a;
   int MODEL_OUTPUT_VARIABLES;   /* Actual no of MODEL (output) VARIABLES */
   int MODEL_INPUT_PARAMETERS;  /* Actual no of MODEL (input) PARAMETERS */
+  int MODEL_PARAMETERS_EXTENDED; 
 
   MODEL_INPUT_PARAMETERS = MODEL_PARAMETERS_MAXIMUM;
   MODEL_OUTPUT_VARIABLES = OUTPUT_VARIABLES_MAXIMUM;
+  MODEL_PARAMETERS_EXTENDED = MODEL_PARAMETERS_MAXIMUM * (1 + No_of_TDC_FUNC_AUX_PARAM_MAX); 
   // int MODEL_STATE_VARIABLES;  /* Actual no of MODEL (state) VARIABLES 
   /* Model parameters are all input parameters defining and controling
      model dynamics (both through simulation and mathematically, in case
      the model has a mathematical description such as a system of ODEs)
   */
-  Table->Code_Parameters = (char **)malloc( MODEL_INPUT_PARAMETERS * sizeof(char *) );
-  Table->Symbol_Parameters = (char **)malloc( MODEL_INPUT_PARAMETERS * sizeof(char *) );
-  Table->Symbol_Parameters_Greek_CPGPLOT = (char **)malloc( MODEL_INPUT_PARAMETERS * sizeof(char *));
-  Table->Name_Parameters = (char **)malloc( MODEL_INPUT_PARAMETERS * sizeof(char *) );
-  for (i=0; i<MODEL_INPUT_PARAMETERS; i++){
+  Table->Code_Parameters = (char **)calloc( MODEL_PARAMETERS_EXTENDED, sizeof(char *) );
+  Table->Symbol_Parameters = (char **)calloc(MODEL_PARAMETERS_EXTENDED, sizeof(char *) );
+  Table->Symbol_Parameters_Greek_CPGPLOT = (char **)calloc( MODEL_PARAMETERS_EXTENDED,
+							    sizeof(char *));
+  Table->Name_Parameters = (char **)calloc( MODEL_PARAMETERS_EXTENDED, sizeof(char *) );
+  for (i=0; i<MODEL_PARAMETERS_EXTENDED; i++){
     Table->Code_Parameters[i] = (char *)malloc( 100 * sizeof(char) );
     Table->Name_Parameters[i] = (char *)malloc( 100 * sizeof(char) );
     Table->Symbol_Parameters[i] = (char *)malloc( 100 * sizeof(char) );
     Table->Symbol_Parameters_Greek_CPGPLOT[i] = (char *)malloc( 100 * sizeof(char) );
   }
-  Table->Default_Vector_Parameters = (double *)malloc( MODEL_INPUT_PARAMETERS * sizeof(double) );
-
-  Table->Index = (int *)malloc( MODEL_PARAMETERS_MAXIMUM * sizeof(int) );
-  Table->Vector_Parameters = (double *)malloc( MODEL_PARAMETERS_MAXIMUM * sizeof(double) );
+  Table->Default_Vector_Parameters = (double *)calloc(MODEL_PARAMETERS_EXTENDED, sizeof(double) );
+  Table->Vector_Parameters = (double *)calloc( MODEL_PARAMETERS_EXTENDED, sizeof(double) );
+  Table->Index = (int *)calloc( MODEL_PARAMETERS_EXTENDED, sizeof(int) );
 
   /* Output Variables are any measure of the state model variables of any function of
      these at any given time:
@@ -109,11 +111,24 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
     }
   }
   /* END: Allocating and Setting up Connectivity Matrix */
+  
+  Table->A_P = (int *)calloc(N_E, sizeof(int) );
+  Table->RA_P = (int *)calloc(N_E, sizeof(int) );
+  Table->ARA_P = (int **)calloc(N_E, sizeof(int *) );
+  for(i=0; i<N_E; i++)
+    Table->ARA_P[i] = (int *)calloc(N_E, sizeof(int) );
 }
 
 void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
 {
   int i, a;
+
+  for(i=0; i<Table->N_E; i++)
+    free(Table->ARA_P[i]);
+
+  free(Table->A_P);
+  free(Table->RA_P);
+  free(Table->ARA_P);
 
   for (i=0; i < Table->MODEL_INPUT_PARAMETERS; i++){
     free( Table->Code_Parameters[i] );
@@ -205,7 +220,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 
   /* Total number of potential input paramters */
   Table->MODEL_INPUT_PARAMETERS   = MODEL_PARAMETERS_MAXIMUM;
-  Table->OUTPUT_VARIABLES_GENUINE = Table->LOCAL_STATE_VARIABLES + 3;
+  Table->OUTPUT_VARIABLES_GENUINE = Table->LOCAL_STATE_VARIABLES + OUTPUT_VARIABLES_TRUE_DERIVED;
   /* Three are the different cases in definition_OutPut_Variables.c */
 
   /* Total number of potential state variables */
@@ -234,6 +249,17 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   }
   /*   END: Names and codes for model parameter  */
 
+  /* BEGIN: Names for aux model parameters (time dependence) */
+  int i_0 = Table->MODEL_INPUT_PARAMETERS; 
+  int i_1 = Table->MODEL_INPUT_PARAMETERS * (1 + No_of_TDC_FUNC_AUX_PARAM_MAX); 
+  for(i = i_0; i < i_1; i++){
+    AssignLabel_to_Model_Parameters(i, Table->Name_Parameters[i], Table);
+    /* AssignCodes_to_Model_Parameters(i, Table->Code_Parameters[i], Table); */
+    AssignSymbol_to_Model_Parameters(i, Table->Symbol_Parameters[i], Table);
+    AssignCPGPLOT_Symbol_to_Model_Parameters(i, Table->Symbol_Parameters_Greek_CPGPLOT[i],Table); 
+  }
+  /*   END: Names and codes for model parameter  */
+  
   /// Setting MODEL STATE VARIABLES up !!!  
   int MODEL_STATE_VARIABLES    = Table->K + 1;
   Table->Model_Variable_Name   = (char **)malloc( MODEL_STATE_VARIABLES * sizeof(char *) );
@@ -383,6 +409,15 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->Chi_C_0    = Chi_C_0;        /* -H11 */
   P->Eta_C_0    = Eta_C_0;        /* -H12 */
 
+  P->N_E        = N_E;            /* -H14 */ /* Number of Energy Levels */
+  P->f          = f;              /* -H15 */ /* Fecundity: Number of Offspring Individuals */ 
+  P->i_0        = i_0;            /* -H16 */ /* Energy Level at Maturity  */
+  P->Beta_C     = Beta_C;         /* -H17 */ /* Consummer Reproduction Rate */
+  P->k_E        = k_E;            /* -H18 */ /* 2* k_E is the resourse value in energy units */
+  P->Theta_C    = Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
+  P->p_1        = p_1;    /* -H21 */ /* Cooperation probability 1st position in the triplet */ 
+  P->p_2        = p_2;    /* -H22 */ /* Cooperation probability 2on position in the triplet */ 
+
   P->No_of_IC = No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = TYPE_of_INITIAL_CONDITION;
   P->INITIAL_TOTAL_POPULATION  = INITIAL_TOTAL_POPULATION;
@@ -414,7 +449,7 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->Err_16 = Err_16;
 
   /* Definition of type of network */
-  P->TYPE_of_NETWORK  = TYPE_of_NETWORK;
+  P->TYPE_of_NETWORK    = TYPE_of_NETWORK;
                                /* 0: Fully Connected Network
 				  1: Square Grid with Von Neuman neighborhood
 				  More network structures under construction 

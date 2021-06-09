@@ -22,6 +22,19 @@ double AssignStructValue_to_VectorEntry(int j, Parameter_Table * P);
 void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
 
 void AssignLabel_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
+void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
+
+void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
+void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table * P); 
+
+void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
+void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table * P); 
+
+void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P);
+void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P);
+
+void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P);
+void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P); 
 
 void AssignLabel_to_Model_Variables(int j, char * Label, Parameter_Table *P);
 
@@ -29,19 +42,11 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * P);
 
 void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * P); 
 
-void AssignSymbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P);
-
 void AssignCPGPLOT_Symbol_to_Output_Variables(int j, char * Label, Parameter_Table * P);
-
-void AssignCPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P); 
 
 void AssignSymbol_to_Model_Variables(int j, char * Label, Parameter_Table *P);
 
 void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * P);
-
-void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P);
-
-void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P);
 
 void Vector_Entry_into_Model_Variable_Initial_Condition_Table(double Value, 
 								int j, Parameter_Table * P);

@@ -137,20 +137,20 @@ void Community_Initialization (Community ** PATCH,
   Network_Structure_Inititialization (PATCH,
 				      P->No_of_NEIGHBORS,
 				      P->TYPE_of_NETWORK);
-
+#if defined VERBOSE
   Writing_Adjacency_List(PATCH);
-
   if (P->TYPE_of_NETWORK == 1) Writing_Adjacency_List_VonNeumann(PATCH);
-
+#endif
+  
   Immigration_Preassure_on_Focal_Patch_Initialization( PATCH, P );
 
-  #if defined DIFFUSION_1R1C
+#if defined DIFFUSION_1R1C
   if( P->TYPE_of_MODEL == 2) { 
     Event_Delta_Matrix_Initialization(PATCH, P);
     
     Event_Adjacence_List_Initialization(PATCH, P);
   }
-  #endif 
+#endif 
 }
 
 void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,

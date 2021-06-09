@@ -36,7 +36,8 @@ int function (double t, const double y[], double dydt[], void *params)
 
     dydt[ARA] = Table->Chi_C_0 *y[RA]/K_R *y[A] -Table->Eta_C_0 *y[ARA]; 
   }
-       
+
+  if( Table->No_of_CELLS > 1) {   
   n= 0; 
   for (j=0; j<Table->No_of_CELLS; j++) { 
    
@@ -45,6 +46,7 @@ int function (double t, const double y[], double dydt[], void *params)
       n++;
     }
   }
-  
+  }
+
   return GSL_SUCCESS;
 }

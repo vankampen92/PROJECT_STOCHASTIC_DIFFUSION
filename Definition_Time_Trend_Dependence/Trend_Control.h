@@ -14,3 +14,14 @@ void S_E_T_U_P___T_R_E_N_D___L_I_N_E_A_R ( Trend_Control * T,
 					   int Input_Parameter, 
 					   int Signature );
 
+void S_E_T_U_P___T_R_E_N_D___M_U_L_T_I___S_T_E_P ( Trend_Control * T,
+						   Parameter_Table * Table,
+						   int Input_Parameter ); 
+
+void Upload_Argument_Input_Trend_Values_into_Table ( Parameter_Table * Table,
+						     int Input_Parameter, 
+						     int pattern ); 
+
+void  Upload_Auxiliary_Parameter_Values_into_Table ( Parameter_Table * Table,
+						     int Input_Parameter, 
+						     int pattern ); 

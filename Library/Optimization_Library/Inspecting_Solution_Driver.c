@@ -33,7 +33,7 @@ double Inspecting_Solution_Driver( Parameter_Fitting * F )
     Parameter_Table_into_Vector_Entries ( Table, x,
 					  Table->S->Parameter_Index,
 					  Table->S->No_of_PARAMETERS );
-    if(Table->No_of_IC > 0)
+  if(Table->No_of_IC > 0)
     Parameter_Table_into_Vector_Entries_Initial_Condition ( Table, x,
 							    Table->IC_Space->Parameter_Index,
 							    Table->S->No_of_PARAMETERS,

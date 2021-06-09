@@ -1,6 +1,6 @@
 #/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #/*                                                                           */
-#/*                           David Alonso, 2011 (c)                          */
+#/*                           David Alonso, 2021 (c)                          */
 #/*                                                                           */
 #/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #
@@ -30,9 +30,9 @@ HEAD.H =${PROJECT_DIR}Include/MODEL.h##############
 # MAC_OPT_DIR=/opt/local/include/
 INCLUDE_DIR=${PROJECT_DIR}Include/#################
 # Directories where libraries are located 
-# (the linker will look for at the final linking step, 
+# the linker will look for at the final linking step, 
 # after all object files, *.o, are successfully compiled,
-# to create the exectuable code file) 
+# to create the exectuable code file 
 EXTRA_LIBRARY_PATH+=-L${CPGPLOT}###################
 EXTRA_LIBRARY_PATH+=-L${CPGPLOT}library/###########
 EXTRA_LIBRARY_PATH+=-L${CPGPLOT}library_basic_UTL/#
@@ -71,7 +71,7 @@ STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_PO
 TYPE_of_BOUNDARY=###
 TYPE_of_INDEX=_5p#   '_X2-Y_5p' /
 ##############################################################################################################
-RANDOM_SEED=CURRENT_TIME_RDN_SEED####### 'CURRENT_TIME_RDN_SEED' / 'FILE_RND_SIDE'
+RANDOM_SEED=CURRENT_TIME_RDN_SEED# Alternative: 'FILE_RND_SIDE'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   M O D E L   D E F I N I T I O N #############
 MODEL=DIFFUSION_S_RESOURCES#  ######################################
@@ -304,9 +304,6 @@ Event_Delta_Matrix_Initialization.o: ${STO_DIR}Event_Delta_Matrix_Initialization
 Event_Adjacence_List_Initialization.o: ${STO_DIR}Event_Adjacence_List_Initialization.c ${HEAD.H}
 	${CC} -c ${STO_DIR}Event_Adjacence_List_Initialization.c $(CXXFLAGS)
 
-Force_of_Infection_Sto.o: ${STO_DIR}Force_of_Infection_Sto.c ${HEAD.H}
-	${CC} -c ${STO_DIR}Force_of_Infection_Sto.c $(CXXFLAGS)
-
 Stochastic_Time_Dynamics.o: ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c ${HEAD.H}
 	${CC} -c ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c $(CXXFLAGS)
 
@@ -326,30 +323,8 @@ Choose_Village.o: ${STO_DIR_GENERAL}Choose_Village.c ${HEAD.H}
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}
 	${CC} -c ${PROJECT_DIR}Model_Variables_Code.c $(CXXFLAGS)
 
-Total_Population_Numbers.o: ${PROJECT_DIR}Total_Population_Numbers.c ${HEAD.H}
-	$(CC) -c ${PROJECT_DIR}Total_Population_Numbers.c $(CXXFLAGS)
-
-Total_Accumulated_Numbers.o: ${PROJECT_DIR}Total_Accumulated_Numbers.c ${HEAD.H}
-	$(CC) -c ${PROJECT_DIR}Total_Accumulated_Numbers.c $(CXXFLAGS)
-
-Total_Population_Fractions.o: ${PROJECT_DIR}Total_Population_Fractions.c ${HEAD.H}
-	$(CC) -c ${PROJECT_DIR}Total_Population_Fractions.c $(CXXFLAGS)
-
-Total_Disease_Prevalence.o: ${PROJECT_DIR}Total_Disease_Prevalence.c ${HEAD.H}
-	$(CC) -c ${PROJECT_DIR}Total_Disease_Prevalence.c $(CXXFLAGS)
-
-Total_Disease_Infection.o: ${PROJECT_DIR}Total_Disease_Infection.c ${HEAD.H}
-	$(CC) -c ${PROJECT_DIR}Total_Disease_Infection.c $(CXXFLAGS)
-
 In_Out_Migration_Functions.o: ${PROJECT_DIR}In_Out_Migration_Functions.c ${HEAD.H}
 	$(CC) -c ${PROJECT_DIR}In_Out_Migration_Functions.c  $(CXXFLAGS)
-
-Error_Function.o: ${PROJECT_DIR}Error_Function.c ${HEAD.H}
-	${CC} -c ${PROJECT_DIR}Error_Function.c $(CXXFLAGS)
-
-# R_0 related functions:
-#  R_0.o: ${PROJECT_DIR}R_0.c ${HEAD.H}
-#  	${CC} -c ${PROJECT_DIR}R_0.c $(CXXFLAGS)
 
 # # # Funcions to calculate the fixed points of the ODE system
 # Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}

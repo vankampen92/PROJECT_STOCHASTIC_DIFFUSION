@@ -1,9 +1,22 @@
 /* Notice that Parameter_Table Struct depends and relies
    on the correct previous defintion of the structures
    Time_Control, Parameter_Model, and Parameter_Space
+   but Parameter_Fitting type has not been defined yet. 
 */
 typedef struct Parameter_Tableinfo
 {
+  /* The structure to fit parameters has not been defined yet. 
+     I cannot do: 
+  
+     Parameter_Fitting * Fitting_Data; 
+     
+     I will get the same if I do: 
+  */
+  void * Fitting_Data;    /* When I need this to point to 
+                             a Parameter_Fitting structure, 
+                             I will have to do a cast!!! 
+                          */
+	
   int Focal_Resource;  /* Only for between-function communication purposes */
 
   /* Boolean Variable (see Time_Dependence_Control.c) */
@@ -68,7 +81,8 @@ typedef struct Parameter_Tableinfo
   double * Vector_Output_Variables;
   double ** Matrix_Output_Variables;
   /* * * * * * * * * */
-  
+
+  int SUM_LOCAL_STATE_VARIABLES; 
   int LOCAL_STATE_VARIABLES;
   int MODEL_STATE_VARIABLES;
   char ** Model_Variable_Name;
@@ -77,8 +91,14 @@ typedef struct Parameter_Tableinfo
   int K;
   int R;
   int A;
+  int A_R; /* Index for Fertile Population */
+  int A_A;
   int RA;
-  int ARA; 
+  int ARA;
+
+  int * A_P;
+  int * RA_P;
+  int ** ARA_P; 
 
   double * Vector_Model_Variables; 
   double * Vector_Model_Variables_Time_0;

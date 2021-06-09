@@ -1,5 +1,5 @@
 #include <MODEL.h>
-#include "IO_Procedures_AIDS.h"
+#include "IO_Procedures_Aux.h"
 
 void Reading_Model_Parameters_from_File(char * File_Name, double ** Data, int * N,
 					int No_of_PARAMETERS) 

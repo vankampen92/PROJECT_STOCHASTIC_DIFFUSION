@@ -30,7 +30,7 @@ CFLAGS=-g -Wall -DHAVE_INLINE -D${CPG} ${EXTRA_INCLUDE_PATH}
 
 COMPILER=gcc -fPIC -DSHARED_OBJECT
 
-OBJECTS=GSL_Function_to_Minimize.o GSL_Function_to_Minimize_AIDS.o GSL_Function_to_Minimize_Error_Model.o GSL_neglog_Error_Probability_Model.o GSL_neglog_Error_Probability_Model_Gaussian.o GSL_neglog_Error_Probability_Model_Gamma.o GSL_Minimization_Simplex.o GSL_CPGPLOT_Minimization_Simplex.o GSL_Minimization_Driver.o Checking_for_Parameter_Boundaries.o Inspecting_Likelihood_of_Final_Solution.o Inspecting_Solution_Driver.o 
+OBJECTS=Function_to_Minimize.o generic_Function_Parameter_2Dim_Scan.o GSL_Function_to_Minimize.o GSL_Function_to_Minimize_Error_Model.o GSL_neglog_Error_Probability_Model.o GSL_neglog_Error_Probability_Model_Gaussian.o GSL_neglog_Error_Probability_Model_Gamma.o GSL_Minimization_Simplex.o GSL_CPGPLOT_Minimization_Simplex.o GSL_Minimization_Driver.o Checking_for_Parameter_Boundaries.o Inspecting_Likelihood_of_Final_Solution.o Inspecting_Solution_Driver.o 
 
 .SUFIXES:       .o .c
 

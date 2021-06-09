@@ -20,7 +20,8 @@ double GSL_Function_to_Minimize( const gsl_vector * x, void * Par )
   Parameter_Space * Space  = F->Space;   
   int No_of_PARAMETERS     = F->Space->No_of_PARAMETERS;
   int x_is_BOUNDED;
-
+  int Theory_is_NOT_a_NUMBER; 
+  
   x_is_BOUNDED = Checking_for_Parameter_Boundaries( F, x );
 
   if( x_is_BOUNDED == 1 ) {
@@ -53,17 +54,21 @@ double GSL_Function_to_Minimize( const gsl_vector * x, void * Par )
 
     int State = M_O_D_E_L(Table);
 
-    assert(State == GSL_SUCCESS);
-
-    Value = 0.0;
+    Theory_is_NOT_a_NUMBER = 0;
     for( i=0; i<No_of_VARIABLES; i++ )
-      for( j=0; j<No_of_POINTS; j++ )
-	Value += (Data[i][j] - Theory[i][j]) * (Data[i][j] - Theory[i][j]) / Theory[i][j];
+      Theory_is_NOT_a_NUMBER += da_vector_isnan(Theory[i], No_of_POINTS);
+  
+    if( Theory_is_NOT_a_NUMBER == 0 && State == GSL_SUCCESS) { 
+      Value = 0.0;
+      for( i=0; i<No_of_VARIABLES; i++ )
+	for( j=0; j<No_of_POINTS; j++ )
+	  Value += (Data[i][j] - Theory[i][j]) * (Data[i][j] - Theory[i][j]) / Theory[i][j];
 
-    Value = sqrt(Value);
-
+      Value = sqrt(Value);
+    }
+    else Value = DBL_MAX;
+    
   }
-
   else Value = DBL_MAX;
 
   return(Value);

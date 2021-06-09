@@ -90,9 +90,9 @@ double Inspecting_Likelihood_of_Final_Solution( const gsl_vector * x, void * Par
       printf(" %s (%s):\n",
 	     Table->Output_Variable_Name[key], Table->Output_Variable_Symbol[key]);
     
-      Value_j = GSL_neglog_Error_Probability_Model( Data[i], Theory[i],
-						    No_of_POINTS, No_of_VARIABLES, F,
-						    GSL_neglog_Error_Probability_Model_Gaussian );
+    Value_j = GSL_neglog_Error_Probability_Model( Data[i], Theory[i],
+						  No_of_POINTS, No_of_VARIABLES, F,
+						  GSL_neglog_Error_Probability_Model_Gaussian );
     Value += Value_j;
   }
 

@@ -1,6 +1,6 @@
 #include "./Include/MODEL.h"
 
-void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
+void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 {
   char * p;
   Label[0] = '\0';
@@ -54,7 +54,23 @@ void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table
 
     case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
       break;
-    
+
+    case 21:  p = strcat(Label, "Number of Energy Levels ");   
+      break;
+    case 22:  p = strcat(Label, "Per Capita Fecundity: No of Offspring ");   
+      break;
+    case 23:  p = strcat(Label, "Energy Level at Maturity ");   
+      break; 
+    case 24:  p = strcat(Label, "Consummer Reproduction Rate");   
+      break;
+    case 25:  p = strcat(Label, "2*k_E is the resourse value in energy units ");   
+      break;
+    case 26:  p = strcat(Label, "Maintainance Energy loss rate");   
+      break;
+    case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
+      break; 
+    case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
+      break;  
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
@@ -65,7 +81,33 @@ void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table
     }
 }
 
-void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P)
+void AssignLabel_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table * P)
+{
+  int i, k;
+  
+  char * p;
+  Label[0] = '\0';
+  
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+    Label_to_Model_Parameters__LATEX(j, Label, P);
+  }
+  else{
+    
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    Label_to_Model_Parameters__LATEX(k, Label, P);
+    char * I_P = (char *)calloc(10, sizeof(char)); 
+    sprintf(I_P, "%d", i); 
+    p = strcat(Label, "(t)\\d");
+    p = strcat(Label, I_P);
+    p = strcat(Label, "-th Auxiliar Parameter");
+    free(I_P); 
+  }
+  
+}
+
+void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P)
 {
   char * p;
   Label[0] = '\0';
@@ -119,7 +161,24 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
 
     case 20: p=strcat(Label,"$\\mu^{(C)}$");           /* -H13 */
       break; 
-   
+
+    case 21:  p = strcat(Label, "$N_E$");   
+      break;
+    case 22:  p = strcat(Label, "$f$");   
+      break;
+    case 23:  p = strcat(Label, "$i_0$");   
+      break; 
+    case 24:  p = strcat(Label, "$\\beta_C$");   
+      break;
+    case 25:  p = strcat(Label, "$k_E$");   
+      break;
+    case 26:  p = strcat(Label, "$\\theta_C$");   
+      break;
+    case 27:  p = strcat(Label, "$p_1$");   
+      break; 
+    case 28:  p = strcat(Label, "$p_2$");   
+      break;
+      
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
       printf(".... The permited correspondences are:\n");
@@ -127,4 +186,28 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
       fprintf_Model_Parameters(stdout, P);
       exit(0);
     }
+}
+
+void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P)
+{
+  int i, k; 
+  char * p;
+  
+  Label[0] = '\0';
+  if ( j < MODEL_PARAMETERS_MAXIMUM ) { 
+    Label_to_Model_Parameters__LATEX__SYMBOL(j, Label, P);
+  }
+  else{
+    
+    i = (j - MODEL_PARAMETERS_MAXIMUM)%No_of_TDC_FUNC_AUX_PARAM_MAX;
+    k = (j - MODEL_PARAMETERS_MAXIMUM)/No_of_TDC_FUNC_AUX_PARAM_MAX; 
+    assert( i < No_of_TDC_FUNC_AUX_PARAM_MAX && k < MODEL_PARAMETERS_MAXIMUM);
+    Label_to_Model_Parameters__LATEX__SYMBOL(k, Label, P);
+    char * I_P = (char *)calloc(10, sizeof(char)); 
+    sprintf(I_P, "%d", i); 
+    p = strcat(Label, "$(t)[");
+    p = strcat(Label, I_P);
+    p = strcat(Label, "]$");
+    free(I_P); 
+  }
 }

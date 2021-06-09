@@ -2,9 +2,11 @@
 
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
+  int k, i, n, m; 
   char * p;
   char * L[] = {"R", "A", "RA", "ARA"}; 
   Label[0] = '\0';
+  char * n_Label = (char *)calloc(10, sizeof(char) );
   
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
@@ -12,11 +14,46 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
     AssignLabel_to_Model_Variables(j, Label, Table);
   }
   else if (j < Table->LOCAL_STATE_VARIABLES ) {
-    // char * n_Label = (char *)calloc(10, sizeof(char) );
-    p = strcat(Label, "n[");
-    p = strcat(Label, L[j]);
-    p = strcat(Label, "]");
-    // free(n_Label);
+
+    if(Table->TYPE_of_MODEL == 3) {
+      k = j%Table->LOCAL_STATE_VARIABLES;
+      n_Label[0] = '\0';
+      if (k>0 && k<=Table->N_E) { 
+	sprintf(n_Label, "%d", k-1);
+	i = 1;
+      }
+      else if (k>Table->N_E &&   k<=2*Table->N_E) { 
+	sprintf(n_Label, "%d", k-1-Table->N_E);
+	i = 2;
+      }
+      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) { 
+	i = 3;
+	n = (k-1-2*Table->N_E)%Table->N_E;
+	m = (k-1-2*Table->N_E)/Table->N_E;
+	p = strcat(Label, "[");
+	sprintf(n_Label, "%d", n);
+	p = strcat(Label, "]");
+	p = strcat(Label, "[");
+	sprintf(n_Label, "%d", m);
+	p = strcat(Label, "]");
+      }
+      else { 
+	n_Label[0] = '\0';
+	i = 0;
+      }
+      p = strcat(Label, "n[");
+      p = strcat(Label, L[i]);
+      if (i>0) { 
+	p = strcat(Label, "_");
+	p = strcat(Label, n_Label);
+      }
+      p = strcat(Label, "]");
+    }
+    else { 
+      p = strcat(Label, "n[");
+      p = strcat(Label, L[j]);
+      p = strcat(Label, "]");
+    }
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->LOCAL_STATE_VARIABLES;
@@ -32,7 +69,26 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
       case  2:
 	p = strcat(Label , "N");         /*  2: Total No of Individuals */
         break;
-      
+      case  3:
+	p = strcat(Label , "n[R]");         /*  3: Resources */
+        break;
+      case  4:
+	p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
+        break;
+      case  5:
+	p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */
+        break;
+      case  6:
+	p = strcat(Label , "n[RA]");        /*  6: Total Handling Consumers */
+        break;
+      case  7:
+	p = strcat(Label , "n[ARA]");       /*  7: Total Triplets */
+        break;
+      case  8:
+	p = strcat(Label , "n[C]");       /*  8: Total Population Consumers */
+        break;
+
+
       default:
         printf(".... INVALID OUTPUT VARIABLE KEY [key = %d]\n", j);
         printf(".... The permited correspondences are:\n");
@@ -40,26 +96,62 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
         exit(0);
       }
   }
+  free(n_Label);
 }
 
 void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
+  int k, i, n, m; 
   char * p;
   char * L[] = {"R", "A", "RA", "ARA"}; 
+  char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
-
-
+  
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
     AssignLabel_to_Model_Variables(j, Label, Table);
   }
   else if (j < Table->LOCAL_STATE_VARIABLES ) {
-    // char * n_Label = (char *)calloc(10, sizeof(char) );
-    p = strcat(Label, "n[");
-    p = strcat(Label, L[j]);
-    p = strcat(Label, "]");
-    // free(n_Label);
+     if(Table->TYPE_of_MODEL == 3) {
+      k = j%Table->LOCAL_STATE_VARIABLES;
+      n_Label[0] = '\0';
+      if (k>0 && k<=Table->N_E) { 
+	sprintf(n_Label, "%d", k-1);
+	i = 1;
+      }
+      else if (k>Table->N_E &&   k<=2*Table->N_E) { 
+	sprintf(n_Label, "%d", k-1-Table->N_E);
+	i = 2;
+      }
+      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) { 
+	i = 3;
+	n = (k-1-2*Table->N_E)%Table->N_E;
+	m = (k-1-2*Table->N_E)/Table->N_E;
+	p = strcat(Label, "[");
+	sprintf(n_Label, "%d", n);
+	p = strcat(Label, "]");
+	p = strcat(Label, "[");
+	sprintf(n_Label, "%d", m);
+	p = strcat(Label, "]");
+      }
+      else { 
+	n_Label[0] = '\0';
+	i = 0;
+      }
+      p = strcat(Label, "n[");
+      p = strcat(Label, L[i]);
+      if (i>0) { 
+	p = strcat(Label, "_");
+	p = strcat(Label, n_Label);
+      }
+      p = strcat(Label, "]");
+    }
+    else { 
+      p = strcat(Label, "n[");
+      p = strcat(Label, L[j]);
+      p = strcat(Label, "]");
+    }
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->LOCAL_STATE_VARIABLES;
@@ -75,6 +167,25 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
     case  2:
       p = strcat(Label , "Total No of Individuals");           /*  0: S */
       break;
+    case  3:
+	p = strcat(Label , "Total Resources");         /*  3: Resources */
+        break;
+    case  4:
+	p = strcat(Label , "Total Free Consumers");         /*  4: Total Free Consumers */
+        break;
+    case  5:
+      p = strcat(Label , "Total Reproductive Consumers");  /*  5: Total Reproductive Consumers */
+        break;
+    case  6:
+      p = strcat(Label , "Total Handling Consumers");      /*  6: Total Handling Consumers */
+      break;
+    case  7:
+      p = strcat(Label , "Total Triplets");       /*  7: Total Triplets */
+      break;	
+    case  8:
+      p = strcat(Label , "Total Population Consumers");       /*  8: Total Population Consumers */
+      break;	
+    
       
     default:
       printf(".... INVALID OUTPUT VARIABLE KEY [key = %d]\n", j);
@@ -83,6 +194,7 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
         exit(0);
     }
   }
+  free(n_Label);
 }
 
 

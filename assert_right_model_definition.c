@@ -18,4 +18,14 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 2 );
   
 #endif
+#if defined DIFFUSION_1RnC_E
+  
+    assert ( P->TYPE_of_MODEL == 3 );
+  
+#endif
+#if defined DIFFUSION_1R1C_2D
+  
+    assert ( P->TYPE_of_MODEL == 4 );
+  
+#endif
 }

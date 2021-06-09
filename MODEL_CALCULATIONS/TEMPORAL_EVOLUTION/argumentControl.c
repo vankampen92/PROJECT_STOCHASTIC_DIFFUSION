@@ -30,10 +30,15 @@ void ArgumentControl(int argc, char **argv)
 #endif
 
 #include <include.Trend_Control.argumentControl.c>
+	      
 #include <include.Output_Variables.argumentControl.c>
+
 #include <include.Parameter_Model.argumentControl.c>
+
 #include <include.Parameter_Space.argumentControl.c>
+
 #include <include.Time_Control.argumentControl.c>
+
 #include <include.Time_Dependence_Control.argumentControl.c>
 
 #include <include.Initial_Conditions.argumentControl.c>
@@ -56,9 +61,10 @@ void ArgumentControl(int argc, char **argv)
 	    }
 	}
       else
-	{
-	  printf("**invalid command line flag >%c<\n", argv[argcount][0]);
-	  printf("try -h for help.\n");
+	{ 
+	  printf("Executing %s...\n", argv[0]);
+	  printf("**invalid command line flag >%c<>%c<\n", argv[argcount][0], argv[argcount][1]);
+	  printf("Puta, puta, puta, try -h for help.\n");
 	  exit(0);
 	}
     }

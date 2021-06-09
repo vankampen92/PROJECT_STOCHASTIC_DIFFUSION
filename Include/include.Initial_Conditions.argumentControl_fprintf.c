@@ -45,7 +45,7 @@
 		  printf("Something goes very wrong (in an argumentfprintf function)\n");
 		  exit(0);
 		}
-
+	      }
         skip++;
         break;
 
