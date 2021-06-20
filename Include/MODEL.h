@@ -107,6 +107,7 @@ typedef struct totalRateinfo
 #include <Definition_Time_Trend_Dependence/Time_Dependence_Control.h>
 #include <Definition_Time_Trend_Dependence/Trend_Control.h>
 #include <Definition_Parameter_Space/Parameter_Space.h>
+#include <Definition_Fitting_Structure/Fitting_Structure.h>
 #include <Definition_Stochastic_Realizations/Stochastic_Time_Dynamics.h>
 #include <Definition_Numerical_Integration/deterministic_time_dynamics.h>
 #include <Definition_Numerical_Integration/numerical_Integration_Driver.h>

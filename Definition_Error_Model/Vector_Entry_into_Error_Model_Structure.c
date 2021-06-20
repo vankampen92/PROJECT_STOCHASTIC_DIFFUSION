@@ -83,7 +83,6 @@ void Vector_Entry_into_Error_Model_Table(double value, int j, Parameter_Table * 
   }
 }
 
-
 void Vector_Entry_into_Error_Model_Model(double value, int j, Parameter_Model * Table)
 {
   

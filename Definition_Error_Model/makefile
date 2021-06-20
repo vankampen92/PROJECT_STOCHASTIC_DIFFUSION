@@ -31,7 +31,7 @@ CFLAGS=-g -Wall -DHAVE_INLINE -D${CPG} ${EXTRA_INCLUDE_PATH}
 
 COMPILER=gcc -fPIC -DSHARED_OBJECT
 
-OBJECTS=Error_Function.o Error_Model_Structure_Value_into_Vector_Entry.o Vector_Entry_into_Error_Model_Structure.o
+OBJECTS=Error_Function.o Error_Model_Structure_Value_into_Vector_Entry.o Vector_Entry_into_Error_Model_Structure.o Random_Error_Model_within_Boundaries.o
 
 .SUFIXES:       .o .c
 

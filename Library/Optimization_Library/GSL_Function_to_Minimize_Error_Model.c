@@ -20,9 +20,12 @@ double GSL_Function_to_Minimize_Error_Model( const gsl_vector * x, void * Par )
   Parameter_Space * Space  = F->Space;
   int No_of_PARAMETERS     = F->Space->No_of_PARAMETERS;
   int x_is_BOUNDED; 
-  
-  x_is_BOUNDED = 1; // Checking_for_Parameter_Boundaries( F, x );
 
+  x_is_BOUNDED = 1; /* By default, the neg Log Likelihood is evaluated */
+  
+  if(F->Minimization == 1)
+    x_is_BOUNDED = Checking_for_Parameter_Boundaries( F, x );
+  
   if( x_is_BOUNDED == 1 ) { 
 						    
     if(No_of_PARAMETERS > 0) 

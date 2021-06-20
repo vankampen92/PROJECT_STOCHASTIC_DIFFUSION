@@ -47,7 +47,7 @@ double GSL_Minimization_Driver( Parameter_Fitting * F )
   MY_ERROR_HANDLER = 0;
   gsl_error_handler_t * old_handler = gsl_set_error_handler ( &my_error_handler );
 
-  if( F->Minimization == 1 )       Value = GSL_Minimization_Simplex( F, x, x, F->Function );
+  if( F->Minimization == 1 ) Value = GSL_Minimization_Simplex( F, x, x, F->Function );
   
   else if ( F->Minimization == 0 ) {
     Value =  ( * F->Function )( x, F );
@@ -96,7 +96,8 @@ double GSL_Minimization_Driver( Parameter_Fitting * F )
     }
   }
 
-  Value = Inspecting_Likelihood_of_Final_Solution(x, F);
+  if ( F->Minimization == 0 ) 
+    Value = Inspecting_Likelihood_of_Final_Solution(x, F);
 
   if (MY_ERROR_HANDLER == 1) {
     Value = DBL_MAX;

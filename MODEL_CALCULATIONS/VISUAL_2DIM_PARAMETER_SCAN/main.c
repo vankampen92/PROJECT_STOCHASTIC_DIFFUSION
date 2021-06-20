@@ -14,10 +14,7 @@
    For instance, a negative logLikelihood function, a Chi^2 Function, etc  
 
    Parameter ranges are defined in Parameter_Space structure. Parameters to scan 
-   are defined as input arguments. For instance,  
-
-   -sP 2 -I0 1 -H1 0.005 -m0 0.001  -M0 0.01    -d0 100     // Parameter: p_XY
-         -I1 0 -H0 100.0 -m1 50.0 -M1 200.0     -d1 100     // Parameter: Beta_Y
+   are defined as input arguments. 
 
    Compilation:
    
@@ -25,14 +22,20 @@
    
    Execution:
                                                        
-   . ~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -sT 1.0E-06 -sN 300 -sP 2 -H9 10.0 -I0 16 -m0 0.0 -M0 50.0 -A0 0.01 -d0 10 -H10 2.0 -I1 17 -m1 0.0 -M1 10.0 -A1 0.01 -d1 10 -iP 0 -en 0 -eV 100.0 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.0  
+   . ~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 10.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 2.0 -I1 17 -m1 1.0 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.0 -G30 R
 
-   Old example: 
-   ./X2W2SILD-YSILD -y0 1  -sP 2 -I0 9 -m0 0.00001 -M0 0.001 -d0 400 -I1 0 -m1 50.0 -M1 120.0 -d1 400 -G0 1 -G1 1 -G14 R\\d\\fs0\\fn\\u -n 1 -v0 0 -en 0 -iP 0 
+   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 12 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 5.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 1.0 -I1 17 -m1 0.5 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.5 -G30 R
 */
 
 gsl_rng * r; /* Global generator defined in main.c */
 
+void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
+			       int No_of_POINTS_1, int Input_Parameter_1,
+			       int No_of_POINTS_2, int Input_Parameter_2,
+			       double * W_GRID,
+			       double * Likelihood_Minimum,
+			       double * x_Value, 
+			       double * y_Value); 
 
 float * customized_contour_levels( Parameter_CPGPLOT * C )
 {
@@ -230,7 +233,7 @@ int main(int argc, char **argv)
   F->Table                 = &Table;
   F->Minimization          = 0;     
   F->Bounded_Parameter_Set = 1;
-  F->Function              = GSL_Function_to_Minimize;
+  F->Function              = GSL_Function_to_Minimize_Error_Model; // GSL_Function_to_Minimize;
 #if defined VERBOSE
   F->Verbose               = 1;     // 1: Verbose                // 0: Non Verbose
 #else
@@ -337,16 +340,30 @@ int main(int argc, char **argv)
       
       float * xs = (float *)calloc(2, sizeof(float) );
       float * ys = (float *)calloc(2, sizeof(float) );
-      xs[0] = x_Value;  xs[1] = 0.4 * x_Value; /* A 40 % reduction */ 
-      ys[0] = y_Value;  ys[1] = y_Value;
+      xs[0] = 0.5* x_Value;  xs[1] = x_Value; /* A 40 % reduction */ 
+      ys[0] = y_Value;       ys[1] = y_Value;
 
       cpg_XY_same_arrow( 2, xs, ys, 4, 1, 4);
       // cpg_XY_same_arrow( N, xs, ys, CPG->color_Index, CPG->type_of_Line, CPG->type_of_Width );
       
       free(xs);
       free(ys); 
-#endif  	
+#endif
+
+      double Likelihood_Minimum, x_Val, y_Val;
       
+      Minimum_Parameter_2D_Scan(&Table,
+				No_of_POINTS_1, Input_Parameter_1,
+				No_of_POINTS_2, Input_Parameter_2,
+				W_GRID,
+				&Likelihood_Minimum, &x_Val, &y_Val);
+
+      //#if defined VERBOSE
+      printf("Optimal Negative logLikelihood: %g\n", Likelihood_Minimum); 
+      printf("%s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Val);
+      printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val);
+      //#endif
+    
       free (W_GRID);
 
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 
@@ -390,4 +407,68 @@ int main(int argc, char **argv)
   return (0);
 }
 
+void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
+				     int No_of_POINTS_1, int Input_Parameter_1,
+				     int No_of_POINTS_2, int Input_Parameter_2,
+				     double * W_GRID,
+				     double * Likelihood_Minimum,
+				     double * x_Value, 
+				     double * y_Value)
+{
+	int n, k, j, i;
+	int k_MIN, j_MIN; 
+	double Minimum_Value, Value, Value_0, Value_1;
+	
+	Parameter_Space * S = Table->S;
+	/* BEGIN : Allocating memory for saving data to plot a bifurcation  * * * * * * */
+	/*         diagram for each variable  * * * * * * * * * * * * * * * * * * * * * */  
+	double      ** z_SOL  = (double **)malloc( No_of_POINTS_2 * sizeof(double *) );
+	for( i = 0; i < No_of_POINTS_2; i++){
+	  z_SOL[i] = (double *)malloc( No_of_POINTS_1 * sizeof(double) );
+	}
+	double * x_Data  = (double *)malloc(No_of_POINTS_1 * sizeof(double) ); 
+	double * y_Data  = (double *)malloc(No_of_POINTS_2 * sizeof(double) ); 
+	/*   END : Allocating memory for saving dynamical data * * * * * */
+
+	Minimum_Value = W_GRID[0]; 
+	n = 0; 
+	for( k = 0; k < No_of_POINTS_2; k++ ) {
+  
+	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
+	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
+	  
+	  Value = Value_0 + k * (Value_1 - Value_0)/(double)(No_of_POINTS_2 - 1);
+	  y_Data[k]= Value;
+	  
+	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
+	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
+	  
+	  for( j = 0; j < No_of_POINTS_1; j++ ){
+	    
+	    Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
+	    
+	    x_Data[j] = Value;
+	    
+	    z_SOL[k][j]    = W_GRID[n++]; 
+
+	    Minimum_Value = MIN(Minimum_Value, z_SOL[k][j]);
+
+	    if(Minimum_Value == z_SOL[k][j]) {
+	      k_MIN = k;
+	      j_MIN = j; 
+	    }
+	  }
+	}
+
+	//#if defined VERBOSE
+	printf("Optimal Negative logLikelihood: %g\n", Minimum_Value); 
+	printf("%s=%f\t", Table->Symbol_Parameters[Input_Parameter_1], x_Data[j_MIN]);
+	printf("%s=%f\n", Table->Symbol_Parameters[Input_Parameter_2], y_Data[k_MIN]);
+	//#endif
+
+	* Likelihood_Minimum = Minimum_Value; 
+	* x_Value = x_Data[j_MIN];
+	* y_Value = y_Data[k_MIN];  
+}
+      
 

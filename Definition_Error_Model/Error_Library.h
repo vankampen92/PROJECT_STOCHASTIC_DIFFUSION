@@ -43,4 +43,8 @@ void Vector_Entry_into_Error_Model_Table(double value, int j, Parameter_Table * 
 
 void Vector_Entry_into_Error_Model_Model(double value, int j, Parameter_Model * Table); 
 
+void Random_Error_Model_within_Boundaries_Model (Parameter_Model * ,
+						 Parameter_Space *  ); 
 
+void Random_Error_Model_within_Boundaries_Table (Parameter_Table * ,
+						 Parameter_Space *  ); 

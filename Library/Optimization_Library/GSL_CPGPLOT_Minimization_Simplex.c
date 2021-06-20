@@ -1,5 +1,7 @@
 #include <MODEL.h>
 
+
+
 void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
 				       gsl_vector * Solution, size_t iter,
 				       double ( * Function )( const gsl_vector * , void * ) )
@@ -7,11 +9,14 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
   #if defined CPGPLOT_REPRESENTATION
   int i, key;
   double value;
+  static int Iteration;
 
+  if (iter == 0) Iteration++;
+  else Iteration = (int)iter;
+  
   Parameter_Table * Table  = F->Table;
   Parameter_Space * Space  = F->Space;
 
-  
   value = ( * Function )(Solution, F);
 
   if (value == DBL_MAX )
@@ -20,12 +25,12 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
     /* B E G I N : Creating nice title with parameter values and greek symbols */
     double Parameter_Value;
     char * pTitle;
-    char * pValue = (char *)calloc(10, sizeof(char) );
+    char * pValue = (char *)calloc(20, sizeof(char) );
     char * Title_Parameters = (char *)calloc(2000, sizeof(char) );
     Title_Parameters[0]='\0';
     pTitle = strcat(Title_Parameters, F->Data->Name);
-    pTitle = strcat(Title_Parameters, ", ");
-    pValue[0]='\0'; sprintf(pValue, "%zu", iter);
+    pTitle = strcat(Title_Parameters, " Iter: ");
+    pValue[0]='\0'; sprintf(pValue, "%d", Iteration);
     pTitle = strcat(Title_Parameters, pValue);
     pTitle = strcat(Title_Parameters, ": ");
     for(i=0; i<Space->No_of_PARAMETERS; i++) {
@@ -35,7 +40,7 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
       Parameter_Value  = AssignStructValue_to_VectorEntry ( key, Table );
       pValue[0]='\0'; sprintf(pValue, "%4.3f", Parameter_Value);
       pTitle = strcat(Title_Parameters, pValue);
-      pTitle = strcat(Title_Parameters, "  ");
+      pTitle = strcat(Title_Parameters, "  ");  
     }
     for(i=0; i<Table->No_of_IC; i++) {
       key = Table->IC_Space->Parameter_Index[i];
@@ -44,7 +49,7 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
       Parameter_Value  = Model_Variable_Initial_Condition_into_Vector_Entry_Table( key, Table );
       pValue[0]='\0'; sprintf(pValue, "%4.3f", Parameter_Value);
       pTitle = strcat(Title_Parameters, pValue);
-      pTitle = strcat(Title_Parameters, "  ");
+      pTitle = strcat(Title_Parameters, "  ");  
     }
     for(i=0; i<Table->No_of_ERROR_PARAMETERS; i++ ) {
       key = Table->E_Space->Parameter_Index[i];
@@ -55,15 +60,27 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
       Parameter_Value  = Error_Model_into_Vector_Entry_Table( key, Table );
       pValue[0]='\0'; sprintf(pValue, "%4.3f", Parameter_Value);
       pTitle = strcat(Title_Parameters, pValue);
-      pTitle = strcat(Title_Parameters, "  ");
+      pTitle = strcat(Title_Parameters, "  ");     
     }
+    pTitle = strcat(Title_Parameters, ". NegLogLK:  ");
+    if (value < 1.E+18) {  
+      pValue[0]='\0'; sprintf(pValue, "%4.3f", value);
+      pTitle = strcat(Title_Parameters, pValue);
+    }
+    else {
+      pTitle = strcat(Title_Parameters, " inf");
+    }
+    pTitle = strcat(Title_Parameters, ".");
     /*     E N D : ----------------------------------------- */
+
+    printf("Title of Plot: %s\n", Title_Parameters); 
+    
     int SAME, k;
     for(k = 0; k<Table->SUB_OUTPUT_VARIABLES; k++) {
 
       key  = Table->OUTPUT_VARIABLE_INDEX[k];
 
-      Table->CPG->CPG_SCALE_X   = 1;        Table->CPG->CPG_SCALE_Y   =  0;
+      Table->CPG->CPG_SCALE_X   = 1;        Table->CPG->CPG_SCALE_Y   =  1;
       Table->CPG->CPG_RANGE_X_0 = Table->T->Time_Vector[0];
       Table->CPG->CPG_RANGE_X_1 = Table->T->Time_Vector[Table->T->I_Time-1];
 
@@ -77,7 +94,7 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
 							    Table->T->I_Time,
 							    Table->T->Time_Vector,
 							    Table->Matrix_Output_Variables[k],
-							    "Year",
+							    "Time",
 							    Table->Output_Variable_Name[key],
 							    Title_Parameters,
 							    Table->CPG->CPG_SCALE_X,
@@ -103,5 +120,10 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
     free (pValue);
     free(Title_Parameters);
   }
-  #endif  
+  #if defined VERBOSE
+  Press_Key();
+  #endif
+  
+  #endif
+  
 }

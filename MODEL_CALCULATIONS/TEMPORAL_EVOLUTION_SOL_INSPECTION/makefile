@@ -10,7 +10,7 @@ TIME_TREND_DIR=${PROJECT_DIR}Definition_Time_Trend_Dependence/
 IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
-WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_ESTIMATION/
+WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_SOL_INSPECTION/
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
 GSL_DA=${PROJECT_DIR}Library/GSL_RANDOM/###########
 HEAD.H =${PROJECT_DIR}Include/MODEL.h##############
@@ -130,10 +130,10 @@ ${EXE}:  	$(OBJECTS) library library_Error library_IO
 		$(FF) -o ${EXE} $(OBJECTS) $(LDFLAGS) $(CXXFLAGS) $(CPGPLOT_LIB) $(LIBS)
 
 library:
-	cd ${OPT_DIR}; rm *.o; rm *.a; make CPG=${CPG}
+	cd ${OPT_DIR}; rm *.o; rm *.a; make CPG=${CPG} V=${V}
 
 library_Error:
-	cd ${ERROR_DIR}; rm *.o; rm *.a; make CPG=${CPG}
+	cd ${ERROR_DIR}; rm *.o; rm *.a; make CPG=${CPG} 
 
 library_IO:
 	cd ${IO_DIR}; rm *.o; rm *.a; make

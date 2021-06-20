@@ -66,9 +66,9 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
 	z_SOL[k][j]    = GENERIC_FUNCTION ( P );
 	W_GRID[n++]    = z_SOL[k][j]; 
 
-// #if defined VERBOSE	
+#if defined VERBOSE	
 	printf(" n = %d\t x = %g\ty = %g\tz = %g\n", n, x_Data[j], y_Data[k], z_SOL[k][j] );
-// #endif 
+#endif 
       }
 
 #if defined CPGPLOT_REPRESENTATION

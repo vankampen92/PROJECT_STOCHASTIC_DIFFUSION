@@ -32,7 +32,7 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break; 
     case 10: p=strcat(Label, "K\\dR\\u");       
       break; 
-    case 11: p=strcat(Label,"\\b\\dR\\u");
+    case 11: p=strcat(Label,"\\gb\\dR\\u");
       break;
 
     case 12: p=strcat(Label, "\\gl\\u(C)\\d\\d0\\u");    

@@ -21,15 +21,19 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Execution:
 
-   . ~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -sT 1.0E-08 -sN 300 -sP 2 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -I1 17 -m1 1.0 -M1 5.0 -A1 0.01 -iP 0 -en 1 -e0 500.0 -em0 100 -eM0 1000  -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.0  
-   
+   . ~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -sT 1.0E-08 -sN 300 -sP 11 -iP 0 -en 1 -e0 500.0 -em0 100 -eM0 1000  -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 2 -F0 Pseudo_Empirical_Data.dat -Y0 99 -F1 Full_Parameter_Set_Ordered.dat -Y1 [No_of_MAX_SOLUTIONS] -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 
+  
+   (-sP 11: TOTAL_No_of_MODEL_PARAMETER (Total number of potentially searcheable parameters. 
+   This number depends on which model you are inspecting )
+   (No_of_MAX_SOLUTIONS is the number of rows in Full_Parameter_Set_Ordered.dat. However, is it irrelevant here because it will be dynamically read in a proper function from IO library) 
+ 
    (True parameters: -H9 [Alpha = 5.0] -H10 [Nu = 1.0] -H6 [Delta_C_0 = 1.0] used to generate pseudo data with DIFFUSION_1R1C) (Results file renamed as Full_Parameter_Set_Ordered.dat)
 
    According to the parameter correspondence in the Entropy paper, this would correspond to the following effective true parameters for the 2D system: 
 
    -H6 [Delta_C_0] approx 1  -H4 [Beta_R] approx 1  -H9 [Alpha] 10.0  -H10 [Nu] 2.0
 
-`  . Pseudo_Data_File.dat has been generated with (in ./TEMPORAL_EVOLUTION)
+   . Pseudo_Empirical_Data.dat has been generated with (in ./TEMPORAL_EVOLUTION)
 
    . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 12 -G0 2 -G1 2 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000
 
@@ -44,7 +48,7 @@ gsl_rng * r; /* Global generator defined in main.c */
 
 int main(int argc, char **argv)
 {
-  int i, j, k, n, s, z, key;
+  int i, j, k, n, s, z, key, N;
   double value, Min_Value, Data_Value, Theory_Value;
   double Likelihood_Value, Average_Likelihood_Value, Standard_Error_Value, Ave, Var;
   Parameter_Table Table;
@@ -66,6 +70,8 @@ int main(int argc, char **argv)
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( &Table, Index_Output_Variables );
   printf(" Parameter_Table structure has been correctly allocated and initiated\n");
 
+  assert( No_of_PARAMETERS == Table.TOTAL_No_of_MODEL_PARAMETERS); 
+  
   Parameter_Model * Initial_Guess = (Parameter_Model *)malloc( 1 * sizeof(Parameter_Model) );
   P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N (&Table, Initial_Guess);
   printf(" Parameter_Model structure 'Initial_Guess' has been correctly allocated and initiated\n");
@@ -149,25 +155,33 @@ int main(int argc, char **argv)
     Empirical_Data_Matrix[i] = (double *)calloc( I_Time, sizeof(double) );
   }
 
+  int No_of_SETS_MAX = 100000; 
+  if( No_of_FILES > 0) No_of_SETS_MAX = MAX(F_y_GRID[1], No_of_SETS_MAX);
+  double ** Demo_Data = (double **)calloc(No_of_SETS_MAX , sizeof(double *));
+  for(i=0; i<No_of_SETS_MAX; i++)
+    Demo_Data[i] = (double *)calloc(1 + No_of_PARAMETERS + No_of_ERROR_PARAMETERS + No_of_IC, sizeof(double));
+
   /* B E G I N : Time Dependent Parameters, Observed Data, and Output files           */
   char * pF;
   char * TIME_PARAMETERS_FILE = (char *)calloc(1000, sizeof(char) ); /* Input files   */
   char * OBSERVED_DATA_FILE   = (char *)calloc(1000, sizeof(char) ); /* Input files   */
   char * PARAMETER_SET_FILE   = (char *)calloc(1000, sizeof(char) ); /* Output files  */
 
-  FILE * DEMO;
-  PARAMETER_SET_FILE[0] = '\0';
-  pF = strcat(PARAMETER_SET_FILE, "Full_Parameter_Set.dat");
-  DEMO = fopen(PARAMETER_SET_FILE, "w");
-
   /* In order for these default names to work properly, you need -Fn 0 in command line */
   OBSERVED_DATA_FILE[0] = '\0';
   pF = strcat(OBSERVED_DATA_FILE, "Observed_Data_File.dat");          /* Default Name */
   if( No_of_FILES > 0) strcpy(OBSERVED_DATA_FILE, Name_of_FILE[0]);   // -Fn 2
 
+  PARAMETER_SET_FILE[0] = '\0';
+  pF = strcat(PARAMETER_SET_FILE, "Full_Parameter_Set.dat");
+  if( No_of_FILES > 1) strcpy(PARAMETER_SET_FILE, Name_of_FILE[1]);   // -Fn 2
+
+  /* With Parameter Time Dependenece... the time dependence parameter file should be 
+     given as the third file (-Fn 3) */
   TIME_PARAMETERS_FILE[0] = '\0';
   pF = strcat(TIME_PARAMETERS_FILE, "Time_Dependent_Parameters.dat"); /* Default Name */
-  if( No_of_FILES > 1) strcpy(TIME_PARAMETERS_FILE, Name_of_FILE[1]);
+  if( No_of_FILES > 2) strcpy(TIME_PARAMETERS_FILE, Name_of_FILE[2]); 
+  
   /*     E N D -----------------------------------------------------------------------*/
 
   /* B E G I N : Time Dependence Control common initization                           */
@@ -175,7 +189,7 @@ int main(int argc, char **argv)
   double ** Type_1_Parameter_Values; 
   double  * Time_Empirical_Vector;
   char   ** Name_Rows_Dummy; 
-  int No_of_EMPIRICAL_TIMES = F_y_GRID[1]; // No of Cols the time-dependent parameter file
+  int No_of_EMPIRICAL_TIMES = F_y_GRID[2]; // No of Cols the time-dependent parameter file
   int No_of_Rows;                          // For example, -Y1 12 (see input argument list)
   if (TYPE_of_TIME_DEPENDENCE == 0) {      // -t4 1
     printf(" Time_Control structure will be allocated: \n");
@@ -244,55 +258,45 @@ int main(int argc, char **argv)
   printf(" Observed_Data structure has been correctly allocated and initiated\n");
   /*     E N D : ------------------------------------- */
 
-  /* B E G I N :   Defining first row of "Full_Parameter_Set.dat" file
-   */
-  // fprintf(DEMO, "ID\t");
-  for(i=0; i<Table.TOTAL_No_of_MODEL_PARAMETERS; i++) {
-    key = Table.Index[i];
-    fprintf(DEMO, "%s\t", Table.Symbol_Parameters[key]);
-  }
-  for(i=0; i<No_of_IC; i++) {
-    key = Initial_Condition_Space->Parameter_Index[i];
-    fprintf(DEMO, "%s\t", Table.Model_Variable_Symbol[key]);
-  }
-  for(i=0; i<No_of_ERROR_PARAMETERS; i++) {
-    key = Error_Space->Parameter_Index[i];
-    if(key < OUTPUT_VARIABLES_GENUINE_MAXIMUM)
-      fprintf(DEMO, "Error(%s)\t", Table.Output_Variable_Symbol[key]);
-    else
-      fprintf(DEMO, "Error_Parameter_%d\t", i);
-  }
-  fprintf(DEMO, "NegLogLike\n");
-  /*     E N D : --------------------------------------------------------
-   */
-
+  Reading_Model_Parameters_from_File(PARAMETER_SET_FILE, Demo_Data, &N,
+				     No_of_PARAMETERS + No_of_ERROR_PARAMETERS + No_of_IC); 
+  Writing_Model_Parameters_Matrix(&Table, "Set",
+  				  Demo_Data, N,
+  				  No_of_PARAMETERS + No_of_ERROR_PARAMETERS + No_of_IC);
+ 
+  /* N will be the number of solutions in PARAMETER_SET_FILE to explore. 
+     Notice that F->Minimization should be set to 0 to only evaluate and 
+     explore the different solutions in PARAMETER_SET_FILE 
+  */
   /* B E G I N : Reserving memmory for Fitting Structure -----------------
    */
   Parameter_Fitting * F = (Parameter_Fitting*)calloc(1,sizeof(Parameter_Fitting));
-  Parameter_Fitting_Alloc( F, Realizations, &Table ); 
-  Parameter_Fitting_Initialization(F, Realizations, Data, &Table);
+  Parameter_Fitting_Alloc( F, N, &Table ); 
+  Parameter_Fitting_Initialization(F, N, Data, &Table);
   
-  F->Minimization          = 1;     // 1: Function Minimization  // 0: Function Evaluation
+  F->Minimization          = 0;   // 1: Function Minimization  // 0: Function Evaluation
   F->Bounded_Parameter_Set = 1;
   // F->Function              = GSL_Function_to_Minimize;
   F->Function              = GSL_Function_to_Minimize_Error_Model;
 #if defined VERBOSE
-  F->Verbose               = 1;     // 1: Verbose                // 0: Non Verbose
+  F->Verbose               = 1;   // 1: Verbose                // 0: Non Verbose
 #else
-  F->Verbose               = 0;     // 1: Verbose                // 0: Non Verbose
+  F->Verbose               = 0;   // 1: Verbose                // 0: Non Verbose
 #endif
+  		       
+  Press_Key();
   /*     E N D : ----------------------------------------------------------
    */
   
   s = 0;
   int s_Attemps   = 0;   /* This counter will count number of random seeds */
-  int Total_Tries = Realizations;                                // -tR 1000
-  for(z=0; z<Realizations; z++) {  
+  int Total_Tries = N;                                // -tR 1000
+  for(z=0; z<N; z++) {
 
     Parameter_Model_Copy_into_Parameter_Table(&Table, Initial_Guess);
-    Random_Initial_Guess_within_Boundaries_Table(&Table, Space);
-    Random_Error_Model_within_Boundaries_Table (&Table, Error_Space);
-						
+    Uploading_Full_Model_Parameters_into_Parameter_Table(&Table, Demo_Data, z);
+    
+    /* if (TIME_DEPENDENT_PARAMETERS == 1) {                                           */ 
     /* Time_Dependence_Control_Upload_Optimized (&Time, &Time_Dependence, &Table,      */
     /* 					      I_Time, No_of_EMPIRICAL_TIMES,           */
     /* 					      TIME_DEPENDENT_PARAMETERS,               */
@@ -305,7 +309,7 @@ int main(int argc, char **argv)
     /* 					      Matrix_of_COVARIATES,                    */
     /* 					      Type_1_Parameter_Values,                 */
     /* 					      Time_Empirical_Vector);                  */
-
+    /* }                                                                               */
     if (TIME_DEPENDENT_PARAMETERS == 1) assert( Time_Dependence.No_of_TIMES == I_Time );
     
     /* Initial conditions from empirical data at the initial time (-xn 0 ) */
@@ -313,6 +317,7 @@ int main(int argc, char **argv)
     /* The system has only one cell (no spatial structure) */
     assert(Table.No_of_CELLS     == 1);
     assert(Table.No_of_RESOURCES == 1);
+    
     Table.INITIAL_TOTAL_POPULATION = Empirical_Data_Matrix[0][0]; 
       
     F->Iteration             = z;
@@ -338,7 +343,6 @@ int main(int argc, char **argv)
 
     if (F->Bounded_Parameter_Set == 1) {
       printf(" Min Value: NLL=%g\t Best Estimates: ", Min_Value);
-      // fprintf(DEMO, "%d:\t", s_Attemps);
 
       for(i=0; i<Table.TOTAL_No_of_MODEL_PARAMETERS; i++) {
 	key = Table.Index[i];
@@ -346,28 +350,24 @@ int main(int argc, char **argv)
 	gsl_vector_set(F->Solution[s], i, value); 
 	
 	printf(" %s  = %g  ", Table.Symbol_Parameters[key], value);
-	fprintf(DEMO, "%g\t", value);
       }
       for(i=0; i<No_of_IC; i++) {
 	key = Initial_Condition_Space->Parameter_Index[i];
 	value = Model_Variable_Initial_Condition_into_Vector_Entry_Table( key, &Table );
-	gsl_vector_set(F->Solution[s], i+Table.TOTAL_No_of_MODEL_PARAMETERS, value);
+	gsl_vector_set(F->Solution[s], i+No_of_IC, value);
 	
 	printf("%s = %g  ", Table.Model_Variable_Symbol[key], value);
-	fprintf(DEMO, "%g\t", value);
       }
       for(i=0; i<No_of_ERROR_PARAMETERS; i++) {
 	key = Error_Space->Parameter_Index[i];
 	value = Error_Model_into_Vector_Entry_Table( key, &Table );
-	gsl_vector_set(F->Solution[s], i+Table.TOTAL_No_of_MODEL_PARAMETERS+No_of_IC, value);
+	gsl_vector_set(F->Solution[s], i+No_of_IC, value+No_of_ERROR_PARAMETERS);
 	
 	if(key < OUTPUT_VARIABLES_GENUINE_MAXIMUM)
 	  printf("%s = %g  ", Table.Output_Variable_Symbol[key], value);
 	else
 	  printf("Error_Parameter_%d = %g  ", i, value);
-	fprintf(DEMO, "%g\t", value);
       }
-      fprintf(DEMO, "%g\n", Min_Value);
       gsl_vector_set(F->Solution_Fitness, s, Min_Value); 
       
       s++; // Counting Successful attemts!!! 
@@ -376,14 +376,13 @@ int main(int argc, char **argv)
 
     s_Attemps++;
 
-    printf(" Parameter Set Attemp No: %d\t Remaining Attemps: %d\t Successful Attemps: %d\n",
+    printf(" Parameter Set No: %d\t Attemps Read: %d\t Successful Attemps: %d\n",
 	   s_Attemps, Total_Tries-s_Attemps, s );
   }
-  fclose(DEMO);
 
-  Parametric_Configurations_from_Fitting_Structure_into_File (F,
-							      "Full_Parameter_Set_Ordered.dat",
-							      1);
+  // Parametric_Configurations_from_Fitting_Structure_into_File (F,
+  //                                                             "Full_Parameter_Set_Ordered.dat",
+  // 							         1);
 
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */
   Parameter_Fitting_Free(F); free(F);
@@ -422,6 +421,9 @@ int main(int argc, char **argv)
     free(Time_Empirical_Vector);
   }
   
+  for(i=0; i<No_of_SETS_MAX; i++) free(Demo_Data[i]);
+  free(Demo_Data);
+    
   free(Name_of_Rows);
   for (i=0; i<SUB_OUTPUT_VARIABLES; i++)  free(Empirical_Data_Matrix[i]);
   free(Empirical_Data_Matrix);
