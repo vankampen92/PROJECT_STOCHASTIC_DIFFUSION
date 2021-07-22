@@ -240,6 +240,9 @@ void saving_Time_Two_Float_vectors(char *file,
 				   float *time, float *x, float *y, int nP);
 void Reading_from_File_double_TwoCol(char *, double *, double *, int);
 void Reading_from_File_double_nxy(char * File_Name, double * x_Data, double ** y_Data, int No, int n_XY);
+void Reading_from_File_double_nxy_Counting_Rows(char * ,
+						double * , double ** , int ,
+						int , int * );
 void Reading_from_File_double_y(char * , double ** , int , int );
 void Reading_floatVector(char *, float *, int);
 void Reading_DiversityData(char*, int *, int);

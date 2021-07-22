@@ -137,7 +137,7 @@ double GSL_Minimization_Simplex (Parameter_Fitting * F,
 
   if (MY_ERROR_HANDLER == 0) {
 #if defined CPGPLOT_REPRESENTATION
-    // GSL_CPGPLOT_Minimization_Simplex(F, s->x, iter, Function); 
+    GSL_CPGPLOT_Minimization_Simplex(F, s->x, iter, Function); 
 #endif   
   }
   

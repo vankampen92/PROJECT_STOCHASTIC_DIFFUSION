@@ -121,7 +121,7 @@ void GSL_CPGPLOT_Minimization_Simplex (Parameter_Fitting * F,
     free(Title_Parameters);
   }
   #if defined VERBOSE
-  Press_Key();
+  // Press_Key();
   #endif
   
   #endif

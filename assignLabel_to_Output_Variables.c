@@ -4,7 +4,22 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
 {
   int k, i, n, m; 
   char * p;
-  char * L[] = {"R", "A", "RA", "ARA"}; 
+  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
+
+  for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
+  
+  if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
+    p = strcat(L[0], "V");
+    p = strcat(L[1], "R");
+    p = strcat(L[2], "G");
+  }
+  else {
+    p = strcat(L[0], "R");
+    p = strcat(L[1], "A");
+    p = strcat(L[2], "RA");
+    p = strcat(L[3], "ARA");
+  }  
+
   Label[0] = '\0';
   char * n_Label = (char *)calloc(10, sizeof(char) );
   
@@ -97,13 +112,31 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
       }
   }
   free(n_Label);
+  for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) free(L[i]);
+  free(L); 
 }
 
 void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
   int k, i, n, m; 
   char * p;
-  char * L[] = {"R", "A", "RA", "ARA"}; 
+
+  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
+
+  for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
+  
+   if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
+    p = strcat(L[0], "V");
+    p = strcat(L[1], "R");
+    p = strcat(L[2], "G");
+  }
+  else {
+    p = strcat(L[0], "R");
+    p = strcat(L[1], "A");
+    p = strcat(L[2], "RA");
+    p = strcat(L[3], "ARA");
+  }  
+  
   char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
   
@@ -195,6 +228,8 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
     }
   }
   free(n_Label);
+  for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) free(L[i]);
+  free(L); 
 }
 
 

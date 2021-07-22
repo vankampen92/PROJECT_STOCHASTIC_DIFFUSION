@@ -28,4 +28,15 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 4 );
   
 #endif
+#if defined DIFFUSION_DRAG
+  
+    assert ( P->TYPE_of_MODEL == 5 );
+  
+#endif
+#if defined DIFFUSION_VRG
+  
+    assert ( P->TYPE_of_MODEL == 6 );
+  
+#endif
+
 }

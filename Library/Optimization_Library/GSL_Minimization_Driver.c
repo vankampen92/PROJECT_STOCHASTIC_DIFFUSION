@@ -64,7 +64,7 @@ double GSL_Minimization_Driver( Parameter_Fitting * F )
 
   gsl_set_error_handler (old_handler);
 
-  if(Space->No_of_PARAMETERS) 
+  if(Space->No_of_PARAMETERS > 0) 
     Vector_Entries_into_Parameter_Table ( x, Table,
 					Table->S->Parameter_Index, Table->S->No_of_PARAMETERS );
 

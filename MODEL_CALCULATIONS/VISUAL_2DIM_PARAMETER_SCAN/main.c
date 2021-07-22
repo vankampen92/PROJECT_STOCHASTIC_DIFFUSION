@@ -257,13 +257,16 @@ int main(int argc, char **argv)
   /*     E N D : ------------------------------------- */
   
   P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( &Table, City_Par_Values) ;
-      
+  
+  /* B E G I N : Main Function Call -------------------------------------------------*/  
   double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
   int Status =  generic_Function_Parameter_2Dim_Scan(&Table, 
 						     No_of_POINTS_1, Input_Parameter_1,
 						     No_of_POINTS_2, Input_Parameter_2,
 						     Function_to_Minimize, 
 						     W_GRID, "Negative LogLikelihood");
+  /*   E N D : ----------------------------------------------------------------------*/
+
 #if defined CPGPLOT_REPRESENTATION
       /* BEGIN : 2D GRID cpgplot representation */
       /*********************************************************************/

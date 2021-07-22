@@ -20,6 +20,7 @@ TIME_TREND_DIR=${PROJECT_DIR}Definition_Time_Trend_Dependence/
 IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
+FIXED_POINTS_DIR=${PROJECT_DIR}Definition_Fixed_Points/
 WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_STOCHASTIC/#
 DET_DIR=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_DETERMINISTIC/#
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
@@ -57,15 +58,16 @@ EXTRA_INCLUDE_PATH+=-I${GSL_DA}####################
 EXTRA_INCLUDE_PATH+=-I${IO_DIR}
 EXTRA_INCLUDE_PATH+=-I${OPT_DIR}
 EXTRA_INCLUDE_PATH+=-I${ERROR_DIR}
+EXTRA_INCLUDE_PATH+=-I${FIXED_POINTS_DIR}
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N   C O N T R O L I N G   N U M E R I C A L   R E C I P E S
 NR=NUMERICAL_RECIPES###############################
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
-V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
+V=VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
 CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
-STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
+STATIONARITY=STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P A R A M E T E R   S P A C E ###############
 TYPE_of_BOUNDARY=###
@@ -81,7 +83,7 @@ ODE_MODEL=${MODEL}####################
 ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
 ODE_DIR=${ODE_DIR_GENERAL}${ODE_MODEL}/#########
 ODE_DEF=${ODE_DIR_GENERAL}ODE_Definitions/###########################
-ODE_FIXED_POINTS=${PROJECT_DIR}Fixed_Points_Functions/###########
+ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
 TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
 ######################################## Possibilities:
 ######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be provided in JAC_sys${SYS}.c.
@@ -121,16 +123,16 @@ PGPLOT_LIB=-L/usr/lib -lpgplot -L/usr/lib -lpng
 CPGPLOT_LIB=-L/usr/lib -lcpgplot -lpgplot -L/usr/lib -lpng
 ##############################################################################################################
 OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Community_Scatter_Plot_Representation.o assert_right_model_definition.o              \
-	Parameter_Model.o Time_Control.o Parameter_Table.o  assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Model_Parameters.o fprintf_Output_Variables.o                                                                                                                                             \
+	Parameter_Model.o Time_Control.o Parameter_Table.o  assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Model_Parameters.o fprintf_Output_Variables.o                                                                                                                                                                          \
 	assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o               \
-	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o  \
+	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o           \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                            \
 	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o         \
 	Model_Variables_Code.o definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o \
 	stat.o                                                                               \
 	CPGPLOT___X_Y___Parameter_Table.o                                                    \
-	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o
-
+	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               \
+	Fixed_Points_All.o
 # \ # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
 # Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
 ### Example:
@@ -327,8 +329,8 @@ In_Out_Migration_Functions.o: ${PROJECT_DIR}In_Out_Migration_Functions.c ${HEAD.
 	$(CC) -c ${PROJECT_DIR}In_Out_Migration_Functions.c  $(CXXFLAGS)
 
 # # # Funcions to calculate the fixed points of the ODE system
-# Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
-# 	$(CC) -c ${ODE_FIXED_POINTS}Fixed_Points_All.c $(CXXFLAGS)
+Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
+	$(CC) -c ${ODE_FIXED_POINTS}Fixed_Points_All.c $(CXXFLAGS)
 
 # fixed_ALL_Points_Intersection.o: ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c ${HEAD.H}
 #	$(CC) -c ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c $(CXXFLAGS)

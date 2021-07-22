@@ -144,3 +144,42 @@ void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table, d
 /*     } */
 /*   } */
 /* } */
+
+void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Table * Table,
+								  double Value)
+{
+  /* Initial conditions from empirical data at the initial time ( -xn 0 ) */
+
+  int J,n,m, Sp; 
+  int N_X, N_Y;
+
+  N_X = Table->No_of_CELLS_X;
+  N_Y = Table->No_of_CELLS_Y;
+
+  for (J=0; J<Table->No_of_CELLS; J++) {
+    
+    n = 0;  
+    for(Sp = 0; Sp < Table->No_of_RESOURCES; Sp++) {
+      m = Table->LOCAL_STATE_VARIABLES*J + n;
+      Table->Vector_Model_Variables_Time_0[m] = Value;
+      n++; 
+    }
+  }
+}
+
+void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * Table,
+							     double Value_0,
+							     double Value_1)
+{
+  /* Initial conditions from empirical data at the initial time ( -xn 0 ) */
+
+  int J,n,m;
+ 
+  /* The system has only one cell (no spatial structure) */
+  assert(Table->No_of_CELLS     == 1);
+  assert(Table->No_of_RESOURCES == 2);
+  assert(Table->LOCAL_STATE_VARIABLES == Table->MODEL_STATE_VARIABLES); 
+    
+  Table->Vector_Model_Variables_Time_0[0] = Value_0; /* Initial value for resources */
+  Table->Vector_Model_Variables_Time_0[1] = Value_1; /* Initial value for consumers */
+}

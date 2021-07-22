@@ -12,13 +12,13 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break; 
     case  1:  p = strcat(Label , "No of INDIVIDUALS");         /*  1 */
       break;
-    case  2:  p = strcat(Label , "No_of_CELLS");               /*  2 */
+    case  2:  p = strcat(Label , "No of CELLS");               /*  2 */
       break;
     case  3:  p = strcat(Label , "No of CELSS (X Dimension)"); /*  3 */
       break;
-    case  4:  p = strcat(Label , "No_of_CELLS (Y Dimension)"); /*  4 */
+    case  4:  p = strcat(Label , "No of CELLS (Y Dimension)"); /*  4 */
       break;
-    case  5:  p = strcat(Label , "No_of_RESOURCES"); /*  4 */
+    case  5:  p = strcat(Label , "No of RESOURCES"); /*  4 */
       break;
     case  6:  p = strcat(Label, "External Immigration Rate (0)");  
       break;
@@ -63,9 +63,9 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break; 
     case 24:  p = strcat(Label, "Consummer Reproduction Rate");   
       break;
-    case 25:  p = strcat(Label, "2*k_E is the resourse value in energy units ");   
+    case 25:  p = strcat(Label, "2*$k_E$ is the resourse value in energy units ");   
       break;
-    case 26:  p = strcat(Label, "Maintainance Energy loss rate");   
+    case 26:  p = strcat(Label, "Energy loss maintance rate");   
       break;
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
       break; 

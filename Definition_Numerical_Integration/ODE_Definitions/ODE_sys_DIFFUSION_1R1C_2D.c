@@ -27,8 +27,10 @@ int function (double t, const double y[], double dydt[], void *params)
     A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
 
     dydt[R] = Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Delta_R_0 *y[R] - Table->Alpha_C_0 * y[R]/(K_R + Table->Alpha_C_0/Table->Nu_C_0 * y[R]) * y[A];
-    
-    dydt[A] = Table->Alpha_C_0 * y[R]/(K_R  +Table->Alpha_C_0/Table->Nu_C_0 * y[R]) * y[A] - Table->Delta_C_0 * y[A] ;
+
+    /* Theta_C should be regarded as "Energy Loss for Maintenace", this is, the fraction of 
+       consumed resources that are not transformed in new consumers */
+    dydt[A] = (1.0-Table->Theta_C)*Table->Alpha_C_0 * y[R]/(K_R  +Table->Alpha_C_0/Table->Nu_C_0 * y[R]) * y[A] - Table->Delta_C_0 * y[A] ;
   }
 
   if(Table->No_of_CELLS > 1) { 

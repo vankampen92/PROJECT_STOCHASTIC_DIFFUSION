@@ -29,7 +29,7 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION -y0 0 -y2 1 -HS 3 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 15156 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
 
    1 species (with external immigration and death) example:  (OUTPUT_VARIABLES_GENUINE will be 4) 
-   .~$ ./DIFFUSION_S_RESOURCES ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
+   .~$ ../DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
 
    2 species (with external immigration and death) example:  (OUTPUT_VARIABLES_GENUINE will be 5) 
    .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.1 -n 1 -v0 10105 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
@@ -152,10 +152,14 @@ int main(int argc, char **argv)
 
   // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic
   // counter-part implemented yet!
-#ifndef DIFFUSION_1R1C_2D 
+#ifndef DIFFUSION_1R1C_2D
+#ifndef DIFFUSION_DRAG
+#ifndef DIFFUSION_VRG
   /* Stochastic Time Dynamics: A number of stochastic realizations     */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
+#endif
+#endif
 #endif
   /* BEGIN : -------------------------------------------------------------------------
    */

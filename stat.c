@@ -1628,6 +1628,49 @@ void saving_Time_Two_Float_vectors(char *file,
   fclose(fp);
 }
 
+void Reading_from_File_double_nxy_Counting_Rows(char * File_Name,
+						double * x_Data, double ** y_Data,
+						int MAX_No_of_ROWS,
+						int n_XY,
+						int * No)
+{
+  /* This function counts the nubmer of rows (int * No) of the file while to read 
+     It checks if the vector and Matrix to read will be too large for the quantity 
+     of memory reserved in main code (through MAX_No_of_ROWS) 
+  */
+  int n, j;
+  double x,y;
+  FILE *fp;
+
+  int Max_No_of_ROWS; 
+  
+  printf("\n[Entering function Reading_from_File_double_nxy() from stat.c ]\n    Reading File %s...\n", 
+	 File_Name); //Press_Key();
+
+  if((fp=fopen(File_Name,"r")) == NULL) { 
+    printf("File non-existent! Cannot open file.\n");
+    exit(1);
+  }
+  
+  n=0;
+  while ( fscanf(fp, "%lf\t", &x) != EOF ){
+    x_Data[n] = x;
+    for(j=0; j < n_XY; j++){
+      fscanf(fp, "%lf\t", &y);
+      y_Data[j][n] = y;
+    }
+    
+    n++;  
+    assert( n <= MAX_No_of_ROWS );  
+  }
+  
+  * No = n; /* Number of rows (for instance, times) in the file to read */
+  
+  fclose(fp);
+  printf("    File %s has been read successfully\n", File_Name); //Press_Key();
+  printf("[Exiting function Reading_from_File_double_nxy() from stat.c]\n\n");
+}
+
 void Reading_from_File_double_nxy(char * File_Name, double * x_Data, double ** y_Data, int No, int n_XY)
 {
   int i,j;

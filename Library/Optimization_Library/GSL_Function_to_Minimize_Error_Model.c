@@ -62,14 +62,23 @@ double GSL_Function_to_Minimize_Error_Model( const gsl_vector * x, void * Par )
     
     int State = M_O_D_E_L(Table);
     
-    assert(State == GSL_SUCCESS);   
-    
-    Value = 0.0;
-    for( i=0; i<No_of_VARIABLES; i++ )
-      Value += GSL_neglog_Error_Probability_Model( Data[i], Theory[i],
-						   No_of_POINTS, No_of_VARIABLES, F,
-						   GSL_neglog_Error_Probability_Model_Gaussian );
+    if (State != GSL_SUCCESS)
+      Value = DBL_MAX;
+    else{
+      
+      int Theory_is_NOT_a_NUMBER = 0;
+      for( i=0; i<No_of_VARIABLES; i++ )
+	Theory_is_NOT_a_NUMBER += da_vector_isnan(Theory[i], No_of_POINTS);
 
+      if( Theory_is_NOT_a_NUMBER == 0 ) { 
+	Value = 0.0;
+	for( i=0; i<No_of_VARIABLES; i++ )
+	  Value += GSL_neglog_Error_Probability_Model(Data[i],Theory[i],
+						      No_of_POINTS, No_of_VARIABLES, F,
+						      GSL_neglog_Error_Probability_Model_Gaussian);
+      }
+      else Value = DBL_MAX;
+    }
   }
   
   else Value = DBL_MAX;

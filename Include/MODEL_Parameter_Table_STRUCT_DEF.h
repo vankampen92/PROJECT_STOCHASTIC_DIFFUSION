@@ -96,6 +96,9 @@ typedef struct Parameter_Tableinfo
   int RA;
   int ARA;
 
+  int V;
+  int G;
+  
   int * A_P;
   int * RA_P;
   int ** ARA_P; 

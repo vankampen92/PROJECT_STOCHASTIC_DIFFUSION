@@ -13,7 +13,7 @@
    which is a generic common function which is always called
    for any implemented particular model
 */
-// #define VERBOSE
+#define BIO_NEGATIVE_VALUE 1.0E-10
 
 int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Table )
 {
@@ -40,6 +40,7 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
 
      2. definition_OutPut_Variables(...)
   */
+  int NEGATIVE_VALUE; 
   int i; int State;
   // FILE *FP; char file[50];
   int j, k, kk;
@@ -184,12 +185,34 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
 	 // printf("t=%g\tXX = %g\tWW = %g\tTotal=%g\n",Time_Current, No_of_XX, No_of_WW, No_of_TOTAL_Women);
    // Press_Key();
 
+   /* Break if some variables take negative values */
+      NEGATIVE_VALUE = 0; 
+      for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) { 
+	
+	if (Table->Vector_Output_Variables[k] < 0.0 ) {
+	  if (fabs(Table->Vector_Output_Variables[k]) > BIO_NEGATIVE_VALUE )
+	    NEGATIVE_VALUE = 1;
+	  else 
+	    Table->Vector_Output_Variables[k] = 0.0;
+	}
+      }
+      
+      if (NEGATIVE_VALUE == 1) 	{
+	State = -State;
+	break;
+      }
   }/* ------> go further to the next time step */
 
 
   // fclose(FP);
 
-  if (State != GSL_SUCCESS) printf(" Numerical integration failed at the %dth time\n", j);
-
+#if defined VERBOSE
+  if (State != GSL_SUCCESS ) {
+    printf(" Numerical integration failed at the %dth time\n", j);
+    if(NEGATIVE_VALUE == 1)
+      printf(" Some outvariables are negative!!!\n");
+  }
+#endif
+  
   return(State);
 }

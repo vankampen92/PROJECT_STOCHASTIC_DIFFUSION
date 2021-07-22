@@ -10,4 +10,14 @@ void Parametric_Configurations_into_Fitting_Structure_from_File (Parameter_Fitti
 
 void Parametric_Configurations_from_Fitting_Structure_into_File (Parameter_Fitting * ,
 								 char *  ,
-								 int ); 
+								 int );
+
+void Accuracy_Calculation_from_Optimal_Parameter_Configuration(Parameter_Fitting * ,
+							       int ,
+							       double ,
+							       double * ,
+							       double * ,
+							       int ,
+							       double ,
+							       double * ,
+							       double * ); 

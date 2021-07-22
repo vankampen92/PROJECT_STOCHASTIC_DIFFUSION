@@ -12,7 +12,7 @@ Mu      = 0.0;         /* -Hu  *//* Resources: Movement Per Capita Rate Between 
 Mu_C    = 0.0;         /* -H13 *//* Consumers: Movement Per Capita Rate Between Patches */ 
 
 Lambda_R_0 = 0.0;      /* -H0 */
-Delta_R_0  = 0.5;      /* -H1 */
+Delta_R_0  = 0.0;      /* -H1 */
 
 K_R        = 5000.0;   /* -HK */ /* Resource Carrying Capacity */ 
 Beta_R     = 1.5;      /* -H4 */ 
@@ -38,7 +38,7 @@ f   = 2;              /* -H15 */ /* Fecundity: Number of Offspring Individuals *
 i_0 = 4;              /* -H16 */ /* Energy Level at Maturity  */
 Beta_C = 0.5;         /* -H17 */ /* Consummer Reproduction Rate */
 k_E    = 1;           /* -H18 */ /* 2* k_E is the resourse value in energy units */
-Theta_C = 5.0;        /* -H19 */ /* Energy loss rate for maintenance */
+Theta_C = 0.0;        /* -H19 */ /* Energy loss rate for maintenance */
 p_1 = 1.0;            /* -H20 */ /* Cooperation probability 1st position in the triplet */ 
 p_2 = 1.0;            /* -H21 */ /* Cooperation probability 2on position in the triplet */ 
 

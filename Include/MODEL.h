@@ -15,21 +15,30 @@
 */
 
 #define No_of_TDC_FUNC_AUX_PARAM_MAX 10   /* Maximum No of Time Dependence Function Auxiliary
-                                             Parameters required to define the potential time 
-                                             dependence in each true model parametes 
+                                             Parameters required to define the potential  
+                                             functional time dependence of each model parameter
                                           */
 #define DEPENDENT_PARAMETERS_MAXIMUM 29   /* Maximum number of potentially forced parameters */
 
 #define MODEL_PARAMETERS_MAXIMUM 29      /* Maximum No of MODEL (input) PARAMETERS */
-                                         /* The total number of parameters in 
-					    model-paramaters-related assign functions 
+                                         /* The total number of parameters in all 
+					    model-paramater-related assign functions.
+					    This is the whole parameter pool from which a 
+					    parameter subspace can be defined for 
+					    optimization searches and parameter scans   
 					 */
 #ifdef DIFFUSION_1RnC_E
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
 #elif defined DIFFUSION_1R1C
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1R1C.h"
+#elif defined DIFFUSION_S_RESOURCES
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_S_RESOURCES.h"
 #elif defined DIFFUSION_1R1C_2D
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1R1C_2D.h"
+#elif defined DIFFUSION_DRAG
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_DRAG.h"
+#elif defined DIFFUSION_VRG
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_VRG.h"
 #endif
 
 typedef struct totalRateinfo
@@ -79,6 +88,8 @@ typedef struct totalRateinfo
 #include <GSL_stat.h>
 
 #include <Definition_Error_Model/Error_Library.h>
+
+#include <Definition_Fixed_Points/Fixed_Points_All.h>
 
 /* Auxiliary Functions */
 #include "main.H"

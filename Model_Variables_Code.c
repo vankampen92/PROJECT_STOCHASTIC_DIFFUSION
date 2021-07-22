@@ -223,6 +223,104 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
 
+      Table->Index[n++]   = 26; /* Energy Loss Rate (here, fraction of 
+				   conumed resourced that are NOT transformed 
+				   into new consumers */
+
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break; 
+
+    case 5: /* DIFFUSION_DRAG * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:                      */
+      Table->No_of_EVENTS       = 3;    /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 3 * Table->No_of_EVENTS + 5; // 5? Stochastic Dynamics Not Yet Implemented 
+      Table->LOCAL_STATE_VARIABLES = 3; /* V + R + G */
+                                        
+      assert(Table->No_of_RESOURCES == 1);
+
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+        for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+          n++;
+
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->V = 0;  Table->R = 1; Table->G = 2; 
+
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0;  /* Resource Movement Rate     */
+
+      Table->Index[n++] = 6;  /* External Immigration Rate (V)    */
+      Table->Index[n++] = 7;  /* Per Capita Death Rate (V)        */
+      Table->Index[n++] = 10; /* Vegetation Carrying Capacity (V) */
+      Table->Index[n++] = 11; /* Vegetation Local Growth Rate (V) */
+      
+      Table->Index[n++] = 12; /* External Immigration Rate (R) */
+      Table->Index[n++] = 13; /* Rat Per Capita Death Rate (R) */  
+
+      Table->Index[n++] = 14; /* External Immigration Rate (G) */
+      Table->Index[n++] = 15; /* Rat Per Capita Death Rate (G) */  
+      
+      Table->Index[n++] = 16; /* Rat Exploration/Attack Rate (R) */
+      
+      Table->Index[n++] = 20; /* Consumer Movement Rate (G / R)  */
+
+      Table->Index[n++] = 24; /* Gull Per Capita Reproduction Rate (G) */
+
+      Table->Index[n++] = 26; /* Energy Loss/Efficient Rate (here, fraction of 
+				 conumed resources that are NOT transformed 
+				 into new consumers) */
+      Table->Index[n++] = 27; /* Guano Conversion Factor (G) */
+
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break; 
+
+    case 6: /* DIFFUSION_VRG * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:                      */
+      Table->No_of_EVENTS       = 3;    /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 3 * Table->No_of_EVENTS + 5; // 5? Stochastic Dynamics Not Yet Implemented 
+      Table->LOCAL_STATE_VARIABLES = 3; /* V + R + G */
+                                        
+      assert(Table->No_of_RESOURCES == 1);
+
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+        for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+          n++;
+
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->V = 0;  Table->R = 1; Table->G = 2; 
+
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0;  /* Resource Movement Rate     */
+
+      Table->Index[n++] = 6;  /* External Immigration Rate (V)    */
+      Table->Index[n++] = 7;  /* Per Capita Death Rate (V)        */
+      Table->Index[n++] = 10; /* Vegetation Carrying Capacity (V) */
+      Table->Index[n++] = 11; /* Vegetation Local Growth Rate (V) */
+      
+      Table->Index[n++] = 12; /* External Immigration Rate (R) */
+      Table->Index[n++] = 13; /* Rat Per Capita Death Rate (R) */  
+
+      Table->Index[n++] = 14; /* External Immigration Rate (G) */
+      Table->Index[n++] = 15; /* Rat Per Capita Death Rate (G) */  
+      
+      Table->Index[n++] = 16; /* Rat Exploration/Attack Rate (R) */
+      
+      Table->Index[n++] = 20; /* Consumer Movement Rate (G / R)  */
+
+      Table->Index[n++] = 24; /* Gull Per Capita Reproduction Rate (G) */
+
+      Table->Index[n++] = 26; /* Energy Loss/Efficient Rate (here, fraction of 
+				 conumed resources that are NOT transformed 
+				 into new consumers) */
+      Table->Index[n++] = 27; /* Guano Conversion Factor (G) */
+
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break; 
 
@@ -305,6 +403,20 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       break; 
 
     case 4: /* DIFFUSION_1R1C_2D * * * * * * * * * * * * * * * * * * * * * * */
+                                  
+      assert(P->No_of_RESOURCES == 1);
+
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+        for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+          n++;
+
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+
+      break;
+
+    case 5: /* DIFFUSION_DRAG * * * * * * * * * * * * * * * * * * * * * * */
                                   
       assert(P->No_of_RESOURCES == 1);
 

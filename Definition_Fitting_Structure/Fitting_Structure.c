@@ -127,8 +127,6 @@ void Parametric_Configurations_from_Fitting_Structure_into_File (Parameter_Fitti
   }
    
   /* Creating Title Row */
-  /* B E153 G I N :   Defining first row of "Full_Parameter_Set.dat" file
-   */
   char ** Title_Parameters = (char **)calloc(F->TOTAL_No_of_Fitting_Parameters+1,
 					     sizeof(char *) );
   for(i=0; i < F->TOTAL_No_of_Fitting_Parameters+1; i++)
@@ -138,14 +136,95 @@ void Parametric_Configurations_from_Fitting_Structure_into_File (Parameter_Fitti
   
   Writing_Model_Parameters_into_File(File_Name, Title_Parameters, Data, N,
   				     F->TOTAL_No_of_Fitting_Parameters);
-  
-  /* Writing_Model_Parameters_Matrix(Table, "Set", */
-  /* 				  Data, N, */
-  /* 				   F->TOTAL_No_of_Fitting_Parameters); */
-  
+
   for(i=0; i < j; i++) free(Title_Parameters[i]);
   free(Title_Parameters);
 
+  for( i=0; i < F->No_of_SOLUTIONS; i++ ) free(Data[i]);
+  free(Data);
+}
+
+void Accuracy_Calculation_from_Optimal_Parameter_Configuration(Parameter_Fitting * F,
+							       int Input_Parameter_0,
+							       double Parameter_True_Value_0,
+							       double *Parameter_Estimated_Value_0,
+							       double *Parameter_Accuracy_0,
+							       int Input_Parameter_1,
+							       double Parameter_True_Value_1,
+							       double *Parameter_Estimated_Value_1,
+							       double * Parameter_Accuracy_1)
+{
+  int i, j;
+  int key; 
+  int N;
+  double value; 
+  gsl_vector * xx;     
+  gsl_permutation * p;
+  
+  Parameter_Table * Table = F->Table;
+  
+  double ** Data = (double **)calloc( F->No_of_SOLUTIONS, sizeof(double *) );
+  for( i=0; i < F->No_of_SOLUTIONS; i++ )
+    Data[i] = (double *)calloc( F->TOTAL_No_of_Fitting_Parameters + 1, sizeof(double) );
+
+  N = F->No_of_SOLUTIONS;
+  
+  xx = gsl_vector_alloc(N);
+  p  = gsl_permutation_alloc(N);
+  
+  for(i=0; i<N; i++) {
+    value = gsl_vector_get(F->Solution_Fitness, i);
+    gsl_vector_set(xx, i, value);
+  }  
+  gsl_sort_vector_index (p, xx);  
+
+    
+  for( i=0; i<N; i++ ) {
+    
+    key = gsl_permutation_get(p, i);
+    
+    for( j=0; j < F->TOTAL_No_of_Fitting_Parameters; j++ ) {   
+      Data[i][j] = gsl_vector_get(F->Solution[key], j);  
+    }
+    
+    assert( j == F->TOTAL_No_of_Fitting_Parameters );
+      
+    Data[i][j] = gsl_vector_get(F->Solution_Fitness, key);
+  }
+
+  gsl_vector_free(xx);
+  gsl_permutation_free(p);
+
+  /* Calculationg Accuracies */
+  gsl_vector * x  = gsl_vector_alloc(F->Table->TOTAL_No_of_MODEL_PARAMETERS);
+  for(i=0; i<F->Table->TOTAL_No_of_MODEL_PARAMETERS; i++)
+    gsl_vector_set(x, i, Data[0][i]);
+    
+  Vector_Entries_into_Parameter_Table ( x, F->Table,
+					Table->Index,
+					F->Table->TOTAL_No_of_MODEL_PARAMETERS );
+
+  * Parameter_Estimated_Value_0 = AssignStructValue_to_VectorEntry(Input_Parameter_0,
+									F->Table);
+
+  * Parameter_Estimated_Value_1 = AssignStructValue_to_VectorEntry(Input_Parameter_1,
+									F->Table);
+
+  * Parameter_Accuracy_0 = fabs( * Parameter_Estimated_Value_0 - Parameter_True_Value_0 ); 
+  * Parameter_Accuracy_1 = fabs( * Parameter_Estimated_Value_1 - Parameter_True_Value_1 ); 
+
+  /* Relative Error (with respect to true values) */
+  * Parameter_Accuracy_0 /= Parameter_True_Value_0; 
+  * Parameter_Accuracy_1 /= Parameter_True_Value_1; 
+  
+  printf("%s: Parameter True Value = %g\tParameter Estimated Value = %lf\tAccuracy = %lf\n",
+	   Table->Symbol_Parameters[Input_Parameter_0],
+	   Parameter_True_Value_0, * Parameter_Estimated_Value_0, * Parameter_Accuracy_0); 
+  printf("%s: Parameter True Value = %g\tParameter Estimated Value = %lf\tAccuracy = %lf\n",
+	   Table->Symbol_Parameters[Input_Parameter_1],
+	   Parameter_True_Value_1, * Parameter_Estimated_Value_1, * Parameter_Accuracy_1); 
+
+  gsl_vector_free( x ); 
   for( i=0; i < F->No_of_SOLUTIONS; i++ ) free(Data[i]);
   free(Data);
 }
