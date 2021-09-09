@@ -4,9 +4,11 @@
  *   . Table->Vector_Model_Int_Variables will store global variables across the patch system
  */
 
-void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
-						      Parameter_Table * Table,
-						      int * Bad_Times )
+#define EXTINCTION_CONTROL
+
+int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
+						     Parameter_Table * Table,
+						     int * Bad_Times )
 {
   /* This function perform one single stochastic realization (i-th),
      sample the system at times stored in Time->Time_Vector[],
@@ -88,8 +90,27 @@ void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       }
     /*     E N D
      * -------------------------------------------------------------------
-     */
+     */    
+#if defined EXTINCTION_CONTROL
+    int EXTINCTION;
+    double Total_Population_of_Consumers;  
+    EXTINCTION = 0;
+
+    if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
+      Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables,
+								  Table );
+      if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
     
+    // EXTINCTION = Extinction_Control_Condition(Table);
+    }
+    
+    if (FROZEN_SYSTEM == 1 || EXTINCTION == 1) {
+      if (FROZEN_SYSTEM == 1 && EXTINCTION == 0) FROZEN_SYSTEM = 1;
+      if (FROZEN_SYSTEM == 0 && EXTINCTION == 1) FROZEN_SYSTEM = 2;
+      if (FROZEN_SYSTEM == 1 && EXTINCTION == 1) FROZEN_SYSTEM = 1;
+      break;  /* Don't advance more times */  
+    }
+#endif
 
     if( Time_Current > Time->Time_Vector[j] + Time->EPSILON){
       (*Bad_Times)++;
@@ -130,10 +151,10 @@ void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 #if defined CPGPLOT_REPRESENTATION    /* Plotting Time evolution */
       /* BEGIN: Grafical Representation per SUCCESSFUL time step */
       C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S( Table->CPG->DEVICE_NUMBER,
-						       1+i, j_Good, Table );
+      						       1+i, j_Good, Table );
 
       /* GRID REPRESENTATION */
-      Community_Scatter_Plot_Representation(Table, i, j);   
+      // Community_Scatter_Plot_Representation(Table, i, j);   
       // Press_Key(); 
       /*   END: Grafical Representation per time step */
 #endif
@@ -154,9 +175,9 @@ void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     Print_Meta_Community_Patch_System (Table);
     Press_Key();
 #endif
-
-    
   }/* go further to the next time           */
 
   fclose(FP);
+
+  return(FROZEN_SYSTEM); 
 }

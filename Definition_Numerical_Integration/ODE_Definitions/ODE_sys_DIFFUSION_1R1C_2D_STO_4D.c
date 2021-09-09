@@ -25,10 +25,18 @@ int function (double t, const double y[], double dydt[], void *params)
 
     R   = j*Table->LOCAL_STATE_VARIABLES + Table->R;
     A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
+    RA  = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
+    ARA = j*Table->LOCAL_STATE_VARIABLES + Table->ARA;
 
-    dydt[R] = Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Delta_R_0 *y[R] - Table->Alpha_C_0 * y[A]/(1.0 + Table->Alpha_C_0/Table->Nu_C_0)* y[R];
-    
-    dydt[A] = Table->Alpha_C_0 * y[A]/(1.0 + Table->Alpha_C_0/Table->Nu_C_0)* y[R] - Table->Delta_C_0 * y[A] ;
+    dydt[R] = Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Delta_R_0 *y[R] - Table->Alpha_C_0 * y[R]/(K_R + Table->Alpha_C_0/Table->Nu_C_0 * y[R]) * y[A];
+
+    /* Theta_C should be regarded as "Energy Loss for Maintenace", this is, the fraction of 
+       consumed resources that are not transformed in new consumers */
+    dydt[A] = (1.0-Table->Theta_C)*Table->Alpha_C_0 * y[R]/(K_R  +Table->Alpha_C_0/Table->Nu_C_0 * y[R]) * y[A] - Table->Delta_C_0 * y[A] ;
+
+    dydt[RA] = 0.0;
+
+    dydt[ARA] = 0.0; 
   }
 
   if(Table->No_of_CELLS > 1) { 

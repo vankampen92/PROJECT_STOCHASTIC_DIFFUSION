@@ -168,86 +168,90 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
   if (Table->TYPE_of_MODEL == 0 )
     assert( N == (Table->No_of_RESOURCES * Table->No_of_INDIVIDUALS) );
 
-  float * x_Data = (float *)calloc( N, sizeof(float) );
-  float * y_Data = (float *)calloc( N, sizeof(float) );
+  if( N > 0 ) { /* Otherwise nothing to represent!!! */
+    
+    float * x_Data = (float *)calloc( N, sizeof(float) );
+    float * y_Data = (float *)calloc( N, sizeof(float) );
 
-  Range_x[0] = 0.0;  Range_x[1] = P[0]->X_DIMENSION;
-  Range_y[0] = 0.0;  Range_y[1] = P[0]->Y_DIMENSION;
-
-  if(i_Replicate == 0 && j_Time == 1) {
+    Range_x[0] = 0.0;  Range_x[1] = P[0]->X_DIMENSION;
+    Range_y[0] = 0.0;  Range_y[1] = P[0]->Y_DIMENSION;
+    
+    if(i_Replicate == 0 && j_Time == 1) {
       DEVICE_NUMBER = cpgopen( "/XSERVE" );
       cpgsubp(1, 1);
       cpgask( 0 );
-  }
-
-  for(Sp = 0; Sp<Table->LOCAL_STATE_VARIABLES; Sp++) {
-
-    n=0;
-    for(i = 0; i<Table->No_of_CELLS; i++) {
-      Patch = P[i]; 
-      for(j = 0; j<Patch->n[Sp]; j++) {
-	x_Data[n] = (float)(Patch->center.x - 0.5 + gsl_rng_uniform(r));
-	/* This is because STEP is 1.0 */
-	y_Data[n] = (float)(Patch->center.y - 0.5 + gsl_rng_uniform(r));
-	/* This is because STEP is 1.0 */
-	n++;
-      }
     }
     
-    type_of_Line = 1;
-    type_of_Width = 2;
-    cpgsls(type_of_Line);
-    cpgslw(type_of_Width);
-    cpgask( 0 );
-
-    cpgslct(DEVICE_NUMBER);      /* Selecting Device */
-
-    if (Sp == 0) {
+    for(Sp = 0; Sp<Table->LOCAL_STATE_VARIABLES; Sp++) {
+      
+      n=0;
+      for(i = 0; i<Table->No_of_CELLS; i++) {
+	Patch = P[i]; 
+	for(j = 0; j<Patch->n[Sp]; j++) {
+	  x_Data[n] = (float)(Patch->center.x - 0.5 + gsl_rng_uniform(r));
+	  /* This is because STEP is 1.0 */
+	  y_Data[n] = (float)(Patch->center.y - 0.5 + gsl_rng_uniform(r));
+	  /* This is because STEP is 1.0 */
+	  n++;
+	}
+    }
+      
+      type_of_Line = 1;
+      type_of_Width = 2;
+      cpgsls(type_of_Line);
+      cpgslw(type_of_Width);
+      cpgask( 0 );
+      
+      cpgslct(DEVICE_NUMBER);      /* Selecting Device */
+      
+      if (Sp == 0) {
       color_Index    = 3;
       type_of_Symbol = 1;
       cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
 		       color_Index, type_of_Symbol,
 		       "X", "Y", "");
-    }
-    else {
-      color_Index    = 3 + Sp;
-      type_of_Symbol = 1 + Sp;
-      cpg_XY_same_scattered(n, x_Data, y_Data,
-			    color_Index, type_of_Symbol);
-    }
-    cpgsls(1);
+      }
+      else {
+	color_Index    = 3 + Sp;
+	type_of_Symbol = 1 + Sp;
+	cpg_XY_same_scattered(n, x_Data, y_Data,
+			      color_Index, type_of_Symbol);
+      }
+      cpgsls(1);
     cpgslw(1);
+    }
+    
+    /* n: Total number of individuals across species */
+    // Print_Meta_Community_Patch_System (Table);
+    
+    /* B E G I N : Plotting Current Time on Top */
+    char * Plot_Time  = (char *)calloc( 50, sizeof(char));
+    char * Time_Eraser = (char *)calloc(50, sizeof(char));
+    float char_Size;
+    float x_Time_Position = 0.50 * Range_x[1]; 
+    float y_Time_Position = 1.09 * Range_y[1];
+    static double Current_Time  = 0.0; 
+    double Last_Time            = Current_Time;
+    Current_Time  = Table->T->Time_Vector[j_Time];
+    sprintf(Plot_Time, "Time = %5.2f", Current_Time);
+    sprintf(Time_Eraser, "Time = %5.2f", Last_Time);
+    cpgqch(&char_Size);
+    cpgsch(2.0);
+    cpgsci(0);
+    cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.0, Time_Eraser);
+    cpgsci(1);
+    cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Plot_Time);
+    cpgsch(char_Size);
+    free(Plot_Time); free(Time_Eraser);
+    /*     E N D : Plotting Current Time on Top */
+
+    if(Table->TYPE_of_INITIAL_CONDITION == 0 && Table->TYPE_of_MODEL == 0)
+      assert( n == Table->No_of_INDIVIDUALS );
+    
+
+    free(x_Data);
+    free(y_Data);
   }
-
-  /* n: Total number of individuals across species */
-  // Print_Meta_Community_Patch_System (Table);
-
-  /* B E G I N : Plotting Current Time on Top */
-  char * Plot_Time  = (char *)calloc( 50, sizeof(char));
-  char * Time_Eraser = (char *)calloc(50, sizeof(char));
-  float char_Size;
-  float x_Time_Position = 0.50 * Range_x[1]; 
-  float y_Time_Position = 1.09 * Range_y[1];
-  static double Current_Time  = 0.0; 
-  double Last_Time            = Current_Time;
-  Current_Time  = Table->T->Time_Vector[j_Time];
-  sprintf(Plot_Time, "Time = %5.2f", Current_Time);
-  sprintf(Time_Eraser, "Time = %5.2f", Last_Time);
-  cpgqch(&char_Size);
-  cpgsch(2.0);
-  cpgsci(0);
-  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.0, Time_Eraser);
-  cpgsci(1);
-  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Plot_Time);
-  cpgsch(char_Size);
-  free(Plot_Time); free(Time_Eraser);
-  /*     E N D : Plotting Current Time on Top */
-
-  if(Table->TYPE_of_INITIAL_CONDITION == 0 && Table->TYPE_of_MODEL == 0)
-    assert( n == Table->No_of_INDIVIDUALS );
-
-
-  free(x_Data);
-  free(y_Data);
 }
+
 #endif

@@ -337,9 +337,12 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	  for(i=0; i<Table->No_of_CELLS; i++)
 	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
 	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
-    else
+    else{
       printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
 	     Table->TYPE_of_MODEL);
+      printf(" This model is not ready for multi-patch dynamics\n");
+      assert(Table->No_of_CELLS == 1); 
+    }
   }
   /* This function should be called always after having called 
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)

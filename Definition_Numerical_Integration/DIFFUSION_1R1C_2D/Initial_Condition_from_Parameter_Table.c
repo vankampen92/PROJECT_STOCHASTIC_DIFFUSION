@@ -121,7 +121,6 @@ void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * T
     
   Table->Vector_Model_Variables_Time_0[0] = Value_0; /* Initial value for resources */
   Table->Vector_Model_Variables_Time_0[1] = Value_1; /* Initial value for consumers */
-
 }
 
 void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Table * Table,

@@ -209,11 +209,17 @@ double Total_Population_Consumers  ( double * y, Parameter_Table * Table )
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
   
-   if (Table->TYPE_of_MODEL == 2) {
+   if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
      x = 0.0;
      for(i=0; i<Table->MODEL_STATE_VARIABLES; i++) {
        if(i%Table->LOCAL_STATE_VARIABLES == A)  x += y[i]; /* Free Consumers     */ 
        if(i%Table->LOCAL_STATE_VARIABLES == RA) x += y[i]; /* Handling Consumers */
+     }
+   }
+   else if (Table->TYPE_of_MODEL == 4) {
+     x = 0.0;
+     for(i=0; i<Table->MODEL_STATE_VARIABLES; i++) {
+       if(i%Table->LOCAL_STATE_VARIABLES == A)  x += y[i]; /* Free Consumers     */ 
      }
    }
    else {

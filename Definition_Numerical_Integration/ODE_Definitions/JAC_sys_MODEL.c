@@ -17,7 +17,7 @@ jacobian (double t, const double y[], double *dfdy, double dfdt[],
 	  void *params)
 {
 
-  void evaluating_JACOBIAN_Matrix(gsl_matrix *, const double *, double, int, Parameter_Table *);
+  void JACOBIAN_Matrix(gsl_matrix *, const double *, double, int, Parameter_Table *);
   int i;
 
   Parameter_Table * Table;

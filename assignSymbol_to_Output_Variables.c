@@ -8,17 +8,7 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
 
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
 
-  if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
-    p = strcat(L[0], "V");
-    p = strcat(L[1], "R");
-    p = strcat(L[2], "G");
-  }
-  else {
-    p = strcat(L[0], "R");
-    p = strcat(L[1], "A");
-    p = strcat(L[2], "RA");
-    p = strcat(L[3], "ARA");
-  }   
+  Defining_Output_Variables_Labels (Table, L);
 
   char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
@@ -102,7 +92,6 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
       p = strcat(Label , "n[C]");       /*  8: Total Populaiton Consumers  */
       break;
 
-      
     default:
       printf(".... INVALID OUTPUT VARIABLE KEY [key = %d]\n", j);
       printf(".... The permited correspondences are:\n");
@@ -122,18 +111,8 @@ void AssignCPGPLOT_Symbol_to_Output_Variables(int j, char * Label, Parameter_Tab
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
   
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
-  
-  if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
-    p = strcat(L[0], "V");
-    p = strcat(L[1], "R");
-    p = strcat(L[2], "G");
-  }
-  else {
-    p = strcat(L[0], "R");
-    p = strcat(L[1], "A");
-    p = strcat(L[2], "RA");
-    p = strcat(L[3], "ARA");
-  }   
+
+  Defining_Output_Variables_Labels (Table, L);
   
   char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
@@ -209,8 +188,8 @@ void AssignCPGPLOT_Symbol_to_Output_Variables(int j, char * Label, Parameter_Tab
       p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */
       break;
     case  6:
-	p = strcat(Label , "n[RA]");        /*  6: Total Handling Consumers */
-        break;
+      p = strcat(Label , "n[RA]");        /*  6: Total Handling Consumers */
+      break;
     case  7:
       p = strcat(Label , "n[ARA]");       /*  7: Total Triplets */
       break;

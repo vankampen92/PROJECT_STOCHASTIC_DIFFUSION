@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MODEL.h>
 
-#define TOLERANCE -1.0E-20
+#define TOLERANCE -1.0E-10
 
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table);
 
@@ -45,7 +45,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 
     if (Type_of_Event < n ) {
       
-      assert( Type_of_Event != 0 && Type_of_Event != 3 ) ; 
+      assert( Type_of_Event != 0 && Type_of_Event != 3 ) ; /* Because these are out
+							      migration events. Only
+							      possible when x patch 
+							      is different from y patch
+							   */
       
       Pa    = My_Community[x];
       Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); 
@@ -139,7 +143,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     printf(" but R shouldn't be too negative!!!\n");
     printf(" If it is, check if it is lower than certain very small tolerance value\n");
     printf("\n");
-    if( Rate->Total_Rate < TOLERANCE) exit(0);
+    // if( Rate->Total_Rate < TOLERANCE) exit(0);
   }
 }
 

@@ -70,7 +70,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   /* BEGIN: Main loop: a number of REALIZATIONS (stochastic temporal evolutions) is computed */
   printf("Entering Generation of Stochastic Realizations...\n");   Press_Key();
-  for (n=0; n < Table->T->Realizations; n++){
+  n = 0;
+  while (n < Table->T->Realizations){
     // Notice that TDC has not been initialized when TYPE_of_TIME_DEPENDENCE = 0
     // This is the reason we need an 'extern int TYPE_of_TIME_DEPENDENCE' above!!!
     if (TYPE_of_TIME_DEPENDENCE == 1) {
@@ -95,13 +96,18 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
        . Bad_Times is a measure of the performance of the sampling frequency. 
          If Bad_Times is high, interval times should be choosen smaller 
     */
-    S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S ( n, Table, &Bad_Times );
+    int FROZEN_SYSTEM = S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S ( n,
+									  Table, &Bad_Times );
     
     /* End of the i-th STOCHASTIC REALIZATIONS */
     printf("Realization: %d of a total of %d\n", n+1, Table->T->Realizations);
     printf("Time failed in %d occasions out of %d time steps\n", Bad_Times, I_Time);
     printf("If the number of failed times is too big, EPSILON might be too small!\n");
     printf("Try to choose a larger EPSILON [Current value: -tE %g]\n", Table->T->EPSILON);
+
+    /* Only selection those stochastic realizations according to certain criterion */
+    if(FROZEN_SYSTEM == 0) n++;  
+
   }
   /* END: End of STOCHASTIC REALIZATIONS */
 

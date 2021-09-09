@@ -40,4 +40,35 @@ int Checking_for_Parameter_Boundaries( Parameter_Fitting * F, const gsl_vector *
 
 double Inspecting_Likelihood_of_Final_Solution( const gsl_vector * x, void * Par ); 
 
-double Inspecting_Solution_Driver( Parameter_Fitting * F ); 
+double Inspecting_Solution_Driver( Parameter_Fitting * F );
+
+/* Eigenvalue Calculation */
+void GSL_Eigenvalue_Calculation ( double * y_Sol,  int N,
+                                  Parameter_Table * P,
+                                  double * l_re, double * l_im );
+
+void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
+				     int * Index_Value_D, int * Index_Value_S);
+
+void NR_Eigenvalue_Calculation ( double * y_Sol,  int N, 
+				 Parameter_Table * P, 
+				 double * l_re, double * l_im ); 
+
+void NR_Eigenvalue_Calculation_float ( double * y_Sol,  int K, int W, 
+				       Parameter_Table * P, 
+				       float * l_re, float * l_im ); 
+
+
+double Well_Defined_Matrix_Elements(float **mm, int N, float xmin, float xmax);
+
+int showing_eigenValues(float *l_re, float *l_im, int n); 
+
+int fprintf_to_File_Matrix_gsl(FILE * Out, gsl_matrix * A, int MM, int NN); 
+
+int gsl_matrix_to_NR_matrix(gsl_matrix * A, float **a,  int MM, int NN);
+
+/* Backup Version */
+void E_I_G_E_N___V_A_L_U_E___C_A_L_C_U_L_A_T_I_O_N ( double * y_Sol,  int K, int W,
+                                                     Parameter_Table * P,
+                                                     float * l_re, float * l_im );
+

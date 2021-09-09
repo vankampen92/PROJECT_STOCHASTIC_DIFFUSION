@@ -7,19 +7,9 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
 
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
-  
-  if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
-    p = strcat(L[0], "V");
-    p = strcat(L[1], "R");
-    p = strcat(L[2], "G");
-  }
-  else {
-    p = strcat(L[0], "R");
-    p = strcat(L[1], "A");
-    p = strcat(L[2], "RA");
-    p = strcat(L[3], "ARA");
-  }  
 
+  Defining_Output_Variables_Labels (Table, L);
+  
   Label[0] = '\0';
   char * n_Label = (char *)calloc(10, sizeof(char) );
   
@@ -124,18 +114,8 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
 
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
-  
-   if (Table->TYPE_of_MODEL == 5 || Table->TYPE_of_MODEL == 6) {
-    p = strcat(L[0], "V");
-    p = strcat(L[1], "R");
-    p = strcat(L[2], "G");
-  }
-  else {
-    p = strcat(L[0], "R");
-    p = strcat(L[1], "A");
-    p = strcat(L[2], "RA");
-    p = strcat(L[3], "ARA");
-  }  
+
+  Defining_Output_Variables_Labels (Table, L);
   
   char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
@@ -232,4 +212,66 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   free(L); 
 }
 
+void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
+{
+  char * p; 
+  
+  switch(Table->TYPE_of_MODEL)
+    {
+    case  0:
+      p = strcat(L[0], "R");
+      break;
+    case  1:
+      p = strcat(L[0], "R");
+      
+    break;
+    case  2:
+      p = strcat(L[0], "R");
+      p = strcat(L[1], "A");
+      p = strcat(L[2], "RA");
+      p = strcat(L[3], "ARA");
+      
+      break;
+    case  3:
+      p = strcat(L[0], "R");
+      p = strcat(L[1], "A");
+      p = strcat(L[2], "RA");
+      p = strcat(L[3], "ARA");
 
+      break;
+    case  4:
+      p = strcat(L[0], "R");
+      p = strcat(L[1], "A");
+      
+      break;
+    case  5:
+      p = strcat(L[0], "V");
+      p = strcat(L[1], "R");
+      p = strcat(L[2], "G");
+
+      break;
+    case  6:
+      p = strcat(L[0], "V");
+      p = strcat(L[1], "R");
+      p = strcat(L[2], "G");
+
+      break;
+    case  7:
+      p = strcat(L[0], "R");
+      p = strcat(L[1], "A");
+      p = strcat(L[2], "RA");
+
+      break;
+    case  8:
+      p = strcat(L[0], "R");
+      p = strcat(L[1], "A");
+      p = strcat(L[2], "RA");
+      p = strcat(L[3], "ARA");
+      
+      break;   
+    default:
+      printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);
+      printf(".... The permited correspondences are: 0 to 7\n");
+      exit(0);
+    }
+}

@@ -1,3 +1,5 @@
+void Write_Parameter_Table ( Parameter_Table * P, int no_Par ); 
+
 void write_Parameter_Table___RANGES___VALUES___LATEX ( char * File_Model_Parameters,
 						       char * Type_of_Boundary_Parameter_Space,
 						       Parameter_Table * P,

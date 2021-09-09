@@ -66,6 +66,7 @@ int M_O_D_E_L( Parameter_Table * Table )
 								   sizeof(double) );
 
 #if defined STATIONARY_POINT_REPRESENTATION
+#ifndef DIFFUSION_1R1C_2D
   /* B E G I N : Calculation of Stationary Points */
   Fixed_Points_All( Table,
 		    Table->Vector_Model_Variables_MultiStability[0],
@@ -73,6 +74,12 @@ int M_O_D_E_L( Parameter_Table * Table )
 		    Table->Vector_Model_Variables_MultiStability[2],
 		    EPSILON );
 
+  /* This function depends on the JACOBIAN at the fixed point, which is 
+     only available for MODEL = DIFFUSION_1R1C 
+  */
+  x = Function_to_Type_of_Stability( Table );
+  Press_Key(); 
+  
   printf("Lower Fixed Point (model variables):\t");
   for (k=0; k < Table->MODEL_STATE_VARIABLES; k++)
     printf("y_LOWER[%d] = %g\t", k, Table->Vector_Model_Variables_MultiStability[0][k]);
@@ -87,7 +94,7 @@ int M_O_D_E_L( Parameter_Table * Table )
   printf("\n");
   /*    E N D : --------------------------------- */
 #endif
-
+#endif
   printf(" Entering deterministic dynamics. Parameter time dependencies will be\n");
   printf(" de-activated if -t4 0 (TYPE_of_TIME_DEPENDENCE = 0).\n");
 

@@ -6,3 +6,6 @@ void Fixed_Points_All( Parameter_Table * Table,
 
 int  Coexistence_Condition ( Parameter_Table * Table );
 
+double Coexistence_Condition_Double ( Parameter_Table * Table ); 
+
+double Function_to_Type_of_Stability( Parameter_Table * Table ); 

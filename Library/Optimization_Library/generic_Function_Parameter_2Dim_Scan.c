@@ -42,27 +42,41 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
 
   n = 0;
   for( k = 0; k < No_of_POINTS_2; k++ ) {
-  
-    // Boundary(Input_Parameter_2, &Value_0, &Value_1);
+
+    // Linear Scale
     Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
     Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
+
+    // Log Scale
+    // Value_0 = log10(Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min ));
+    // Value_1 = log10(Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX ));
     
     Value = Value_0 + k * (Value_1 - Value_0)/(double)(No_of_POINTS_2 - 1);
-    y_Data[k]= Value;
-
-    AssignVectorEntry_to_Structure(P, Input_Parameter_2, Value);
     
-    // Boundary(Input_Parameter_1, &Value_0, &Value_1);
-    Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
-    Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
+    y_Data[k]= Value; 
+    // Log Scale
+    // AssignVectorEntry_to_Structure(P, Input_Parameter_2, pow(y_Data[k], 10.0) );
+    // Linear Scale
+    AssignVectorEntry_to_Structure(P, Input_Parameter_2, y_Data[k] );
+
+    // Linear Scale
+    // Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
+    // Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
+
+    // Log Scale
+    Value_0 = log10(Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min ));
+    Value_1 = log10(Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX ));
   
     for( j = 0; j < No_of_POINTS_1; j++ ){
 	
 	Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
 	x_Data[j] = Value;
+	// Log Scale:
+	AssignVectorEntry_to_Structure(P, Input_Parameter_1, pow(x_Data[j], 10.0) );
+	// Linear Scale:
+	// AssignVectorEntry_to_Structure(P, Input_Parameter_1, x_Data[j] );
 
-	AssignVectorEntry_to_Structure(P, Input_Parameter_1, Value);
-	
+	// Most important code line in this function: 
 	z_SOL[k][j]    = GENERIC_FUNCTION ( P );
 	W_GRID[n++]    = z_SOL[k][j]; 
 

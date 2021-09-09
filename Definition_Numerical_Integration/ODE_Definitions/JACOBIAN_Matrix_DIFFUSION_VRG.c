@@ -37,7 +37,7 @@ void JACOBIAN_Matrix( gsl_matrix * m, const double *y, double t, int W_DUMMY,
   /* First, setting entries to zero... */
   gsl_matrix_set_zero(m);
   
-#include  <include.JAC_sys_DIFFUSION_1R1C.c>
+#include  <include.JAC_sys_DIFFUSION_VRG.c>
 
   /* End of setting the Jacobian matrix evaluated at (y[0], ..., y[W]) */
 }

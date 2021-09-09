@@ -9,15 +9,15 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
   int i, j, a;
   int N, no, Sp;
 
-  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species 
+  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species
 					potentially coexisting locally,
-					and, therefore, also the 
-					Total Number of State Variables 
-					fully determining the local state 
+					and, therefore, also the
+					Total Number of State Variables
+					fully determining the local state
 				     */
   no    = P->No_of_CELLS;
 
-  N     = P->TOTAL_No_of_EVENTS; 
+  N     = P->TOTAL_No_of_EVENTS;
 
   for(i=0; i<no; i++){
     PATCH[i] = (Community *)calloc( 1, sizeof(Community) );
@@ -48,11 +48,11 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
       PATCH[i]->Imm_Rates_Preassure[a] = (double *)calloc(P->No_of_NEIGHBORS, sizeof( double ));
 
     PATCH[i]->Event_Delta_Matrix = (double **)calloc(N, sizeof(double *) );
-    for(a=0; a<N; a++) 
+    for(a=0; a<N; a++)
       PATCH[i]->Event_Delta_Matrix[a] = (double *)calloc(N, sizeof(double) );
 
     PATCH[i]->Event_Adjacence_List = (int **)calloc(N, sizeof(int *) );
-    for(a=0; a<N; a++) 
+    for(a=0; a<N; a++)
       PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(N+1, sizeof(int) );
   }
 }
@@ -102,12 +102,12 @@ void Community_Initialization (Community ** PATCH,
 			       Parameter_Model * P )
 {
   int i, j, Sp, no;
-  
+
   Sp  = P->No_of_RESOURCES;
   no  = P->No_of_CELLS;
-    
+
   for(i=0; i<no; i++){
-    
+
     PATCH[i]->No_of_RESOURCES = Sp;
 
     PATCH[i]->No_of_CELLS   = P->No_of_CELLS;
@@ -141,16 +141,16 @@ void Community_Initialization (Community ** PATCH,
   Writing_Adjacency_List(PATCH);
   if (P->TYPE_of_NETWORK == 1) Writing_Adjacency_List_VonNeumann(PATCH);
 #endif
-  
+
   Immigration_Preassure_on_Focal_Patch_Initialization( PATCH, P );
 
-#if defined DIFFUSION_1R1C
-  if( P->TYPE_of_MODEL == 2) { 
+// #if defined DIFFUSION_1R1C
+  if( P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8) { 
     Event_Delta_Matrix_Initialization(PATCH, P);
-    
+
     Event_Adjacence_List_Initialization(PATCH, P);
   }
-#endif 
+// #endif
 }
 
 void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
@@ -182,9 +182,9 @@ void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
   Sp = P->LOCAL_STATE_VARIABLES;
 
   for(j=0; j < Sp ; j++) {
-    
+
     for(i=0; i<P->No_of_CELLS; i++) {
-   
+
       Imm_Rate = 0.0;
       for(n=0; n < PATCH[i]->No_NEI; n++){
 	  Imm_Rate += PATCH[i]->In_Migration_Vector[j][n]*(double)PATCH[i]->NEI[n]->n[j];
@@ -204,7 +204,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
   int Sp;
   int i_x, j_y;
   double STEP_X, STEP_Y;
-  double Total_Per_Capita_Out_Migration_Rate; 
+  double Total_Per_Capita_Out_Migration_Rate;
 
   switch ( TYPE_of_NETWORK )
     {
@@ -214,12 +214,12 @@ void Network_Structure_Inititialization (Community ** PATCH,
       no        = PATCH[0]->No_of_CELLS;
       Sp        = PATCH[0]->LOCAL_STATE_VARIABLES;
 
-   
+
       for(i=0; i<no; i++){
 
-	PATCH[i]->center.x = gsl_rng_uniform(r) * PATCH[i]->X_DIMENSION; 
-	PATCH[i]->center.y = gsl_rng_uniform(r) * PATCH[i]->Y_DIMENSION;  
-	
+	PATCH[i]->center.x = gsl_rng_uniform(r) * PATCH[i]->X_DIMENSION;
+	PATCH[i]->center.y = gsl_rng_uniform(r) * PATCH[i]->Y_DIMENSION;
+
 	for( a=0; a<Sp; a++ ) {
 
 	  n=0;
@@ -227,10 +227,10 @@ void Network_Structure_Inititialization (Community ** PATCH,
 	  for(j=0; j<no; j++){
 	    if( i != j) {
 	      PATCH[i]->NEI[n] = PATCH[j];
-	      
+
 	      PATCH[i]->Out_Migration_Vector[a][n] = PATCH[i]->Metapop_Connectivity_Matrix[a][j][i];
 	      PATCH[i]->In_Migration_Vector[a][n]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
-	      
+
 	      PATCH[i]->Patch_Connections[n] = j;
 
 	      Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][n];
@@ -239,9 +239,9 @@ void Network_Structure_Inititialization (Community ** PATCH,
 	  }
 	  PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
 	}
-	
+
 	PATCH[i]->No_NEI = no-1; /* All patches are connected to i */
-	assert(no-1 == n); 
+	assert(no-1 == n);
       }
       break;
 
@@ -254,7 +254,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
 
       STEP_X    = PATCH[0]->X_DIMENSION/(double)PATCH[0]->No_of_CELLS_X;
       STEP_Y    = PATCH[0]->Y_DIMENSION/(double)PATCH[0]->No_of_CELLS_Y;
-    
+
       for(i=0; i<no; i++){
 
 	  i_x = i/PATCH[i]->No_of_CELLS_X;
@@ -262,26 +262,26 @@ void Network_Structure_Inititialization (Community ** PATCH,
 
 	  PATCH[i]->center.x = (double)j_y + 0.5*STEP_X;
 	  PATCH[i]->center.y = (double)i_x + 0.5*STEP_Y;
-   
+
 	  Set_Von_Neumann_1st_Neighbors(PATCH, no, N_X, N_Y, i);
 
 	  for( a=0; a<Sp; a++ ) {
 
 	    Total_Per_Capita_Out_Migration_Rate = 0.0;
 	    for(j=0; j<No_of_NEIGHBORS; j++){
-	    
+
 	      PATCH[i]->Out_Migration_Vector[a][j] = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
 	      PATCH[i]->In_Migration_Vector[a][j]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
-	      
+
 	      Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][j];
 	    }
 
 	    PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
 	  }
-	  
+
 	  PATCH[i]->No_NEI = No_of_NEIGHBORS;
       }
-      
+
       break;
 
     default:
@@ -387,17 +387,17 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
   int k, Sp, Patch;
 
   Community ** Village = Table->Patch_System;
-  
-  Sp = Table->LOCAL_STATE_VARIABLES; /* 'The number of state variables that fully define 
+
+  Sp = Table->LOCAL_STATE_VARIABLES; /* 'The number of state variables that fully define
 					the configuration of any given patch
 				     */
   printf(" Total population on local populations (checking local pointers, Y and J vectors):\n");
-  
+
   for(Patch=0; Patch<Table->No_of_CELLS; Patch++) {
     printf(" Patch[%d]:\t", Patch);
 
     for(k = 0; k < Sp; k++) {
-      
+
       printf(" %s = %d ", Table->Model_Variable_Name[k + Patch*Sp],
 	     Village[Patch]->n[k]);
       printf(" %s = %g ", Table->Model_Variable_Name[k + Patch*Sp],
@@ -406,8 +406,8 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 	     Table->Vector_Model_Int_Variables[k+Patch*Sp]);
       printf("\t");
     }
-    
+
     printf("\n");
-    
+
   }
 }

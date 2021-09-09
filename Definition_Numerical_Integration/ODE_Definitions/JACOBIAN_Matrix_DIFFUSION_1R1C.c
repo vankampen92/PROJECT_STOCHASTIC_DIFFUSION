@@ -24,11 +24,9 @@
 #define BETA_DERIVATIVE (Beta_Derivative_1(P,y[W]))
 
 void JACOBIAN_Matrix( gsl_matrix * m, const double *y, double t, int W_DUMMY,
-				 Parameter_Table * Table)
+		      Parameter_Table * Table)
 {
   int i,k;
-  double W_N, M,H, H_2, Q_Sigma_Deriv, Q_Recov_Deriv;
-  double f; /* Infectious Humans */
 
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
@@ -37,7 +35,7 @@ void JACOBIAN_Matrix( gsl_matrix * m, const double *y, double t, int W_DUMMY,
   /* First, setting entries to zero... */
   gsl_matrix_set_zero(m);
   
-#include  <include.JAC_sys_DIFFUSION_1R1C.c>
+  #include  <include.JAC_sys_DIFFUSION_1R1C.c>
 
-  /* End of setting the Jacobian matrix evaluated at (y[0], ..., y[W]) */
+  /* End of setting the Jacobian matrix evaluated at (y[R], y[A], y[RA], y[ARA]) */
 }

@@ -38,5 +38,14 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 6 );
   
 #endif
-
+#if defined DIFFUSION_MR
+  
+    assert ( P->TYPE_of_MODEL == 7 );
+  
+#endif
+#if defined DIFFUSION_1R1C_2D_STO_4D
+  
+    assert ( P->TYPE_of_MODEL == 8 );
+  
+#endif
 }

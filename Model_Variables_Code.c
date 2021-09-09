@@ -221,11 +221,13 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->Index[n++]   = 16; /* Consumer Attack Rate */
       Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
 
       Table->Index[n++]   = 26; /* Energy Loss Rate (here, fraction of 
 				   conumed resourced that are NOT transformed 
-				   into new consumers */
+				   into new consumers 
+				*/
 
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break; 
@@ -324,9 +326,110 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break; 
 
+    case 7: /* DIFFUSION_MR * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
+      Table->LOCAL_STATE_VARIABLES = 3; /* 1 R + 1 C + 1 D + 1 T        */
+                                        /* D \equiv RC and T \equiv CRC */
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->A = 1; Table->RA = 2; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0; /* Resource Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+
+      if ( Table->No_of_RESOURCES > 0 ) {
+	Table->Index[n++] = 6; /* External Immigration Rate (0) */
+	Table->Index[n++] = 7; /* Death Rate (0) */
+      }
+      if ( Table->No_of_RESOURCES > 1 ) {
+	Table->Index[n++] = 8;  
+	Table->Index[n++] = 9; 
+      }
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 11; /* Resource Local Growth Rate */
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      Table->Index[n++]   = 13; /* Consumer Death Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 8: /* DIFFUSION_1R1C_2D_STO_4D * * * * * * * * * * * * * * * * * * * * * * */
+
+      assert(Table->Chi_C_0 == 0.0); 
+      
+      /* No_of_EVENTS: Common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
+      Table->LOCAL_STATE_VARIABLES = 4; /* 1 R + 1 C + 1 D + 1 T        */
+                                        /* D \equiv RC and T \equiv CRC */
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+      
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->A = 1; Table->RA = 2; Table->ARA = 3; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0; /* Resource Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+      
+      if ( Table->No_of_RESOURCES > 0 ) {
+	Table->Index[n++] = 6; /* External Immigration Rate (0) */
+	Table->Index[n++] = 7; /* Death Rate (0) */
+      }
+      if ( Table->No_of_RESOURCES > 1 ) {
+	Table->Index[n++] = 8;  
+	Table->Index[n++] = 9; 
+      }
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 11; /* Resource Local Growth Rate */
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      Table->Index[n++]   = 13; /* Consumer Death Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+
+      Table->Index[n++]   = 26; /* Energy Loss Rate (here, fraction of 
+				   conumed resourced that are NOT transformed 
+				   into new consumers 
+				*/
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+      
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
-      printf(" Check input argument list\n");
+      printf(" Models (0 to 8): Check input argument list!!!\n");
       exit(0);
    }
   /* Conventionally, the last label in the argument list of

@@ -61,7 +61,6 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
       exit(0);
     }
   }
-  
   /* The last output variables are the MODEL_STATE_VARIABLES */
   else {
     j -= Table->OUTPUT_VARIABLES_GENUINE; /* #defined in MODEL.h */

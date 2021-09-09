@@ -1,4 +1,4 @@
-void S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i, 
+int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i, 
 						      Parameter_Table * Table, 
 						      int * Bad_Times );
 

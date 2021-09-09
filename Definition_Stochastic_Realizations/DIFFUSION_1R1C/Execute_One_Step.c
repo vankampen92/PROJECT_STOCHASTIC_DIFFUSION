@@ -38,14 +38,14 @@ void Execute_One_Step(Community ** SP,
 
   if(Table->TOTAL_No_of_EVENTS > 1)
     n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
-    
+
   else {
     printf(" The total number of events tant potentially could happen patch %d\n", x);
-    printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS); 
+    printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
     printf(" Something very wrong with your code\n");
     printf(" The program will exit\n");
-    Press_Key(); 
-    exit(0); 
+    Press_Key();
+    exit(0);
   }
 
   R   = x*Table->LOCAL_STATE_VARIABLES + Table->R;
@@ -54,9 +54,9 @@ void Execute_One_Step(Community ** SP,
   ARA = x*Table->LOCAL_STATE_VARIABLES + Table->ARA;
 
   assert( n_Event < Table->TOTAL_No_of_EVENTS );
-  
+
   // Print_Meta_Community_Patch_System (Table);
-  
+
   switch( n_Event )
     {
     case  0:  /* Out-Migration (R --> R-1) from patch x and some other patch gains one *//* Out R */
@@ -67,19 +67,19 @@ void Execute_One_Step(Community ** SP,
       y = Some_Other_Patch_Population_Increase(x, Table->R, Table);
 
       break;
-      
+
     case  1:  /* External Immigration from outside the system (R --> R+1) *//* External Imm R */
 
       Y[R]++; J[R]++;  Patch->n[Table->R]++;
-      
+
       break;
-      
+
     case  2:  /* Local Death  (R --> R-1)  */                               /* Death R */
       Positivity_Control( 2, Table, x, R, Y[R], J[R] );
 
       Y[R]--; J[R]--;  Patch->n[Table->R]--;
 
-      break; 
+      break;
 
     case  3:  /* Out-Migration (A --> A-1) from patch x and some other patch gains one *//* Out A */
       Positivity_Control( 3, Table, x, A, Y[A], J[A] );
@@ -89,19 +89,19 @@ void Execute_One_Step(Community ** SP,
       y = Some_Other_Patch_Population_Increase(x, Table->A, Table);
 
       break;
-      
+
     case  4:  /* External Immigration from outside the system (A --> A+1) *//* External Imm A */
 
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
-      
+
       break;
-      
+
     case  5:  /* Local Death  (A --> A-1)  */                               /* Death A */
       Positivity_Control( 5, Table, x, A, Y[A], J[A] );
 
       Y[A]--; J[A]--;  Patch->n[Table->A]--;
 
-      break; 
+      break;
 
     case 6: /* Consumer Consumption of Resource and dimmer formation */ /* R + A ---> RA */
       Positivity_Control( 6, Table, x, R, Y[R], J[R] );
@@ -109,36 +109,36 @@ void Execute_One_Step(Community ** SP,
 
       Y[R]--; J[R]--; Patch->n[Table->R]--;
       Y[A]--; J[A]--;  Patch->n[Table->A]--;
-      
+
       Y[RA]++; J[RA]++;  Patch->n[Table->RA]++;
       break;
 
     case 7: /* Dimmer degratation into two individual consumers (Consumer Growth) */ /* RA ---> A + A */
       Positivity_Control( 7, Table, x, RA, Y[RA], J[RA] );
-      
+
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
-      
+
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
-      
+
       Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
-      
+
       break;
 
     case 8: /* Local Growth of Resources  */                       /* R  ---> R + R */
 
       Y[R]++; J[R]++;  Patch->n[Table->R]++;
-      
+
       break;
 
     case 9: /* Consumer Interference */                           /* RA + A ---> ARA */
       Positivity_Control( 9, Table, x, RA, Y[RA], J[RA] );
       Positivity_Control( 9, Table, x, A, Y[A], J[A] );
-      
+
       Y[RA]--; J[RA]--; Patch->n[Table->RA]--;
       Y[A]--; J[A]--;  Patch->n[Table->A]--;
-      
+
       Y[ARA]++; J[ARA]++;  Patch->n[Table->ARA]++;
-      
+
       break;
 
     case 10: /* Degradation of triplets */                        /* ARA ---> RA + A */
@@ -146,11 +146,11 @@ void Execute_One_Step(Community ** SP,
 
       Y[RA]++; J[RA]++; Patch->n[Table->RA]++;
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
-      
+
       Y[ARA]--; J[ARA]--;  Patch->n[Table->ARA]--;
-      
+
       break;
-        
+
     default:
     /* Something is very very wrong!!! */
       printf("The number of event occurring should be between 0 and 0\n");
@@ -159,7 +159,7 @@ void Execute_One_Step(Community ** SP,
       exit(0);
     }
 
-  (*Event) = n_Event;  x_Patch[0] = x;  x_Patch[1] = y;  
+  (*Event) = n_Event;  x_Patch[0] = x;  x_Patch[1] = y;
 }
 
 int Some_Other_Patch_Population_Increase(int x, int Sp,
@@ -172,7 +172,7 @@ int Some_Other_Patch_Population_Increase(int x, int Sp,
      . Table: Parameter Table
 
      Output:
-     
+
      . y: Patch label of the patch receiving the immigrant
 
   */
@@ -194,7 +194,7 @@ int Some_Other_Patch_Population_Increase(int x, int Sp,
 void Positivity_Control( int Event, Parameter_Table * Table,
 			 int x, int jS, double Y, int J)
 {
-  int Q, nS, Non_Positive;
+  int i, Q, nS, Non_Positive;
   Community ** Patch = Table->Patch_System;
 
 #if defined ASSERTION_TRUE
@@ -214,7 +214,13 @@ void Positivity_Control( int Event, Parameter_Table * Table,
     printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
     printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
     printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
-    exit(0);
+    for(i=0; i<Table->TOTAL_No_of_EVENTS; i++) 
+      printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
+    for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) 
+      printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
+
+    Print_Meta_Community_Patch_System (Table);
+    // exit(0);
   }
 
 #endif

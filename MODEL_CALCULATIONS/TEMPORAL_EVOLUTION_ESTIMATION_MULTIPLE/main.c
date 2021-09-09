@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 
   Observed_Data * Data = (Observed_Data *)calloc(1, sizeof(Observed_Data));
   Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, I_Time);
-
+  
   Parameter_Fitting * F = (Parameter_Fitting*)calloc(1,sizeof(Parameter_Fitting));
   Parameter_Fitting_Alloc( F, Realizations, &Table ); 
   Parameter_Fitting_Initialization(F, Realizations, Data, &Table);

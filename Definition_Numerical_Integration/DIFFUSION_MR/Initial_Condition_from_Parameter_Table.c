@@ -123,11 +123,6 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
     n = 2;  
     m = Table->LOCAL_STATE_VARIABLES*J + n;
     Table->Vector_Model_Variables_Time_0[m] = 0.0;
-
-    /* Triplets, RA */
-    n = 3;  
-    m = Table->LOCAL_STATE_VARIABLES*J + n;
-    Table->Vector_Model_Variables_Time_0[m] = 0.0;
   }
 }
 
@@ -147,7 +142,6 @@ void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * T
   Table->Vector_Model_Variables_Time_0[0] = Value_0; /* Initial value for resources */
   Table->Vector_Model_Variables_Time_0[1] = Value_1; /* Initial value for consumers */
   Table->Vector_Model_Variables_Time_0[2] = 0.0; /* Initial value for resources */
-  Table->Vector_Model_Variables_Time_0[3] = 0.0; /* Initial value for consumers */
   
 }
 

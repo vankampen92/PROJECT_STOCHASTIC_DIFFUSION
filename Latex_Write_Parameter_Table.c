@@ -1,5 +1,24 @@
 #include <MODEL.h>
 
+void Write_Parameter_Table ( Parameter_Table * P, int no_Par )
+{
+  double Par_Value;
+  int i, k;
+  
+  printf(" Parameter table:\n" );
+	 
+  for ( i = 0; i < no_Par; i++){
+
+    k = P->Index[i];
+
+    Par_Value = AssignStructValue_to_VectorEntry (k, P);
+
+    printf("%s \t %4.2f \n", P->Symbol_Parameters[k], Par_Value);
+  }
+
+  printf(" End writing parameter table!\n");
+}
+
 void write_Parameter_Table___RANGES___VALUES___LATEX ( char * File_Model_Parameters,
 						       char * Type_of_Boundary_Parameter_Space,
 						       Parameter_Table * P,

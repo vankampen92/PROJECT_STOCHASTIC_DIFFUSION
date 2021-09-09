@@ -40,6 +40,7 @@ EXTRA_LIBRARY_PATH+=-L${CPGPLOT}library_basic_UTL/#
 EXTRA_LIBRARY_PATH+=-L${C_NR}######################
 EXTRA_LIBRARY_PATH+=-L${GSL_DA}####################
 EXTRA_LIBRARY_PATH+=-L${IO_DIR}
+EXTRA_LIBRARY_PATH+=-L${OPT_DIR}
 EXTRA_LIBRARY_PATH+=-L${ERROR_DIR}
 # Directories where headers files are located:
 # (required at the precompilation step, when building 
@@ -106,7 +107,7 @@ EXE=${ODE_MODEL}
 ##############################################################################################################
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
-LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Error -lNumRec -lNRUTL  -L${C_NR} -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
+LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -L${C_NR} -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
 CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3
