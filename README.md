@@ -30,7 +30,7 @@ Notice that the linking command from most makefiles contains, at least, the foll
 
 The first two ones are basic GSL libraries. The following 5 are required to use primitive plotting functions from the graphic libraries cpplot and plplot. The final two are mandatory when using higher-level plotting functions from the CPGPLOT Graphix library. All of them are usually required to produce a graphical output. However, the control variable (see any makefile) 'CPG" can also be set up to 'NON_CPG_REPRESENTATION' and, then, through conditional compilation, the same program is built to just run the numerical computations without graphics. In all cases, the output may be saved in files.
 
-When you git clone the repository on your machine, you should do it from your home directory. As a result, the directory 'PROJECT_AB-COVID19_MODEL' will be created on your machine.
+When you git clone the repository on your machine, you should do it from your home directory. As a result, the directory '~/PROJECT_STOCHASTIC_DIFFUSION' will be created on your machine.
 
 If graphic libraries have been correctly installed, this should be enough to make all makefiles work out of the box. Remember though you require to have also git cloned my CPGPLOT repository on your machine. To be clear, you should end up with two directories:
 
@@ -58,7 +58,7 @@ both in you home directory.
 
 		+ ~/PROJECT/CPGPLOT_EXAMPLES/PLOT -G29 ?
 
-	and see the different avaiable graphic formats in whcodeich plots can be saved. Notice that sometimes the value for these input arguments is overriden by the internal program code. When this happens, it is for a good reason. Please check the code to understand why and make moodgodfications at your own risk. Be creative.   
+	and see the different avaiable graphic formats in which plots can be saved. Notice that sometimes the value for these input arguments is overriden by the internal program code. When this happens, it is for a good reason. Please check the code to understand why and make moodgodfications at your own risk. Be creative.   
 
 	+ #### 7. Examples:
 	See, for instance, ./MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_STOCHASTICS/main.c, and follow the directions to compile and run the code:
@@ -67,9 +67,9 @@ both in you home directory.
 
 		+ ~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 10105 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 2 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
 
-	The code depends on some auxiliary libraries in ./Library  and ./Definition_Error_Model subdirectories. You may notice that you need to generate these libraries before, and then execute the command 'make MODEL=DIFFUSION'. In principle, a recursive makefile does this job for you. However, if gcc does not find these libraries, they may have been accidentally deleted and you should build them back up again. Also, the code is linked against R libraries.  You may remove these R links or install R in your system. I recommend this 2n option. This will allow you to create shared libraries that, then, can be called as standard R funcions from RStudio, for example.
+	The code depends on some auxiliary libraries in ./Library  and ./Definition_Error_Model subdirectories. You may notice that you need to generate these libraries before, and then execute the command 'make MODEL=DIFFUSION'. In principle, a recursive makefile does this job for you. However, if gcc does not find these libraries, they may have been accidentally deleted and you should build them back up again from sources. Also, the code is linked against R libraries.  You may remove these R links or install R in your system. I recommend this 2n option. This will allow you to create shared libraries that, then, can be called as standard R funcions from RStudio, for example.
 
-	The call on the 2nd line above generates a bunch of stochatic realizations (-tR 10) and presents a single output variable (-n 1), this is, the temporal evolution of a central cell. Local populations are 10000 cells (-HM 10000), organized on a 100 times 100 squared grid (-HX 100 -HY 100). The type of network in controled by the -y2 imput argument value. In this case, grid connections are Von Neumann with periodic boundary conditions (-y2 1).
+	The call on the 2nd line above generates a bunch of stochatic realizations (-tR 10) and presents a single output variable (-n 1), this is, the temporal evolution of the central cell of the 100 times 100 grid. Local populations thrive in the 10000 cells (-HM 10000), organized on a 100 times 100 squared grid (-HX 100 -HY 100). The type of network in controled by the -y2 imput argument value. In this case, grid connections are Von Neumann with periodic boundary conditions (-y2 1).
 
 ### Contribution guidelines ###
 
