@@ -38,14 +38,14 @@ int function (double t, const double y[], double dydt[], void *params)
   }
 
   if( Table->No_of_CELLS > 1) {   
-  n= 0; 
-  for (j=0; j<Table->No_of_CELLS; j++) { 
-   
-    for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) { 
-      dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, i, j) * y[n];;
-      n++;
+    n= 0; 
+    for (j=0; j<Table->No_of_CELLS; j++) { 
+      
+      for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) { 
+	dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, i, j) * y[n];;
+	n++;
+      }
     }
-  }
   }
 
   return GSL_SUCCESS;

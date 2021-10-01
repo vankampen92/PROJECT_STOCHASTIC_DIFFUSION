@@ -7,7 +7,8 @@
 
 gsl_rng * r; /* Global generator defined in main.c */
 
-/* This code calculates the stochastic and determinisitic temporal evolution of several resource-consumer models 
+/* This code calculates the temporal evolution of the master equation corresponding to 
+   several resource-consumer models 
 
    Compilation (see makefile variable MODEL):
 
@@ -15,49 +16,14 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Exectution:
    
-   1 species examples:                                       (OUTPUT_VARIABLES_GENUINE will be 4) 
-   . ~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 60 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
-
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   2 species examples:                                       (OUTPUT_VARIABLES_GENUINE will be 5) 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 10105 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 5 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 100 -HX 10 -HY 10 -Hu 0.5 -n 1 -v0 115 -G0 1 -G1 1 -tn 20 -t0 0.0 -t1 5.0 -t4 0 -tR 5 -xn 0 -xN 98 -HN 98 -G2 1 -G3 0.0 -G4 5.0 -G5 1 -G6 0.0 -G7 100.0
-
-   3 species example:                                        (OUTPUT_VARIABLES_GENUINE will be 6) 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 3 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 15156 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   1 species (with external immigration and death) example:  (OUTPUT_VARIABLES_GENUINE will be 4) 
-   .~$ ../DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   2 species (with external immigration and death) example:  (OUTPUT_VARIABLES_GENUINE will be 5) 
-   .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.1 -n 1 -v0 10105 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
-   Notice that the 2nd species (in green) does not die or externally immigrate.
-
-   .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.5 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
-   Notice that the 2nd species (in green) does not die or externally immigrate.
-
-   10 species (with external immigration and death) example (OUTPUT_VARIABLES_GENUINE will be 13) 
-   .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 10 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.5 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   Important notice: MODEL.h contains a 'define' of No_of_RESOURCES_MAXIMUM. If you overcome that
-   limit, program crashes. 
-
-   4 species (4 different species ---R, A, RA, ARA---, therefore OUTPUT_VARIABLES_GENUINE is 7) 
-   .~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100  -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
-
-   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Alpha] -H12 [Nu]. If these two parameters are zero, no triplet formation, and the dynamics is equivalent to a 3D system, with only three local model variables.
-   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
+   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Alpha] -H12 [Nu]. 
+   If these two parameters are zero, no triplet formation, and the dynamics is equivalent to 
+   a 3D system, with only three local model variables.
+   
+. ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
-
-   MacArthur and Rosenzweig (two species 3D, R, A, RA):
-   .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 40.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000.0  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 25.0 -H1 0.0 -H6 5.0 -H9 17.0 -H10 5.0
-
-   Coarse-grained 2D system (two species 1R and 1C):
-   .~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 4 -HX 2 -HY 2 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 50 -HN 50 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 100.0 -H0 0.01 -H5 0.01 -H6 0.5
 
    More examples in ./command_line_examples.txt.
 */
@@ -80,7 +46,6 @@ int main(int argc, char **argv)
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C(   &Table );
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( &Table, Index_Output_Variables );
   printf(" Parameter_Table structure has been correctly allocated and initiated\n");
-
 
   /* B E G I N : Reserving memmory for Parameter Space */
 #include <include.Parameter_Space.default.aux.c>
@@ -157,20 +122,14 @@ int main(int argc, char **argv)
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
   
-  // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic
-  // counter-part implemented yet!
-#ifndef DIFFUSION_1R1C_2D
-#ifndef DIFFUSION_DRAG
-#ifndef DIFFUSION_VRG
-#ifndef DIFFUSION_MR
-  /* Stochastic Time Dynamics: A number of stochastic realizations     */
+  // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic master equation
+  // counter-part implemented yet! At the moment, only DIFFUSION_HOLLING does...
+#if defined DIFFUSION_HII
+  /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);
-  M_O_D_E_L___S_T_O( &Table );
+  M_O_D_E_L___M_E( &Table );
 #endif
-#endif
-#endif
-#endif
-
+  
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];

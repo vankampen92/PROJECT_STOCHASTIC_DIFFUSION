@@ -143,10 +143,6 @@ double Total_Population_Species_0(double * Y, Parameter_Table * Table)
   double x;
   int i;
 
-  /* This total population is calculated over all species in the system.
-     It is rather a total community size if the number of species is larger than 1 
-  */
-
   assert(Table->TYPE_of_MODEL == 0); 
   
   if (Table->TYPE_of_MODEL == 0) {
@@ -162,10 +158,6 @@ double Total_Population_Species_1(double * Y, Parameter_Table * Table)
 {
   double x;
   int i;
-
-  /* This total population is calculated over all species in the system.
-     It is rather a total community size if the number of species is larger than 1 
-  */
 
   assert(Table->TYPE_of_MODEL == 0); 
   

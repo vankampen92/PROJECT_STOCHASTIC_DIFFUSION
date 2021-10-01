@@ -1,5 +1,8 @@
 #include <MODEL.h>
 
+/* This function does not correspond to the stationary points of a 2D MacArthur - Rosenzweig model */
+/* This stationary points are still under construction */
+
 void Fixed_Points_All( Parameter_Table * Table,
 		       double * Vector_Stationarity_Lower,
 		       double * Vector_Stationarity_Inter,
@@ -66,7 +69,7 @@ void Fixed_Points_All( Parameter_Table * Table,
   }
 } 
 
-int Coexistence_Condition ( Parameter_Table * Table )
+int  Coexistence_Condition ( Parameter_Table * Table )
 {
   int Condition_Bool; 
   double q, q_Star;

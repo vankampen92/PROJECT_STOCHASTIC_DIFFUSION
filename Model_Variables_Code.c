@@ -426,6 +426,42 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
+
+    case 9: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 1;  /* (Only Diffusion) */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 2;
+      Table->LOCAL_STATE_VARIABLES = 2; /* 1 A + 1 RA        */
+                                        /* Only free consumers (A) and
+					   handling consumers  (RA) 
+					*/
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->A = 0; Table->RA = 1; Table->ARA = 0; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++] = 0; /* Resource Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+     
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break; 
       
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);

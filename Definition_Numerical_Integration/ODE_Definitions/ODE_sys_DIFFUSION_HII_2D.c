@@ -8,34 +8,33 @@ int function (double t, const double y[], double dydt[], void *params)
 {
   int i, n, j;
   int Sp; 
-  double K_R; 
+  double K_R, y_R; 
 
   Parameter_Table * Table = (Parameter_Table *)params;
 
-  Sp = Table->No_of_RESOURCES;
+  Sp  = Table->No_of_RESOURCES;
+  y_R = Table->TOTAL_No_of_RESOURCES; /* Resource density (in number of resource units) */
 
   assert( Sp == 1 ); 
 
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
 
+  assert( Table->A == 0 ); 
+
   K_R = (double)Table->K_R; 
 
   for (j=0; j<Table->No_of_CELLS; j++) {
 
-    R   = j*Table->LOCAL_STATE_VARIABLES + Table->R;
-    A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
-    RA  = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
+    A    = j*Table->LOCAL_STATE_VARIABLES + Table->A;
+    RA   = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
 
-    dydt[R] = Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Delta_R_0 *y[R] -Table->Alpha_C_0 *y[R]/K_R *y[A];
-    
-    dydt[A] = Table->Lambda_C_0 -Table->Delta_C_0 *y[A] +2.0*Table->Nu_C_0 *y[RA] -Table->Alpha_C_0 *y[R]/K_R *y[A] ;
+    dydt[A]  = -Table->Alpha_C_0 *y_R/K_R *y[A] + Table->Nu_C_0*y[RA];
 
-    dydt[RA] = Table->Alpha_C_0 *y[R]/K_R *y[A] -Table->Nu_C_0*y[RA] ;
-
+    dydt[RA] = -Table->Nu_C_0*y[RA] + Table->Alpha_C_0 *y_R/K_R *y[A];
   }
 
-  if( Table->No_of_CELLS > 1) {   
+  if(Table->No_of_CELLS > 1) { 
     n= 0; 
     for (j=0; j<Table->No_of_CELLS; j++) { 
       

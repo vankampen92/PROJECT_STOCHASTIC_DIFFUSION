@@ -1,8 +1,5 @@
 /* 
-   JAC_sys_CASES_3.c differs from CASES_1 in the accummulated number of
-   cases and there is an equation for the evolution of the karrrying
-   capacity.
-
+	General File (valid for all models)
 */
 
 #include <MODEL.h>

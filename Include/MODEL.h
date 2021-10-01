@@ -14,6 +14,8 @@
    file, which defines the dinension of the whole parameter space for that particular model 
 */
 
+#define MAX_No_of_CONFIGURATIONAL_STATES 1000000 /* Max No of Eqs in the Master Equation */   
+
 #define No_of_TDC_FUNC_AUX_PARAM_MAX 10   /* Maximum No of Time Dependence Function Auxiliary
                                              Parameters required to define the potential  
                                              functional time dependence of each model parameter
@@ -43,6 +45,8 @@
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_DRAG.h"
 #elif defined DIFFUSION_VRG
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_VRG.h"
+#elif defined DIFFUSION_HII_2D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_HII_2D.h"
 #endif
 
 typedef struct totalRateinfo
@@ -71,6 +75,8 @@ typedef struct totalRateinfo
 #include "MODEL_Observed_Data_STRUCT_DEF.h"
 
 #include "MODEL_Parameter_Fitting_STRUCT_DEF.h"
+
+#include "MODEL_Master_Equation_STRUCT_DEF.h"
 
 #include <Time_Control.h>
 
@@ -128,6 +134,7 @@ typedef struct totalRateinfo
 #include <Definition_Numerical_Integration/numerical_Integration_Driver.h>
 #include <Definition_Numerical_Integration/Initial_Conditions_Numerical_Integration.h>
 #include <Definition_Numerical_Integration/ODE_Definitions/ODE_Definitions.h>
+#include <Definition_Master_Equation/Master_Equation_Functions.h>
 
 #if defined CPGPLOT_REPRESENTATION
 /* Header file for Parameter Table dependent CPGPLOT plotting auxiliary functions */
