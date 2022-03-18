@@ -39,7 +39,7 @@ int master_equation_driver( Parameter_Table * Table,
   gsl_odeiv_evolve * e 
          = gsl_odeiv_evolve_alloc (MODEL_STATE_VARIABLES);
      
-  gsl_odeiv_system sys = {function_ME, jacobian, MODEL_STATE_VARIABLES, Table};
+  gsl_odeiv_system sys = {function_ME, jacobian_ME, MODEL_STATE_VARIABLES, Table};
      
   double * t = Time_Current;
   double t1  = Table->T->Time_Vector[j];

@@ -24,4 +24,4 @@ GSL_UTL: ${OBJECTS} GSL_stat.h
 all: GSL_UTL
 
 clean:  
-	rm -f *.o *~
+	rm -f *.o *~ *.a

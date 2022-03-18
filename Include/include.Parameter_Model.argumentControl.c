@@ -124,7 +124,8 @@
 		printf(" Error at reading input arguments: %s  \n", argv[argcount]);
 		exit(0);
 	      }
-	      skip++;
+
+              skip++;
 	      break;
 
               #include <include.Type_of_Model.argumentControl.c>

@@ -14,7 +14,7 @@ double Lambda_R_1;
 double Delta_R_1; 
 int K_R;              /* Resource Carrying Capacity */ 
 
-double Beta_R;        /* -H5 */ 
+double Beta_R;         /* -H5 */ 
   
 double Lambda_C_0;     /* -H5 */
 double Delta_C_0;      /* -H6 */
@@ -28,7 +28,6 @@ double Chi_C_0;        /* -H11 */
 double Eta_C_0;        /* -H12 */
 
 double Mu_C;           /* -H13 */
-
 
 int N_E;               /* -H14 */ /* Number of Energy Levels */
 int f;                 /* -H15 */ /* Fecundity: Number of Offspring Individuals */

@@ -31,7 +31,10 @@ gsl_rng * r;  /* Global Variable r to communicate with random gerenerator funcio
 int main()
 {
   int i, n;
+
+  // #include <gsl_random_number_Setup.c>
   
+  /* B E G I N : Random init */
   const gsl_rng_type * T;
   const gsl_rng_type **t, **t0;
 
@@ -66,7 +69,8 @@ int main()
   }
   printf("\n"); 
   /*   END: Checking Random Number Generator Setup */
-
+  /* E N D : Init Random */
+  
   double * probability = (double *)calloc(10, sizeof(double) );
 
   probability[0] = 0.1;

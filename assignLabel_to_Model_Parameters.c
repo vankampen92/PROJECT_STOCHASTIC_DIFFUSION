@@ -66,10 +66,13 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 26:  p = strcat(Label, "Maintainance Energy loss rate");   
       break;
-#if defined DIFFUSION_DRAG     
+#ifdef DIFFUSION_DRAG     
     case 27:  p = strcat(Label, "Guano Conversion Factor");   
       break;
-#else
+#elif defined DIFFUSION_VGR
+    case 27:  p = strcat(Label, "Guano Conversion Factor");   
+      break;
+#else 	      
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
       break;
 #endif      

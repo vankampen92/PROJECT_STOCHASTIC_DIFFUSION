@@ -4,15 +4,19 @@ EXTRA_INCLUDE_PATH+=-I${GSL_DA}####################
 EXTRA_LIBRARY_PATH+=-L${GSL_DA}####################
 
 LDFLAGS+=${EXTRA_LIBRARY_PATH} -lm -lgsl -lgslcblas -lDa_GSL_UTL 
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -g #-Wall -D${ERROR}
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -g 
 
 OBJECTS =  main.o
 
 CC=gcc##
 
 # Linking main with libraries 
-random:  	$(OBJECTS)
+random:  	$(OBJECTS) random-library
 		$(CC) -o random $(OBJECTS) $(LDFLAGS) $(CXXFLAGS)
+
+# Compilation of the library
+random-library:	
+		cd ${GSL_DA}; make clean; make 
 
 # Compiling main program function:
 main.o: main.c 

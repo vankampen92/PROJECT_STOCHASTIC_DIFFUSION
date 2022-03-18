@@ -21,7 +21,7 @@ IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
 FIXED_POINTS_DIR=${PROJECT_DIR}Definition_Fixed_Points/
-WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_STOCHASTIC/#
+WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/#
 DET_DIR=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_DETERMINISTIC/#
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
 GSL_DA=${PROJECT_DIR}Library/GSL_RANDOM/##########
@@ -107,7 +107,7 @@ EXE=${ODE_MODEL}
 ##############################################################################################################
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
-LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -L${C_NR} -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
+LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
 CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3

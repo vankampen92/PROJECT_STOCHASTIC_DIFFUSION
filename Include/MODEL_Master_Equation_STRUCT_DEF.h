@@ -9,7 +9,7 @@ typedef struct Master_Equationinfo
 
   double * Probability_Dtstribution;
   double * Probability_Distribution_Time_0; 
-  dobule * P_n;
+  double * P_n;
   double ** P_nm;
   double *** P_nml; 
   
@@ -30,6 +30,6 @@ void Master_Equation_Initialization (Master_Equation * ME,
 				     int n_DIMENSION,
 				     int n_x,
 				     int n_y,
-				     int n_z) );
+				     int n_z);
 
 void Probability_Distribution_Vector_into_Matrix_Form( Master_Equation * ME ); 
