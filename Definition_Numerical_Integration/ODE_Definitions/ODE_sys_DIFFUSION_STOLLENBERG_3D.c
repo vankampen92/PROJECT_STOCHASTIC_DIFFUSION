@@ -29,9 +29,9 @@ int function (double t, const double y[], double dydt[], void *params)
 
     dydt[R] = -Table->Delta_R_0 *y[R] +Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Alpha_C_0 *y[R]/K_R *y[A];
     
-    dydt[A] = -Table->Delta_C_0 *y[A] +Table->Nu_C_0 *y[RA] +Table->Beta_C*y[RA] -Table->Alpha_C_0 *y[R]/K_R *y[A] ;
+    dydt[A] = Table->Lambda_C_0 -Table->Delta_C_0 *y[A] +Table->Nu_C_0 *y[RA] +Table->Beta_C*y[RA] -Table->Alpha_C_0 *y[R]/K_R *y[A] ;
 
-    dydt[RA] = -Table->Deltal_C_0*y[RA] +Table->Alpha_C_0 *y[R]/K_R *y[A] -Table->Nu_C_0*y[RA] ;
+    dydt[RA] = -Table->Delta_C_0*y[RA] +Table->Alpha_C_0 *y[R]/K_R *y[A] -Table->Nu_C_0*y[RA] ;
 
   }
 

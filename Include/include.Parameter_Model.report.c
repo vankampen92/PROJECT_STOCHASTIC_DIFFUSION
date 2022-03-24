@@ -90,6 +90,6 @@ fprintf(fp, "Consummer Reproduction Rate           ---> -H17   %g\n",   Beta_C);
 fprintf(fp, "2* k_E: resourse value in energy units ---> -H18    %d\n", k_E);          /* -H18 */
 fprintf(fp, "Maintenance Energy Loss Rate           ---> -H19   %g\n",  Theta_C);      /* -H19 */
 fprintf(fp, "Cooperation probability 1st position   ---> -Hp1   %g\n", p_1);           /* -H20 */
-fprintf(fp, "Cooperation probability 2on position   ---> -Hp2   %g\n", p_2);           /* -H21 *
+fprintf(fp, "Cooperation probability 2on position   ---> -Hp2   %g\n", p_2);           /* -H21 */
 
 #endif

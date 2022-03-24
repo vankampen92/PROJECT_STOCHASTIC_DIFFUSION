@@ -69,7 +69,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
     case 2: /* DIFFUSION_1R1C * * * * * * * * * * * * * * * * * * * * * * */
 
-      /* No_of_EVENTS: Common events that can occur to every Species: */
+      /* No_of_EVENTS, i.e, common events that can occur to every Species: */
       Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
       Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
       Table->LOCAL_STATE_VARIABLES = 4; /* 1 R + 1 C + 1 D + 1 T        */
@@ -91,14 +91,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++] = 0; /* Resource Movement Rate */ 
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
 
-      if ( Table->No_of_RESOURCES > 0 ) {
-	Table->Index[n++] = 6; /* External Immigration Rate (0) */
-	Table->Index[n++] = 7; /* Death Rate (0) */
-      }
-      if ( Table->No_of_RESOURCES > 1 ) {
-	Table->Index[n++] = 8;  
-	Table->Index[n++] = 9; 
-      }
+      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+      Table->Index[n++] = 7; /* Death Rate (0) */
+      
       Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
       
       Table->Index[n++]   = 11; /* Resource Local Growth Rate */
@@ -149,14 +144,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++] = 0; /* Resource Movement Rate */ 
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
 
-      if ( Table->No_of_RESOURCES > 0 ) {
-	Table->Index[n++] = 6; /* External Immigration Rate (0) */
-	Table->Index[n++] = 7; /* Death Rate (0) */
-      }
-      if ( Table->No_of_RESOURCES > 1 ) {
-	Table->Index[n++] = 8;  
-	Table->Index[n++] = 9; 
-      }
+      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+      Table->Index[n++] = 7; /* Death Rate (0) */
+      
       Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
       Table->Index[n++]   = 11; /* Resource Local Growth Rate */
 
@@ -461,11 +451,55 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
       
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
-      break; 
+      break;
+
+    case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS, i.e, common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
+      Table->LOCAL_STATE_VARIABLES = 3; /* 1 R + 1 C + 1 D                 */
+                                        /* D \equiv RC (handling consumer) */
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class */
+      Table->R = 0;  Table->A = 1; Table->RA = 2; 
+      
+      /* Potentially searcheable: MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+      Table->Index[n++] = 0; /* Resource Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+
+      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+      Table->Index[n++] = 7; /* Death Rate (0) */
+       
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 11; /* Resource Local Growth Rate */
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      Table->Index[n++]   = 13; /* Consumer Death Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+
+      Table->Index[n++]   = 24; /* Consumer Local Growth Rate */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
       
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
-      printf(" Models (0 to 8): Check input argument list!!!\n");
+      printf(" Models (0 to 10): Check input argument list!!!\n");
       exit(0);
    }
   /* Conventionally, the last label in the argument list of
@@ -478,7 +512,6 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
   printf("Total No of MODEL PARAMETERS : %d\n", Table->TOTAL_No_of_MODEL_PARAMETERS);
   Press_Key(); 
 }
-
 
 void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
 {
@@ -568,7 +601,67 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       P->K   = n-1;     /* Label last class            */
 
       break; 
+
+    case 6: /* DIFFUSION_VRG * * * * * * * * * * * * * * * * * * * * * * */
       
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 7: /* DIFFUSION_MR* * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 8: /* DIFFUSION_1R1C_2D_STO_4D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 9: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
       printf(" Check input argument list\n");

@@ -47,8 +47,13 @@ gsl_rng * r; /* Global generator defined in main.c */
    4 species (4 different species ---R, A, RA, ARA---, therefore OUTPUT_VARIABLES_GENUINE is 7) 
    .~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100  -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
 
-   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Alpha] -H12 [Nu]. If these two parameters are zero, no triplet formation, and the dynamics is equivalent to a 3D system, with only three local model variables.
+   MODEL = DIFFUSION_1R1C
+   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Chi_C_0] -H12 [Eta_C_0]. If these two parameters are zero, no triplet formation, and the dynamics is equivalent to a 3D system, with only three local model variables.
    . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
+
+   MODEL = DIFFUSION_STOLLENBERG_3D
+   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. The dynamics do not include triplet formation. It is a 3D system, with only three local model variables (R, A, RA).
+   . ~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
@@ -157,12 +162,13 @@ int main(int argc, char **argv)
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
   
-  // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic
+  // Some models (such as DIFFUSION_1R1C_2D) do no have a stochastic
   // counter-part implemented yet!
 #ifndef DIFFUSION_1R1C_2D
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
+#ifndef DIFFUSION_STOLLENBERG_3D
   /* Stochastic Time Dynamics: A number of stochastic realizations     */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
@@ -170,7 +176,7 @@ int main(int argc, char **argv)
 #endif
 #endif
 #endif
-
+#endif
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];

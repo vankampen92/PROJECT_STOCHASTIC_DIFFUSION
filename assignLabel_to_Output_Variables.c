@@ -2,17 +2,17 @@
 
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
-  int k, i, n, m; 
+  int k, i, n, m;
   char * p;
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
 
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
 
   Defining_Output_Variables_Labels (Table, L);
-  
+
   Label[0] = '\0';
   char * n_Label = (char *)calloc(10, sizeof(char) );
-  
+
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
@@ -23,15 +23,15 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
     if(Table->TYPE_of_MODEL == 3) {
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
-      if (k>0 && k<=Table->N_E) { 
+      if (k>0 && k<=Table->N_E) {
 	sprintf(n_Label, "%d", k-1);
 	i = 1;
       }
-      else if (k>Table->N_E &&   k<=2*Table->N_E) { 
+      else if (k>Table->N_E &&   k<=2*Table->N_E) {
 	sprintf(n_Label, "%d", k-1-Table->N_E);
 	i = 2;
       }
-      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) { 
+      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) {
 	i = 3;
 	n = (k-1-2*Table->N_E)%Table->N_E;
 	m = (k-1-2*Table->N_E)/Table->N_E;
@@ -42,19 +42,19 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
 	sprintf(n_Label, "%d", m);
 	p = strcat(Label, "]");
       }
-      else { 
+      else {
 	n_Label[0] = '\0';
 	i = 0;
       }
       p = strcat(Label, "n[");
       p = strcat(Label, L[i]);
-      if (i>0) { 
+      if (i>0) {
 	p = strcat(Label, "_");
 	p = strcat(Label, n_Label);
       }
       p = strcat(Label, "]");
     }
-    else { 
+    else {
       p = strcat(Label, "n[");
       p = strcat(Label, L[j]);
       p = strcat(Label, "]");
@@ -62,7 +62,7 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->LOCAL_STATE_VARIABLES;
-    
+
     switch(j)
       {
       case  0:
@@ -103,12 +103,12 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
   }
   free(n_Label);
   for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) free(L[i]);
-  free(L); 
+  free(L);
 }
 
 void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
-  int k, i, n, m; 
+  int k, i, n, m;
   char * p;
 
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
@@ -116,10 +116,10 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
 
   Defining_Output_Variables_Labels (Table, L);
-  
+
   char * n_Label = (char *)calloc(10, sizeof(char) );
   Label[0] = '\0';
-  
+
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
@@ -129,15 +129,15 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
      if(Table->TYPE_of_MODEL == 3) {
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
-      if (k>0 && k<=Table->N_E) { 
+      if (k>0 && k<=Table->N_E) {
 	sprintf(n_Label, "%d", k-1);
 	i = 1;
       }
-      else if (k>Table->N_E &&   k<=2*Table->N_E) { 
+      else if (k>Table->N_E &&   k<=2*Table->N_E) {
 	sprintf(n_Label, "%d", k-1-Table->N_E);
 	i = 2;
       }
-      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) { 
+      else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) {
 	i = 3;
 	n = (k-1-2*Table->N_E)%Table->N_E;
 	m = (k-1-2*Table->N_E)/Table->N_E;
@@ -148,19 +148,19 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
 	sprintf(n_Label, "%d", m);
 	p = strcat(Label, "]");
       }
-      else { 
+      else {
 	n_Label[0] = '\0';
 	i = 0;
       }
       p = strcat(Label, "n[");
       p = strcat(Label, L[i]);
-      if (i>0) { 
+      if (i>0) {
 	p = strcat(Label, "_");
 	p = strcat(Label, n_Label);
       }
       p = strcat(Label, "]");
     }
-    else { 
+    else {
       p = strcat(Label, "n[");
       p = strcat(Label, L[j]);
       p = strcat(Label, "]");
@@ -168,7 +168,7 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->LOCAL_STATE_VARIABLES;
-    
+
     switch(j) {
 
     case  0:
@@ -194,12 +194,12 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
       break;
     case  7:
       p = strcat(Label , "Total Triplets");       /*  7: Total Triplets */
-      break;	
+      break;
     case  8:
       p = strcat(Label , "Total Population Consumers");       /*  8: Total Population Consumers */
-      break;	
-    
-      
+      break;
+
+
     default:
       printf(".... INVALID OUTPUT VARIABLE KEY [key = %d]\n", j);
       printf(".... The permited correspondences are:\n");
@@ -209,13 +209,13 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   }
   free(n_Label);
   for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) free(L[i]);
-  free(L); 
+  free(L);
 }
 
 void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 {
-  char * p; 
-  
+  char * p;
+
   switch(Table->TYPE_of_MODEL)
     {
     case  0:
@@ -223,14 +223,14 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       break;
     case  1:
       p = strcat(L[0], "R");
-      
+
     break;
     case  2:
       p = strcat(L[0], "R");
       p = strcat(L[1], "A");
       p = strcat(L[2], "RA");
       p = strcat(L[3], "ARA");
-      
+
       break;
     case  3:
       p = strcat(L[0], "R");
@@ -242,7 +242,7 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
     case  4:
       p = strcat(L[0], "R");
       p = strcat(L[1], "A");
-      
+
       break;
     case  5:
       p = strcat(L[0], "V");
@@ -267,18 +267,25 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       p = strcat(L[1], "A");
       p = strcat(L[2], "RA");
       p = strcat(L[3], "ARA");
-      
-      break;   
-   
+
+      break;
+
     case  9:
       p = strcat(L[0], "A");
       p = strcat(L[1], "RA");
-      
+
       break;
+
+    case  10:
+        p = strcat(L[0], "R");
+        p = strcat(L[1], "A");
+        p = strcat(L[2], "RA");
+
+        break;
 
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);
-      printf(".... The permited correspondences are: 0 to 7\n");
+      printf(".... The permited correspondences are: 0 to 10\n");
       exit(0);
     }
 }
