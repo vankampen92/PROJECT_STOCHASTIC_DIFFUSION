@@ -145,7 +145,7 @@ void Community_Initialization (Community ** PATCH,
   Immigration_Preassure_on_Focal_Patch_Initialization( PATCH, P );
 
 // #if defined DIFFUSION_1R1C
-  if( P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8) { 
+  if( P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10) { 
     Event_Delta_Matrix_Initialization(PATCH, P);
 
     Event_Adjacence_List_Initialization(PATCH, P);

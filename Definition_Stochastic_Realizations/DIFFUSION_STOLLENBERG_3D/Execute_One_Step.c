@@ -9,6 +9,7 @@ extern gsl_rng * r;   /* Global generator (define at the main program level */
 #define RANDOM gsl_rng_uniform_pos(r)
 
 void assert_Total_Population (Parameter_Table * Table, double * Y);
+void Print_Discrete_Probability_Distribution(Parameter_Table * Table, int Event, int x);
 
 #define ASSERTION_TRUE
 
@@ -36,9 +37,9 @@ void Execute_One_Step(Community ** SP,
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
 
-  if(Table->TOTAL_No_of_EVENTS > 1)
+  if(Table->TOTAL_No_of_EVENTS > 1) {
     n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
-
+  }
   else {
     printf(" The total number of events that potentially could happen in patch %d\n", x);
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
@@ -47,6 +48,8 @@ void Execute_One_Step(Community ** SP,
     Press_Key();
     exit(0);
   }
+
+  // Print_Discrete_Probability_Distribution(Table, n_Event, x); /* Comment out if it works */
 
   R   = x*Table->LOCAL_STATE_VARIABLES + Table->R;
   A   = x*Table->LOCAL_STATE_VARIABLES + Table->A;
@@ -121,19 +124,19 @@ void Execute_One_Step(Community ** SP,
     case 8: /* Local Growth of Consumers */ /* RA ---> RA + A */
 
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
-      
+
       break;
 
     case 9: /* Local Death of Handling Consumers */ /* RA ---> RA - 1 */
       Positivity_Control( 9, Table, x, RA, Y[RA], J[RA] );
-      
+
       Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
-      
+
       break;
 
     case 10: /* Handling Consumers relax back into Free Consumers */ /* RA ---> A */
       Positivity_Control( 10, Table, x, RA, Y[RA], J[RA] );
-      
+
       Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
       Y[A]++;  J[A]++;   Patch->n[Table->A]++;
 
@@ -202,14 +205,23 @@ void Positivity_Control( int Event, Parameter_Table * Table,
     printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
     printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
     printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
-    for(i=0; i<Table->TOTAL_No_of_EVENTS; i++) 
+    for(i=0; i<Table->TOTAL_No_of_EVENTS; i++)
       printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
-    for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) 
+    for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++)
       printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
 
     Print_Meta_Community_Patch_System (Table);
-    // exit(0);
+    exit(0);
   }
 
 #endif
+}
+
+void Print_Discrete_Probability_Distribution(Parameter_Table * Table, int Event, int x)
+{
+  int i;
+  Community ** Patch = Table->Patch_System;
+
+  for(i=0; i<Table->TOTAL_No_of_EVENTS; i++)
+      printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
 }

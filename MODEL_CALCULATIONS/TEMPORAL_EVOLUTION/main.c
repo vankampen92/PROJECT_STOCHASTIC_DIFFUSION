@@ -53,8 +53,7 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    MODEL = DIFFUSION_STOLLENBERG_3D
    Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. The dynamics do not include triplet formation. It is a 3D system, with only three local model variables (R, A, RA).
-   . ~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
-
+   . ~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0 -H4 3.5 -H17 1.0 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
 
@@ -168,11 +167,9 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
-#ifndef DIFFUSION_STOLLENBERG_3D
   /* Stochastic Time Dynamics: A number of stochastic realizations     */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
-#endif
 #endif
 #endif
 #endif

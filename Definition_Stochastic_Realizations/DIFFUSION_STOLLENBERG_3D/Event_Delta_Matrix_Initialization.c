@@ -42,7 +42,7 @@ void Event_Delta_Matrix_Initialization(Community ** PATCH,
 
     M[8][3] = +Out_Migration_C;                            M[8][5] = +P->Delta_C_0;
 
-    M[9][8] = -P->Beta_C;       M[9][9] = -P->Delta_C_0;   M[6][10]= -P->Nu_C_0;
+    M[9][8] = -P->Beta_C;       M[9][9] = -P->Delta_C_0;   M[9][10]= -P->Nu_C_0;
 
     M[10][3] = +Out_Migration_C;                           M[10][5] = +P->Delta_C_0;
     M[10][8] = -P->Beta_C;      M[10][9] = -P->Delta_C_0;  M[10][10]= -P->Nu_C_0;

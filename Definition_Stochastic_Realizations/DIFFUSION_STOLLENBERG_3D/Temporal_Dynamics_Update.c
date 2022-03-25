@@ -57,8 +57,8 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       
       m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
 							 to event 'Type_of_Event'???
-							 Lenght of the adjacence list 
-							 of 'Type_of_Event'
+							 i.e., the lenght of the adjacence  
+							 list of 'Type_of_Event'
 						      */
       Delta_Rate = 0.0; 
       for(i=0; i<m; i++) {
@@ -83,8 +83,9 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     }   
   }
   else {         /* MOVEMENT EVENT involving two Patches */
-		 /* Out migration sending one individual (R or C) 
-		    out from patch 'x' to patch 'y'      */
+		 /* Out migration sending one individual (R or C, 
+		    RA individuals do not move) out 
+		    from patch 'x' into patch 'y'      */
     
     assert( Type_of_Event == 0 || Type_of_Event == 3 ) ; 
     
@@ -180,7 +181,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     
     case 2:  /* Resoure Death  */
       Delta_Matrix[2][6] = -Table->Alpha_C_0/K_R * (double)n[A];;
-      Delta_Matrix[2][7] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); ;
+      Delta_Matrix[2][7] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); 
     break;
     
     case 3:  /* Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
@@ -204,17 +205,17 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     break;
 
     case 7:  /* Local Growthh of Resources */
-      Delta_Matrix[7][6] = 2.0*Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[7][7] = Table->Chi_C_0/K_R * (2.0*((double)n[RA]+1.0)-(double)n[A]);
+      Delta_Matrix[7][6] = Table->Alpha_C_0/K_R * (double)n[A];
+      Delta_Matrix[7][7] = Table->Beta_R/K_R * (K_R-2.0*(double)n[R]+1.0); 
     break;
 
     case 8:  /* Local Growth of Consumers  */
-      Delta_Matrix[8][6] = Table->Alpha_C_0/K_R * (double)n[A];
+      Delta_Matrix[8][6] = Table->Alpha_C_0/K_R * (double)n[R];
       
     break;
 
     case 9:  /* RA Local Death: RA ---> RA - 1 */
-             /* Delta Matrix change is independent from system current configuration */
+             /* Delta Matrix change is independent from current system configuration */
     break;
 
     case 10: /* RA relax back into A: RA ---> A */
