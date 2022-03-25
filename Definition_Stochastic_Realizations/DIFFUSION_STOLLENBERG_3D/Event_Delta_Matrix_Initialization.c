@@ -3,6 +3,12 @@
 void Event_Delta_Matrix_Initialization(Community ** PATCH,
 				       Parameter_Model * P)
 {
+  /* 
+     This is the subset of the Delta Matrix entries that are independent 
+     from system configuration. Therefore, they only need to be 
+     initialized 
+  */
+  
   int i, no, R, A;
   double Out_Migration_R, Out_Migration_C;
 
@@ -30,19 +36,16 @@ void Event_Delta_Matrix_Initialization(Community ** PATCH,
 
     M[6][0] = -Out_Migration_R; M[6][1] = +P->Lambda_R_0;  M[6][2] = -P->Delta_R_0; 
     M[6][3] = -Out_Migration_C;                            M[6][5] = -P->Delta_C_0;
-    M[6][7] = +P->Nu_C_0;
+    M[6][8] = +P->Beta_C;       M[6][9] = +P->Delta_C_0;   M[6][10] = +P->Nu_C_0;
 
-    M[7][3] =+2.0*Out_Migration_C;                         M[7][5] =+2.0*P->Delta_C_0;
-    M[7][7] =-P->Nu_C_0;
+    M[7][0] = +Out_Migration_R; M[7][1] = -P->Lambda_R_0;  M[7][2] = +P->Delta_R_0;
 
-    M[8][0] = +Out_Migration_R; M[8][1] = -P->Lambda_R_0;  M[8][2] = +P->Delta_R_0;
+    M[8][3] = +Out_Migration_C;                            M[8][5] = +P->Delta_C_0;
 
-    M[9][3] = -Out_Migration_C;                            M[9][5] = -P->Delta_C_0;
-    M[9][7] = -P->Nu_C_0;                                  M[9][10]= +P->Eta_C_0;
+    M[9][8] = -P->Beta_C;       M[9][9] = -P->Delta_C_0;   M[6][10]= -P->Nu_C_0;
 
-    M[10][3] = +Out_Migration_C;                            M[10][5] = +P->Delta_C_0;
-    M[10][7] = +P->Nu_C_0;                                 M[10][10]= -P->Eta_C_0;
-
+    M[10][3] = +Out_Migration_C;                           M[10][5] = +P->Delta_C_0;
+    M[10][8] = -P->Beta_C;      M[10][9] = -P->Delta_C_0;  M[10][10]= -P->Nu_C_0;
   }
 }
 

@@ -85,26 +85,26 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* 7: Dimmer degrations (production of two consumers */
-    P->rate[n] = Table->Nu_C_0;                           P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
-    P->ratePatch += P->rToI[n];
-    n++;
-
-    /* 8 : Local Growth of Resources  */
+    /* 7: Local Growth of Resources  */
     P->rate[n]= Table->Beta_R *(K_R-(double)P->n[R])/K_R; P->rToI[n] = P->rate[n]*(double)P->n[R];
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* 9: Consumer Interference */
-    P->rate[n] = Table->Chi_C_0 * (double)P->n[RA]/K_R;   P->rToI[n] = P->rate[n]*(double)P->n[A];
+    /* 8: Local Growth of Consumers */
+    P->rate[n] = Table->Beta_C;                           P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* 10: Degradation of triplets */
-    P->rate[n] = Table->Eta_C_0;                         P->rToI[n] = P->rate[n]*(double)P->n[ARA];
+    /* 9: Local Death of Handling Consumers */
+    P->rate[n] = Table->Delta_C_0;                        P->rToI[n]  = Table->Delta_C_0 * (double)P->n[RA];
     P->ratePatch += P->rToI[n];
     n++;
-    
+
+    /* 10: Handling Consumers relax back into Free Consumers */ 
+    P->rate[n] = Table->Nu_C_0;                           P->rToI[n] = P->rate[n]*(double)P->n[RA];
+    P->ratePatch += P->rToI[n];
+    n++;
+
     assert( n == Table->TOTAL_No_of_EVENTS );
     
     Rate->Total_Rate += P->ratePatch;

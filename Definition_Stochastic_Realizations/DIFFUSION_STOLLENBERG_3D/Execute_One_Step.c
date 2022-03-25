@@ -40,10 +40,10 @@ void Execute_One_Step(Community ** SP,
     n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
 
   else {
-    printf(" The total number of events tant potentially could happen patch %d\n", x);
+    printf(" The total number of events that potentially could happen in patch %d\n", x);
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
-    printf(" Something very wrong with your code\n");
-    printf(" The program will exit\n");
+    printf(" If it is, there is something very wrong with your code\n");
+    printf(" The program will exit!!!\n");
     Press_Key();
     exit(0);
   }
@@ -51,7 +51,6 @@ void Execute_One_Step(Community ** SP,
   R   = x*Table->LOCAL_STATE_VARIABLES + Table->R;
   A   = x*Table->LOCAL_STATE_VARIABLES + Table->A;
   RA  = x*Table->LOCAL_STATE_VARIABLES + Table->RA;
-  ARA = x*Table->LOCAL_STATE_VARIABLES + Table->ARA;
 
   assert( n_Event < Table->TOTAL_No_of_EVENTS );
 
@@ -113,41 +112,30 @@ void Execute_One_Step(Community ** SP,
       Y[RA]++; J[RA]++;  Patch->n[Table->RA]++;
       break;
 
-    case 7: /* Dimmer degratation into two individual consumers (Consumer Growth) */ /* RA ---> A + A */
-      Positivity_Control( 7, Table, x, RA, Y[RA], J[RA] );
-
-      Y[A]++; J[A]++;  Patch->n[Table->A]++;
-
-      Y[A]++; J[A]++;  Patch->n[Table->A]++;
-
-      Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
-
-      break;
-
-    case 8: /* Local Growth of Resources  */                       /* R  ---> R + R */
+    case 7: /* Local Growth of Resources  */                       /* R  ---> R + R */
 
       Y[R]++; J[R]++;  Patch->n[Table->R]++;
 
       break;
 
-    case 9: /* Consumer Interference */                           /* RA + A ---> ARA */
-      Positivity_Control( 9, Table, x, RA, Y[RA], J[RA] );
-      Positivity_Control( 9, Table, x, A, Y[A], J[A] );
+    case 8: /* Local Growth of Consumers */ /* RA ---> RA + A */
 
-      Y[RA]--; J[RA]--; Patch->n[Table->RA]--;
-      Y[A]--; J[A]--;  Patch->n[Table->A]--;
-
-      Y[ARA]++; J[ARA]++;  Patch->n[Table->ARA]++;
-
+      Y[A]++; J[A]++;  Patch->n[Table->A]++;
+      
       break;
 
-    case 10: /* Degradation of triplets */                        /* ARA ---> RA + A */
-      Positivity_Control( 10, Table, x, ARA, Y[ARA], J[ARA] );
+    case 9: /* Local Death of Handling Consumers */ /* RA ---> RA - 1 */
+      Positivity_Control( 9, Table, x, RA, Y[RA], J[RA] );
+      
+      Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
+      
+      break;
 
-      Y[RA]++; J[RA]++; Patch->n[Table->RA]++;
-      Y[A]++; J[A]++;  Patch->n[Table->A]++;
-
-      Y[ARA]--; J[ARA]--;  Patch->n[Table->ARA]--;
+    case 10: /* Handling Consumers relax back into Free Consumers */ /* RA ---> A */
+      Positivity_Control( 10, Table, x, RA, Y[RA], J[RA] );
+      
+      Y[RA]--; J[RA]--;  Patch->n[Table->RA]--;
+      Y[A]++;  J[A]++;   Patch->n[Table->A]++;
 
       break;
 

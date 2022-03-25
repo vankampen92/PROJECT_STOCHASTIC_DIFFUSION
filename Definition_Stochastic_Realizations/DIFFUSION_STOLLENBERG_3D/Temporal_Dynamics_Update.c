@@ -14,7 +14,8 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 {
   /* This function calculates the stochastic rates after the execution of a stochastic event
      in terms of the old ones, with no recalculation. This is a way to optimize the algorithm.
-     It is always worth trying this optimization for very sparsely coupled systems. 
+     It is always worth trying this optimization, particularly, for very sparsely coupled 
+     systems. 
   */
   /* Input arguments:
      
@@ -149,6 +150,13 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table)
 {
+  /* 
+     This is the subset of the Delta Matrix entries that depend
+     on system configuration. Therefore, they need to be 
+     changed in agreement to the event that has just occurred 
+  */
+  
+  
   double ** Delta_Matrix = Pa->Event_Delta_Matrix;
 
   int * n = Pa->n;
@@ -162,58 +170,56 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     {
     case 0:  /* Resource Out-Migration (R --> R-1) and some other patch gains one */ 
       Delta_Matrix[0][6] = -Table->Alpha_C_0/K_R * (double)n[A];
-      Delta_Matrix[0][8] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); 
+      Delta_Matrix[0][7] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); 
     break;
       
     case 1:  /* Resource External Immigration event */
       Delta_Matrix[1][6] = Table->Alpha_C_0/K_R * (double)n[A];
-      Delta_Matrix[1][8] = Table->Beta_R/K_R * (K_R-2.0*(double)n[R]+1.0); 
+      Delta_Matrix[1][7] = Table->Beta_R/K_R * (K_R-2.0*(double)n[R]+1.0); 
     break;
     
     case 2:  /* Resoure Death  */
       Delta_Matrix[2][6] = -Table->Alpha_C_0/K_R * (double)n[A];;
-      Delta_Matrix[2][8] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); ;
+      Delta_Matrix[2][7] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); ;
     break;
     
     case 3:  /* Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
       Delta_Matrix[3][6] = -Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[3][9] = -Table->Chi_C_0/K_R * (double)n[RA];
+      
     break;
       
     case 4:  /* Consumer External Immigration event  */  
       Delta_Matrix[4][6] = Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[4][9] = Table->Chi_C_0/K_R * (double)n[RA];;
+      
     break;
     
     case 5:  /* Consumer Death  */
       Delta_Matrix[5][6] = -Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[5][9] = -Table->Chi_C_0/K_R * (double)n[RA];
+      
     break;
     
     case 6:  /* Consumer Consumption of resource and dimmer formation */
       Delta_Matrix[6][6] = -Table->Alpha_C_0/K_R * (1.0+(double)n[A]+(double)n[R]);
-      Delta_Matrix[6][8] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); 
-      Delta_Matrix[6][9] = Table->Chi_C_0/K_R * (1.0+(double)n[A]-(double)n[RA]);
+      Delta_Matrix[6][7] = Table->Beta_R/K_R * (2.0*(double)n[R]-K_R+1.0); 
     break;
 
-    case 7:  /* Dimer degradation into two new consumer individuals */
+    case 7:  /* Local Growthh of Resources */
       Delta_Matrix[7][6] = 2.0*Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[7][9] = Table->Chi_C_0/K_R * (2.0*((double)n[RA]+1.0)-(double)n[A]);
+      Delta_Matrix[7][7] = Table->Chi_C_0/K_R * (2.0*((double)n[RA]+1.0)-(double)n[A]);
     break;
 
-    case 8:  /* Local Growth of Resources  */
+    case 8:  /* Local Growth of Consumers  */
       Delta_Matrix[8][6] = Table->Alpha_C_0/K_R * (double)n[A];
-      Delta_Matrix[8][8] = Table->Beta_R/K_R * (K_R-2.0*(double)n[R]+1.0); 
+      
     break;
 
-    case 9:  /* Consumer Interference */
-      Delta_Matrix[9][6] = -Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[9][9] = -Table->Chi_C_0/K_R * (1.0+(double)n[A]+(double)n[RA]);
+    case 9:  /* RA Local Death: RA ---> RA - 1 */
+             /* Delta Matrix change is independent from system current configuration */
     break;
 
-    case 10: /* Degradation of triplets */
+    case 10: /* RA relax back into A: RA ---> A */
       Delta_Matrix[10][6] = Table->Alpha_C_0/K_R * (double)n[R];
-      Delta_Matrix[10][9] = Table->Chi_C_0/K_R * ((double)n[A]+(double)n[RA]-1.0);
+      
     break;
 
     default:
