@@ -16,7 +16,7 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Exectution:
    
-   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Alpha] -H12 [Nu]. 
+   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Chi] -H12 [Eta]. 
    If these two parameters are zero, no triplet formation, and the dynamics is equivalent to 
    a 3D system, with only three local model variables.
    

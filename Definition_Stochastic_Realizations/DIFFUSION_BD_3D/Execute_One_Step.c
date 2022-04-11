@@ -50,6 +50,7 @@ void Execute_One_Step(Community ** SP,
 
   A   = x*Table->LOCAL_STATE_VARIABLES + Table->A;
   RA  = x*Table->LOCAL_STATE_VARIABLES + Table->RA;
+  ARA = x*Table->LOCAL_STATE_VARIABLES + Table->ARA;
 
   assert( n_Event < Table->TOTAL_No_of_EVENTS );
 
@@ -68,7 +69,7 @@ void Execute_One_Step(Community ** SP,
 
       break;
 
-   case  1:  /* External Immigration from outside the system (A --> A+1) *//* External Imm A */
+    case  1:  /* External Immigration from outside the system (A --> A+1) *//* External Imm A */
 
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
 
@@ -93,10 +94,31 @@ void Execute_One_Step(Community ** SP,
 
       break;
 
-    default:
-    /* Something is very very wrong!!! */
-      printf("The number of event occurring should be between 0 and 0\n");
-      printf("Event to Occur = %d\n", n_Event);
+    case 4: /* Consumer Interference */                           /* RA + A ---> ARA */
+      Positivity_Control( 4, Table, x, RA, Y[RA], J[RA] );
+      Positivity_Control( 4, Table, x, A, Y[A], J[A] );
+
+      Y[RA]--; J[RA]--; Patch->n[Table->RA]--;
+      Y[A]--;  J[A]--;   Patch->n[Table->A]--;
+
+      Y[ARA]++; J[ARA]++;  Patch->n[Table->ARA]++;
+
+      break;
+
+    case 5: /* Degradation of triplets */                        /* ARA ---> RA + A */
+      Positivity_Control( 5, Table, x, ARA, Y[ARA], J[ARA] );
+
+      Y[RA]++;  J[RA]++;   Patch->n[Table->RA]++;
+      Y[A]++;   J[A]++;    Patch->n[Table->A]++;
+
+      Y[ARA]--; J[ARA]--;  Patch->n[Table->ARA]--;
+
+      break;
+       
+    default: /* Something is very very wrong!!! */
+      printf("The number of event occurring should be between 0 and 5\n");
+      printf("but your Event to Occur = %d\n", n_Event);
+      printf("Something is very wrong. The program will stop\n"); 
       Press_Key();
       exit(0);
     }

@@ -52,7 +52,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   
   /* Master Equation Numerical Integration                 */
   /* BEGIN: Core part (integration of the master equation) */
-  printf("Entering Generation of Stochastic Realizations...\n");   Press_Key();
+  printf("Entering Numerical Integration of the Master Equation...\n");   Press_Key();
   int ME_SYSTEM = master_equation_time_dynamics( Table );
   /*   END: ------------------------------------------ */
 

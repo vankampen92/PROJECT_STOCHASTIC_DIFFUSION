@@ -102,9 +102,8 @@ void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table,
     /* The system has only one cell (no spatial structure) */
     assert(Table->No_of_RESOURCES == 1 && Table->No_of_CELLS == 1);
     
-    Table->Vector_Model_Variables_Time_0[0] = 0.0;   /* Initial value for resources */
-    Table->Vector_Model_Variables_Time_0[1] = Value; /* Initial value for free consumers */
-    Table->Vector_Model_Variables_Time_0[2] = 0.0;   /* Initial value for handling consumers */
+    Table->Vector_Model_Variables_Time_0[0] = 0.0;
+    Table->Vector_Model_Variables_Time_0[1] = Value; /* Inicial value for consumers */
   }
 }
 
@@ -120,10 +119,8 @@ void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * T
   assert(Table->No_of_CELLS     == 1);
   assert(Table->No_of_RESOURCES == 1);
     
-  Table->Vector_Model_Variables_Time_0[0] = Value_0; /* Initial value for resources          */
-  Table->Vector_Model_Variables_Time_0[1] = Value_1; /* Initial value for free consumers     */
-  Table->Vector_Model_Variables_Time_0[2] = 0.0;     /* Initial value for handling consumers */
-
+  Table->Vector_Model_Variables_Time_0[0] = Value_0; /* Initial value for free consumers */
+  Table->Vector_Model_Variables_Time_0[1] = Value_1; /* Initial value for handling consumers */
 }
 
 void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Table * Table,
@@ -138,12 +135,12 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
   N_Y = Table->No_of_CELLS_Y;
 
   for (J=0; J<Table->No_of_CELLS; J++) {
-    /* Resources */
+    /* Free consumers */
     n = 0;  
     m = Table->LOCAL_STATE_VARIABLES*J + n;
     Table->Vector_Model_Variables_Time_0[m] = Value;
 
-    /* Consumers */
+    /* Handling consumers */
     n = 1;  
     m = Table->LOCAL_STATE_VARIABLES*J + n;
     Table->Vector_Model_Variables_Time_0[m] = Value;

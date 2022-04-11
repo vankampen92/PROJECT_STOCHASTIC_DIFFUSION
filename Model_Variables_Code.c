@@ -211,7 +211,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->Index[n++]   = 16; /* Consumer Attack Rate */
       Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
-      
+
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
 
       Table->Index[n++]   = 26; /* Energy Loss Rate (here, fraction of 
@@ -420,8 +420,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
     case 9: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
 
       /* No_of_EVENTS: Common events that can occur to every Species: */
-      Table->No_of_EVENTS       = 1;  /* (Only Diffusion) */
-      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 2;
+      Table->No_of_EVENTS       = 0;  
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 4;
+      /* Four total events: Diffusion + Immigration + Attack + Handling */
       Table->LOCAL_STATE_VARIABLES = 2; /* 1 A + 1 RA        */
                                         /* Only free consumers (A) and
 					   handling consumers  (RA) 
@@ -440,14 +441,15 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       /* List of (Potentially searcheable) model parameters */
       n = 0;
-      Table->Index[n++] = 0; /* Resource Movement Rate */ 
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
 
       Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
       
       Table->Index[n++]   = 16; /* Consumer Attack Rate */
       Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
-     
+
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
       
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
@@ -456,7 +458,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
     case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * * * * * * */
 
       /* No_of_EVENTS, i.e, common events that can occur to every Species: */
-      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) 
+				          R and A can undergo these three same processes 
+				      */
       Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
       Table->LOCAL_STATE_VARIABLES = 3; /* 1 R + 1 C + 1 D                 */
                                         /* D \equiv RC (handling consumer) */
@@ -471,8 +475,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* Conventions */
       Table->K   = n-1;     /* Label last class */
       Table->R = 0;  Table->A = 1; Table->RA = 2; 
-      
-      /* Potentially searcheable: MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+
+      /* List of (Potentially searcheable) model parameters:  */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
       n = 0;
       Table->Index[n++] = 0; /* Resource Movement Rate */ 
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
@@ -494,6 +499,158 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->Index[n++]   = 24; /* Consumer Local Growth Rate */
       
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 11: /* DIFFUSION_HII_AC_2D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:  */
+      Table->No_of_EVENTS       = 0;  /* No of common events           */
+      Table->TOTAL_No_of_EVENTS = 4;  /* Diffusion + Immigration + Attack + Handling */
+      Table->LOCAL_STATE_VARIABLES = 2; /* 1 A + 1 AC        */
+                                        /* Only free consumers (A) and
+					   Accumulated Resource Consumed  (AC)
+					   y[RA] will be calculated as A_0 - y[A]
+					*/
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->AC = 0; Table->A = 1; Table->RA = 0; Table->ARA = 0; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+     
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 12: /* DIFFUSION_HII_1D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:  */
+      Table->No_of_EVENTS       = 0;  /* No of common events           */
+      Table->TOTAL_No_of_EVENTS = 4;  /* Diffusion + Ext Immigration + Attack + Handling */
+      Table->LOCAL_STATE_VARIABLES = 1; /* 1 A         */
+                                        /* Only free consumers (A).				   
+					   y[RA] will be calculated as A_0 - y[A]
+					*/
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->AC = 0; Table->A = 0; Table->RA = 0; Table->ARA = 0; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      n = 0;
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+     
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:  */
+      Table->No_of_EVENTS       = 0;  /* No of common events           */
+      Table->TOTAL_No_of_EVENTS = 6;  /* OutDiffusion(A) + InMigration(A) + Attack + Handling  + 
+				         Triplet formation + Triplet decomposition 
+				      */
+      Table->LOCAL_STATE_VARIABLES = 2; /* 1 A + 1 RA        */
+                                        /* Only free consumers (A) and
+					   handling consumers (RA).
+					   y[ARA] will be calculated as 
+					   0.5*(A_0 - y[A] -y[RA])
+					*/
+      
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->AC = 0; Table->A = 0; Table->RA = 1; Table->ARA = 0; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+
+      Table->Index[n++]   = 18; /* Trimer Formation Rate (Chi_C_0)   */
+      Table->Index[n++]   = 19; /* Trimer Destruction Rate (Eta_C_0) */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  (A) */
+
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 14: /* DIFFUSION_BD_3D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS: Common events that can occur to every Species:  */
+      Table->No_of_EVENTS       = 0;  /* No of common events           */
+      Table->TOTAL_No_of_EVENTS = 6;  /* OutDiffusion(A) + InMigration(A) + Attack + Handling  + 
+				         Triplet formation + Triplet decomposition 
+				      */
+      Table->LOCAL_STATE_VARIABLES = 3; /* 1 A + 1 RA + 1 ARA        */
+                                        
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class            */
+      Table->R = 0;  Table->AC = 0; Table->A = 0; Table->RA = 1; Table->ARA = 2; 
+      
+      /* List of (Potentially searcheable) model parameters */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+
+      Table->Index[n++]   = 18; /* Trimer Formation Rate (Chi_C_0)   */
+      Table->Index[n++]   = 19; /* Trimer Destruction Rate (Eta_C_0) */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  (A) */
+
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
       
@@ -661,6 +818,67 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       P->K   = n-1;     /* Label last class            */
       
       break;
+
+    case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 11: /* DIFFUSION_HII_AC_2D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 12: /* DIFFUSION_HII_1D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break; 
+
+    case 14: /* DIFFUSION_BD_3D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
 
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);

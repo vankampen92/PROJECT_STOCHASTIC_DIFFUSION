@@ -16,23 +16,22 @@ int function (double t, const double y[], double dydt[], void *params)
   y_R = Table->TOTAL_No_of_RESOURCES; /* Resource density (in number of resource units) */
 
   assert( Sp == 1 ); 
-
+  assert( Table->Lambda_C_0 == 0.0 ); 
+  
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
-
-  assert( Table->A == 0 );
-  assert( Table->Lambda_C_0 ); 
 
   K_R = (double)Table->K_R; 
 
   for (j=0; j<Table->No_of_CELLS; j++) {
 
-    A    = j*Table->LOCAL_STATE_VARIABLES + Table->A;
-    RA   = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
+    AC  = j*Table->LOCAL_STATE_VARIABLES + Table->AC;
+    A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
 
-    dydt[A]  = -Table->Alpha_C_0 *y_R/K_R *y[A] + Table->Nu_C_0*y[RA];
+    dydt[AC] = Table->Alpha_C_0 *y_R/K_R *y[A];               // Rate of accumulation of feeding events 
 
-    dydt[RA] = -Table->Nu_C_0*y[RA] + Table->Alpha_C_0 *y_R/K_R *y[A];
+    dydt[A]  = -Table->Alpha_C_0 *y_R/K_R *y[A] + Table->Nu_C_0*y[RA];   // Free predator temporal rate
+ 
   }
 
   if(Table->No_of_CELLS > 1) { 

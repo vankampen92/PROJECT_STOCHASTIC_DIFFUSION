@@ -63,8 +63,18 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* 3: Dimmer degrations (production of two consumers */
+    /* 3: Dimmer degration: handling */
     P->rate[n] = Table->Nu_C_0;                           P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
+    P->ratePatch += P->rToI[n];
+    n++;
+
+    /* 4: Consumer interference: Triplet formation  */
+    P->rate[n] = Table->Chi_C_0 * (double)P->n[RA]/K_R;   P->rToI[n] = P->rate[n]*(double)P->n[A];
+    P->ratePatch += P->rToI[n];
+    n++;
+
+    /* 5: Consumer interference: Triplet degration */
+    P->rate[n] = Table->Eta_C_0;                          P->rToI[n]= P->rate[n]*(double)P->n[ARA]; 
     P->ratePatch += P->rToI[n];
     n++;
 

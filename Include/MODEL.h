@@ -1,17 +1,20 @@
 #include "HEADERS.h"
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                           */
-/*                            David Alonso, 2021 (c)                         */
+/*                            David Alonso, 2022 (c)                         */
 /*                                                                           */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #define HUMAN_CONSTANT_POPULATION
 
 #define INTEGER_CODE_FOR_TIME_DIMENSION 0
 
-/* Model parameters are drawn from a pool. Only the most complex model defined uses them all */
-/* Simpler models only use a subset from the whole pool. The maximum number of model parameters 
-   for each specific model is defined in the corresponding MODEL_DEFINE_MAX_VARIABLES_[MODEL].h 
-   file, which defines the dinension of the whole parameter space for that particular model 
+/* Model parameters are drawn from a pool. Only the most complex model defined might use them 
+   all. Simpler models only use a subset from the whole pool. The maximum number of model 
+   parameters for each specific model is defined in the corresponding file: 
+
+   MODEL_DEFINE_MAX_VARIABLES_[MODEL].h, 
+
+   which defines the maxim dinension of the whole parameter space for that particular model 
 */
 
 #define MAX_No_of_CONFIGURATIONAL_STATES 1000000 /* Max No of Eqs in the Master Equation */   
@@ -27,7 +30,8 @@
 					    model-paramater-related assign functions.
 					    This is the whole parameter pool from which a 
 					    parameter subspace can be defined for 
-					    optimization searches and parameter scans   
+					    optimization searches and parameter scans  
+					    for any given model
 					 */
 #ifdef DIFFUSION_1RnC_E
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
@@ -49,6 +53,14 @@
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_HII_2D.h"
 #elif defined DIFFUSION_STOLLENBERG_3D
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_STOLLENBERG_3D.h"
+#elif defined DIFFUSION_HII_AC_2D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_HII_AC_2D.h"
+#elif defined DIFFUSION_HII_1D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_HII_1D.h"
+#elif defined DIFFUSION_BD_2D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_BD_2D.h"
+#elif defined DIFFUSION_BD_3D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_BD_3D.h"
 #endif
 
 typedef struct totalRateinfo

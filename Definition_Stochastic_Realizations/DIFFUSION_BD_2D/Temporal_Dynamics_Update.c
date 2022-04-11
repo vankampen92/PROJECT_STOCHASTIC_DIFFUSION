@@ -159,30 +159,46 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
   
   switch( Type_of_Event )
     {
-    case 0:  /* Resource Out-Migration (R --> R-1) and some other patch gains one */ 
+    case 0:  /* Consumer outmigration  */ 
       
-      
-    break;
-      
-    case 1:  /* Resource External Immigration event */
-      
+      Delta_Matrix[0][4] = -Table->Chi_C_0/K_R * (double)n[RA];
       
     break;
-    
-    case 2:  /* Resoure Death  */
       
+    case 1:  /* Consumer immigration */
+
+      Delta_Matrix[1][4] = +Table->Chi_C_0/K_R * (double)n[RA];
       
     break;
     
-    case 3:  /* Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
+    case 2:  /* Consumer Attack  */
       
+      Delta_Matrix[2][4] = Table->Chi_C_0/K_R * (1.0+(double)n[A]-(double)n[RA]);
+      
+    break;
+    
+    case 3:  /* Consumer Handling */ 
+      
+      Delta_Matrix[3][4] = Table->Chi_C_0/K_R * (1.0-(double)n[A]+(double)n[RA]);
+      
+    break;
+
+    case 4:  /* Consumer Interference (A + RA --> ARA): Triplet formation  */ 
+      
+      Delta_Matrix[4][4] = -Table->Chi_C_0/K_R * (1.0+(double)n[A]+(double)n[RA]);
+      
+    break;
+
+    case 5:  /* Consumer Interference (ARA --> A + RA): Triple degration */ 
+      
+      Delta_Matrix[5][4] = -Table->Chi_C_0/K_R * (1.0-(double)n[A]-(double)n[RA]);
       
     break;
       
     default:
       /* Something is very very wrong!!! */
       printf(" Type_of_Event = %d\t This value is not possible!!!\n", Type_of_Event);
-      printf(" There are only four events possible labelled as (0, 1, 2, 3)\n");
+      printf(" There are only six events possible labelled as (0, 1, 2, 3, 4, 5)\n");
       printf(" Type of Event ill-defined\n");
       printf(" The program will exit\n");
       Press_Key(); 
