@@ -31,7 +31,7 @@ int function_ME (double t, const double y[], double dydt[], void *params)
 
   K_R   = (double)Table->K_R;
   n_R   = Table->TOTAL_No_of_RESOURCES;   /* which determines resource density */
-  a_0   = Table->TOTAL_No_of_CONSUMERS;
+  a_0   = Table->TOTAL_No_of_CONSUMERS;   /* and the Theta parameter           */
   
   No_of_CONFIGURATIONAL_STATES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
 
