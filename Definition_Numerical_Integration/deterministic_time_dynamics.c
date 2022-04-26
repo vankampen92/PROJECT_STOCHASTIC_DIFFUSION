@@ -76,7 +76,9 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
 
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
     kk = Table->OUTPUT_VARIABLE_INDEX[k];
-    value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables, Time->Time_Vector[0], Table);
+    value = definition_OutPut_Variables(kk,
+					Table->Vector_Model_Variables, Time->Time_Vector[0],
+					Table);
 #if defined CPGPLOT_REPRESENTATION
     Table->CPG->y_Time[k][0] = value;
 #endif

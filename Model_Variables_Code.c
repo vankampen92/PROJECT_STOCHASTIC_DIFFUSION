@@ -819,18 +819,6 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       break;
 
-    case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
     case 11: /* DIFFUSION_HII_AC_2D * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;

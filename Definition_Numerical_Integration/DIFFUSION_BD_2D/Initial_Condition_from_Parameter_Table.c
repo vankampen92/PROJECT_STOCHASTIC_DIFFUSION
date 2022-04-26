@@ -143,7 +143,7 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
     /* Handling consumers */
     n = 1;  
     m = Table->LOCAL_STATE_VARIABLES*J + n;
-    Table->Vector_Model_Variables_Time_0[m] = Value;
+    Table->Vector_Model_Variables_Time_0[m] = 0.0;
   }
 }
 

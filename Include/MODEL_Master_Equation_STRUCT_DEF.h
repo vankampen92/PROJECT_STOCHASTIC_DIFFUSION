@@ -1,5 +1,6 @@
 typedef struct Master_Equationinfo
 {
+  /* Up to dimension 3 */
   
   int No_of_CONFIGURATIONAL_STATES;
   int n_x;
@@ -7,11 +8,21 @@ typedef struct Master_Equationinfo
   int n_z;
   int n_DIMENSION;
 
-  double * Probability_Dtstribution;
+  double * Probability_Distribution;
   double * Probability_Distribution_Time_0; 
   double * P_n;
   double ** P_nm;
   double *** P_nml; 
+
+  double * P_n_Marginal;
+  double * P_m_Marginal;
+  double * P_l_Marginal; 
+
+  char ** Marginal_Probability_Label;
+  
+  void * Table;
+
+  double * Vector_Model_Variables; 
   
 }Master_Equation;
 

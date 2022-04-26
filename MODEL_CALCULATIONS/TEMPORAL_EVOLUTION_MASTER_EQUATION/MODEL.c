@@ -34,8 +34,8 @@ int M_O_D_E_L( Parameter_Table * Table )
     Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
   else if (Table->No_of_CELLS == 1)
     Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
-							    Table->INITIAL_TOTAL_POPULATION,
-							    Table->INITIAL_TOTAL_POPULATION);
+						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
+						   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
   else 
     Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
 								 Table->INITIAL_TOTAL_POPULATION);

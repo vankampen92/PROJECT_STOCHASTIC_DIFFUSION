@@ -5,15 +5,6 @@
 #include <gsl/gsl_odeiv.h>
 
 
-void i_to_nm_Map(Parameter_Table * Table,
-		 int i, int * n_i, int * m_i);
-
-void nm_to_i_Map(Parameter_Table * Table,
-		 int * i, int n, int m);
-
-double Sumando(int a_0, int m);
-
-
 int function_ME (double t, const double y[], double dydt[], void *params)
 {
   int i, No_of_CONFIGURATIONAL_STATES, n, m, a_0;
@@ -42,8 +33,8 @@ int function_ME (double t, const double y[], double dydt[], void *params)
   
   for (i=0; i<No_of_CONFIGURATIONAL_STATES; i++) {
 
-    i_to_nm_Map(Table, i, &n, &m);             /* n: A  (free predators)    */ 
-                                               /* m: RA (handling predators */
+    i_to_nm_Map(Table, i, &n, &m);             /* n: A  (free predators)     */ 
+                                               /* m: RA (handling predators) */
 
     nm_to_i_Map(Table, &i_1, n+1, m-1);
     nm_to_i_Map(Table, &i_2, n-1, m+1);
@@ -51,8 +42,8 @@ int function_ME (double t, const double y[], double dydt[], void *params)
     nm_to_i_Map(Table, &i_4, n-1, m-1);
    
     A_1= Theta * (double)(n+1) * y[i_1];
-    A_2= Nu *  (double)(m + 1) * y[i_2];
-    A_3= Chi * (double)(m + 1)/K_R * (double)n+1 * y[i_3];
+    A_2= Nu *  (double)(m+1) * y[i_2];
+    A_3= Chi * (double)(m+1)/K_R * (double)(n+1) * y[i_3];
     A_4= 0.5*Eta*(double)(a_0-n-m+2) * y[i_4];
     A_0= (Theta*(double)n+Nu*(double)m+Chi*(double)m/K_R*(double)n+0.5*Eta*(double)(a_0-n-m))*y[i];
     
@@ -76,44 +67,6 @@ int function_ME (double t, const double y[], double dydt[], void *params)
   }
   
   return GSL_SUCCESS;
-}
-
-void i_to_nm_Map(Parameter_Table * Table,
-		 int i, int * n_i, int * m_i)
-{
-  int m, a_0;
-  double S, a_0;
-
-  a_0 = Table->TOTAL_No_of_CONSUMERS;
-  
-  m = 0;
-  S = Sumando(a_0, 1);
-
-  while ( (i - S) >= 0.0 ) {
-    m++;
-
-    S = Suma_m(m+1);
-  }
-
-  * n_i = i - Sumando(a_0, m);
-  * m_i = m;
-}
-
-void nm_to_i_Map(Parameter_Table * Table,
-		 int * i, int n, int m)
-{
-  int a_0 = Table->TOTAL_No_of_CONSUMERS; 
-  
-  * i = n + Sumando(a_0, m); 
-}
-
-double Sumando(int a_0, int m)
-{
-  double R;
-
-  R = (double)m/2.0 * (2.0*(a_0 + 1.0) - m + 1.0); 
-
-  return(R); 
 }
 
 int jacobian_ME (double t, const double y[], double *dfdy, double dfdt[],

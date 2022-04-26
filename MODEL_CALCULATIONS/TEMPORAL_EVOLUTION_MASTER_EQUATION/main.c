@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                            David Alonso, 2018 (c)                         */
+/*                            David Alonso, 2022 (c)                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <Include/MODEL.h>
 
@@ -16,11 +16,15 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    Exectution:
    
-   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Chi] -H12 [Eta]. 
-   If these two parameters are zero, no triplet formation, and the dynamics is equivalent to 
-   a 3D system, with only three local model variables.
+   Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---A, RA (and ARA, but only two dynamic
+   variables, A and RA. Notice -H11 [Chi] -H12 [Eta]. If these two parameters are zero, there 
+   is no triplet formation
    
-. ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 5 -t0 0.0 -t1 0.8 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 0.8 -G5 1 -G6 0.0 -G7 20 -HK 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 8.0 -H10 2.0 -H11 50.0 -H12 0.5 -Hp1 0.4 -Hp2 0.5 -HN 20
+
+  -Hp1: Resource Carrying Capacity Fraction   
+  -Hp2: No of Free Predator a Time 0 Fraction 
+  -HN: No_of_INDIVIDUALS (TOTAL No of CONSUMERS)
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
@@ -104,29 +108,57 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0,
-							 SUB_OUTPUT_VARIABLES, I_Time,
-							 0, CPG_DRIVER_NAME);
-  printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
-  printf(" These will open two windows (or two ploting devices of the same kind)\n");
-  printf(" Table.CPG will store deterministic dynamic variables to plot\n");
-  printf(" Table.CPG_STO will store stochastic dynamic variables to plot\n");
-  printf(" As a consquence, deterministic and stochastic dynamics can be plotted\n");
-  printf(" on the same device to compare (as it is done here, indicated by the first\n");
-  printf(" input argument (0) of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function).\n");
-  printf(" Alternatively, two different devices (two different pdf files, for instance)\n");
-  printf(" can be used, if required (1).\n");
+  /* Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0,                           */
+  /* 							 SUB_OUTPUT_VARIABLES, I_Time,   */
+  /* 							 0, CPG_DRIVER_NAME);            */
+  /* printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n"); */
+  /* printf(" These will open two windows (or two ploting devices of the same kind)\n"); */
+  /* printf(" Table.CPG will store deterministic dynamic variables to plot\n");          */
+  /* printf(" Table.CPG_STO will store stochastic dynamic variables to plot\n");         */
+  /* printf(" As a consquence, deterministic and stochastic dynamics can be plotted\n");        */
+  /* printf(" on the same device to compare (as it is done here, indicated by the first\n");    */
+  /* printf(" input argument (0) of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function).\n");  */
+  /* printf(" Alternatively, two different devices (two different pdf files, for instance)\n"); */
+  /* printf(" can be used, if required (1).\n"); */
 #endif
+  
+  /* BEGIN : -------------------------------------------------------------------------
+   * Definition Initial Condition:  
+   */
+  /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
+  /* double p_2;         */ /* -Hp2 */ /* See below the definition of the
+                                       /* TOTAL_No_of_FREE_CONSUMERS_TIME_0 */ 
 
+  Table.TOTAL_No_of_RESOURCES  = (int)(Table.p_1 * (double)Table.K_R);
+  Table.TOTAL_No_of_CONSUMERS  = Table.No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
+
+  assert(Table.p_2 <= 1.0 && Table.p_2 >= 0.0);  // 
+  assert(Table.p_1 <= 1.0 && Table.p_1 >= 0.0);  // Fractions!!!  
+  
+  Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
+  Table.TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table.TOTAL_No_of_CONSUMERS - Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+  /* END ----------------------------------------------------------------------------
+     This initial Condition involves no triplets at time t = 0.0 because the sum of states
+     should add up the TOTAL No of CONSUMERS 
+  */
+  
   /* Deterministic Time Dynamics */
-  Parameter_Values_into_Parameter_Table(&Table);
+  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
+						      parameter set as defined through
+						      either the command line or the 
+						      default files is used!!! 
+						   */
   M_O_D_E_L( &Table );
   
-  // Some models (such as DIFFUSION_1R1C_2D) does no have a stochastic master equation
-  // counter-part implemented yet! At the moment, only DIFFUSION_HOLLING does...
-#if defined DIFFUSION_HII
+  // Some models does no have a stochastic master equation
+  // counter-part implemented yet! At the moment, only DIFFUSION_BD_2D does it
+#if defined DIFFUSION_BD_2D
   /* Stochastic Master Equation Time Evolution */
-  Parameter_Values_into_Parameter_Table(&Table);
+  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
+						      parameter set as defined through
+						      either the command line or the 
+						      default files is used!!! 
+						   */
   M_O_D_E_L___M_E( &Table );
 #endif
   
@@ -142,11 +174,6 @@ int main(int argc, char **argv)
   /*  END : ------------------------------------------------------------------------*/
 
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */
-#if defined CPGPLOT_REPRESENTATION
-  P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
-  P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG_STO, SUB_OUTPUT_VARIABLES );
-  cpgclos();
-#endif
 
 #include <include.Parameter_Space.default.free.c>
   Parameter_Space_Free(Space, No_of_PARAMETERS); free( Space );
@@ -158,6 +185,12 @@ int main(int argc, char **argv)
 #include <include.Time_Dependence_Control.default.free.c>
   if (TYPE_of_TIME_DEPENDENCE == 0) T_I_M_E___C_O_N_T_R_O_L___F_R_E_E( &Time, &Table );
   else                        Time_Dependence_Control_Free( &Time_Dependence, &Table );
+
+#if defined CPGPLOT_REPRESENTATION
+  P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
+  // P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG_STO, SUB_OUTPUT_VARIABLES );
+  cpgclos();
+#endif
 
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( &Table );
   /*  END : Freeing  All Memmory * * * * * * * * * * * * * * */

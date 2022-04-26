@@ -1,4 +1,4 @@
-#include "../../Include/MODEL.h"
+#include <MODEL.h>
 
 extern gsl_rng * r;
 
@@ -16,46 +16,60 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   Time = Table->T;
   TDC  = Table->TDC; 
 
-  /* BEGIN : -------------------------------------------------------------------------
-   * Definition Initial Condition 
-   */
-  // double p_1;          /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
-  // double p_2;          /* -Hp2 */ /*  */ 
-  Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
-  Table->TOTAL_No_of_CONSUMERS  = 200; // = Table->No_of_INDIVIDUALS; 
-
-  assert(Table->p_2 == 1.0); 
-
-  Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
-  Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_CONSUMERS - Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
-  /* END ----------------------------------------------------------------------------
-   */
-  
   int No_of_CONFIGURATIONAL_STATES;
   int n_DIMENSION;
   int n_x, n_y, n_z;
   Model_Parameters_Master_Equation(Table,
 				   &No_of_CONFIGURATIONAL_STATES,
-				   &n_DIMENSION;
+				   &n_DIMENSION,
 				   &n_x, &n_y, &n_z);
   
   Master_Equation * MEq = (Master_Equation *)calloc( 1, sizeof(Master_Equation) );
+  /* MEq and Table will be two data structures that point to each other */
+  Table->MEq = MEq;           
+  MEq->Table = Table;
+  
   Master_Equation_Allocation ( MEq,
 			       No_of_CONFIGURATIONAL_STATES,
 			       n_DIMENSION,
-			       n_x, n_y, n_z);
+			       n_x, n_y, n_z );
+ 
   Master_Equation_Initialization ( MEq,
 				   No_of_CONFIGURATIONAL_STATES,
 				   n_DIMENSION,
-				   n_x, n_y, n_z);
-  Table->MEq = MEq; 
+				   n_x, n_y, n_z );
+  
+  Labels_for_Marginal_Probabilities( Table ); 
   
   /* Master Equation Numerical Integration                 */
   /* BEGIN: Core part (integration of the master equation) */
   printf("Entering Numerical Integration of the Master Equation...\n");   Press_Key();
   int ME_SYSTEM = master_equation_time_dynamics( Table );
+  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Press_Key();
   /*   END: ------------------------------------------ */
-
+  
+#if defined CPGPLOT_REPRESENTATION
+  //  Parameter Table dependent costumized plotting is defined in
+  //  ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
+  int TIMES           = Table->T->I_Time;
+  int Input_Parameter = 0; /* The value of this model parameter appears in the title */
+  //  Axes redefinition:
+  Table->CPG->CPG_RANGE_X_0 = 0.0;  Table->CPG->CPG_RANGE_X_1 = Table->CPG->x_Time[TIMES-1];  
+  Table->CPG->CPG_RANGE_Y_0 = 0.0;  Table->CPG->CPG_RANGE_Y_1 = (double)Table->No_of_INDIVIDUALS;
+  C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E(Table,
+								    TIMES,
+								    Table->CPG->x_Time,
+								    Table->Matrix_Output_Variables,
+								    Input_Parameter );
+  Press_Key(); 
+  C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E(Table,
+								    TIMES,
+								    Table->CPG->x_Time,
+								    Table->CPG->y_Time,
+								    Input_Parameter );
+#endif
+  
+  
   Master_Equation_Free ( MEq );
 
   return(0);

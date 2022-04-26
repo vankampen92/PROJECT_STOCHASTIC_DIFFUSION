@@ -28,8 +28,13 @@ int master_equation_driver( Parameter_Table * Table,
 #endif
 
   int MODEL_STATE_VARIABLES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
-  /* Total No of Discrete Values in Probability Distribution 
-     Total No of Equations in the Master Equaiton System
+  /* Total No of Discrete Values in Probability Distribution, i. e., 
+     the Total No of Equations in the Master Equaiton System. 
+     For systems that have naturally an infinit number of configurational states, 
+     the Total No of Equations in the Master Equation, this is, the total number 
+     of configurational states should be caped at some large enough value. In 
+     this case, the ME integration is only an approximation of the true 
+     infinit system. 
   */
   
   gsl_odeiv_step * s 

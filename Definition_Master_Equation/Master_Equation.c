@@ -17,29 +17,36 @@ void Master_Equation_Allocation ( Master_Equation * ME,
      . n_DIMENSION, dimension of the mutivariate probability distribution. This is can 
      be maximum 3, this is, P(n, m, l) 
    
-     . No_of_CONFIGURATIONAL_STATES, which is equal to the product of n_x * n_y * n_z
+     . No_of_CONFIGURATIONAL_STATES, which is equal to (or less than ) the product of 
+     n_x * n_y * n_z
      
-     . n_x, n_y, n_z, size for each dimension. 
+     . n_x, n_y, n_z, are the maximum sizes for each dimension. 
+
+     If the natural support of P(n, m, l) does not go from n=0 to n_x, m=0 to n_y, and 
+     l=0 to n_z, then P(n, m, l) will take zero values out of its actual support (see 
+     caloc() calls for zero allocations below). 
      
   */ 
   int i, j;
-
-  assert(No_of_CONFIGURATIONAL_STATES < MAX_No_of_CONFIGURATIONAL_STATES);
-
-  assert( n_x * n_y * n_z == No_of_CONFIGURATIONAL_STATES );  
+  Parameter_Table * Table = (Parameter_Table *)ME->Table; 
   
-  ME->Probability_Distribution = (double *)caloc(No_of_CONFIGURATIONAL_STATES, sizeof(double) );
+  assert(No_of_CONFIGURATIONAL_STATES < MAX_No_of_CONFIGURATIONAL_STATES);
+  
+  ME->Probability_Distribution = (double *)calloc(No_of_CONFIGURATIONAL_STATES, sizeof(double) );
 
-  ME->Probability_Distribution_Time_0 = (double *)caloc(No_of_CONFIGURATIONAL_STATES,
+  ME->Probability_Distribution_Time_0 = (double *)calloc(No_of_CONFIGURATIONAL_STATES,
 							sizeof(double));
 
-  if (n_DIMENSION == 1)
+  if (n_DIMENSION == 1) 
     ME->P_n = (double *)calloc(n_x, sizeof(double) );
 
   else if (n_DIMENSION == 2) { 
     ME->P_nm = (double **)calloc(n_x, sizeof(double *)); 
     for(i=0; i<n_x; i++) 
-      ME->P_nm[i] = (double *)calloc(n_y, sizeof(double)); 
+      ME->P_nm[i] = (double *)calloc(n_y, sizeof(double));
+
+    ME->P_n_Marginal = (double *)calloc(n_x, sizeof(double));
+    ME->P_m_Marginal = (double *)calloc(n_y, sizeof(double));
   }
   else if (n_DIMENSION == 3) {
     ME->P_nml = (double ***)calloc(n_x, sizeof(double **)); 
@@ -48,12 +55,22 @@ void Master_Equation_Allocation ( Master_Equation * ME,
       for(j=0; j<n_y; j++) 
 	ME->P_nml[i][j] = (double *)calloc(n_z, sizeof(double));
     }
+
+    ME->P_n_Marginal = (double *)calloc(n_x, sizeof(double));
+    ME->P_m_Marginal = (double *)calloc(n_y, sizeof(double));
+    ME->P_l_Marginal = (double *)calloc(n_z, sizeof(double));
   }
   else {
     printf(" This structure is only prepared to accept maximum three dimensions, but\n");
     printf(" you probability distribution seems to have %d dimensions!!!\n", n_DIMENSION); 
     assert(n_DIMENSION < 4);
   }
+
+  ME->Marginal_Probability_Label = (char **)calloc(n_DIMENSION, sizeof(char *) );
+  for(i = 0; i<n_DIMENSION; i++) 
+    ME->Marginal_Probability_Label[i] = (char *)calloc(100, sizeof(char));
+
+  ME->Vector_Model_Variables = (double *)calloc(n_DIMENSION, sizeof(double)); 
   
 }
 
@@ -71,6 +88,9 @@ void Master_Equation_Free ( Master_Equation * ME )
     
     for(i=0; i<ME->n_x; i++) free (ME->P_nm[i]); 
     free (ME->P_nm);
+
+    free(ME->P_n_Marginal);
+    free(ME->P_m_Marginal); 
   }
   else if (ME->n_DIMENSION == 3) {
     
@@ -79,12 +99,22 @@ void Master_Equation_Free ( Master_Equation * ME )
       free( ME->P_nml[i]); 
     }
     free (ME->P_nml);
+
+    free(ME->P_n_Marginal);
+    free(ME->P_m_Marginal);
+    free(ME->P_l_Marginal);
+   
   }
   else {
     printf(" This structure is only prepared to accept maximum three dimensions, but\n");
     printf(" you probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION); 
     assert(ME->n_DIMENSION < 4);
   }
+
+  for(i = 0; i<ME->n_DIMENSION; i++) free(ME->Marginal_Probability_Label[i]);
+  free(ME->Marginal_Probability_Label); 
+
+  free(ME->Vector_Model_Variables); 
   
   free( ME );
 }
@@ -94,7 +124,7 @@ void Master_Equation_Initialization (Master_Equation * ME,
 				     int n_DIMENSION,
 				     int n_x,
 				     int n_y,
-				     int n_z) )
+				     int n_z) 
 {
   ME->No_of_CONFIGURATIONAL_STATES = No_of_CONFIGURATIONAL_STATES;
   ME->n_DIMENSION                  = n_DIMENSION;
@@ -103,41 +133,3 @@ void Master_Equation_Initialization (Master_Equation * ME,
   ME->n_z                          = n_z; 
 }
 
-void Probability_Distribution_Vector_into_Matrix_Form( Master_Equation * ME )
-{
-  int i;
-  int n,m,l;
-  int s; 
-
-  double * y = ME->Probability_Distribution; 
-
-  if (ME->n_DIMENSION == 1) {
-    for(i=0; i<ME->n_x; i++) ME->P_n[i] = y[i];
-  }  
-  else if (ME->n_DIMENSION == 2) {
-    
-    for(i=0; i<ME->No_of_CONFIGURATION_STATES; i++) {
-      n = i/ME->n_y;
-      m = i%ME->n_y;
-      ME->P_nm[n][m] = y[i];
-    }
-    
-  }
-  else if (ME->n_DIMENSION == 3) {
-
-    for(i=0; i<ME->No_of_CONFIGURATION_STATES; i++) {
-      n = i/(ME->n_y*ME->n_z);
-      s = i%(ME->n_y*ME->n_z);
-      m = s/ME->n_z;
-      l = s%ME->n_z
-	
-      ME->P_nml[n][m][l] = y[i];
-    }
-    
-  }
-  else {
-    printf(" This structure is only prepared to accept maximum three dimensions, but\n");
-    printf(" you probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION); 
-    assert(ME->n_DIMENSION < 4);
-  }
-}

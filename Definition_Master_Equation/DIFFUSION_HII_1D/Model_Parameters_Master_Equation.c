@@ -35,6 +35,51 @@ double Average_Number_of_Feeding_Events( Parameter_Table * Table, double T )
   return (n_T);
 }
 
+void Probability_Distribution_Vector_into_Matrix_Form( Master_Equation * ME )
+{
+  int i;
+  int n,m,l;
+  int s; 
+  /* Notice that this only works for probability distributions defined in maximum 
+     three dimensions where each dimension goes from 0 to a maximum constant value: 
+
+     n = 0, ..., ME->n_x
+     m = 0, ..., ME->n_y
+     l = 0, ..., ME->n_z
+  */
+  
+  double * y = ME->Probability_Distribution; 
+
+  if (ME->n_DIMENSION == 1) {
+    for(i=0; i<ME->n_x; i++) ME->P_n[i] = y[i];
+  }  
+  else if (ME->n_DIMENSION == 2) {
+    
+    for(i=0; i<ME->No_of_CONFIGURATION_STATES; i++) {
+      n = i/ME->n_y;
+      m = i%ME->n_y;
+      ME->P_nm[n][m] = y[i];
+    }
+    
+  }
+  else if (ME->n_DIMENSION == 3) {
+
+    for(i=0; i<ME->No_of_CONFIGURATION_STATES; i++) {
+      n = i/(ME->n_y*ME->n_z);
+      s = i%(ME->n_y*ME->n_z);
+      m = s/ME->n_z;
+      l = s%ME->n_z
+	
+      ME->P_nml[n][m][l] = y[i];
+    }
+    
+  }
+  else {
+    printf(" This structure is only prepared to accept maximum three dimensions, but\n");
+    printf(" you probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION); 
+    assert(ME->n_DIMENSION < 4);
+  }
+}
 
 
 

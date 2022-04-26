@@ -2,22 +2,25 @@
 
 void Initial_Condition_Master_Equation( Parameter_Table * Table, double * y_INI )
 {
-  int i, No_of_CONFIGURATIONAL_STATES; 
-  int m_Time_0;
-  int n_0, m_0;
+  int i, i_0, No_of_CONFIGURATIONAL_STATES; 
+  int n_Time_0, m_Time_0;
+  int a_0;
   int n, m;
 
   No_of_CONFIGURATIONAL_STATES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
-  m_0   = Table->TOTAL_No_of_CONSUMERS;
+  a_0   = Table->TOTAL_No_of_CONSUMERS;
 
-  /* No of Free Consumers at time 0          */
-  m_Time_0 = Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
-  /* No accumulated Feeding Events at time 0 */
-  n_0      = 0;                                        
+  /* No of Free Consumers at time 0          */         /* n */ 
+  n_Time_0 = Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+  /* No of Handling Consumers at time 0      */         /* m */
+  m_Time_0 = a_0 - Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+
+  /* This initial condition involves no triplets at time t = 0.0 */
   
-  assert(m_Time_0 <= m_0); 
-  
-  i_0 =n_0 * m_0 + n_Time_0;
+  assert(m_Time_0 + n_Time_0 <= a_0); 
+
+  nm_to_i_Map(Table,
+	      &i_0, n_Time_0, m_Time_0);  
  
   for (i=0; i<No_of_CONFIGURATIONAL_STATES; i++) {
     

@@ -12,9 +12,8 @@ void Event_Delta_Matrix_Initialization(Community ** PATCH,
   A   = 0;    /* Consumer */ /* Resources are fixed to a density n_R/K_R */
   no  = P->No_of_CELLS;
 
-
-  K_R = (double)Table->K_R; 
-  n_R = (double)Table->TOTAL_No_of_RESOURCES; 
+  K_R = (double)P->K_R; 
+  n_R = (double)P->TOTAL_No_of_RESOURCES; 
     
   for(i=0; i<no; i++){
    

@@ -67,6 +67,8 @@ typedef struct Parameter_Tableinfo
   Parameter_Space * S;
   /* * * * * * * * * */
 
+  Master_Equation * MEq; 
+  
   /* Total Number of Model Output Variables (in defintion_OutPut_Variables.c file) */
   int OUTPUT_VARIABLES_GENUINE; 
   int MODEL_OUTPUT_VARIABLES;
@@ -91,6 +93,7 @@ typedef struct Parameter_Tableinfo
   int K;
   int R;
   int A;
+  int AC; 
   int A_R; /* Index for Fertile Population */
   int A_A;
   int RA;
@@ -161,5 +164,3 @@ typedef struct Parameter_Tableinfo
 // void values_TempDependency(double Temp, Parameter_Table *); ???
 
 // void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * );
-
-

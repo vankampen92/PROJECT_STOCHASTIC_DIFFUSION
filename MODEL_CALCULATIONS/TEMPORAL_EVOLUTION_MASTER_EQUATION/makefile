@@ -9,10 +9,11 @@
 # It means that you need to export these two environment variables:
 #
 # . ~$ export PROJECT_DIR=${HOME}/PROJECT_AB-COVID19_MODEL/
-# . ~$ export CPGPLOT=${HOME}/CPGPLOT/
+# . ~$ export CPGPLOT=${HOME}/CPGPLOT/Definition_Master_Equation
 #
 # Alternatively, you can also define these environmental variables here in
 # the make file:
+# Make sure there in blank spaces after sub-directory definitions
 CPGPLOT=${HOME}/CPGPLOT/
 PROJECT_DIR=${HOME}/PROJECT_STOCHASTIC_DIFFUSION/
 INCLUDE_DIR=${HOME}/PROJECT_STOCHASTIC_DIFFUSION/Include/
@@ -21,6 +22,7 @@ IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
 FIXED_POINTS_DIR=${PROJECT_DIR}Definition_Fixed_Points/
+ME_DIR_GENERAL=${PROJECT_DIR}Definition_Master_Equation/# 
 WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_STOCHASTIC/#
 DET_DIR=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_DETERMINISTIC/#
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
@@ -60,6 +62,7 @@ EXTRA_INCLUDE_PATH+=-I${IO_DIR}
 EXTRA_INCLUDE_PATH+=-I${OPT_DIR}
 EXTRA_INCLUDE_PATH+=-I${ERROR_DIR}
 EXTRA_INCLUDE_PATH+=-I${FIXED_POINTS_DIR}
+EXTRA_INCLUDE_PATH+=-I${ME_DIR_GENERAL}
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N   C O N T R O L I N G   N U M E R I C A L   R E C I P E S
 NR=NUMERICAL_RECIPES###############################
@@ -68,7 +71,7 @@ NR=NUMERICAL_RECIPES###############################
 V=VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
 CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
-STATIONARITY=STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
+STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P A R A M E T E R   S P A C E ###############
 TYPE_of_BOUNDARY=###
@@ -79,7 +82,7 @@ RANDOM_SEED=CURRENT_TIME_RDN_SEED# Alternative: 'FILE_RND_SIDE'
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   M O D E L   D E F I N I T I O N #############
 MODEL=DIFFUSION_S_RESOURCES#  ######################################
 ODE_MODEL=${MODEL}####################
-################################################### (see rainTemperature.c) ##################################
+ME_DIR_MODEL=${ME_DIR_GENERAL}${MODEL}/#############################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   N U M E R I C A L   I N T E G R A T I O N  ##
 ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
 ODE_DIR=${ODE_DIR_GENERAL}${ODE_MODEL}/#########
@@ -123,18 +126,19 @@ LIBS=-L/usr/lib -lX11
 PGPLOT_LIB=-L/usr/lib -lpgplot -L/usr/lib -lpng
 CPGPLOT_LIB=-L/usr/lib -lcpgplot -lpgplot -L/usr/lib -lpng
 ##############################################################################################################
-OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Community_Scatter_Plot_Representation.o assert_right_model_definition.o              \
+OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_ME.o Community.o Community_Scatter_Plot_Representation.o assert_right_model_definition.o              \
 	Parameter_Model.o Time_Control.o Parameter_Table.o  assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Model_Parameters.o fprintf_Output_Variables.o                                                                                                                                                                          \
-	assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o               \
+	assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o  \
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o           \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                            \
 	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o         \
 	Model_Variables_Code.o definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o \
 	stat.o                                                                               \
 	CPGPLOT___X_Y___Parameter_Table.o                                                    \
-	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               \
-	Fixed_Points_All.o
-# \ # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
+	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o    \
+	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o
+# \ Fixed_Points_All.o 
+# \ index.Definition${TYPE_of_INDEX}.o Error_Function.o 
 # Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
 ### Example:
 
@@ -158,8 +162,11 @@ report.o: report.c ${HEAD.H}
 argumentControl.o: argumentControl.c ${HEAD.H}
 	${CC} -c argumentControl.c $(CXXFLAGS)
 
-MODEL_STO.o: MODEL_STO.c ${HEAD.H}
-	$(CC) -c MODEL_STO.c $(CXXFLAGS)
+# MODEL_STO.o: MODEL_STO.c ${HEAD.H}
+# 	$(CC) -c MODEL_STO.c $(CXXFLAGS)
+
+MODEL_ME.o: MODEL_ME.c ${HEAD.H}
+	$(CC) -c MODEL_ME.c $(CXXFLAGS)
 
 MODEL.o: MODEL.c ${HEAD.H}
 	$(CC) -c MODEL.c $(CXXFLAGS)
@@ -321,6 +328,25 @@ Advance_Current_Time.o: ${STO_DIR_GENERAL}Advance_Current_Time.c ${HEAD.H}
 
 Choose_Village.o: ${STO_DIR_GENERAL}Choose_Village.c ${HEAD.H}
 	${CC} -c ${STO_DIR_GENERAL}Choose_Village.c $(CXXFLAGS)
+
+# Functions Controling the numerical integration of the master equation
+Master_Equation.o:	${ME_DIR_GENERAL}Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}Master_Equation.c $(CXXFLAGS)
+
+master_equation_time_dynamics.o: ${ME_DIR_GENERAL}master_equation_time_dynamics.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}master_equation_time_dynamics.c $(CXXFLAGS)
+
+master_equation_driver.o: ${ME_DIR_GENERAL}master_equation_driver.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}master_equation_driver.c $(CXXFLAGS)
+
+Initial_Condition_Master_Equation.o: ${ME_DIR_MODEL}Initial_Condition_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Initial_Condition_Master_Equation.c $(CXXFLAGS)
+
+Model_Parameters_Master_Equation.o: ${ME_DIR_MODEL}Model_Parameters_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Model_Parameters_Master_Equation.c $(CXXFLAGS)
+
+ODE_sys_Master_Equation.o: ${ME_DIR_MODEL}ODE_sys_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}ODE_sys_Master_Equation.c $(CXXFLAGS)
 
 # Auxiliary functions to specify model ODE definition
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}

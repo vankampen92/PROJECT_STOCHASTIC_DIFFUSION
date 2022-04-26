@@ -459,5 +459,8 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 			       */
   P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
 
-  P->No_of_RESOURCES    = No_of_RESOURCES; 
+  P->No_of_RESOURCES    = No_of_RESOURCES;
+
+  
+
 }

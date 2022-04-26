@@ -40,5 +40,11 @@ typedef struct Parameter_Modelinfo
   int * Vector_Model_Int_Variables_Time_0;        /* Stochastic Dynamics */
   
   double *** Metapop_Connectivity_Matrix;
+
+  /* Master Equation Numerical Integration */
+  int TOTAL_No_of_RESOURCES;
+  int TOTAL_No_of_CONSUMERS;
+  int TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+  int TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
   
 }Parameter_Model;

@@ -38,7 +38,7 @@ int function_ME (double t, const double y[], double dydt[], void *params)
     i_2 = n   *m_0 + m;
 
     A_0 = Theta * (double)(m-1) * y[i_0];
-    A_1 = Nu * (double)(m_0 - m + 1) * y[i_1];
+    A_1 = Nu * (double)(m_0-m+1) * y[i_1];
     A_2 = ((Theta-Nu)*(double)m + Nu*(double)m_0) * y[i_2];  
     
     if( n == 0 ) { 

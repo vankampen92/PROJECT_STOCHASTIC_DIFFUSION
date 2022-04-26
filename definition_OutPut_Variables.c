@@ -18,7 +18,9 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
   if (j < Table->LOCAL_STATE_VARIABLES) {
     Table->Focal_Resource = j;
     x = Total_Population_Resource_Species (y, Table);
-    /* Total Populations across the Spatial Metapopulation for every species type */
+    /* Total Populations across the Spatial Metapopulation for every species type 
+       Total Populations for every species type if there is only a single site 
+    */
   }
   else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
     /* Derived output variables from model dynamic variables and parameters */

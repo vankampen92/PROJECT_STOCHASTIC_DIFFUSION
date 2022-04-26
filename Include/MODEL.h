@@ -82,6 +82,8 @@ typedef struct totalRateinfo
 
 #include "MODEL_Parameter_Space_STRUCT_DEF.h"
 
+#include "MODEL_Master_Equation_STRUCT_DEF.h"
+
 #include "MODEL_Parameter_Table_STRUCT_DEF.h"
 
 #include "MODEL_Generic_Root_Data_STRUCT_DEF.h"
@@ -89,8 +91,6 @@ typedef struct totalRateinfo
 #include "MODEL_Observed_Data_STRUCT_DEF.h"
 
 #include "MODEL_Parameter_Fitting_STRUCT_DEF.h"
-
-#include "MODEL_Master_Equation_STRUCT_DEF.h"
 
 #include <Time_Control.h>
 
@@ -114,6 +114,8 @@ typedef struct totalRateinfo
 #include <Definition_Error_Model/Error_Library.h>
 
 #include <Definition_Fixed_Points/Fixed_Points_All.h>
+
+#include <Definition_Master_Equation/Master_Equation_Functions.h>
 
 /* Auxiliary Functions */
 #include "main.H"
