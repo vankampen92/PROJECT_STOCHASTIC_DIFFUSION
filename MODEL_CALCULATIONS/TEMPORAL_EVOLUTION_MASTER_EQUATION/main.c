@@ -125,9 +125,14 @@ int main(int argc, char **argv)
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition:  
    */
+  /* This definition is contingent to TYPE of MODEL at work from the pre-defined family of models:
+     DIFFUSION_BD_2D, DIFFUSION_HII_1D, ... 
+  */
   /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
   /* double p_2;         */ /* -Hp2 */ /* See below the definition of the
-                                       /* TOTAL_No_of_FREE_CONSUMERS_TIME_0 */ 
+                                       /* TOTAL_No_of_FREE_CONSUMERS_TIME_0 */
+  
+  // void Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
 
   Table.TOTAL_No_of_RESOURCES  = (int)(Table.p_1 * (double)Table.K_R);
   Table.TOTAL_No_of_CONSUMERS  = Table.No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
