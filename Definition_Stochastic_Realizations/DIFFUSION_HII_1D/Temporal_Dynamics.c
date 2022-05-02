@@ -10,7 +10,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   int MODEL_STATE_VARIABLES;
   int No_of_CELLS;
   int No_of_EVENTS;
-  double OutMigration, n_R, n_ARA, A_0, K_R;
+  double OutMigration, n_R, n_RA, A_0, K_R;
   
   Parameter_Model * pa  = Table->P;
 
@@ -20,7 +20,6 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   P = My_Community[0]; /* P could be used as a pointer to the zero-th to be incremented 
 			  if necessary (not used like that in this implementation) 
 		       */
-  
   No_of_CELLS             = pa->No_of_CELLS;
   MODEL_STATE_VARIABLES   = pa->MODEL_STATE_VARIABLES;
   Sp                      = pa->No_of_RESOURCES; 
@@ -37,15 +36,15 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
 
   K_R = (double)Table->K_R; 
   n_R = (double)Table->TOTAL_No_of_RESOURCES;
-  A_0 = (double)Table->TOTAL_No_of_CONSUMERS; 
+  A_0 = (double)Table->TOTAL_No_of_CONSUMERS;
 
   assert( No_of_CELLS == 1 );  /* The total number of consumers is globally constant, but
 				  the diffusion process changes this number locally. This 
-				  function calculates n_ARA of the cell by considering 
+				  function calculates n_RA of the cell by considering 
 				  the total number of consumers is constant and equal 
 				  to A_0. This is only true if we have only one cell!!! 
 			       */
-  
+
   for(i=0; i<No_of_CELLS; i++){
 
     P = My_Community[i];
@@ -53,7 +52,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch = 0; 
     n = 0;
 
-    n_ARA = 0.5 * (A_0 - (double)P->n[A] - (double)P->n[RA]); 
+    n_RA = (A_0 - (double)P->n[A]);  
     
     /* 0: Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
     OutMigration = P->Total_Per_Capita_Out_Migration_Rate[A];
@@ -73,18 +72,8 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* 3: Dimmer degration: handling */
-    P->rate[n] = Table->Nu_C_0;                           P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
-    P->ratePatch += P->rToI[n];
-    n++;
-
-    /* 4: Consumer interference: Triplet formation  */
-    P->rate[n] = Table->Chi_C_0 * (double)P->n[RA]/K_R;   P->rToI[n] = P->rate[n]*(double)P->n[A];
-    P->ratePatch += P->rToI[n];
-    n++;
-
-    /* 5: Consumer interference: Triplet degration */
-    P->rate[n] = Table->Eta_C_0;                          P->rToI[n]= P->rate[n]* n_ARA; 
+    /* 3: Dimmer degrations (production of two consumers */
+    P->rate[n] = Table->Nu_C_0;                           P->rToI[n]= P->rate[n]*n_RA; 
     P->ratePatch += P->rToI[n];
     n++;
 

@@ -397,7 +397,7 @@ stat.o:	${PROJECT_DIR}stat.c ${PROJECT_DIR}stat.h
 #
 
 clean:
-	rm -f *.o *~ core
+	rm -f *.o *~ core *.txt
 #
 COMPILATION_OPTIONS:
 	echo "Main model definition compilation options:" > ${EXE}_COMPILATION_OPTIONS.txt

@@ -27,6 +27,8 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table );
 
 void Print_Probability_Distribution ( Parameter_Table * Table ); 
 
+void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table); 
+
 int master_equation_driver( Parameter_Table * Table, int j, double * Time_Current );
 
 void Normalization_Master_Equation(Parameter_Table * Table); 

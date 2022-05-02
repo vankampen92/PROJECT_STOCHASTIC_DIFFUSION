@@ -5,7 +5,7 @@ void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table 
     /*  This definition is contingent to TYPE of MODEL at work from the pre-defined family of models:
 	DIFFUSION_BD_2D, DIFFUSION_HII_1D, ...
 
-	This definitions can be taken by both deterministic functions (associated to the ODE system
+	This definitions can be used by both deterministic functions (associated to the ODE system
 	numerical integration) or the stochastic functions (related to either the generation of 
 	stochastic replicates of the integration of the master equation). 
     */ 

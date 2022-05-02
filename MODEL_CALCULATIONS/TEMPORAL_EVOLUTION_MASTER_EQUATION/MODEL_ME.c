@@ -68,7 +68,15 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 								    Table->CPG->y_Time,
 								    Input_Parameter );
 #endif
-  
+
+  FILE * fp = fopen("Data_ODE_vs_ME_Marginals_0.dat", "w");
+  for(i=0; i<TIMES; i++)
+    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],  Table->CPG->y_Time[0][i], Table->Matrix_Output_Variables[0][i]);  
+  fclose(fp);
+         fp = fopen("Data_ODE_vs_ME_Marginals_1.dat", "w");
+  for(i=0; i<TIMES; i++)
+    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],  Table->CPG->y_Time[1][i], Table->Matrix_Output_Variables[1][i]);  
+  fclose(fp);
   
   Master_Equation_Free ( MEq );
 

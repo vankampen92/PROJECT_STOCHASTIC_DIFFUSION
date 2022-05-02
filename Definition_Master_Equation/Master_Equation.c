@@ -37,9 +37,10 @@ void Master_Equation_Allocation ( Master_Equation * ME,
   ME->Probability_Distribution_Time_0 = (double *)calloc(No_of_CONFIGURATIONAL_STATES,
 							sizeof(double));
 
-  if (n_DIMENSION == 1) 
+  if (n_DIMENSION == 1) {
     ME->P_n = (double *)calloc(n_x, sizeof(double) );
-
+    ME->P_n_Marginal = (double *)calloc(n_x, sizeof(double));
+  }
   else if (n_DIMENSION == 2) { 
     ME->P_nm = (double **)calloc(n_x, sizeof(double *)); 
     for(i=0; i<n_x; i++) 
@@ -81,9 +82,10 @@ void Master_Equation_Free ( Master_Equation * ME )
   free( ME->Probability_Distribution );
   free( ME->Probability_Distribution_Time_0 );
   
-  if (ME->n_DIMENSION == 1)
+  if (ME->n_DIMENSION == 1) {
     free( ME->P_n );
-
+    free(ME->P_n_Marginal);
+  }
   else if (ME->n_DIMENSION == 2) { 
     
     for(i=0; i<ME->n_x; i++) free (ME->P_nm[i]); 

@@ -6,11 +6,11 @@
 
 int function_ME (double t, const double y[], double dydt[], void *params)
 {
-  int i, No_of_CONFIGURATIONAL_STATES, n, m, m_0;
+  int i, No_of_CONFIGURATIONAL_STATES, n;
   int n_R; 
   int Sp; 
   double K_R, Theta, Nu; 
-  int    i_0, i_1, i_2;
+  int    i_0, i_1, i_2, a_0;
   double A_0, A_1, A_2;
   
   Parameter_Table * Table = (Parameter_Table *)params;
@@ -21,7 +21,7 @@ int function_ME (double t, const double y[], double dydt[], void *params)
 
   K_R   = (double)Table->K_R;
   n_R   = Table->TOTAL_No_of_RESOURCES;   /* which determines resource density */
-  m_0   = Table->TOTAL_No_of_CONSUMERS;
+  a_0   = Table->TOTAL_No_of_CONSUMERS;
   
   No_of_CONFIGURATIONAL_STATES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
 
@@ -30,32 +30,25 @@ int function_ME (double t, const double y[], double dydt[], void *params)
   
   for (i=0; i<No_of_CONFIGURATIONAL_STATES; i++) {
 
-    n = i/m_0;
-    m = i%m_0; 
+    n = i;
     
-    i_0 =(n-1)*m_0 + m+1;
-    i_1 = n   *m_0 + m-1;
-    i_2 = n   *m_0 + m;
+    i_0 = n; 
+    i_1 = n-1; 
+    i_2 = n+1; 
 
-    A_0 = Theta * (double)(m-1) * y[i_0];
-    A_1 = Nu * (double)(m_0-m+1) * y[i_1];
-    A_2 = ((Theta-Nu)*(double)m + Nu*(double)m_0) * y[i_2];  
+    A_2 = Theta * (double)(n+1) * y[i_2];
+    A_1 = Nu * (double)(a_0-n+1) * y[i_1];
+    A_0 = ((Theta-Nu)*(double)n + Nu*(double)a_0) * y[i_0];  
     
     if( n == 0 ) { 
-      if( m == 0 ) {
-	dydt[i] = -A_2;
-      }
-      else { 
-	dydt[i] = A_1 - A_2;
-      }
+      
+      dydt[i] = A_2 - A_0;
+      
     }
     else{
-      if( m == 0 ) {
-	dydt[i] = A_0 - A_2;
-      }
-      else {
-	dydt[i] = A_0 + A_1 - A_2;
-      }
+      
+      dydt[i] = A_2 + A_1 - A_0;
+
     }    
   }
   

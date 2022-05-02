@@ -63,8 +63,13 @@ gsl_rng * r; /* Global generator defined in main.c */
    Coarse-grained 2D system (two species 1R and 1C):
    .~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 4 -HX 2 -HY 2 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 50 -HN 50 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 100.0 -H0 0.01 -H5 0.01 -H6 0.5
 
+   Feeding experiments at a constant number of total consumers: 
+   .~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+
    More examples in ./command_line_examples.txt.
 */
+
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table);
 
 int main(int argc, char **argv)
 {
@@ -157,6 +162,10 @@ int main(int argc, char **argv)
   printf(" can be used, if required (1).\n");
 #endif
 
+  if(Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14) 
+    /* TOTAL_No_of_CONSUMERS is a CONSTANT */
+    Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
+    
   /* Deterministic Time Dynamics */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
@@ -209,3 +218,30 @@ int main(int argc, char **argv)
   printf("\nEnd of progam\n");
   return (0);
 }
+
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table)
+{
+      /* BEGIN : -------------------------------------------------------------------------
+       * Definition Initial Condition:  
+       */
+      /* This definition is contingent to TYPE of MODEL at work from the pre-defined family 
+	 of models:
+	 DIFFUSION_BD_2D, DIFFUSION_HII_1D, ... 
+      */
+      /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
+      /* double p_2;         */ /* -Hp2 */ /* See below the definition of the     */
+                                           /* TOTAL_No_of_FREE_CONSUMERS_TIME_0   */
+      Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
+      Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
+
+      assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
+      assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
+  
+      Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
+      Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_CONSUMERS - Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+      /* END ----------------------------------------------------------------------------
+	 This initial Condition involves no triplets at time t = 0.0 because the sum of states
+	 should add up the TOTAL No of CONSUMERS 
+      */
+}
+  

@@ -34,7 +34,8 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 
      2. definition_OutPut_Variables(...)
   */
-  int i; int State;
+  int i;
+  int State;
   // FILE *FP; char file[50];
   int j, k, kk;
   int TIMES;
@@ -55,7 +56,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
   Initial_Condition_Master_Equation( Table, Table->MEq->Probability_Distribution );
 
 #if defined VERBOSE
-  printf(" After Initial Condition Master Equation (...).");
+  printf(" After Initial Condition Master Equation (...)\n");
 #endif
   
   for (k=0; k < Table->MEq->No_of_CONFIGURATIONAL_STATES; k++) {
@@ -67,27 +68,24 @@ int master_equation_time_dynamics( Parameter_Table * Table )
   /*   END : Initial Conditions - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 #if defined VERBOSE
-  printf(" Initiating Numerical Integration Master Equaiton \n");
+  printf(" Initiating Numerical Integration Master Equation \n");
 #endif
   Marginal_Probability_Calculation ( Table );           /* At time zero */
   Marginal_Probability_Averages_Calculation ( Table );  /* At time zero */
   Print_Probability_Distribution ( Table );
-  printf("t = %g\t<n> = %g\t<m> = %g\n",
-	 Time_Current,
-	 Table->MEq->Vector_Model_Variables[0],
-	 Table->MEq->Vector_Model_Variables[1]);  
-  
+  Print_Marginal_Averages (Time_Current, Table);
+
 #if defined CPGPLOT_REPRESENTATION
   int SAME = 0;
-  assert(Table->MEq->n_DIMENSION <= 2);  
-  C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-						      0, Time_Current,
-						      SAME );
-    
-  C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-						      1, Time_Current,
-						      SAME );
-  Press_Key();
+  j = 0;
+  assert(Table->MEq->n_DIMENSION <= 2);
+  for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {  
+      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
+							  i, Time_Current,
+							  SAME);
+      Press_Key();
+  }
+ 
 #endif
   // SAME = 1
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
@@ -131,15 +129,13 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 					  Table);
       Table->Matrix_Output_Variables[k][j] = value;
     }
-    
-    assert(Table->MEq->n_DIMENSION <= 2);  
-    C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							0, Time_Current,
-							SAME );
-    
-    C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							1, Time_Current,
-							SAME );
+
+    for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {
+      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
+							  i, Time_Current,
+							  SAME);
+      Press_Key();
+    }
     // SAME = 1;
     Press_Key(); 
 #endif
@@ -192,12 +188,14 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
   double * x; 
   
   if(n == 0)       {
+    assert(ME->n_DIMENSION == 1); 
     y = ME->P_n_Marginal;
     x = (double *)calloc(ME->n_x, sizeof(double));
     for(i=0; i<ME->n_x; i++) x[i] = (double)i;
     No_of_POINTS = ME->n_x;
   }
   else if (n == 1) {
+    assert(ME->n_DIMENSION == 2); 
     y = ME->P_m_Marginal;
     x = (double *)calloc(ME->n_y, sizeof(double));
     for(i=0; i<ME->n_y; i++) x[i] = (double)i;
@@ -227,6 +225,10 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
 
   Plot_Title[0] ='\0';
   sprintf(Plot_Title, "Time = %5.2f", Current_Time);
+
+  CPG->type_of_Line   = 4;
+  CPG->type_of_Symbol = 25;
+  CPG->type_of_Width  = 3; 
   
   CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
 							No_of_POINTS, 

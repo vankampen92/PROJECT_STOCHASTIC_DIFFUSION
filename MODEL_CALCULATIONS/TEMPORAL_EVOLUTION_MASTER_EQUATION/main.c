@@ -17,11 +17,15 @@ gsl_rng * r; /* Global generator defined in main.c */
    Exectution:
    
    Single patch (-HM 1 -HX 2 -HY 1), and 3 species ---A, RA (and ARA, but only two dynamic
-   variables, A and RA. Notice -H11 [Chi] -H12 [Eta]. If these two parameters are zero, there 
-   is no triplet formation
+   variables, A and RA). Notice -H11 [Chi] -H12 [Eta]. If these two parameters are zero, there 
+   is no triplet formation, and the feeding model is HOLLING Type II (-H9 [Alpha] -H10 [Nu]). 
    
-   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 5 -t0 0.0 -t1 0.8 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 0.8 -G5 1 -G6 0.0 -G7 20 -HK 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 8.0 -H10 2.0 -H11 50.0 -H12 0.5 -Hp1 0.4 -Hp2 0.5 -HN 20
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 8.0 -H10 2.0 -H11 50.0 -H12 0.5 -Hp1 0.4 -Hp2 0.5 -HN 20
 
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   
+   . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 1 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 0.0 -H12 0.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   
   -Hp1: Resource Carrying Capacity Fraction   
   -Hp2: No of Free Predator a Time 0 Fraction 
   -HN: No_of_INDIVIDUALS (TOTAL No of CONSUMERS)
@@ -108,18 +112,6 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  /* Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0,                           */
-  /* 							 SUB_OUTPUT_VARIABLES, I_Time,   */
-  /* 							 0, CPG_DRIVER_NAME);            */
-  /* printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n"); */
-  /* printf(" These will open two windows (or two ploting devices of the same kind)\n"); */
-  /* printf(" Table.CPG will store deterministic dynamic variables to plot\n");          */
-  /* printf(" Table.CPG_STO will store stochastic dynamic variables to plot\n");         */
-  /* printf(" As a consquence, deterministic and stochastic dynamics can be plotted\n");        */
-  /* printf(" on the same device to compare (as it is done here, indicated by the first\n");    */
-  /* printf(" input argument (0) of the A_Ch_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T function).\n");  */
-  /* printf(" Alternatively, two different devices (two different pdf files, for instance)\n"); */
-  /* printf(" can be used, if required (1).\n"); */
 #endif
   
   /* BEGIN : -------------------------------------------------------------------------
@@ -156,7 +148,8 @@ int main(int argc, char **argv)
   M_O_D_E_L( &Table );
   
   // Some models does no have a stochastic master equation
-  // counter-part implemented yet! At the moment, only DIFFUSION_BD_2D does it
+  // counter-part implemented yet! At the moment, only DIFFUSION_BD_2D and
+  // DIFFUSION_HII_1D do
 #if defined DIFFUSION_BD_2D
   /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
@@ -166,6 +159,18 @@ int main(int argc, char **argv)
 						   */
   M_O_D_E_L___M_E( &Table );
 #endif
+
+#if defined DIFFUSION_HII_1D  
+  /* Stochastic Master Equation Time Evolution */
+  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
+						      parameter set as defined through
+						      either the command line or the 
+						      default files is used!!! 
+						   */
+  M_O_D_E_L___M_E( &Table );
+#endif
+
+
   
   /* BEGIN : -------------------------------------------------------------------------
    */
@@ -178,8 +183,7 @@ int main(int argc, char **argv)
                                                     Space->P_min->data, Space->No_of_PARAMETERS);
   /*  END : ------------------------------------------------------------------------*/
 
-  /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */
-
+  /* BEGIN : De-allocating All Memmory * * * * * * * * * * * */
 #include <include.Parameter_Space.default.free.c>
   Parameter_Space_Free(Space, No_of_PARAMETERS); free( Space );
 
@@ -193,7 +197,6 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
-  // P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG_STO, SUB_OUTPUT_VARIABLES );
   cpgclos();
 #endif
 

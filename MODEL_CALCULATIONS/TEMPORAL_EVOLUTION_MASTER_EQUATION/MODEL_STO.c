@@ -4,7 +4,7 @@ extern gsl_rng * r;
 
 extern int TYPE_of_TIME_DEPENDENCE;
 
-int M_O_D_E_L___M_E( Parameter_Table * Table )
+int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 {
   int i,j,k, n;
   int I_Time, no_Patch;

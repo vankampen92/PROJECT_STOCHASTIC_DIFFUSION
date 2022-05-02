@@ -144,6 +144,19 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table )
   ME->Vector_Model_Variables[1] = S; 
 }
 
+void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table)
+{
+  Master_Equation * ME = Table->MEq;
+  
+  assert(ME->n_DIMENSION == 2);
+  
+  printf("t = %g\t<n> = %g\t<m> = %g\n",
+	   Time_Current,
+	   ME->Vector_Model_Variables[0],
+	   ME->Vector_Model_Variables[1]);
+}
+
+
 void Print_Probability_Distribution ( Parameter_Table * Table )
 { 
   int n, m, A_0;
