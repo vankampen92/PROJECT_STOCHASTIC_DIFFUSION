@@ -26,8 +26,8 @@ int Advance_Current_Time( Parameter_Table * Table,
   /* Patch[0] and Patch[1] recover two patch labels of either: 
      1. Patch[0] suffers from outmigration and Patch[1] received an immigrated individual 
      or 
-     2. When Patch[0] is equal to Patch[1], the event occured in this patch does not 
-     involved any movement between patches
+     2. When Patch[0] is equal to Patch[1], the event occurred in this patch did not 
+     involve any movement between patches
   */
   
   int * Patch                = (int *)calloc(2, sizeof(int)); 
@@ -46,7 +46,9 @@ int Advance_Current_Time( Parameter_Table * Table,
     inter_event_time = -1./(Rate->Total_Rate) * log(RANDOM);
     (*Time_Current) += inter_event_time;
     
-    /* BEGIN : Stochastic Dynamic is actually performed : Village is updated accoundingly */
+    /* BEGIN : Stochastic Dynamic is actually performed : 
+               The Community "Village" is updated accoundingly 
+    */
     Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
@@ -68,9 +70,12 @@ int Advance_Current_Time( Parameter_Table * Table,
     // Trend_Time_Dependence( Table, (*Time_Current) );
   }
 
-  // Temporal_Dynamics(Village, Table, Rate); 
+#if defined STOCHASTIC_OPTIMIZATION 
   Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
-
+#else
+  Temporal_Dynamics(Village, Table, Rate);
+#endif
+  
   free(Patch); 
   /*   END: Calculation of Total Rate of Change */
 

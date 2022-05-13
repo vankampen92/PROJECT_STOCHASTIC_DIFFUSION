@@ -176,6 +176,61 @@ void Print_Probability_Distribution ( Parameter_Table * Table )
  
 }
 
+void Saving_Marginal_Distribution_Triplets(Parameter_Table * Table, int j, double Time_Current)
+{
+  /* This function saves the triplets marginal probability distributions at a particular time, 
+     Time_Current. 
+
+     As an input argument, it takes Table. A member of Table is MEq, which stores all the 
+     necessary information to save the whole distribution arising from the numerical integration
+     of the master equation or related calculations, and, of course, the marginals.
+     
+     This function is specific of MODEL=DIFFUSION_BD_2D. That is the reason why it is stored
+     in the corresponding model directory. 
+   */
+  /* Notice that the probability distribution is associated to a Time_Current around the 
+     j-th time in Time_Vector[j] 
+  */
+  int i, l, n, m, A_0, ARA_MAX;
+  double S;
+  int No_of_POINTS;
+  
+  Master_Equation * ME = Table->MEq;
+  
+  double * y;
+  double * x; 
+
+  assert(Table->TYPE_of_MODEL == 13);             // MODEL=DIFFUSION_BD_2D
+
+  A_0          = Table->TOTAL_No_of_CONSUMERS;    // A_0 + 1 = ME->n_x   
+  assert(A_0%2 == 0);
+  ARA_MAX      = Table->TOTAL_No_of_CONSUMERS/2;  
+  No_of_POINTS = 1 + Table->TOTAL_No_of_CONSUMERS/2;  
+  x = (double *)calloc(No_of_POINTS, sizeof(double));
+  y = (double *)calloc(No_of_POINTS, sizeof(double));
+
+  for(i=0; i < No_of_POINTS; i++) x[i] = (double)i;
+
+  for (l=0; l < No_of_POINTS; l++) {
+    S = 0.0;
+    for(n=0; n < ME->n_x-2*l; n++)
+      S += ME->P_nm[n][A_0-n-2*l];
+
+    y[l] = S; 
+  }
+ 
+  char * Marginal = (char *)calloc(100, sizeof(char));
+  char * pFile;
+
+  pFile = strcat(Marginal, "Marginal_Probability_Triplets");
+  pFile = strcat(Marginal, "_Time_");
+
+  printf("Saving Marginal Probability for Triplets at Time %g\n", Time_Current);  
+  Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);  
+  
+  free(Marginal); 
+  free(x); free(y); 
+}
 
 
 

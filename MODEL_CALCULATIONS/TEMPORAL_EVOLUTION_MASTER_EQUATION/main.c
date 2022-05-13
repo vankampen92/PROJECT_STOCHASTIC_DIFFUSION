@@ -10,9 +10,9 @@ gsl_rng * r; /* Global generator defined in main.c */
 /* This code calculates the temporal evolution of the master equation corresponding to 
    several resource-consumer models 
 
-   Compilation (see makefile variable MODEL):
+   Compilation (see first makefile variable MODEL to specify a given model to compile):
 
-   . ~$ make
+   . ~$ make 
 
    Exectution:
    
@@ -20,11 +20,13 @@ gsl_rng * r; /* Global generator defined in main.c */
    variables, A and RA). Notice -H11 [Chi] -H12 [Eta]. If these two parameters are zero, there 
    is no triplet formation, and the feeding model is HOLLING Type II (-H9 [Alpha] -H10 [Nu]). 
    
-   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 8.0 -H10 2.0 -H11 50.0 -H12 0.5 -Hp1 0.4 -Hp2 0.5 -HN 20
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 8.0 -H10 2.0 -H11 50.0 -H12 0.5 -Hp1 0.4 -Hp2 0.5 -HN 20 -tE 0.1
 
-   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20 -tE 0.1 
    
-   . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 1 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 0.0 -H12 0.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 1 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 1.0 -H11 0.0 -H12 0.0 -Hp1 0.3750 -Hp2 0.5 -HN 20
+
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 10000 -xn 0 -xN 40.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 40 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 40 -tE 0.1
    
   -Hp1: Resource Carrying Capacity Fraction   
   -Hp2: No of Free Predator a Time 0 Fraction 
@@ -111,7 +113,8 @@ int main(int argc, char **argv)
   }
 
 #if defined CPGPLOT_REPRESENTATION
-  Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  Table.CPG     = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T ( 1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME );
 #endif
   
   /* BEGIN : -------------------------------------------------------------------------
@@ -138,7 +141,6 @@ int main(int argc, char **argv)
      This initial Condition involves no triplets at time t = 0.0 because the sum of states
      should add up the TOTAL No of CONSUMERS 
   */
-  
   /* Deterministic Time Dynamics */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
 						      parameter set as defined through
@@ -146,10 +148,14 @@ int main(int argc, char **argv)
 						      default files is used!!! 
 						   */
   M_O_D_E_L( &Table );
-  
+
+#if defined STOCHASTIC_REALIZATIONS
+  M_O_D_E_L___S_T_O( &Table );
+#endif
+
   // Some models does no have a stochastic master equation
-  // counter-part implemented yet! At the moment, only DIFFUSION_BD_2D and
-  // DIFFUSION_HII_1D do
+  // counter-part implemented yet! 
+  // At the moment, only DIFFUSION_BD_2D and DIFFUSION_HII_1D do
 #if defined DIFFUSION_BD_2D
   /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
@@ -168,10 +174,7 @@ int main(int argc, char **argv)
 						      default files is used!!! 
 						   */
   M_O_D_E_L___M_E( &Table );
-#endif
-
-
-  
+#endif  
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];
@@ -196,6 +199,7 @@ int main(int argc, char **argv)
   else                        Time_Dependence_Control_Free( &Time_Dependence, &Table );
 
 #if defined CPGPLOT_REPRESENTATION
+  P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG_STO, SUB_OUTPUT_VARIABLES );
   P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
   cpgclos();
 #endif

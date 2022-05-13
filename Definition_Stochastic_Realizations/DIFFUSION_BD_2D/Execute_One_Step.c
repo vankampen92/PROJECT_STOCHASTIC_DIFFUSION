@@ -37,7 +37,7 @@ void Execute_One_Step(Community ** SP,
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
 
   if(Table->TOTAL_No_of_EVENTS > 1)
-    n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
+    n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 5 */
 
   else {
     printf(" The total number of events tant potentially could happen patch %d\n", x);
@@ -51,7 +51,6 @@ void Execute_One_Step(Community ** SP,
   A   = x*Table->LOCAL_STATE_VARIABLES + Table->A;
   RA  = x*Table->LOCAL_STATE_VARIABLES + Table->RA;
   
-
   assert( n_Event < Table->TOTAL_No_of_EVENTS );
 
   // Print_Meta_Community_Patch_System (Table);
@@ -76,10 +75,10 @@ void Execute_One_Step(Community ** SP,
       break;
 
     case 2: /* Consumer Consumption of Resource and dimmer formation */ /* R + A ---> RA */
-      Positivity_Control( 2, Table, x, R, Y[R], J[R] );
+      // Positivity_Control( 2, Table, x, R, Y[R], J[R] );
       Positivity_Control( 2, Table, x, A, Y[A], J[A] );
 
-      Y[R]--; J[R]--; Patch->n[Table->R]--;
+      // Y[R]--; J[R]--; Patch->n[Table->R]--;  Resources are maintained at a constant level
       Y[A]--; J[A]--;  Patch->n[Table->A]--;
 
       Y[RA]++; J[RA]++;  Patch->n[Table->RA]++;
@@ -94,7 +93,7 @@ void Execute_One_Step(Community ** SP,
 
       break;
 
-    case 4: /* Consumer Interference */                           /* RA + A ---> ARA */
+    case 4: /* Consumer Interference: Triplet formation */             /* RA + A ---> ARA */
       Positivity_Control( 4, Table, x, RA, Y[RA], J[RA] );
       Positivity_Control( 4, Table, x, A, Y[A], J[A] );
 
@@ -105,8 +104,7 @@ void Execute_One_Step(Community ** SP,
 
       break;
 
-    case 5: /* Degradation of triplets */                        /* ARA ---> RA + A */
-      
+    case 5: /* Consumer interference: Triplet degradation */          /* ARA ---> RA + A */
 
       Y[RA]++;  J[RA]++;   Patch->n[Table->RA]++;
       Y[A]++;   J[A]++;    Patch->n[Table->A]++;
@@ -115,8 +113,9 @@ void Execute_One_Step(Community ** SP,
 
       break;
        
-    default: /* Something is very very wrong!!! */
-      printf("The number of event occurring should be between 0 and 5\n");
+    default: 
+      printf(" Something is very very wrong!!!\n");
+      printf("The label of the event to occur should be between 0 and 5\n");
       printf("but your Event to Occur = %d\n", n_Event);
       printf("Something is very wrong. The program will stop\n"); 
       Press_Key();
@@ -173,19 +172,20 @@ void Positivity_Control( int Event, Parameter_Table * Table,
 
   if ( Patch[x]->n[nS] <= 0) Non_Positive = 1;
 
-  if( Non_Positive == 1 ) {
-    printf (" Event No %d:", Event);
-    printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
-    printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
-    printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
-    for(i=0; i<Table->TOTAL_No_of_EVENTS; i++) 
-      printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
-    for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) 
-      printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
+#if defined VERBOSE  
+  printf (" Event No %d:", Event);
+  printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
+  printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
+  printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
+  for(i=0; i<Table->TOTAL_No_of_EVENTS; i++) 
+    printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
+  for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) 
+    printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
+  
+  Print_Meta_Community_Patch_System (Table);
+#endif
 
-    Print_Meta_Community_Patch_System (Table);
-    // exit(0);
-  }
-
+  if( Non_Positive == 1 ) exit(0);
+  
 #endif
 }

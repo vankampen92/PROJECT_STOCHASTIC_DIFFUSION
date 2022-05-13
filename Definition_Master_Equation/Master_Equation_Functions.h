@@ -43,5 +43,14 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
 							 int j,
 							 int n, 
 							 double Time_Current,
-							 int SAME ); 
+							 int SAME );
 
+void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
+							   int j,
+							   int n, 
+							   double Time_Current,
+							   int SAME );
+
+void Saving_Marginal_Distribution(Parameter_Table * Table, int j, int n, double Time_Current); 
+
+void Saving_Marginal_Distribution_Triplets(Parameter_Table * Table, int j, double Time_Current); 

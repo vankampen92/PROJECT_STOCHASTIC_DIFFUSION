@@ -40,6 +40,17 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    */
   if (Table->No_of_CELLS > 4)
     Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+  else if (Table->No_of_CELLS == 1)
+    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 ) {
+      Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
+						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
+						   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
+    }
+    else {
+      Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
+							      Table->INITIAL_TOTAL_POPULATION,
+							      Table->INITIAL_TOTAL_POPULATION);
+    }
   else 
     Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
 								 Table->INITIAL_TOTAL_POPULATION);
@@ -112,7 +123,6 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   /* END: End of STOCHASTIC REALIZATIONS */
 
   /* BEGIN : Averaging and saving stochastic realizations */
-  /*         One file per each output variable            */  
   printf( " \nAs many as %d stochastic realizations have been successfully completed\n",
           Time->Realizations);
   printf( " Averages and Variances over the ensamble of realizations\n");
@@ -128,8 +138,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 							DATA_POINTS, Table->T->time_DEF, 
 							Table->T->AVE, Table->T->VAR ); 
 #endif
-  /*   END : Averaging stochastic realizations            */  
-
+  /*   END : Averaging stochastic realizations -------------------------*/  
+  
   free( Table->Vector_Model_Variables );
   free( Table->Vector_Model_Variables_Time_0 ); 
   free( Table->Vector_Model_Int_Variables );
@@ -140,3 +150,4 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   return(0);
 }
+

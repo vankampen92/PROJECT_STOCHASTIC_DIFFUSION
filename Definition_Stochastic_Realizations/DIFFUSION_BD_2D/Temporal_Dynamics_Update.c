@@ -45,11 +45,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 
     if (Type_of_Event < n ) {
       
-      assert( Type_of_Event != 0 ) ; /* Because these are out
+      assert( Type_of_Event != 0 ) ; /* Because 0 labels an out
 					migration events. Only
 					possible when x patch 
 					is different from y patch
-							   */
+				     */
       
       Pa    = My_Community[x];
       Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); 
@@ -83,8 +83,8 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   }
   else {         /* MOVEMENT EVENT involving two Patches */
 		 /* Out migration sending one individual (C) 
-		    out from patch 'x' to patch 'y'      */
-    
+		    out from patch 'x' to patch 'y'      
+		 */
     assert( Type_of_Event == 0 ) ; 
     
     /* Changes in rates due to the loss of an individual in patch x */

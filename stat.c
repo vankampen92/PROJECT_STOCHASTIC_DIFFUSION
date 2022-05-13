@@ -1099,6 +1099,39 @@ void abundance_distribution_int(int Pop[], int Sp, int * Relative_Abundance, int
   }
 }
 
+void probability_distribution_from_stochastic_realizations(double * y, int Realizations,
+							   double * p, int p_DIM )
+{
+  /* Input: 
+     . y is an array with a number of 'Realizations' of a stochastic variable that takes 
+     integer values.  
+     . p_DIM is the max dimension of the p array
+     
+     Output: 
+     . p is the distribution (normalized to one) with the relative appearance of those 
+     integer values in the array y. 
+
+     For this algorithm to work, p_DIM > MAX_i ( y[i] ), and p should have been initialized 
+     with calloc() to make sure all its entries are zero. 
+  */
+  
+  int i, Pop;
+  for(i=0; i < Realizations; i++){
+    Pop = (int)y[i];
+    if(Pop < p_DIM) p[Pop]++;
+    else {
+      printf(" The dimension of the distribution vector, p, is too low (p_DIM = %d)\n", p_DIM);
+      printf(" It is lower than required. p_DIM should be larger or equal to MAX_i ( y[i] )\n");
+      printf(" This p vector should be allocated with a higher dimension.\n");
+      printf(" The program will exit\n");
+      exit(0);
+    }
+  }
+
+  Norma_Total_0_J(p, p_DIM-1);
+}
+
+
 void abundance_distribution(int Pop[], int Sp, double Relative_Abundance[], int No)
 {
   int i;
@@ -1195,7 +1228,7 @@ void Norma_Total_0_J(double *Relative_Abundance, int J)
   summ = 0.; Dumm = Relative_Abundance;
 
   for(i=0; i<= J; i++) summ += *Dumm++;
-  if(summ > 0.){
+  if(summ > 0.0){
     Dumm = Relative_Abundance;
     for(i=0; i<= J; i++) *Dumm++ /= summ;
   }
@@ -1233,7 +1266,7 @@ void Norma(double Relative_Abundance[], int No)
   double summ;
   summ = 0.;
   for(i=0; i<= No+1; i++) summ += Relative_Abundance[i];
-  if(summ > 0.)
+  if(summ > 0.0)
     for(i=0; i<= No+1; i++) Relative_Abundance[i] /= summ;
   else{
     printf("ERROR... Summ = 0 --> Non-normalizable probability\n");
