@@ -68,21 +68,26 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   //  Parameter Table dependent costumized plotting is defined in
   //  ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
   int TIMES           = Table->T->I_Time;
-  int Input_Parameter = 0; /* The value of this model parameter appears in the title */
   //  Axes redefinition:
   Table->CPG->CPG_RANGE_X_0 = 0.0;  Table->CPG->CPG_RANGE_X_1 = Table->CPG->x_Time[TIMES-1];  
   Table->CPG->CPG_RANGE_Y_0 = 0.0;  Table->CPG->CPG_RANGE_Y_1 = (double)Table->No_of_INDIVIDUALS;
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E(Table,
-								    TIMES,
-								    Table->CPG->x_Time,
-								    Table->Matrix_Output_Variables,
-								    Input_Parameter );
-  Press_Key(); 
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E(Table,
-								    TIMES,
-								    Table->CPG->x_Time,
-								    Table->CPG->y_Time,
-								    Input_Parameter );
+  Table->CPG->CPG_SCALE_Y   = 1;    Table->CPG->CPG_SCALE_X   = 1;
+  SAME_PLOT = 0;
+  C_P_G___S_U_B___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T( SAME_PLOT,
+						       Table, TIMES,
+						       Table->CPG->x_Time,
+						       Table->Matrix_Output_Variables);
+  SAME_PLOT = 1;
+  Press_Key();
+  /* New colors and lines */
+  Table->CPG->color_Index   = 3;
+  Table->CPG->type_of_Width = 2;
+  Table->CPG->type_of_Line  = 2;
+  Table->CPG->type_of_Symbol = 5; 
+  C_P_G___S_U_B___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T( SAME_PLOT,
+						       Table, TIMES,
+						       Table->CPG->x_Time,
+						       Table->CPG->y_Time);
 #endif
 
   FILE * fp = fopen("Data_ODE_vs_ME_Marginals_0.dat", "w");
