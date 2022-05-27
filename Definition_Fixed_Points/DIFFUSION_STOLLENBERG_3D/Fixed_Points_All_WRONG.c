@@ -43,17 +43,16 @@ void Fixed_Points_All( Parameter_Table * Table,
 	printf("Only self-maintained resources with extintion of consumers\n");
       }
       else {
-
-	q = (b_R-1)/b_R; 
-	x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
 	
-	if ( q > x) {
+	q = b_R/(b_R-1.0) * (d_C + u)/a;
+	
+	if (b_C/d_C < 1.0 + q) {
 	  /* 2: Coexistence of resources and consumers */
-	 
-	  y = b_R/a * ( q - x);
-       
-	  z = 1/(b_C/d_C - 1.0) * y; 
-
+	  
+	  z = ((b_C + u) * b_R - a * (b_R -1.0) * (b_C/d_C - 1.0)) / a/(b_C/d_C - 1.0) /a/(b_C/d_C - 1.0);
+	  y = (b_C/d_C - 1.0) * z;
+	  x = b_R/(b_R-1)  + a/b_R * y; 
+	  
 	  Vector_Stationarity_Lower[R]   = x; 
 	  Vector_Stationarity_Lower[A]   = y; 
 	  Vector_Stationarity_Lower[RA]  = z;
@@ -61,10 +60,9 @@ void Fixed_Points_All( Parameter_Table * Table,
 	  printf("Peacefull coexistence of resources and consumers\n"); 
 	}
 	else {
-	  /* 3: Over-exploitation of resources by greedy consumers and system total collapse and 
-	        resoruces recover to carrying capacity 
-	  */
-	  Vector_Stationarity_Lower[R]   = 1.0 - 1.0/b_R; 
+	  /* 3: Over-exploitation of resources by greedy consumers and system total collapse */
+
+	  Vector_Stationarity_Lower[R]   = 0.0;
 	  Vector_Stationarity_Lower[A]   = 0.0;
 	  Vector_Stationarity_Lower[RA]  = 0.0;
 
@@ -100,7 +98,7 @@ int  Coexistence_Condition ( Parameter_Table * Table )
 {
   int Condition_Bool; 
   double b_R, b_C, d_C, a, u;
-  double q, x; 
+  double q; 
 
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->No_of_CELLS == 1) {  
     b_R = Table->Beta_R/Table->Delta_R_0; 
@@ -109,13 +107,11 @@ int  Coexistence_Condition ( Parameter_Table * Table )
     a   = Table->Alpha_C_0/Table->Delta_R_0;
     u   = Table->Nu_C_0/Table->Delta_R_0; 
     
-    q = b_R/(b_R-1);
+    q = b_R/(b_R-1) * (d_C + u)/a;
     
-    x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
-
-    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x) Condition_Bool = 1;
+    if( b_R > 1.0 && b_C/d_C > 1.0 && b_C/d_C < 1.0 + q) Condition_Bool = 1;
     
-    else                                     Condition_Bool = 0;
+    else                                                 Condition_Bool = 0;
   
   }
   else {
@@ -138,7 +134,7 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
   double Condition_Double;
 
   double b_R, b_C, d_C, a, u;
-  double q, x; 
+  double q; 
 
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->No_of_CELLS == 1) {  
     
@@ -148,13 +144,11 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
     a   = Table->Alpha_C_0/Table->Delta_R_0;
     u   = Table->Nu_C_0/Table->Delta_R_0; 
     
-    q = b_R/(b_R-1);
-
-    x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
-
-    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x ) Condition_Bool = 1;
-       
-    else                                      Condition_Bool = 0;
+    q = b_R/(b_R-1) * (d_C + u)/a;
+    
+    if( b_R > 1.0 && b_C/d_C > 1.0 && b_C/d_C < 1.0 + q) Condition_Bool = 1;
+    
+    else                                                 Condition_Bool = 0;
    
   }
   else {
@@ -196,7 +190,7 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
   double Type_of_Stability_Double; 
 
   double b_R, b_C, d_C, a, u;
-  double q, x; 
+  double q; 
 
   b_R = Table->Beta_R/Table->Delta_R_0; 
   b_C = Table->Beta_C/Table->Delta_R_0;
@@ -208,9 +202,7 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
 
     Type_of_Stability = Coexistence_Condition ( Table );
 
-    q = b_R/(b_R-1);
-
-    x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
+    q = b_R/(b_R-1) * (d_C + u)/a;
     
     if (Type_of_Stability == 0 ) {
       /* When there is no coexistence, we distinguish 3 different situations:
@@ -220,12 +212,12 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
       */
       if ( b_R < 1.0 )             Type_of_Stability = 0; 
       /* 0: Self-maintainance of resources by themselves in the absence of cosumers is not possible */
+     
       else if( b_C/d_C < 1.0 )     Type_of_Stability = 1; 
       /* 1: Only self-maintained resources with extintion of consumers */
-      else if( q < x )             Type_of_Stability = 1; 
-      /* 1: Over-exploitation of resources by greedy consumers. Consumers go extinct and the 
-	    system bounces back upto carrying capacity. In the end, only self-maintained 
-            resources persist in the system*/
+
+      else if( b_C/d_C > 1.0 + q ) Type_of_Stability = 3; 
+      /* 3: Over-exploitation of resources by greedy consumers and system total collapse */
 	      
       else {
 	printf("Something very wrong in function Function_to_Type_of_Stability(...)\n"); 
@@ -236,9 +228,9 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
     }
     else {
       /* When there is coexistence, we distinguish 3 different situations:
-	 2: Coexistence to a fixed point with non-damped oscillations
-	 3: Coexistence to a fixed point with damped oscillations 
-	 4: Coexistence to a an periodic atractor of limit cycles
+	 20: Coexistence to a fixed point with non-damped oscillations
+	 21: Coexistence to a fixed point with damped oscillations 
+	 22: Coexistence to a an periodic atractor of limit cycles
       */
       
       double * Y0 = (double *)calloc(Table->MODEL_STATE_VARIABLES, sizeof(double) );
@@ -266,21 +258,20 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
       }
       
       if(Value_D < 0.0) {
-	if(Y2[Index_D] == 0.0)       Type_of_Stability = 2;
-	else if (Y2[Index_D] != 0.0) Type_of_Stability = 3;
+	if(Y2[Index_D] == 0.0)       Type_of_Stability = 20;
+	else if (Y2[Index_D] != 0.0) Type_of_Stability = 21;
       }
-      else                           Type_of_Stability = 4; 
-
-#if defined VERBOSE      
-      if (Type_of_Stability == 2) printf("%d: Stability: Non-Damped Oscillations\n",
+      else Type_of_Stability = 22; 
+      
+      if (Type_of_Stability == 20) printf("%d: Stability: Non-Damped Oscillations\n",
 					  Type_of_Stability); 
-      if (Type_of_Stability == 3) printf("%d: Stability: Damped Oscillations\n",
+      if (Type_of_Stability == 21) printf("%d: Stability: Damped Oscillations\n",
 					  Type_of_Stability); 
-      if (Type_of_Stability == 4) printf("%d: Unstability: Limits Cycles\n",
+      if (Type_of_Stability == 22) printf("%d: Unstability: Limits Cycles\n",
 					  Type_of_Stability);
       
       Write_Parameter_Table( Table, Table->TOTAL_No_of_MODEL_PARAMETERS ); 
-#endif      
+      
       
       free(Y0); free(Y1); free(Y2);    
     }

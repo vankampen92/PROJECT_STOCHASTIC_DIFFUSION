@@ -24,20 +24,29 @@
 
    Otherwise, if the parametric function depends only on the parametric configuration, 
    the main code becomes simpler, as done here. Examples of such funcitons are 
-   R_0 or any output variable that depends on the stationary state of the system. 
+   R_0 or any output variable that depends on the stationary state of the system.
 
-   In this example, for the DIFFUSION_1R1C model, a three-valued parametric function 
-   is defined representing the qualitative different dynamics obtained for different
-   parameteric configurations (stable end points, damped oscillatins, extinction of 
-   consumers...): 
+   The case of Function_to_Type_of_Stability(...), the number of different dynamic
+   regimes that this function distinguish should coincide with the dimension of the
+   Color_States[] array.  
 
-   . Function (Parameter_Table * Table) == 0, for only resources
+   In this example, for the consumer-resource models, a five-valued parametric function 
+   is defined representing the qualitative different dynamic regimes obtained for 
+   different parameteric configurations (collapse, only resources, stable end point wint 
+   non-damped oscillations, stable points with damped oscillatins, and limit cycles): 
 
-   . Function (Parameter_Table * Table) == 1, for stable coexistce of resources
-   and consumers
+   . Function (Parameter_Table * Table) == 0, for no resources nor consumres
+
+   . Function (Parameter_Table * Table) == 1, for only resources 
 
    . Function (Parameter_Table * Table) == 2, for stable coexistce of resources
-   and consumers and damped oscillations 
+   and consumers with non-damped tendency to the stable point 
+
+   . Function (Parameter_Table * Table) == 3, for stable coexistce of resources
+   and consumers with damped oscillations 
+
+   . Function (Parameter_Table * Table) == 4, for stable coexistce of resources
+   and consumers with limit cycles  
 
    Other functions, for other models, can be defined in a similar way. 
 
@@ -60,7 +69,13 @@ Index  Argument   Parameter Definition
 16:   -H9 5.0     Consumer Attack Rate
 17:   -H10 1.0    Consumer Handling Time
 18:   -H11 0.0    Rate of Triplet Formation 
-19:   -H12 1.0    Rate of Triplet Degradation
+19:   -H12 0.0    Rate of Triplet Degradation
+24:   -H17 1.0    Consumer growth rate (Beta_C_0)
+
+For example, the main function input arguments 
+-I0 16 Consumer Attack Rate 
+-I1 17 Consumer Handling Time
+defined the parameter space to explore. 
 
    Extension of MacArthur and Rosenweig (4D: R, A, RA, ARA) with consumer interference. Notice -H11 [Xhi] and -H12 [Eta]. If these are zero, the model collapses into a 3D without consumer interference
    . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100  -I1 17 -m1 1.0 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 1.5 -H1 0.5 -H6 5.0 -H9 10.0 -H10 2.0 -H11 0.0 -H12 0.0
@@ -77,6 +92,8 @@ Index  Argument   Parameter Definition
    . ~$ ./DIFFUSION_MR   -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 16 -m1 1.0 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 10.0 -H10 2.0
 
    . ~S ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 16 -m1 1.0 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 10.0 -H10 2.0 -H11 0.0 -H12 0.0
+
+   . ~S ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 16 -m1 1.0 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
 */
 
 gsl_rng * r; /* Global generator defined in main.c */
@@ -160,69 +177,119 @@ int main(int argc, char **argv)
 							       sizeof(double) );
   /* B E G I N : Main Function Call -------------------------------------------------*/  
   double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
-  int Status =  generic_Function_Parameter_2Dim_Scan(&Table, 
-						     No_of_POINTS_1, Input_Parameter_1,
-						     No_of_POINTS_2, Input_Parameter_2,
-						     Function_to_Type_of_Stability, 
-						     W_GRID, "Coexistence_Condition.dat");
+  /* int Status =  generic_Function_Parameter_2Dim_Scan(&Table,                            */
+  /* 						     No_of_POINTS_1, Input_Parameter_1,    */
+  /* 						     No_of_POINTS_2, Input_Parameter_2,    */
+  /* 						     Function_to_Type_of_Stability,        */
+  /* 						     W_GRID, "Coexistence_Condition.dat"); */
+  int X_LINEAR, Y_LINEAR;
+  // X_LINEAR = 0; Y_LINEAR = 0;    /* Both axes linear */
+  // X_LINEAR = 0; Y_LINEAR = 1; /* X axis linear and Y axis logarithmic */
+  X_LINEAR = 1; Y_LINEAR = 0; /* X axis logarithmic and Y axis linear */
+  // X_LINEAR = 1; Y_LINEAR = 1; /* Both axes logarithmic */
+  int Status =  generic_Function_Parameter_2Dim_Scan_Improved(&Table, 
+							      No_of_POINTS_1, Input_Parameter_1,
+							      No_of_POINTS_2, Input_Parameter_2,
+							      Function_to_Type_of_Stability, 
+							      W_GRID, "Coexistence_Condition.dat",
+							      X_LINEAR, Y_LINEAR);
   /*   E N D : ----------------------------------------------------------------------*/
   free(Table.Vector_Model_Variables_Stationarity);
   
 #if defined CPGPLOT_REPRESENTATION
   /* BEGIN : 2D GRID cpgplot representation */
-      /*********************************************************************/
-      Table.CPG->X_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_1]; 
-      Table.CPG->Y_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_2]; 
-      /*********************************************************************/
+  /*********************************************************************/
+  Table.CPG->X_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_1]; 
+  Table.CPG->Y_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_2]; 
+  /*********************************************************************/
       
-      Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
-      Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
+  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
+  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
 
-      /* X Axis: Log Scale */
-      Table.CPG->ORIGIN_X    = log10(Value_0);
-      Table.CPG->X_Dimension = log10(Value_1) - log10(Value_0);
-      /* Table.CPG->ORIGIN_X    = Value_0;            */
-      /* Table.CPG->X_Dimension = Value_1 - Value_0;  */
-      
-      Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_min );
-      Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX );
-
-      /* Y Axis: Linear Scale */
-      /* Table.CPG->ORIGIN_Y = log10(Value_0);                     */
-      /* Table.CPG->Y_Dimension = log10(Value_1) - log10(Value_0); */
-      Table.CPG->ORIGIN_Y = Value_0;
-      Table.CPG->Y_Dimension = Value_1 - Value_0;
-      
-      Table.CPG->x_GRID  = No_of_POINTS_1; 
-      Table.CPG->y_GRID  = No_of_POINTS_2;
-      
-      int Output_Variable  = Table.OUTPUT_VARIABLE_INDEX[0];
-      Table.CPG->W_label   = Table.Output_Variable_Name[Output_Variable];
-
-      Table.CPG->Title[0]='\0';  
-      // pF = strcat(Table.CPG->Title, "Type of Stability Regimes (axes in log scale)");
-      pF = strcat(Table.CPG->Title, "Type of Stability Regimes (X axis in log scale)");
-
-      double * Color_States = (double *)calloc(4, sizeof(double));
-      Color_States[0] = 3.0;  /* green  */ /* Only Resources                      */
-      Color_States[1] = 2.0;  /* Red    */ /* Coexistence: non-damped oscillions  */
-      Color_States[2] = 5.0;  /* Blue   */ /* Coexistence: damped oscillations    */
-      Color_States[3] = 8.0;  /* Orange */ /* Coexistence: limit cycles           */
-      
-      int FIRST_PLOT = 0;
-      double i_PLOT  = 0.0;
-      C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S( Table.CPG,
-								    W_GRID, 
-								    FIRST_PLOT,
-								    4, Color_States,
-								    0 );
-      FIRST_PLOT = 1;
-      C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S___F_R_A_M_E(Table.CPG,
-      									     W_GRID,
-      									     FIRST_PLOT,
-      									     4, Color_States,
-      									     0 );
-      free(Color_States);
+  if (X_LINEAR == 0 ) {
+    /* X Axis: Linear Scale */
+    Table.CPG->ORIGIN_X    = Value_0;            
+    Table.CPG->X_Dimension = Value_1 - Value_0;  
+  }
+  else if( X_LINEAR == 1) {
+    /* X Axis: Log Scale */
+    Table.CPG->ORIGIN_X    = log10(Value_0);
+    Table.CPG->X_Dimension = log10(Value_1) - log10(Value_0);
+  }
+  else {
+    printf(" X_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
+    printf(" The program will exit\n");
+    Press_Key();
+    exit(0); 
+  }
+  
+  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_min );
+  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX );
+  
+  if (Y_LINEAR == 0 ) {
+    /* Y Axis: Linear Scale */
+    Table.CPG->ORIGIN_Y = Value_0;
+    Table.CPG->Y_Dimension = Value_1 - Value_0;
+  }
+  else if (Y_LINEAR == 1 ) {
+    /* Y Axis: Log Scale */
+    Table.CPG->ORIGIN_Y = log10(Value_0);                     
+    Table.CPG->Y_Dimension = log10(Value_1) - log10(Value_0); 
+  }
+  else {
+    printf(" y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
+    printf(" The program will exit\n");
+    Press_Key();
+    exit(0); 
+  }
+  
+  Table.CPG->x_GRID  = No_of_POINTS_1; 
+  Table.CPG->y_GRID  = No_of_POINTS_2;
+  
+  int Output_Variable  = Table.OUTPUT_VARIABLE_INDEX[0];
+  Table.CPG->W_label   = Table.Output_Variable_Name[Output_Variable];
+  
+  Table.CPG->Title[0]='\0';
+  
+  if ( X_LINEAR == 0 & Y_LINEAR == 1 )
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (Y axis in log scale)");
+  else if ( X_LINEAR == 1 & Y_LINEAR == 0 )
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (X axis in log scale)");
+  else if ( X_LINEAR == 1 & Y_LINEAR == 1 )
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axis in log scale)");
+  else if ( X_LINEAR == 0 & Y_LINEAR == 0 )
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axis in linear scale)");
+  else {
+    printf(" y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
+    printf(" The program will exit\n");
+    Press_Key();
+    exit(0); 
+  }
+  
+  int No_of_COLOR_STATES = 5;
+  double * Color_States = (double *)calloc(No_of_COLOR_STATES, sizeof(double));
+  Color_States[0] = 1.0;  /* Black  */ /* Collapse                              */
+  Color_States[1] = 3.0;  /* Green  */ /* Only Resouces (non-coexistence)       */
+  Color_States[2] = 7.0;  /* Yellow */ /* Coexistence: non damped oscillations  */
+  Color_States[3] = 8.0;  /* Orange */ /* Coexistence: damped oscillations      */
+  Color_States[4] = 2.0;  /* Red    */ /* Coexistence: limit cycles             */
+  
+  int FIRST_PLOT = 0;
+  double i_PLOT  = 0.0;
+  C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S( Table.CPG,
+								W_GRID, 
+								FIRST_PLOT,
+								No_of_COLOR_STATES,
+								Color_States,
+								0 );
+  FIRST_PLOT = 1;
+  C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S___F_R_A_M_E(Table.CPG,
+									   W_GRID,
+									   FIRST_PLOT,
+									   No_of_COLOR_STATES,
+									   Color_States,
+									   0 );
+  free(Color_States);
 #endif    
   /*   END : 2D GRID cpgplot representation */
   free(W_GRID);

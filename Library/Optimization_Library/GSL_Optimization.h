@@ -5,6 +5,14 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
                                           double * W_GRID,
                                           char * generic_Function_Parameter_Scan_Output_File );
 
+int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
+                                          int No_of_POINTS_1, int Input_Parameter_1,
+                                          int No_of_POINTS_2, int Input_Parameter_2,
+                                          double (* GENERIC_FUNCTION) (Parameter_Table *),
+                                          double * W_GRID,
+                                          char * generic_Function_Parameter_Scan_Output_File,
+					  int X_LINEAR, int Y_LINEAR);
+
 double Function_to_Minimize( Parameter_Table * );
 
 
