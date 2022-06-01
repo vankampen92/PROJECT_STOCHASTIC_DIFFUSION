@@ -23,15 +23,15 @@
                                              Parameters required to define the potential  
                                              functional time dependence of each model parameter
                                           */
-#define DEPENDENT_PARAMETERS_MAXIMUM 29   /* Maximum number of potentially forced parameters */
+#define DEPENDENT_PARAMETERS_MAXIMUM 30   /* Maximum number of potentially forced parameters */
 
-#define MODEL_PARAMETERS_MAXIMUM 29      /* Maximum No of MODEL (input) PARAMETERS */
+#define MODEL_PARAMETERS_MAXIMUM 30      /* Maximum No of MODEL (input) PARAMETERS */
                                          /* The total number of parameters in all 
 					    model-paramater-related assign functions.
 					    This is the whole parameter pool from which a 
 					    parameter subspace can be defined for 
 					    optimization searches and parameter scans  
-					    for any given model
+					    for any specified model
 					 */
 #ifdef DIFFUSION_1RnC_E
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
@@ -61,6 +61,8 @@
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_BD_2D.h"
 #elif defined DIFFUSION_BD_3D
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_BD_3D.h"
+#elif defined DIFFUSION_STOLLENBERG_4D
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_STOLLENBERG_4D.h"
 #endif
 
 typedef struct totalRateinfo

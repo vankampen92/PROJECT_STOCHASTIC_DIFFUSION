@@ -50,7 +50,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 
 #if defined STOCHASTIC_REALIZATIONS  
  /* BEGIN : Representing distributions associated to output variables across 
-             stochastic realization
+            stochastic realization
  */  
 #if defined CPGPLOT_REPRESENTATION
   int SAME_PLOT = 1;
@@ -62,11 +62,23 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   							  SAME_PLOT );
   Press_Key();
 #endif
-  /*   END : Empirical Distribuiton Representation -----------------------*/
-#endif   
+ /*   END : Empirical Distribuiton Representation -----------------------*/
+  
+  /* Saving also the last time in a file */
+  j = Table->T->I_Time - 1;
+  assert(Table->MEq->n_DIMENSION <= 2);
+  Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Table,
+							      j, Table->T->Time_Vector[j] );
+#endif
+  
 #if defined CPGPLOT_REPRESENTATION
   //  Parameter Table dependent costumized plotting is defined in
   //  ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
+  // Plotting the temporal evolution of the averages of the dynamical variables (which
+  // should match the output variables for this work) calculated with the marginals from
+  // the numerical integration of the master equation vs the densities calculated with
+  // the ODE system.
+  
   int TIMES           = Table->T->I_Time;
   //  Axes redefinition:
   Table->CPG->CPG_RANGE_X_0 = 0.0;  Table->CPG->CPG_RANGE_X_1 = Table->CPG->x_Time[TIMES-1];  
@@ -194,7 +206,7 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
   F       =  Table->T->Realizations - Table->T->count[j];
   for(i=0; i<Table->T->Realizations; i++) {
     
-    if( Table->T->Variable[i][n][j] == 0 ) {
+    if( Table->T->Variable[i][n][j] == 0.0 ) {
       if (count < F) count++;
       else           y[i_valid++] = Table->T->Variable[i][n][j];
     }
@@ -261,6 +273,136 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
 
   free(Plot_Title); free(Plot_Time); free(Time_Eraser);
   free(x); free(y); free(p); 
+}
+
+void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table * Table,
+								 int j,
+								 double Time_Current)
+{
+  /* This function save the empirical probability distributions from stochastic 
+     replicates vs the numerical integration of the Master Equaiton at Time_Current, which 
+     corresponds to the j-th time of the Time Vector stored in Table->T->Time_Vector. 
+
+     As input, it takes Table. A member of Table is T, a pointer to a Time_Control structure 
+     that stores all the necessary information to plot these distributions across stochastic 
+     realizations. 
+     
+     This empirical distributions can be compared with the probability distribution 
+     from the numerical integration of the master equation only if the first output variable
+     is also the first dynamic variable and so on. If the output variables are NOT the same 
+     dynamic variables encoded in the master equation (also in the same order), this comparision 
+     will, of course, fail.
+
+     For a 2D system, the output file will be a 4-columns file with this structure: 
+
+     n  m  P_e  P_nm
+
+
+     For a 1D system, the output file will be a 3-columns file with this structure: 
+
+     n  P_e  P_n
+     
+     where P_e is the empirical probability and P_n is the result from performing 
+     the numerical integration of the Master Equation until time Time_Current. 
+  */
+  
+  /* Notice that the probability distribution is associated to a Time_Current 
+     around the j-th time in Time_Vector[j] 
+  */
+  int i, n, m; 
+  FILE * fp; 
+  Master_Equation * ME = Table->MEq;
+
+  double * y;
+  double * x;
+  double * P_n;
+  double ** P_nm;
+ 
+  int F; /* F: Number of errors at the j-th time across realizations; */ 
+  int count, i_valid, valid_realizations; 
+
+  fp = fopen("Probability_Distribution_Empirical_vs_Numerical.dat", "w");
+  
+  if( ME->n_DIMENSION == 1 ) {
+   
+    P_n = (double *)calloc(ME->n_x, sizeof(double));
+    x   = (double *)calloc(Table->T->Realizations, sizeof(double));
+
+    count   = 0;
+    i_valid = 0; 
+    F       =  Table->T->Realizations - Table->T->count[j];
+    for(i=0; i<Table->T->Realizations; i++) {
+      
+      if( Table->T->Variable[i][0][j] == 0.0 ) {
+	if (count < F) count++;
+	else           x[i_valid++] = Table->T->Variable[i][0][j];
+      }
+      else {
+	x[i_valid++] = Table->T->Variable[i][0][j];
+      }
+    }
+    valid_realizations = i_valid;
+	    
+    probability_distribution_from_stochastic_realizations( y, valid_realizations, 
+							   P_n, ME->n_x );
+
+    for(i = 0; i<ME->n_x; i++)
+      fprintf(fp, "%d\t%g\t%g\n", i, P_n[i], ME->P_n[i]);
+
+    free(x); free(P_n); 
+  }
+  
+  else if ( ME->n_DIMENSION == 2 ) {
+
+    P_nm = (double **)calloc(ME->n_x, sizeof(double *)); 
+    for(i=0; i<ME->n_x; i++) 
+      P_nm[i] = (double *)calloc(ME->n_y, sizeof(double));
+
+    x   = (double *)calloc(Table->T->Realizations, sizeof(double));
+    y   = (double *)calloc(Table->T->Realizations, sizeof(double));
+
+    count   = 0;
+    i_valid = 0; 
+    F       =  Table->T->Realizations - Table->T->count[j];
+    for(i=0; i<Table->T->Realizations; i++) {
+      
+      if( Table->T->Variable[i][0][j] == 0.0 && Table->T->Variable[i][1][j] == 0.0 )  {
+	if (count < F)
+	  count++;
+	else {
+	  x[i_valid] = Table->T->Variable[i][0][j];
+	  y[i_valid] = Table->T->Variable[i][1][j];
+	  i_valid++; 
+	}
+      }
+      else {
+	x[i_valid] = Table->T->Variable[i][0][j];
+	y[i_valid] = Table->T->Variable[i][1][j];
+	i_valid++;
+      }
+    }
+    
+    valid_realizations = i_valid;
+    probability_distribution_from_stochastic_realizations_2D (x, y, valid_realizations,
+							      P_nm, ME->n_x, ME->n_y);
+    for(n = 0; n<ME->n_x; n++)
+      for(m = 0; m<ME->n_y; m++) 
+	fprintf(fp, "%d\t%d\t%g\t%g\n", n, m, P_nm[n][m], ME->P_nm[n][m]);
+
+    free(x); free(y);
+    
+    for(i=0; i<ME->n_x; i++) 
+      free(P_nm[i]);
+    free(P_nm); 
+  }
+  
+  else {
+    printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
+    printf("The program will exit\n");
+    Press_Key();
+    exit(0); 
+  }
+  fclose(fp); 
 }
 
 

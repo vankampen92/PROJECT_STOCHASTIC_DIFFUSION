@@ -150,6 +150,7 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_1R1C             TYPE_of_MODEL = 2
      . MODEL=DIFFUSION_1R1C_2D_STO-4D   TYPE_of_MODEL = 8
      . MODEL=DIFFUSION_STOLLENBERG_3D   TYPE_of_MODEL = 10
+     . MODEL=DIFFUSION_STOLLENBERG_4D   TYPE_of_MODEL = 15
      . MODEL=DIFFUSION_BD_2D            TYPE_of_MODEL = 13
      . MODEL=DIFFUSION_BD_3D            TYPE_of_MODEL = 14
      . MODEL=DIFFUSION_HII_2D           TYPE_of_MODEL = 9
@@ -157,7 +158,7 @@ void Community_Initialization (Community ** PATCH,
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9){
+  if(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9){
     Event_Delta_Matrix_Initialization(PATCH, P);
     Event_Adjacence_List_Initialization(PATCH, P);
   }
@@ -166,7 +167,7 @@ void Community_Initialization (Community ** PATCH,
     printf(" The program will exit\n");
   }
   
-  assert(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9);
+  assert(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9);
 #endif
 }
 

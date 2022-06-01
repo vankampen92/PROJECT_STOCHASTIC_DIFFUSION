@@ -71,6 +71,8 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break; 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;  
+    case 29:  p = strcat(Label, "Propagule Establishment Rate");
+      break;  
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);
@@ -177,6 +179,8 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
     case 27:  p = strcat(Label, "$p_1$");   
       break; 
     case 28:  p = strcat(Label, "$p_2$");   
+      break;
+    case 29:  p = strcat(Label, "$\\eta_R$");   
       break;
       
     default:

@@ -91,6 +91,7 @@ typedef struct Parameter_Tableinfo
   char ** Model_Variable_Symbol;
 
   int K;
+  int RP; 
   int R;
   int A;
   int AC; 

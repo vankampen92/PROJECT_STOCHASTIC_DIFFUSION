@@ -23,18 +23,26 @@ int function (double t, const double y[], double dydt[], void *params)
 
   for (j=0; j<Table->No_of_CELLS; j++) {
 
+    RP  = j*Table->LOCAL_STATE_VARIABLES + Table->RP;
     R   = j*Table->LOCAL_STATE_VARIABLES + Table->R;
     A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
     RA  = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
 
-    dydt[R] = -Table->Delta_R_0 *y[R] +Table->Lambda_R_0 *(K_R-y[R]) +Table->Beta_R *(K_R-y[R])/K_R *y[R] -Table->Alpha_C_0 *y[R]/K_R *y[A];
+    /* Lambda_R_0 represents an exteral passive
+       source of propagules arriving in the local
+       patches. 
+    */
+    dydt[RP] = Table->Lambda_R_1 -Table->Delta_R_1 *y[RP] + Table->Beta_R *y[R] - Table->Eta_R *(1.0 - y[R]/K-R) *y[RP];             
     
-    dydt[A] = Table->Lambda_C_0 -Table->Delta_C_0 *y[A] +Table->Nu_C_0 *y[RA] +Table->Beta_C*y[RA] -Table->Alpha_C_0 *y[R]/K_R *y[A] ;
+    dydt[R]  = -Table->Delta_R_0 *y[R]  +Table->Eta_R *(K_R-y[R])/K_R *y[RP] -Table->Alpha_C_0 *y[R]/K_R *y[A];
+    
+    dydt[A]  = Table->Lambda_C_0 -Table->Delta_C_0 *y[A] +Table->Nu_C_0 *y[RA] +Table->Beta_C*y[RA] -Table->Alpha_C_0 *y[R]/K_R *y[A] ;
 
     dydt[RA] = -Table->Delta_C_0*y[RA] +Table->Alpha_C_0 *y[R]/K_R *y[A] -Table->Nu_C_0*y[RA] ;
 
   }
 
+  
   if( Table->No_of_CELLS > 1) {   
     n= 0; 
     for (j=0; j<Table->No_of_CELLS; j++) { 

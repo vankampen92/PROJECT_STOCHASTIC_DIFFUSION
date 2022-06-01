@@ -89,7 +89,8 @@ fprintf(fp, "Energy Level at Maturity              ---> -H16   %d\n",  i_0);    
 fprintf(fp, "Consummer Reproduction Rate           ---> -H17   %g\n",   Beta_C);       /* -H17 */
 fprintf(fp, "2* k_E: resourse value in energy units ---> -H18    %d\n", k_E);          /* -H18 */
 fprintf(fp, "Maintenance Energy Loss Rate           ---> -H19   %g\n",  Theta_C);      /* -H19 */
-fprintf(fp, "Cooperation probability 1st position   ---> -Hp1   %g\n", p_1);           /* -H20 */
-fprintf(fp, "Cooperation probability 2on position   ---> -Hp2   %g\n", p_2);           /* -H21 */
+fprintf(fp, "Cooperation probability 1st position   ---> -Hp1   %g\n", p_1);           /* -Hp1 */
+fprintf(fp, "Cooperation probability 2on position   ---> -Hp2   %g\n", p_2);           /* -Hp2 */
 
+fprintf(fp, "Propagule Establishment Rate           ---> -H20   %g\n", Eta_R);         /* -H20 */
 #endif

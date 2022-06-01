@@ -72,10 +72,11 @@ Index  Argument   Parameter Definition
 19:   -H12 0.0    Rate of Triplet Degradation
 24:   -H17 1.0    Consumer growth rate (Beta_C_0)
 
-For example, the main function input arguments 
--I0 16 Consumer Attack Rate 
--I1 17 Consumer Handling Time
-defined the parameter space to explore. 
+Index is the number key in full list of model parameters (see assigb functions). 
+They are main function input arguments, for instnace:  
+             -I0 16 Consumer Attack Rate 
+             -I1 17 Consumer Handling Time
+which here define the 2D parameter space to explore. 
 
    Extension of MacArthur and Rosenweig (4D: R, A, RA, ARA) with consumer interference. Notice -H11 [Xhi] and -H12 [Eta]. If these are zero, the model collapses into a 3D without consumer interference
    . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100  -I1 17 -m1 1.0 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 1.5 -H1 0.5 -H6 5.0 -H9 10.0 -H10 2.0 -H11 0.0 -H12 0.0
@@ -169,7 +170,6 @@ int main(int argc, char **argv)
 
   P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( &Table, Par_Values) ;
 
-
   /* This vector is used by Fixed_Points_All(...) function, 
      which is called by Function_to_Type_of_Stability 
   */
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
   /* 						     Function_to_Type_of_Stability,        */
   /* 						     W_GRID, "Coexistence_Condition.dat"); */
   int X_LINEAR, Y_LINEAR;
-  // X_LINEAR = 0; Y_LINEAR = 0;    /* Both axes linear */
+  // X_LINEAR = 0; Y_LINEAR = 0; /* Both axes linear */
   // X_LINEAR = 0; Y_LINEAR = 1; /* X axis linear and Y axis logarithmic */
   X_LINEAR = 1; Y_LINEAR = 0; /* X axis logarithmic and Y axis linear */
   // X_LINEAR = 1; Y_LINEAR = 1; /* Both axes logarithmic */
@@ -256,9 +256,9 @@ int main(int argc, char **argv)
   else if ( X_LINEAR == 1 & Y_LINEAR == 0 )
     pF = strcat(Table.CPG->Title, "Type of Stability Regimes (X axis in log scale)");
   else if ( X_LINEAR == 1 & Y_LINEAR == 1 )
-    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axis in log scale)");
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axes in log scale)");
   else if ( X_LINEAR == 0 & Y_LINEAR == 0 )
-    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axis in linear scale)");
+    pF = strcat(Table.CPG->Title, "Type of Stability Regimes (both axes in linear scale)");
   else {
     printf(" y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
     printf(" The program will exit\n");

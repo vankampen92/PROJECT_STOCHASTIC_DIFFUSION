@@ -70,7 +70,9 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 27:  p = strcat(Label, "-Hp1");   
       break; 
     case 28:  p = strcat(Label, "-Hp2");   
-      break; 
+      break;
+    case 29:  p = strcat(Label, "-H20");   
+      break;
 
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);

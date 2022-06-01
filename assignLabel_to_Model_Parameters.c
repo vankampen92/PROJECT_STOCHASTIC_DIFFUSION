@@ -78,6 +78,8 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #endif      
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;
+    case 29:  p = strcat(Label, "Propagule Establishment Rate");
+      break;
       
     default:
       printf(".... INVALID PARAMETER KEY [key = %d]\n", j);

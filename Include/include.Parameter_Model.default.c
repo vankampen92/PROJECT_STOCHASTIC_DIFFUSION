@@ -42,5 +42,6 @@ Theta_C = 0.0;        /* -H19 */ /* Energy loss rate for maintenance */
 p_1 = 1.0;            /* -H20 */ /* Cooperation probability 1st position in the triplet */ 
 p_2 = 1.0;            /* -H21 */ /* Cooperation probability 2on position in the triplet */ 
 
+Eta_R = 1.0;          /* -H20 */ /* Propagule establishment rate */
 
 #include <include.Type_of_Model.default.c>

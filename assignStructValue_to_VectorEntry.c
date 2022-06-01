@@ -109,6 +109,9 @@ double AssignStructValue_to_VectorEntry(int j, Parameter_Table * P)
       
     case 28: value = P->p_2        ; /* Cooperation probability 2on position in the triplet */  
       break;
+
+    case 29: value = P->Eta_R     ; /* Propagule Establishment Rate  */  
+      break;
       
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", j);

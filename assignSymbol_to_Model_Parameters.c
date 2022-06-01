@@ -73,6 +73,8 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break; 
     case 28:  p = strcat(Label, "p\\d2\\u");   
       break;
+    case 29:  p = strcat(Label, "\\ge\\dR\\u");   
+      break;
       
       
     default:
@@ -189,10 +191,13 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       
     case 28:  p = strcat(Label, "p_2");   
       break;
-      
+
+    case 29:  p = strcat(Label, "Eta_R");   
+      break;
+    
     default:
       printf(".... INVALID PARAMETER KEY [key=%d]\n", j);
-      printf(".... The permited correspondences are (0 to 12)\n");
+      printf(".... The permited correspondences are (0 to 29)\n");
       printf("\n");
       fprintf_Model_Parameters(stdout, P);
       exit(0);

@@ -78,15 +78,27 @@
 		}
 	      }
 
-              else if(argv[argcount][2]=='2')   fprintf(fp, "-H2 %g  ",
-						        Table->Lambda_R_1);                /* 2 */
+              else if(argv[argcount][2]=='2') { 
+		if(argv[argcount][3]=='\0')   
+		  fprintf(fp, "-H2 %g  ", Table->Lambda_R_1);                /* 2 */
 
+		else if(argv[argcount][3]=='0')
+		  fprintf(fp, "-H20 %g ", Table->Eta_R);                     /* 20 */
+
+		else {
+		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
+		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);
+		  printf(" The program will exit\n");
+		  exit(0);
+		}
+		
+              } 
 	      else if(argv[argcount][2]=='p')   {
-		if(argv[argcount][3]=='1')  fprintf(fp, "-Hp1  %lf",    /* 20 */
+		if(argv[argcount][3]=='1')  fprintf(fp, "-Hp1  %lf",                     /* p1 */
 						   Table->p_1); 
 						        
 		else if(argv[argcount][3]=='2')  fprintf(fp, "-Hp2  %lf",
-						   Table->p_2);                          /* 21 */
+						   Table->p_2);                          /* p2 */
 		else {
 		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
 		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);

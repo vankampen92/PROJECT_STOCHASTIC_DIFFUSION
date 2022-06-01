@@ -166,7 +166,14 @@ void accum_Diversity_Histogram(int *, int, double *, double *);
 void accum_Histogram(double *, int, double *, double *);
 void Norma(double [], int);
 void Norma_Total_a_J(float *, int, int);
-void probability_distribution_from_stochastic_realizations(double * y, int Realizations, double * p, int p_DIM );
+void probability_distribution_from_stochastic_realizations(double * y,
+							   int Realizations,
+							   double * p, int p_DIM );
+void probability_distribution_from_stochastic_realizations_2D(double * x, double * y,
+							      int Realizations,
+							      double ** p,
+							      int p_DIM_x, int p_DIM_y );
+void Norma_2D_Nx_Ny(double **Relative_Abundance, int No_x, int No_y); 
 void Norma_Total_0_J(double *, int);
 void Norma_Total_0_J_Percentage(double *, int);
 void Norma_2D(double **, int);

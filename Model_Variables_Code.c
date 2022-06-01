@@ -653,7 +653,57 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
+
+    case 15: /* DIFFUSION_STOLLENBERG_4D * * * * * * * * * * * * * * * * * * * * * * */
+
+      /* No_of_EVENTS, i.e, common events that can occur to every Species: */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) 
+				          P and A can undergo these three same processes 
+				      */
+      Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 7;
+      Table->LOCAL_STATE_VARIABLES = 4; /* 1 RP + 1 R + 1 C + 1 D                 */
+                                        /* D \equiv RA (handling consumer) */
       
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class */
+      Table->RP = 0; Table->R = 1;  Table->A = 2; Table->RA = 3; 
+
+      /* List of (Potentially searcheable) model parameters:  */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+      Table->Index[n++] = 0; /* Propagule Movement Rate */ 
+      Table->Index[n++] = 5; /* No_of_RESOURCES */ 
+
+      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+      Table->Index[n++] = 7; /* Death Rate (0) */
+      Table->Index[n++] = 9; /* Death Rate (1) */
+       
+      Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
+      
+      Table->Index[n++]   = 11; /* Resource Local Growth Rate */
+
+      Table->Index[n++]   = 12; /* Consumer External Immigration Rate */
+      Table->Index[n++]   = 13; /* Consumer Death Rate */
+      
+      Table->Index[n++]   = 16; /* Consumer Attack Rate */
+      Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time */
+      
+      Table->Index[n++]   = 20; /* Consumer Movement Rate  */
+
+      Table->Index[n++]   = 24; /* Consumer Local Growth Rate */
+
+      Table->Index[n++]   = 29; /* Propagule Establishment Rate */
+      
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
       printf(" Models (0 to 10): Check input argument list!!!\n");
@@ -856,6 +906,18 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       break; 
 
     case 14: /* DIFFUSION_BD_3D * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	  n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 15: /* DIFFUSION_BD_4D * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)

@@ -66,7 +66,7 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
     switch(j)
       {
       case  0:
-	p = strcat(Label , "<n>");         /*  0: Density: No of Individuals per Cell */
+	p = strcat(Label , "<n>");       /*  0: Density: No of Individuals per Cell */
         break;
       case  1:
 	p = strcat(Label , "s");         /*  1: SDV: No of Individuals per Cell */
@@ -306,6 +306,15 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       p = strcat(L[1], "ARA");
       
       break;
+
+    case  15:
+      p = strcat(L[0], "RP");
+      p = strcat(L[1], "A");
+      p = strcat(L[2], "RA");
+      p = strcat(L[3], "ARA");
+      
+      break;
+  
       	
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);

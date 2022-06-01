@@ -8,13 +8,13 @@ int No_of_CELLS_X;          /* No of CELLS X Dimension         */
 int No_of_CELLS_Y;          /* No of CELLS X Dimension         */
 int No_of_RESOURCES;
 
-double Lambda_R_0; 
-double Delta_R_0; 
-double Lambda_R_1; 
-double Delta_R_1; 
-int K_R;              /* Resource Carrying Capacity */ 
+double Lambda_R_0;    /* -H0 */
+double Delta_R_0;     /* -H1 */
+double Lambda_R_1;    /* -H2 */
+double Delta_R_1;     /* -H3 */
+int K_R;              /* -HK: Resource Carrying Capacity */ 
 
-double Beta_R;         /* -H5 */ 
+double Beta_R;         /* -H4 */ 
   
 double Lambda_C_0;     /* -H5 */
 double Delta_C_0;      /* -H6 */
@@ -37,6 +37,8 @@ int k_E;               /* -H18 */ /* 2* k_E is the resourse value in energy unit
 double Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
 double p_1;            /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
 double p_2;            /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
+
+double Eta_R;          /* -H20 */ /* Propagule establishment rate */
 
 /* Type of model */
 #include <include.Type_of_Model.global.h>

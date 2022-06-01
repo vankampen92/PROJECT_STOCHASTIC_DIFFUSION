@@ -54,3 +54,7 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
 void Saving_Marginal_Distribution(Parameter_Table * Table, int j, int n, double Time_Current); 
 
 void Saving_Marginal_Distribution_Triplets(Parameter_Table * Table, int j, double Time_Current); 
+
+void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table * Table,
+								 int j,
+								 double Time_Current);

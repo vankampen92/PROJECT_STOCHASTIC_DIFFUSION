@@ -79,15 +79,24 @@
 		}
 	      }
 
-	      else if(argv[argcount][2]=='2')   sscanf(argv[argcount+1],"%lf",
-						   &Lambda_R_1);                   /* 2 */
+	      else if(argv[argcount][2]=='2') {  
+		if(argv[argcount][3]=='\0')   sscanf(argv[argcount+1],"%lf", &Lambda_R_1); /* 2 */
+		
+		else if(argv[argcount][3]=='0') sscanf(argv[argcount+1],"%lf", &Eta_R); /* 20 */
 
+		else {
+		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
+		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);
+		  printf(" The program will exit\n");
+		  exit(0);
+		}
+	      }		 
 	      else if(argv[argcount][2]=='p')   {
-		if(argv[argcount][3]=='1')  sscanf(argv[argcount+1],"%lf",         /* 20 */
+		if(argv[argcount][3]=='1')  sscanf(argv[argcount+1],"%lf",         /* p1 */
 						   &p_1); 
 						        
 		else if(argv[argcount][3]=='2')  sscanf(argv[argcount+1],"%lf",
-						   &p_2);                          /* 21 */
+						   &p_2);                          /* p2 */
 		else {
 		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
 		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);

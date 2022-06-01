@@ -30,8 +30,10 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
   P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
   P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
-  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
-  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  P_Destination->p_1        = P_Source->p_1;     /* -Hp1 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -Hp2 */  /* 2on Cooperation probability  */
+
+  P_Destination->Eta_R      = P_Source->Eta_R;    /* -H20 */  /* 2on Cooperation probability  */ 
 
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -134,8 +136,10 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Beta_C     = Table->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
   P->k_E        = Table->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
   P->Theta_C    = Table->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
-  P->p_1        = Table->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
-  P->p_2        = Table->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  P->p_1        = Table->p_1;     /* -Hp1 */ /* 1st Cooperation probability  */ 
+  P->p_2        = Table->p_2;     /* -Hp2 */  /* 2on Cooperation probability  */ 
+
+  P->Eta_R      = Table->Eta_R;    /* -H20 */  /* 2on Cooperation probability  */
   
   P->No_of_IC = Table->No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = Table->TYPE_of_INITIAL_CONDITION;
@@ -231,8 +235,10 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
   P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
   P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
-  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
-  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  P_Destination->p_1        = P_Source->p_1;     /* -Hp1 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -Hp2 */  /* 2on Cooperation probability  */ 
+
+  P_Destination->Eta_R      = P_Source->Eta_R;    /* -H20 */  /* 2on Cooperation probability  */ 
   
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
@@ -328,9 +334,11 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->Beta_C     = P_Source->Beta_C;  /* -H17 */ /* Consummer Reproduction Rate */
   P_Destination->k_E        = P_Source->k_E;     /* -H18 */ /* 2*k_E resourse value energy units */
   P_Destination->Theta_C    = P_Source->Theta_C; /* -H19 */ /* Energy loss rate for maintenance */
-  P_Destination->p_1        = P_Source->p_1;     /* -H21 */ /* 1st Cooperation probability  */ 
-  P_Destination->p_2        = P_Source->p_2;    /* -H22 */  /* 2on Cooperation probability  */ 
+  P_Destination->p_1        = P_Source->p_1;     /* -Hp1 */ /* 1st Cooperation probability  */ 
+  P_Destination->p_2        = P_Source->p_2;    /* -Hp2 */  /* 2on Cooperation probability  */ 
 
+  P_Destination->Eta_R      = P_Source->Eta_R;    /* -H20 */  /* 2on Cooperation probability  */ 
+  
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;
   P_Destination->INITIAL_TOTAL_POPULATION  = P_Source->INITIAL_TOTAL_POPULATION;
@@ -485,6 +493,9 @@ void Vector_Entry_into_Parameter_Model ( double value, int key, Parameter_Model 
   case 28: P->p_2        = value; /* Cooperation probability 2on position in the triplet */  
     break;
 
+  case 29: P->Eta_R     = value; /* Propagule Establishment Rate  */  
+    break;
+
   default:
     printf(".... INVALID PARAMETER KEY (key = %d)\n", key);
     printf(" The maximum number of parameters is Number_PAR_MAX\n");
@@ -584,6 +595,9 @@ double Parameter_Model_into_Vector_Entry ( int key, Parameter_Model * P )
     break;
     
   case 28: value = P->p_2        ; /* Cooperation probability 2on position in the triplet */  
+    break;
+
+  case 29: value = P->Eta_R      ; /* Propagule Establishment Rate  */  
     break;
 
   default:

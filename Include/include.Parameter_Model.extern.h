@@ -4,12 +4,13 @@ extern double Mu;                  /* Jumping Rate                    */
 extern int No_of_CELLS;         /* No of CELLS                     */
 extern int No_of_CELLS_X;         /* No of CELLS X Dimension         */
 extern int No_of_CELLS_Y;         /* No of CELLS Y Dimension         */
-extern int No_of_RESOURCES; 
-extern double Lambda_R_0; 
-extern double Delta_R_0; 
-extern double Lambda_R_1; 
-extern double Delta_R_1; 
-extern int K_R;              /* Resource Carrying Capacity */ 
+extern int No_of_RESOURCES;
+
+extern double Lambda_R_0;    /* -H0 */
+extern double Delta_R_0;     /* -H1 */
+extern double Lambda_R_1;    /* -H2 */
+extern double Delta_R_1;     /* -H3 */
+extern int K_R;              /* -HK: Resource Carrying Capacity */ 
 
 extern double Beta_R;        /* -H5 */ 
   
@@ -34,5 +35,7 @@ extern int k_E;               /* -H18 */ /* 2* k_E is the resourse value in ener
 extern double Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
 extern double p_1;     /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
 extern double p_2;     /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
+
+extern double Eta_R;           /* -H20 */ /* Propagule establishment rate */
 
 #include <include.Type_of_Model.extern.h>

@@ -3,7 +3,6 @@ double x, K_R;
   K_R = (double)Table->K_R;
 
   /* F_R( y; parameters) */
-
   x= -Table->Lambda_R_0 -Table->Delta_R_0 +Table->Beta_R -2.0*Table->Beta_R*y[R]/K_R -Table->Alpha_C_0 *y[A]/K_R;
   gsl_matrix_set(m, R, 0, x);
 
@@ -14,7 +13,6 @@ double x, K_R;
   gsl_matrix_set(m, R, 2, x);
 
   /* F_A( y; parameters) */
-
   x= -Table->Alpha_C_0 *y[A]/K_R;
   gsl_matrix_set(m, A, 0, x);
 

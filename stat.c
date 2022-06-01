@@ -1131,6 +1131,70 @@ void probability_distribution_from_stochastic_realizations(double * y, int Reali
   Norma_Total_0_J(p, p_DIM-1);
 }
 
+void probability_distribution_from_stochastic_realizations_2D(double * x, double * y,
+							      int Realizations,
+							      double ** p,
+							      int p_DIM_x, int p_DIM_y )
+{
+  /* Input: 
+     . x is an array with a number of 'Realizations' of the first stochastic variable that takes 
+     integer values.  
+     . x is an array with a number of 'Realizations' of the first stochastic variable that takes 
+     . p_DIM_x is the max dimension of the p array along the first dimension
+     . p_DIM_y is the max dimension of the p array along the second dimension
+     
+     To be clear, the result of the i-th replicate was
+     
+     (x[i], y[i]) 
+
+     and so on and so forth from i=0 to i=Realizations-1
+
+     Output: 
+     . p is the distribution (normalized to one) with the relative appearance of those 
+     integer values in the data (x, y). 
+
+     For this algorithm to work, p_DIM_x > MAX_i ( x[i] ), and p_DIM_y > MAX_i ( y[i] ), 
+     but 'p' should have been initialized with calloc() to make sure all its entries are 
+     zero. 
+  */
+  
+  int i, Pop_x, Pop_y;
+  for(i=0; i < Realizations; i++){
+    Pop_x = (int)x[i];
+    Pop_y = (int)y[i];
+    
+    if(Pop_x < p_DIM_x && Pop_y < p_DIM_y )  p[Pop_x][Pop_y]++;
+    else {
+      printf(" The dimension of the distribution matrix, p, is too low (p_DIM_x = %d)\n", p_DIM_x);
+      printf(" The dimension of the distribution matrix, p, is too low (p_DIM_y = %d)\n", p_DIM_y);
+      printf(" It is lower than required\n");
+      printf(" p_DIM_x should be larger or equal to MAX_i ( x[i] ) and \n");
+      printf(" p_DIM_y should be larger or equal to MAX_i ( y[i] ).\n");
+      printf(" This p matrix should be allocated with higher dimensions.\n");
+      printf(" The program will exit\n");
+      exit(0);
+    }
+  }
+
+  Norma_2D_Nx_Ny(p, p_DIM_x, p_DIM_y ); 
+}
+
+void Norma_2D_Nx_Ny(double **Relative_Abundance, int No_x, int No_y)
+{
+  int i,j;
+  double summ;
+  
+  summ = 0.;
+  for(i=0; i< No_x; i++)
+    for(j=0; j< No_y; j++)
+      summ += Relative_Abundance[i][j];
+
+  for(i=0; i< No_x; i++)
+    for(j=0; j< No_y; j++)
+      Relative_Abundance[i][j] /= summ;
+}  
+
+
 
 void abundance_distribution(int Pop[], int Sp, double Relative_Abundance[], int No)
 {
