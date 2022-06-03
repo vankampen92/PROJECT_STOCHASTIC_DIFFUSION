@@ -9,9 +9,11 @@ gsl_rng * r; /* Global generator defined in main.c */
 
 /* This code calculates the stochastic and determinisitic temporal evolution of several resource-consumer models 
 
-   Compilation (see makefile variable MODEL):
+   Compilation (see makefile variable MODEL). Some compilation commands as example:
 
    . ~$ make
+   . ~$ make STATIONARITY=STATIONARY_POINT_REPRESENTATION MODEL=DIFFUSION_STOLLENBERG_4D
+   . ~$ make STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION MODEL=DIFFUSION_STOLLENBERG_4D
 
    Exectution:
    
@@ -58,8 +60,12 @@ gsl_rng * r; /* Global generator defined in main.c */
    and plain model variables.
 
    MODEL = DIFFUSION_STOLLENBERG_4D
-   Single patch (-HM 1 -HX 1 -HY 1), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation. It is a 4D system, with only four local model variables (RP, R, A, RA).
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 - H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
+   Single patch (-HM 1 -HX 1 -HY 1), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation. It is a 4D system, with only four local model variables (RP, R, A, RA). 
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
+   This example produces a limit cycle. 
+  
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+   This example produces damped oscillations
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.

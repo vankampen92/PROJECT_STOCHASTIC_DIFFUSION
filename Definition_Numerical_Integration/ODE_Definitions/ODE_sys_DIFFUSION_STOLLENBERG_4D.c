@@ -28,11 +28,14 @@ int function (double t, const double y[], double dydt[], void *params)
     A   = j*Table->LOCAL_STATE_VARIABLES + Table->A;
     RA  = j*Table->LOCAL_STATE_VARIABLES + Table->RA;
 
-    /* Lambda_R_0 represents an exteral passive
+    /* Lambda_R_1 represents an exteral passive
        source of propagules arriving in the local
-       patches. 
+       patches.
+       Lambda_C_0 represents an exteral passive
+       source of searching animals arriving in the local
+       patches.
     */
-    dydt[RP] = Table->Lambda_R_1 -Table->Delta_R_1 *y[RP] + Table->Beta_R *y[R] - Table->Eta_R *(1.0 - y[R]/K-R) *y[RP];             
+    dydt[RP] = Table->Lambda_R_1 -Table->Delta_R_1 *y[RP] + Table->Beta_R *y[R] - Table->Eta_R *(K_R-y[R])/K_R *y[RP];             
     
     dydt[R]  = -Table->Delta_R_0 *y[R]  +Table->Eta_R *(K_R-y[R])/K_R *y[RP] -Table->Alpha_C_0 *y[R]/K_R *y[A];
     

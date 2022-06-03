@@ -439,9 +439,11 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->Beta_C     = Beta_C;         /* -H17 */ /* Consummer Reproduction Rate */
   P->k_E        = k_E;            /* -H18 */ /* 2* k_E is the resourse value in energy units */
   P->Theta_C    = Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
-  P->p_1        = p_1;    /* -H21 */ /* Cooperation probability 1st position in the triplet */ 
-  P->p_2        = p_2;    /* -H22 */ /* Cooperation probability 2on position in the triplet */ 
+  P->p_1        = p_1;    /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
+  P->p_2        = p_2;    /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
 
+  P->Eta_R      = Eta_R;  /* -H20 */ /* Propagule establisment Rate */
+  
   P->No_of_IC = No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = TYPE_of_INITIAL_CONDITION;
   P->INITIAL_TOTAL_POPULATION  = INITIAL_TOTAL_POPULATION;

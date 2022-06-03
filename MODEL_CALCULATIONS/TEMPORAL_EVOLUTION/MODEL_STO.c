@@ -134,10 +134,10 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 	 DATA_POINTS, I_Time);
 
 #if defined CPGPLOT_REPRESENTATION
-  SAME_PLOT = 1; 
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___E_R_R_O_R___B_A_R ( Table, SAME_PLOT, 
-							DATA_POINTS, Table->T->time_DEF, 
-							Table->T->AVE, Table->T->VAR ); 
+  // SAME_PLOT = 1; 
+  // C_P_G___S_U_B___P_L_O_T_T_I_N_G___E_R_R_O_R___B_A_R ( Table, SAME_PLOT, 
+  //							DATA_POINTS, Table->T->time_DEF, 
+  //							Table->T->AVE, Table->T->VAR ); 
 #endif
   /*   END : Averaging stochastic realizations            */  
 

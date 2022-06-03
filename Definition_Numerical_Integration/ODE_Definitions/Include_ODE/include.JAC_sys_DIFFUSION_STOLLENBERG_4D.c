@@ -19,7 +19,7 @@ double x, K_R;
   x = Table->Eta_R *(1.0 - y[R]/K_R); 
   gsl_matrix_set(m, R, 0, x);
 
-  x= -Table->Delta_R_0 +Table->Eta_R *y[RP]/K_R -Table->Alpha_C_0 *y[A]/K_R;
+  x= -Table->Delta_R_0 -Table->Eta_R *y[RP]/K_R -Table->Alpha_C_0 *y[A]/K_R;
   gsl_matrix_set(m, R, 1, x);
 
   x= -Table->Alpha_C_0 *y[R]/K_R;
