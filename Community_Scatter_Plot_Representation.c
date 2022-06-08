@@ -205,15 +205,15 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
       cpgslct(DEVICE_NUMBER);      /* Selecting Device */
       
       if (Sp == 0) {
-      color_Index    = 3;
-      type_of_Symbol = 1;
-      cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
+	color_Index    = 3;          /* 3: Green      */
+	type_of_Symbol = 1;          /* 1: .  (point) */
+	cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
 		       color_Index, type_of_Symbol,
 		       "X", "Y", "");
       }
       else {
-	color_Index    = 3 + Sp;
-	type_of_Symbol = 1 + Sp;
+	color_Index    = 3 + Sp;    /* 4: Blue  5: Light Blue  6: Magenta    */
+	type_of_Symbol = 1 + Sp;    /* 2: +     3: *           4: o (cercle) */ 
 	cpg_XY_same_scattered(n, x_Data, y_Data,
 			      color_Index, type_of_Symbol);
       }

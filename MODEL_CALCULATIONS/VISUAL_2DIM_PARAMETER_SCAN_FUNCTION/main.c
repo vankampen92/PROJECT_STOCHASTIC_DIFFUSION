@@ -64,14 +64,15 @@ Index  Argument   Parameter Definition
 12:   -H5 0.0     External Immigration of Consumers
 10:   -HK 2000.0  Resource Carrying Capacity
 11:   -H4 1.5     Resource Growth Rate
- 7:   -H1 0.5     Resource Death Rate 
+ 9:   -H3 5.0     Propagule Death Rate (Delta_R_1, only DIFFUSION_STOLLENBERG_4D)
+ 7:   -H1 0.5     Resource Death Rate  (Delta_R_0)
 13:   -H6 1.0     Consumer Death Rate
 16:   -H9 5.0     Consumer Attack Rate
 17:   -H10 1.0    Consumer Handling Time
 18:   -H11 0.0    Rate of Triplet Formation 
 19:   -H12 0.0    Rate of Triplet Degradation
 24:   -H17 1.0    Consumer growth rate (Beta_C)
-29:   -H20 5.0    Resource Establishment Rate (Eta_R)
+29:   -H20 5.0    Resource Establishment Rate (Eta_R, only DIFFUSION_STOLLENBERG_4D)
 
 Index is the number key in full list of model parameters (see assigb functions). 
 They are main function input arguments, for instnace:  
@@ -95,9 +96,9 @@ which here define the 2D parameter space to explore.
 
    . ~S ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 16 -m1 1.0 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 10.0 -H10 2.0 -H11 0.0 -H12 0.0
 
-   . ~S ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 16 -m1 0.01 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
+   . ~S ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
 
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300  -sP 2 -I1 16 -m1 0.01 -M1 10.0 -A1 0.01 -d1 200  -I0 17 -m0 0.01 -M0 10.0 -A0 0.01 -d0 200 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300  -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H20 20.0 -H17 1.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 10.0 -H10 2.0  
 */
 
 

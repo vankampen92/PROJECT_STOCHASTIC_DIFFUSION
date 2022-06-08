@@ -9,3 +9,7 @@ int  Coexistence_Condition ( Parameter_Table * Table );
 double Coexistence_Condition_Double ( Parameter_Table * Table ); 
 
 double Function_to_Type_of_Stability( Parameter_Table * Table ); 
+
+void Stationary_Solution_Feasibility_Control (Parameter_Table * Table ); 
+
+void assert_positive_model_parameters (Parameter_Table * Table ); 

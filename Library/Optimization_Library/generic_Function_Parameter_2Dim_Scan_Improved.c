@@ -64,6 +64,19 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
     Value = Value_0 + k * (Value_1 - Value_0)/(double)(No_of_POINTS_2 - 1);
     y_Data[k]= Value;
 
+    if (Y_LINEAR == 0 ) 
+      // Linear Scale
+      AssignVectorEntry_to_Structure(P, Input_Parameter_2, y_Data[k] );
+    else if ( Y_LINEAR == 1 ) 
+      // Logr Scale
+      AssignVectorEntry_to_Structure(P, Input_Parameter_2, pow(10.0, y_Data[k]) );
+    else {
+      printf(" Y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
+      printf(" The program will exit\n");
+      Press_Key();
+      exit(0);
+    }
+
     if( X_LINEAR == 0 ) {
       // Linear Scale
       Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
@@ -80,19 +93,6 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
       Press_Key();
       exit(0);
     }
-
-    if (Y_LINEAR == 0 ) 
-      // Linear Scale
-      AssignVectorEntry_to_Structure(P, Input_Parameter_2, y_Data[k] );
-    else if ( Y_LINEAR == 1 )
-      // Logr Scale
-      AssignVectorEntry_to_Structure(P, Input_Parameter_2, pow(y_Data[k], 10.0) );
-    else {
-      printf(" Y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
-      printf(" The program will exit\n");
-      Press_Key();
-      exit(0);
-    }
     
     for( j = 0; j < No_of_POINTS_1; j++ ){
 	
@@ -104,15 +104,22 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
 	  AssignVectorEntry_to_Structure(P, Input_Parameter_1, x_Data[j] );
 	else if ( X_LINEAR == 1 )
 	  // Log Scale
-	  AssignVectorEntry_to_Structure(P, Input_Parameter_1, pow(x_Data[j], 10.0) );
+	  AssignVectorEntry_to_Structure(P, Input_Parameter_1, pow(10.0, x_Data[j]) );
 	else {
 	  printf(" X_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
 	  printf(" The program will exit\n");
 	  Press_Key();
 	  exit(0);
 	}
+
+	/* 
+	   double pow(double x, double y);
+	   This function returns the value of x raised to the power of y.
+	*/
 	
-	// Most important code line in this function: 
+	// Most important code line in this function:
+
+	// printf("k = %d\t j = %d ----------------------------------\t", k, j);  
 	z_SOL[k][j]    = GENERIC_FUNCTION ( P );
 	W_GRID[n++]    = z_SOL[k][j]; 
 

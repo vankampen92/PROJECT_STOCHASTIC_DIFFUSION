@@ -72,7 +72,8 @@ ODE_MODEL=${MODEL}####################
 ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
 ODE_DIR=${ODE_DIR_GENERAL}${ODE_MODEL}/#########
 ODE_DEF=${ODE_DIR_GENERAL}ODE_Definitions/###########################
-ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
+ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/###########
+ODE_FIXED_POINTS_MODEL=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
 TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
 ######################################## Possibilities:
 ######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be provided in JAC_sys${SYS}.c.
@@ -112,7 +113,7 @@ CPGPLOT_LIB=-L/usr/lib -lcpgplot -lpgplot -L/usr/lib -lpng
 OBJECTS = main.o report.o argumentControl.o argumentControl_fprintf.o assert_right_model_definition.o                   \
 	Parameter_Model.o Time_Control.o Parameter_Table.o assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o fprintf_Model_Parameters.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Output_Variables.o                                                                 \
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o  \
-	Fixed_Points_All.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o \
+	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o \
 	Model_Variables_Code.o  definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o              \
 	stat.o                                \
 	CPGPLOT___X_Y___Parameter_Table.o  
@@ -288,8 +289,12 @@ In_Out_Migration_Functions.o: ${PROJECT_DIR}In_Out_Migration_Functions.c ${HEAD.
 	$(CC) -c ${PROJECT_DIR}In_Out_Migration_Functions.c  $(CXXFLAGS)
 
 # Funcions to calculate the fixed points of the ODE system
-Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
-	$(CC) -c ${ODE_FIXED_POINTS}Fixed_Points_All.c $(CXXFLAGS)
+Fixed_Points_All.o: ${ODE_FIXED_POINTS_MODEL}Fixed_Points_All.c ${HEAD.H}
+	$(CC) -c ${ODE_FIXED_POINTS_MODEL}Fixed_Points_All.c $(CXXFLAGS)
+
+Stationary_Solution_Feasibility_Control.o: ${ODE_FIXED_POINTS}Stationary_Solution_Feasibility_Control.c ${HEAD.H}
+	$(CC) -c ${ODE_FIXED_POINTS}Stationary_Solution_Feasibility_Control.c $(CXXFLAGS)
+
 
 stat.o:	${PROJECT_DIR}stat.c ${PROJECT_DIR}stat.h
 	${CC} -c ${PROJECT_DIR}stat.c $(CXXFLAGS)

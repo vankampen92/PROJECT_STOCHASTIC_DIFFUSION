@@ -16,12 +16,14 @@ void Fixed_Points_All( Parameter_Table * Table,
   a   = Table->Alpha_C_0/Table->Delta_R_0;
   u   = Table->Nu_C_0/Table->Delta_R_0; 
   
-  assert_right_model_definition( Table ); 
+  assert_right_model_definition( Table );
+
+  assert_positive_model_parameters (Table); 
 
   #include <Model_Variables_Code.Include.c>
   
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->No_of_CELLS == 1) {  
-
+    
     /* Under these conditions, four Dynamic Regimes at Stationarity are possible */
     if ( b_R < 1.0 ) {
       /* 0: Self-maintainance of resources by themselves in the absence of cosumers is not possible */
@@ -33,6 +35,10 @@ void Fixed_Points_All( Parameter_Table * Table,
       printf("Self-maintainance of resources by themselves in the absence of cosumers is not possible\n"); 
     }
     else {
+
+      q = (b_R-1)/b_R; 
+      x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
+      
       if( b_C/d_C < 1.0 ) {
 	/* 1: Only self-maintained resources with extintion of consumers */
       	
@@ -42,13 +48,25 @@ void Fixed_Points_All( Parameter_Table * Table,
 
 	printf("Only self-maintained resources with extintion of consumers\n");
       }
-      else {
+      else if (x > 1) {
 
-	q = (b_R-1)/b_R; 
-	x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
-	
-	if ( q > x) {
-	  /* 2: Coexistence of resources and consumers */
+	Vector_Stationarity_Lower[R]   = 1.0 - 1.0/b_R; 
+	Vector_Stationarity_Lower[A]   = 0.0; 
+	Vector_Stationarity_Lower[RA]  = 0.0;
+
+	printf("Only self-maintained resources with extintion of consumers\n");
+      }
+      else if ( q < x) {
+
+	Vector_Stationarity_Lower[R]   = 1.0 - 1.0/b_R; 
+	Vector_Stationarity_Lower[A]   = 0.0; 
+	Vector_Stationarity_Lower[RA]  = 0.0;
+
+	printf("Only self-maintained resources with extintion of consumers\n");
+      }
+      else {
+	/* Well adapted animals (x_C < 1.0) and b_C/d_C > 1.0 */
+	/* 2: Coexistence of resources and consumers */
 	 
 	  y = b_R/a * ( q - x);
        
@@ -59,17 +77,6 @@ void Fixed_Points_All( Parameter_Table * Table,
 	  Vector_Stationarity_Lower[RA]  = z;
 
 	  printf("Peacefull coexistence of resources and consumers\n"); 
-	}
-	else {
-	  /* 3: Over-exploitation of resources by greedy consumers and system total collapse and 
-	        resoruces recover to carrying capacity 
-	  */
-	  Vector_Stationarity_Lower[R]   = 1.0 - 1.0/b_R; 
-	  Vector_Stationarity_Lower[A]   = 0.0;
-	  Vector_Stationarity_Lower[RA]  = 0.0;
-
-	  printf("Over-exploitation of resources by greedy consumers and system total collapse\n"); 
-	}
       }
     }
 
@@ -82,7 +89,6 @@ void Fixed_Points_All( Parameter_Table * Table,
       Vector_Stationarity_Upper[i] =                  Vector_Stationarity_Lower[i];
       Table->Vector_Model_Variables_Stationarity[i] = Vector_Stationarity_Lower[i];
     }
-
   }
   else {
     printf("Here, fixed points are only analytically possible if Lambda_C_0 and Lambda_R_0 are both 0 and \n");
@@ -109,13 +115,13 @@ int  Coexistence_Condition ( Parameter_Table * Table )
     a   = Table->Alpha_C_0/Table->Delta_R_0;
     u   = Table->Nu_C_0/Table->Delta_R_0; 
     
-    q = b_R/(b_R-1);
+    q = (b_R-1.0)/b_R;
     
     x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
 
-    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x) Condition_Bool = 1;
+    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x && x < 1 ) Condition_Bool = 1;
     
-    else                                     Condition_Bool = 0;
+    else                                               Condition_Bool = 0;
   
   }
   else {
@@ -148,13 +154,13 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
     a   = Table->Alpha_C_0/Table->Delta_R_0;
     u   = Table->Nu_C_0/Table->Delta_R_0; 
     
-    q = b_R/(b_R-1);
+    q = (b_R-1.0)/b_R;
 
     x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
 
-    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x ) Condition_Bool = 1;
+    if( b_R > 1.0 && b_C/d_C > 1.0 && q > x && x < 1) Condition_Bool = 1;
        
-    else                                      Condition_Bool = 0;
+    else                                              Condition_Bool = 0;
    
   }
   else {
@@ -189,14 +195,14 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
 */
   
   int i, k;
-  int Type_of_Stability;
+  int Type_of_Stability, Coexistence;
   int Index_Value_D, Index_Value_S;
   int Index_D; 
   double Value_D;
   double Type_of_Stability_Double; 
 
   double b_R, b_C, d_C, a, u;
-  double q, x; 
+  double q, x, bR_C; 
 
   b_R = Table->Beta_R/Table->Delta_R_0; 
   b_C = Table->Beta_C/Table->Delta_R_0;
@@ -206,23 +212,27 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
     
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->No_of_CELLS == 1) {  
 
-    Type_of_Stability = Coexistence_Condition ( Table );
+    Coexistence = Coexistence_Condition ( Table );
 
-    q = b_R/(b_R-1);
+    q = (b_R-1.0)/b_R;
 
     x = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
+
+    bR_C = 1.0/(1.0 - x);  /* b_R < bR_C is equivalent to q < x */
     
-    if (Type_of_Stability == 0 ) {
+    if (Coexistence == 0 ) {
       /* When there is no coexistence, we distinguish 3 different situations:
 	 0: Self-maintainance of resources by themserlves in the absence of cosumers is not possible
 	 1: Only self-maintained resources with extintion of consumers 
 	 3: Over-exploitation of resources by greedy consumers and system total collapse 
       */
-      if ( b_R < 1.0 )             Type_of_Stability = 0; 
+      if ( b_R <= 1.0 )             Type_of_Stability = 0; 
       /* 0: Self-maintainance of resources by themselves in the absence of cosumers is not possible */
-      else if( b_C/d_C < 1.0 )     Type_of_Stability = 1; 
+      else if( b_C/d_C <= 1.0 )     Type_of_Stability = 1; 
       /* 1: Only self-maintained resources with extintion of consumers */
-      else if( q < x )             Type_of_Stability = 1; 
+      else if( x >= 1.0 )           Type_of_Stability = 1; 
+      /* 1: Only self-maintained resources with extintion of consumers */
+      else if( q <= x )             Type_of_Stability = 1; 
       /* 1: Over-exploitation of resources by greedy consumers. Consumers go extinct and the 
 	    system bounces back upto carrying capacity. In the end, only self-maintained 
             resources persist in the system*/
@@ -247,7 +257,8 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
       
       Fixed_Points_All( Table,
 			Y0, Y1, Y2, 1.0E-06);
-      
+
+      Stationary_Solution_Feasibility_Control ( Table ); 
       /* Eigen Values: Y1[k] + i Y2[k] from k=0 to Table->MODEL_STATE_VARIABLES-1 */
       
       GSL_Eigenvalue_Calculation(Y0, Table->MODEL_STATE_VARIABLES, Table,  Y1, Y2);

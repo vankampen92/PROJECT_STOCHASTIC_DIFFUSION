@@ -917,7 +917,7 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       break;
 
-    case 15: /* DIFFUSION_BD_4D * * * * * * * * * * * * * * * * * * * * * * */
+    case 15: /* DIFFUSION_STOLLENBERG_4D * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)

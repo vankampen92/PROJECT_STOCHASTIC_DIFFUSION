@@ -55,7 +55,7 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
     
     y_Data[k]= Value; 
     // Log Scale
-    // AssignVectorEntry_to_Structure(P, Input_Parameter_2, pow(y_Data[k], 10.0) );
+    // AssignVectorEntry_to_Structure(P, Input_Parameter_2, pow(10.0, y_Data[k]) );
     // Linear Scale
     AssignVectorEntry_to_Structure(P, Input_Parameter_2, y_Data[k] );
 
@@ -72,7 +72,7 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
 	Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
 	x_Data[j] = Value;
 	// Log Scale:
-	AssignVectorEntry_to_Structure(P, Input_Parameter_1, pow(x_Data[j], 10.0) );
+	AssignVectorEntry_to_Structure(P, Input_Parameter_1, pow(10.0, x_Data[j]) );
 	// Linear Scale:
 	// AssignVectorEntry_to_Structure(P, Input_Parameter_1, x_Data[j] );
 

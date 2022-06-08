@@ -57,7 +57,7 @@ void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table,
       /* Species 0 at the center */
       if (N_X%2 == 0 && N_Y%2 == 0) {
 	if ( J_X == N_X/2 && J_Y == N_Y/2 ) {
-	  n=0;
+	  n=0;                                             /* n=0: Propagules */
 	  m = Table->LOCAL_STATE_VARIABLES*J + n;
 	  Table->Vector_Model_Variables_Time_0[m] = Value;
 	}

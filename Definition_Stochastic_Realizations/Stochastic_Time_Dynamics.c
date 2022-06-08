@@ -152,8 +152,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       /* BEGIN: Grafical Representation per SUCCESSFUL time step */
       C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S( Table->CPG->DEVICE_NUMBER,
       						       1+i, j_Good, Table );
+      if( Table->No_of_CELLS > 4 ) 
       /* GRID REPRESENTATION */
-      // Community_Scatter_Plot_Representation(Table, i, j);   
+	Community_Scatter_Plot_Representation(Table, i, j);   
       // Press_Key(); 
       /*   END: Grafical Representation per time step */
 #endif

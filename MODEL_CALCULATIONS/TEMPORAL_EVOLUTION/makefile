@@ -20,7 +20,7 @@ TIME_TREND_DIR=${PROJECT_DIR}Definition_Time_Trend_Dependence/
 IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
-FIXED_POINTS_DIR=${PROJECT_DIR}Definition_Fixed_Points/
+FIXED_POINTS_DIR=${PROJECT_DIR}Definition_Fixed_Points/###########
 WKD=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/#
 DET_DIR=${PROJECT_DIR}MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_DETERMINISTIC/#
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
@@ -134,7 +134,7 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Comm
 	stat.o                                                                                                                    \
 	CPGPLOT___X_Y___Parameter_Table.o                                                                                         \
 	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               \
-	Fixed_Points_All.o
+	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o
 # \ # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
 # Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
 ### Example:
@@ -333,6 +333,9 @@ In_Out_Migration_Functions.o: ${PROJECT_DIR}In_Out_Migration_Functions.c ${HEAD.
 # # # Funcions to calculate the fixed points of the ODE system
 Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
 	$(CC) -c ${ODE_FIXED_POINTS}Fixed_Points_All.c $(CXXFLAGS)
+
+Stationary_Solution_Feasibility_Control.o: ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c ${HEAD.H}
+	$(CC) -c ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c $(CXXFLAGS)
 
 # fixed_ALL_Points_Intersection.o: ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c ${HEAD.H}
 #	$(CC) -c ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c $(CXXFLAGS)

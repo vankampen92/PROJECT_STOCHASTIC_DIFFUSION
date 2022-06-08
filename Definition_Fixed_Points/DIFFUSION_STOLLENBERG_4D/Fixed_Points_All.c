@@ -7,7 +7,7 @@ void Fixed_Points_All( Parameter_Table * Table,
 		       double Epsilon)
 {
   int i;
-  double d_P, b_R, b_C, d_C, a, u, e_R;
+  double d_P, b_R, bR_C, b_C, d_C, a, u, e_R;
   double q, w, x, y, z, x_C;
   double B_R;
 
@@ -38,9 +38,10 @@ void Fixed_Points_All( Parameter_Table * Table,
     }
     else {
 
-      x_C = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
-      B_R = 1.0 - d_P/(b_R-1.0)/e_R;
-
+      x_C  = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
+      B_R  = 1.0 - d_P/(b_R-1.0)/e_R;
+      bR_C = 1.0 + d_P/e_R * 1.0 /(1-x_C); 
+      
       if( b_C/d_C < 1.0 ) {
 	/* 1: Only self-maintained resources with extintion of consumers */
 
@@ -54,6 +55,16 @@ void Fixed_Points_All( Parameter_Table * Table,
 
       }
       else if (x_C > 1.0) {
+
+	Vector_Stationarity_Lower[RP]  = b_R * B_R/(d_P + (1.0-B_R)*e_R);
+	Vector_Stationarity_Lower[R]   = B_R;
+	Vector_Stationarity_Lower[A]   = 0.0;
+	Vector_Stationarity_Lower[RA]  = 0.0;
+
+	printf("Self-maintainance of resources by themselves in the absence of cosumers is possible,\n");
+	printf("but consumers go extinct (x_C > 1.0)\n");
+      }
+      else if (b_R < bR_C) {
 
 	Vector_Stationarity_Lower[RP]  = b_R * B_R/(d_P + (1.0-B_R)*e_R);
 	Vector_Stationarity_Lower[R]   = B_R;
@@ -86,7 +97,6 @@ void Fixed_Points_All( Parameter_Table * Table,
       Vector_Stationarity_Upper[i] =                  Vector_Stationarity_Lower[i];
       Table->Vector_Model_Variables_Stationarity[i] = Vector_Stationarity_Lower[i];
     }
-
   }
   else {
     printf("Here, fixed points are only analytically possible if Lambda_C_0 and Lambda_R_0 are both 0 and \n");
@@ -104,7 +114,7 @@ int  Coexistence_Condition ( Parameter_Table * Table )
 {
   int Condition_Bool;
   double d_P, b_R, b_C, d_C, a, u, e_R;
-  double x_C;
+  double x_C, bR_C0, bR_C1;
 
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->Lambda_R_1 == 0.0 && Table->No_of_CELLS == 1) {
     d_P = Table->Beta_R/Table->Delta_R_0;
@@ -117,9 +127,13 @@ int  Coexistence_Condition ( Parameter_Table * Table )
 
     x_C = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
 
-    if( b_R > (1.0+d_P/e_R) && b_C/d_C > 1.0 && x_C < 1.0) Condition_Bool = 1;
+    bR_C0 = 1.0 + d_P/e_R;
 
-    else                                                   Condition_Bool = 0;
+    bR_C1 = 1.0 + d_P/e_R * 1.0 /(1-x_C); 
+
+    if( b_R > bR_C0 && b_C/d_C > 1.0 && x_C < 1.0 && b_R > bR_C1) Condition_Bool = 1;
+
+    else                                                          Condition_Bool = 0;
 
   }
   else {
@@ -142,7 +156,7 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
   double Condition_Double;
 
   double d_P, b_R, b_C, d_C, a, u, e_R;
-  double x_C;
+  double x_C, bR_C0, bR_C1;
 
   if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->Lambda_R_1 == 0.0 && Table->No_of_CELLS == 1) {
 
@@ -156,9 +170,13 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
 
     x_C = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
 
-    if( b_R > (1.0+d_P/e_R) && b_C/d_C > 1.0 && x_C < 1.0) Condition_Bool = 1;
+    bR_C0 = 1.0 + d_P/e_R;
 
-    else                                                      Condition_Bool = 0;
+    bR_C1 = 1.0 + d_P/e_R * 1.0 /(1-x_C);
+    
+    if( b_R > bR_C0 && b_C/d_C > 1.0 && x_C < 1.0 && b_R > bR_C1 ) Condition_Bool = 1;
+
+    else                                                           Condition_Bool = 0;
 
   }
   else {
@@ -199,7 +217,7 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
   double Type_of_Stability_Double;
 
   double d_P, b_R, b_C, d_C, a, u, e_R;
-  double x_C, bR_C;  /* Thresholds */
+  double x_C, bR_C0, bR_C1;  /* Thresholds */
 
   d_P = Table->Beta_R/Table->Delta_R_0;
   b_R = Table->Beta_R/Table->Delta_R_0;
@@ -213,26 +231,32 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
 
   x_C   = (d_C + u)/a *1.0/(b_C/d_C - 1.0);
   
-  bR_C = 1.0 + d_P/e_R; 
+  bR_C0 = 1.0 + d_P/e_R;
+  
+  bR_C1 = 1.0 + d_P/e_R * 1.0 /(1-x_C);  
   
   if (Coexistence == 0 ) {
 
-    if ( b_R <= bR_C )        Type_of_Stability = 0;
+    if ( b_R <= bR_C0 )        Type_of_Stability = 0;
     /* 0: Self-maintainance of resources by themselves 
        in the absence of cosumers is not possible 
     */
-    else if( b_C/d_C <= 1.0 ) Type_of_Stability = 1;
+    else if( b_C/d_C <= 1.0 )  Type_of_Stability = 1;
     /* 1: Only self-maintained resources 
        with extinction of consumers 
     */
-    else if( x_C >= 1.0 )     Type_of_Stability = 1;
+    else if( x_C >= 1.0 )      Type_of_Stability = 1;
+    /* 1: Only self-maintained resources 
+       with extinction of consumers 
+    */
+    else if( b_R <= bR_C1 )    Type_of_Stability = 1;
     /* 1: Only self-maintained resources 
        with extinction of consumers 
     */
     else{
       printf("Something very wrong in function Function_to_Type_of_Stability(...)\n");
-      printf("x_C = %g\t bR = %g\t bR_C = %g\t b_C = %g\t d_C = %g\n",
-	     x_C, b_R, bR_C, b_C, d_C);  
+      printf("x_C = %g\t bR = %g\t bR_C0 = %g\t bR_C1 = %g\t b_C = %g\t d_C = %g\n",
+	     x_C, b_R, bR_C0, bR_C1, b_C, d_C);  
       printf("The program will safely exit\n");
       Press_Key();
       exit(0);
@@ -250,7 +274,9 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
     double * Y2 = (double *)calloc(Table->MODEL_STATE_VARIABLES, sizeof(double) );
     
     Fixed_Points_All( Table, Y0, Y1, Y2, 1.0E-06);
-    
+
+    Stationary_Solution_Feasibility_Control ( Table ); 
+
     /* Eigen Values: Y1[k] + i Y2[k] from k=0 to Table->MODEL_STATE_VARIABLES-1 */
     
     GSL_Eigenvalue_Calculation(Y0, Table->MODEL_STATE_VARIABLES, Table,  Y1, Y2);
@@ -267,12 +293,19 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
       Value_D = Y1[Index_Value_D];
       Index_D = Index_Value_D;
     }
+
+    /* Looking only at the dominant... */
+    // Value_D = Y1[Index_Value_D];
+    // Index_D = Index_Value_D;
     
     if(Value_D < 0.0) {
       if(Y2[Index_D] == 0.0)       Type_of_Stability = 2;
       else if (Y2[Index_D] != 0.0) Type_of_Stability = 3;
     }
-    else                           Type_of_Stability = 4;
+    else {
+                                   Type_of_Stability = 4;
+				   assert( Y2[Index_D] != 0.0 );
+    }
     
 #if defined VERBOSE
     if (Type_of_Stability == 2) printf("%d: Stability: Non-Damped Oscillations\n",
