@@ -80,8 +80,12 @@ gsl_rng * r; /* Global generator defined in main.c */
    -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
    -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
   
-   Multi-patch system: a 100 x 100 grid (-HM 10000 -HX 1 -HY 1), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation
+   Multi-patch system: a 100 x 100 grid (-HM 10000 -HX 100 -HY 100), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation
    . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000000 -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 200 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 5.0 -HN 5.0 -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 200000 -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 5.0 -HN 5.0 -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 2000 -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
   
    MacArthur and Rosenzweig (two species 3D, R, A, RA):
    .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 40.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000.0  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 25.0 -H1 0.0 -H6 5.0 -H9 17.0 -H10 5.0
