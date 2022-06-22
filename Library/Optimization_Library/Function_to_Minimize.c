@@ -52,7 +52,7 @@ double Function_to_Minimize( Parameter_Table * Table )
   
   Value =  ( * F->Function )( x, F );
    
-  if(Space->No_of_PARAMETERS) 
+  if(Space->No_of_PARAMETERS > 0) 
     Vector_Entries_into_Parameter_Table ( x, Table,
 					Table->S->Parameter_Index, Table->S->No_of_PARAMETERS );
 

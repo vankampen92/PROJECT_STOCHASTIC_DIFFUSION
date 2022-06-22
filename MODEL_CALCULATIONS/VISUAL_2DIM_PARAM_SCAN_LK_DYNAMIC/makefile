@@ -10,7 +10,7 @@ TIME_TREND_DIR=${PROJECT_DIR}Definition_Time_Trend_Dependence/
 IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
-WKD=${PROJECT_DIR}MODEL_CALCULATIONS/VISUAL_2DIM_PARAMETER_SCAN_LIKELIHOOD/
+WKD=${PROJECT_DIR}MODEL_CALCULATIONS/VISUAL_2DIM_PARAM_SCAN_LK_DYNAMIC/
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
 GSL_DA=${PROJECT_DIR}Library/GSL_RANDOM/###########
 HEAD.H =${PROJECT_DIR}Include/MODEL.h##############
@@ -54,7 +54,8 @@ EXTRA_INCLUDE_PATH+=-I${ERROR_DIR}
 NR=NUMERICAL_RECIPES###############################
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
-V=VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
+STO=STOCHASTIC_OPTIMIZATION#################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
+V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
 CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
 STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
@@ -87,6 +88,9 @@ TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
 JACOBIAN=ODE# Options: 'ODE'
 EXTRA_INCLUDE_PATH+=-I${ODE_DEF}Include_${JACOBIAN}/#####
 ##############################################################################################################
+## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   N U M E R I C A L   I N T E G R A T I O N  ##
+STO_DIR_GENERAL=${PROJECT_DIR}Definition_Stochastic_Realizations/#########
+STO_DIR=${STO_DIR_GENERAL}${ODE_MODEL}/#########
 ## D E F I N I T I O N   N A M E   E X E C U T B L E   C O D E ###############################################
 ### EXE=${JACOBIAN}_${ODE_MODEL}
 EXE=${ODE_MODEL}
@@ -109,13 +113,14 @@ LIBS=-L/usr/lib -lX11
 PGPLOT_LIB=-L/usr/lib -lpgplot -L/usr/lib -lpng
 CPGPLOT_LIB=-L/usr/lib -lcpgplot -lpgplot -L/usr/lib -lpng
 ##############################################################################################################
-OBJECTS = main.o report.o argumentControl.o argumentControl_fprintf.o MODEL.o Community.o assert_right_model_definition.o Observed_Data.o                  \
-	Parameter_Model.o Time_Control.o Parameter_Table.o assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o fprintf_Model_Parameters.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Output_Variables.o                                                                 \
-	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o                        \
+OBJECTS = main.o report.o argumentControl.o argumentControl_fprintf.o MODEL.o MODEL_STO.o Community.o Community_Scatter_Plot_Representation.o assert_right_model_definition.o Observed_Data.o                                                  \
+	Parameter_Model.o Time_Control.o Parameter_Table.o assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o fprintf_Model_Parameters.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Output_Variables.o                                        \
+	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o                      \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o Random_Initial_Guess_within_Boundaries.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                                \
-	Model_Variables_Code.o  definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o             \
-	stat.o                               \
-	CPGPLOT___X_Y___Parameter_Table.o    \
+	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o                                                      \
+	Model_Variables_Code.o  definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o                    \
+	stat.o                             \
+	CPGPLOT___X_Y___Parameter_Table.o  \
 	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o
 ### Example:
 RUN_ARGS =-sP 1 -I0 21 -H21 1.0 -n 1 -v0 6 -G0 1 -G1 1 -tn 17 -t0 2000.0 -t1 2016.0 -t4 1 -xn 0 -G5 1 -G6 0.0 -G7 1000000 -DP 4 -DC 0 -D0 0 -D1 4 -D2 0 -P0 13 -a0 0  -P1 2 -a1 0  -P2 3 -a2 0  -P3 4 -a3 0
@@ -153,8 +158,14 @@ argumentControl_fprintf.o: argumentControl_fprintf.c ${HEAD.H}
 MODEL.o: MODEL.c ${HEAD.H}
 	$(CC) -c MODEL.c $(CXXFLAGS)
 
+MODEL_STO.o: MODEL_STO.c ${HEAD.H}
+	$(CC) -c MODEL_STO.c $(CXXFLAGS)
+
 Community.o: ${PROJECT_DIR}Community.c ${HEAD.H}
 	$(CC) -c ${PROJECT_DIR}Community.c $(CXXFLAGS)
+
+Community_Scatter_Plot_Representation.o: ${PROJECT_DIR}Community_Scatter_Plot_Representation.c ${HEAD.H}
+	$(CC) -c ${PROJECT_DIR}Community_Scatter_Plot_Representation.c $(CXXFLAGS)
 
 # Funcions controling main data structures (Parameter_Model, Time_Control,
 # Parameter_Table):
@@ -277,6 +288,38 @@ JACOBIAN_Matrix_${ODE_MODEL}.o: ${ODE_DEF}JACOBIAN_Matrix_${ODE_MODEL}.c ${HEAD.
 
 ODE_sys_${ODE_MODEL}.o: ${ODE_DEF}ODE_sys_${ODE_MODEL}.c ${HEAD.H}
 	$(CC) -c ${ODE_DEF}ODE_sys_${ODE_MODEL}.c $(CXXFLAGS)
+
+# Functions controling stochastic realizations integration of the ODE system
+# Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Execute_One_Step.o Force_of_Infection_Sto.o
+Temporal_Dynamics_Update.o: ${STO_DIR}Temporal_Dynamics_Update.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Temporal_Dynamics_Update.c $(CXXFLAGS)
+
+Temporal_Dynamics.o: ${STO_DIR}Temporal_Dynamics.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Temporal_Dynamics.c $(CXXFLAGS)
+
+Execute_One_Step.o: ${STO_DIR}Execute_One_Step.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Execute_One_Step.c $(CXXFLAGS)
+
+Event_Delta_Matrix_Initialization.o: ${STO_DIR}Event_Delta_Matrix_Initialization.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Event_Delta_Matrix_Initialization.c $(CXXFLAGS)
+
+Event_Adjacence_List_Initialization.o: ${STO_DIR}Event_Adjacence_List_Initialization.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Event_Adjacence_List_Initialization.c $(CXXFLAGS)
+
+Stochastic_Time_Dynamics.o: ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c ${HEAD.H}
+	${CC} -c ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c $(CXXFLAGS)
+
+Initial_Conditions_Stochastic_Dynamics.o: ${STO_DIR_GENERAL}Initial_Conditions_Stochastic_Dynamics.c ${HEAD.H}
+	${CC} -c ${STO_DIR_GENERAL}Initial_Conditions_Stochastic_Dynamics.c $(CXXFLAGS)
+
+Patch_System_Initialization.o: ${STO_DIR_GENERAL}Patch_System_Initialization.c ${HEAD.H}
+	${CC} -c ${STO_DIR_GENERAL}Patch_System_Initialization.c $(CXXFLAGS)
+
+Advance_Current_Time.o: ${STO_DIR_GENERAL}Advance_Current_Time.c ${HEAD.H}
+	${CC} -c ${STO_DIR_GENERAL}Advance_Current_Time.c $(CXXFLAGS)
+
+Choose_Village.o: ${STO_DIR_GENERAL}Choose_Village.c ${HEAD.H}
+	${CC} -c ${STO_DIR_GENERAL}Choose_Village.c $(CXXFLAGS)
 
 # Auxiliary functions to specify model ODE definition
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}

@@ -141,7 +141,7 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
       Saving_to_File_double("Parameter_Scan_Slice_", x_Data, z_SOL[k], No_of_POINTS_1, k); 
 #endif
   }
-  printf("\n From generic_Function_Parameter_Scan.c:\n  End of 2D scan successfully"); getchar();
+  printf("\n From generic_Function_Parameter_Scan.c:\n  End of 2D scan successfully"); //getchar();
 
   /* BEGIN : Saving to File  */
   FILE * fp_0 = fopen ( Scan_Output_File, "w" );  

@@ -137,8 +137,7 @@ int main(int argc, char **argv)
   assert( No_of_ERROR_PARAMETERS == 0 );
   Table.E_Space = Error_Space;
  
-  Parameter_Space * Initial_Condition_Space = (Parameter_Space *)calloc(1,
-									sizeof(Parameter_Space));
+  Parameter_Space * Initial_Condition_Space = (Parameter_Space *)calloc(1, sizeof(Parameter_Space));
   assert( No_of_IC == 0 );
   Table.IC_Space = Initial_Condition_Space;
   

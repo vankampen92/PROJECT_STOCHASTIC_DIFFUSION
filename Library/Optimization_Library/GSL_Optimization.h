@@ -22,6 +22,8 @@ double GSL_Function_to_Minimize_AIDS( const gsl_vector * x, void * Par );
 
 double GSL_Function_to_Minimize_Error_Model( const gsl_vector * x, void * Par );
 
+double GSL_Function_to_Minimize_Binomial_Free_Consumers( const gsl_vector * x, void * Par );
+
 double GSL_neglog_Error_Probability_Model( double * Data, double * Theory,
 					   int N , int No_of_VARIABLES,
 					   Parameter_Fitting  * F, 

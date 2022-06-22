@@ -22,8 +22,6 @@ void Fixed_Points_All( Parameter_Table * Table,
   if (Table->Lambda_R_0 == 0.0 && Table->Lambda_C_0 == 0.0 && Table->No_of_CELLS == 1) {  
 
       Vector_Stationarity_Lower[A]   = Table->Nu_C_0 / (Table->Nu_C_0 + Theta) * A_0;
-      Vector_Stationarity_Lower[RA]  = Theta         / (Table->Nu_C_0 + Theta) * A_0;
-    
 
     for(i=0; i<Table->MODEL_STATE_VARIABLES; i++) {
       Vector_Stationarity_Inter[i] =                  Vector_Stationarity_Lower[i];

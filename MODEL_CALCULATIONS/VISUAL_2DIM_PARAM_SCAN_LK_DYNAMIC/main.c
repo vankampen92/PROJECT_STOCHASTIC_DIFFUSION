@@ -19,15 +19,22 @@
    Compilation:
    
    . ~$ make MODEL=[TYPE_of_MODEL] 
-   
+  
    Execution:
                                                        
    . ~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 10.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 2.0 -I1 17 -m1 1.0 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.0 -G30 R
 
-   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 12 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 5.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 1.0 -I1 17 -m1 0.5 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.5 -G30 R
+   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 12 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 5.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 1.0 -I1 17 -m1 0.5 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.5 -G30 R -Fn 1 -F0 Pseudo_Empirical_Data.dat -Y0 99
+
+   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 12 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 5.0 -I0 16 -m0 2.0 -M0 15.0 -A0 0.01 -d0 100 -H10 1.0 -I1 17 -m1 0.5 -M1 5.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 1 -D2 0 -a0 0 -tn 99 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000 -H4 1.5 -G30 R -Fn 0 // Zero data files to read: no reading from data files: -Fn 0 to generate pseudo data //
+
+-G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */
 
 gsl_rng * r; /* Global generator defined in main.c */
+void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
+						int i, 
+						double **  Empirical_Data_Matrix ); 
 
 void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 			       int No_of_POINTS_1, int Input_Parameter_1,
@@ -37,7 +44,7 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 			       double * x_Value, 
 			       double * y_Value); 
 
-float * customized_contour_levels( Parameter_CPGPLOT * C )
+float * customized_contour_levels_0( Parameter_CPGPLOT * C )
 {
     int i;
 
@@ -52,6 +59,20 @@ float * customized_contour_levels( Parameter_CPGPLOT * C )
     return(clevels);
 }
 
+float * customized_contour_levels_1( Parameter_CPGPLOT * C,
+				     double Min_Value)
+{
+    int i;
+
+    /* Two contour levels */
+    C->NC = 2;
+    float * clevels = (float *)calloc( C->NC, sizeof(float) );
+    clevels[0] = Min_Value + 2.0;
+    clevels[1] = Min_Value + 100.0;
+    
+    return(clevels);
+}
+
 int main(int argc, char **argv)
 {
   int i, k, key;
@@ -60,6 +81,7 @@ int main(int argc, char **argv)
   Time_Control Time;
   Time_Dependence_Control Time_Dependence; 
   double Value_0, Value_1; 
+  double Initial_Value_0, Initial_Value_1;
   
   P_ARG = &Table;
 
@@ -144,8 +166,11 @@ int main(int argc, char **argv)
 
   /* In order for these default names to work properly, you need -Fn 0 in command line */
   OBSERVED_DATA_FILE[0] = '\0';
-  pF = strcat(OBSERVED_DATA_FILE, "Observed_Data_File.dat");          /* Default Name */
-  if( No_of_FILES > 0) strcpy(OBSERVED_DATA_FILE, Name_of_FILE[0]);   // -Fn 2
+
+  if( No_of_FILES > 0)
+    pF = strcat(OBSERVED_DATA_FILE, Name_of_FILE[0]);          
+  else 
+    pF = strcat(OBSERVED_DATA_FILE, "Pseudo_Data_File.dat");          /* Default Name */
 
   TIME_PARAMETERS_FILE[0] = '\0';
   pF = strcat(TIME_PARAMETERS_FILE, "Time_Dependent_Parameters.dat"); /* Default Name */
@@ -159,7 +184,8 @@ int main(int argc, char **argv)
   char   ** Name_Rows_Dummy; 
   int No_of_EMPIRICAL_TIMES = F_y_GRID[1]; // No of Cols the time-dependent parameter file
   int No_of_Rows;                          // For example, -Y1 12 (see input argument list)
-  if (TYPE_of_TIME_DEPENDENCE == 0) {      // -t4 1
+  if (TYPE_of_TIME_DEPENDENCE == 0) {      // -t4 0 (no time dependence)
+                                           // -t4 1 (time-dependent parameters)
     printf(" Time_Control structure will be allocated: \n");
     printf(" %d output variables of length %d points will be allocated\n",
 	   SUB_OUTPUT_VARIABLES, I_Time);
@@ -186,7 +212,7 @@ int main(int argc, char **argv)
     					    Type_1_Parameter_Values, &No_of_Rows,
 					    No_of_EMPIRICAL_TIMES,
     					    0, Name_Rows_Dummy,
-    					    1, Time_Empirical_Vector);
+    					    1, Time_Empirical_Vector );
     assert( No_of_Rows == TYPE_1_PARAMETERS);
 
     Time_Dependence_Control_Upload_Optimized (&Time, &Time_Dependence, &Table,
@@ -203,29 +229,13 @@ int main(int argc, char **argv)
     					      Time_Empirical_Vector);
   }
   /*     E N D -----------------------------------------------------------------------*/
-  /* B E G I N : Observed Data Control Initization                                    */
-  int No_of_COLS = F_y_GRID[0]; // No of Columns in Observed Data File
-  Reading_Standard_Data_Matrix_from_File( OBSERVED_DATA_FILE,
-					  Empirical_Data_Matrix,
-					  &SUB_OUTPUT_VARIABLES,
-					  No_of_COLS, 
-					  0, Name_of_Rows,
-					  1, Time.Time_Vector );
 
-  Writing_Standard_Data_Matrix( Empirical_Data_Matrix,
-				SUB_OUTPUT_VARIABLES, I_Time,
-				1, Name_of_Rows,
-				0, Time.Time_Vector);
-  Press_Key(); 
-  /* B E G I N :   Reserving memmory for Observed Data and Fitting Structure */
+  if( No_of_FILES == 0) M_O_D_E_L___S_T_O( &Table ); /* Generation of Psedo Data */ 
+
+  /* B E G I N : Observed Data Control Initization (Reserving Memmory)          */
   Observed_Data * Data = (Observed_Data *)calloc(1, sizeof(Observed_Data));
   Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, I_Time);
-  Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
-				I_Time, Empirical_Data_Matrix,
-				"" );
-  printf(" Observed_Data structure has been correctly allocated and initiated\n");
-  /*     E N D : ------------------------------------- */
-  
+  printf(" Observed_Data structure has been correctly allocated\n");
   /* B E G I N : Reserving memmory for Parameter Fitting Structure */
   Parameter_Fitting * F = (Parameter_Fitting*)calloc(1,sizeof(Parameter_Fitting));
   F->Data                  = Data;
@@ -234,6 +244,13 @@ int main(int argc, char **argv)
   F->Minimization          = 0;     
   F->Bounded_Parameter_Set = 1;
   F->Function              = GSL_Function_to_Minimize_Error_Model; // GSL_Function_to_Minimize;
+  /* double Function_to_Minimize( Parameter_Table * Table ) 
+     This will be the function that will be past to the scanning function
+     void generic_Function_Parameter_2Dim_Scan_Improved(Parameter_Table * Table, ...)
+     The function 'Function_to_Minimize' is just wrapper for scanning the function 
+     that the pointer 'F->Function' points to (see Optimization Library in ./Library 
+     directory). 
+  */
 #if defined VERBOSE
   F->Verbose               = 1;     // 1: Verbose                // 0: Non Verbose
 #else
@@ -256,20 +273,78 @@ int main(int argc, char **argv)
   printf("Parameter_Fitting structure has been correctly allocated and initiated\n");
   /*     E N D : ------------------------------------- */
   
-  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( &Table, City_Par_Values) ;
-  
-  /* B E G I N : Main Function Call -------------------------------------------------*/  
-  double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
-  int Status =  generic_Function_Parameter_2Dim_Scan(&Table, 
-						     No_of_POINTS_1, Input_Parameter_1,
-						     No_of_POINTS_2, Input_Parameter_2,
-						     Function_to_Minimize, 
-						     W_GRID, "Negative LogLikelihood");
-  /*   E N D : ----------------------------------------------------------------------*/
+  int No_of_COLS;
+  if( No_of_FILES > 0) No_of_COLS = F_y_GRID[0];  /* -Y0 [VALUE] */
+  else                 No_of_COLS = I_Time;       /* -tn [VALUE] */
 
+  Initial_Value_0 = AssignStructValue_to_VectorEntry(Input_Parameter_1, &Table);
+  Initial_Value_1 = AssignStructValue_to_VectorEntry(Input_Parameter_2, &Table);  
+  
+  for (i = 0; i < Time.Realizations; i++ ) {
+
+    if ( No_of_FILES > 0 )
+      Reading_Standard_Data_Matrix_from_File( OBSERVED_DATA_FILE,
+					      Empirical_Data_Matrix,
+					      &SUB_OUTPUT_VARIABLES,
+					      No_of_COLS, 
+					      0, Name_of_Rows,
+					      1, Time.Time_Vector );
+    else
+      Creating_Standard_Data_Matrix_from_Model ( &Table, i, 
+						 Empirical_Data_Matrix );
+    
+    Writing_Standard_Data_Matrix( Empirical_Data_Matrix,
+				  SUB_OUTPUT_VARIABLES, I_Time,
+				  1, Name_of_Rows,
+				  0, Time.Time_Vector);
+    printf("Row Empirical Data Representation:\n");
+    // Press_Key();
+    C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,
+								       I_Time,
+								       Time.Time_Vector,
+								       Empirical_Data_Matrix,
+								       0);
+    // Press_Key();
+    
+    Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
+				  I_Time, Empirical_Data_Matrix,
+				  "" );
+    printf(" Observed_Data structure has been correctly initiated with an instance\n");
+    printf(" of (real or pseudo) emprical data \n");
+    /*     E N D : -------------------------------------------------------------- */
+
+    /* Back to input argument values in Table */
+    AssignVectorEntry_to_Structure(&Table, Input_Parameter_1, Initial_Value_0);
+    AssignVectorEntry_to_Structure(&Table, Input_Parameter_2, Initial_Value_1);
+    
+    P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( &Table, City_Par_Values) ;
+    
+    /* B E G I N : Main Function Call -------------------------------------------------*/
+    
+    double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
+    /* 
+       int Status =  generic_Function_Parameter_2Dim_Scan(&Table, 
+       No_of_POINTS_1, Input_Parameter_1,
+       No_of_POINTS_2, Input_Parameter_2,
+       Function_to_Minimize, 
+       W_GRID, "Negative LogLikelihood");
+    */
+    int X_LINEAR, Y_LINEAR;
+    X_LINEAR = 0; Y_LINEAR = 0; /* Both axes linear */
+    // X_LINEAR = 0; Y_LINEAR = 1; /* X axis linear and Y axis logarithmic */
+    // X_LINEAR = 1; Y_LINEAR = 0; /* X axis logarithmic and Y axis linear */
+    // X_LINEAR = 1; Y_LINEAR = 1; /* Both axes logarithmic */
+    int Status =  generic_Function_Parameter_2Dim_Scan_Improved(&Table, 
+								No_of_POINTS_1, Input_Parameter_1,
+								No_of_POINTS_2, Input_Parameter_2,
+								Function_to_Minimize, 
+								W_GRID, "Negative LogLikelihood",
+								X_LINEAR, Y_LINEAR);
+    /*   E N D : ----------------------------------------------------------------------*/
+    
 #if defined CPGPLOT_REPRESENTATION
-      /* BEGIN : 2D GRID cpgplot representation */
-      /*********************************************************************/
+    /* BEGIN : 2D GRID cpgplot representation */
+    /*********************************************************************/
       Table.CPG->X_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_1]; 
       Table.CPG->Y_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_2]; 
       /*********************************************************************/
@@ -292,7 +367,10 @@ int main(int argc, char **argv)
       
       int Output_Variable  = Table.OUTPUT_VARIABLE_INDEX[0];
       Table.CPG->W_label   = Table.Output_Variable_Name[Output_Variable];
-
+      /* Comment out the following line if you want to write 
+	 a predetermined title by the color wredge */
+      Table.CPG->W_label[0] = '\0';
+      
       Table.CPG->Title[0]='\0';  
       pF = strcat(Table.CPG->Title, "Negative Log Likelihood");
       
@@ -309,9 +387,19 @@ int main(int argc, char **argv)
       FIRST_PLOT = 1;
       Table.CPG->AUTOMATIC_CONTOUR = 0;
       /* If AUTOMATIC_CONTOUR is 0, the user should customized contours through
-	 the function customized_contour_levels(...);
+	 the function customized_contour_levels_[VALUE](...);
       */
-      Table.CPG->contour_level = customized_contour_levels ( Table.CPG );
+
+      double Likelihood_Minimum, x_Val, y_Val;
+      Minimum_Parameter_2D_Scan(&Table,
+				No_of_POINTS_1, Input_Parameter_1,
+				No_of_POINTS_2, Input_Parameter_2,
+				W_GRID,
+				&Likelihood_Minimum, &x_Val, &y_Val);
+      
+      //Table.CPG->contour_level = customized_contour_levels_0 ( Table.CPG );
+      Table.CPG->contour_level = customized_contour_levels_1 ( Table.CPG,
+							       Likelihood_Minimum );
       C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___C_O_N_T_O_U_R( Table.CPG,
 							      W_GRID, 
 							      FIRST_PLOT,
@@ -328,15 +416,12 @@ int main(int argc, char **argv)
       cpgptxt(0.0001, 78.0, 0.0, 0.0,   "2.5");
       cpgptxt(0.0003, 92.0, 0.0, 0.0,  "5.0");
       
-      /* Drawing arrow to emulate 0.6 reduction in 
-	 p_YX transmission probability (from infecious female to male)
-      */
       float x_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_1, City_Par_Values);
       float y_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_2, City_Par_Values);
-
+      
       printf("%s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Value);
       printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Value);
-
+      
       cpgslw(3);  /* Line width changing to 3     */
       cpgsci(12); /* Color Index changing to 12   */
       cpgpt1(x_Value, y_Value, 23);  /* Symbol 23 */
@@ -345,36 +430,27 @@ int main(int argc, char **argv)
       float * ys = (float *)calloc(2, sizeof(float) );
       xs[0] = 0.5* x_Value;  xs[1] = x_Value; /* A 40 % reduction */ 
       ys[0] = y_Value;       ys[1] = y_Value;
-
+      
       cpg_XY_same_arrow( 2, xs, ys, 4, 1, 4);
       // cpg_XY_same_arrow( N, xs, ys, CPG->color_Index, CPG->type_of_Line, CPG->type_of_Width );
       
       free(xs);
       free(ys); 
 #endif
-
-      double Likelihood_Minimum, x_Val, y_Val;
-      
-      Minimum_Parameter_2D_Scan(&Table,
-				No_of_POINTS_1, Input_Parameter_1,
-				No_of_POINTS_2, Input_Parameter_2,
-				W_GRID,
-				&Likelihood_Minimum, &x_Val, &y_Val);
-
-      //#if defined VERBOSE
+ 
       printf("Optimal Negative logLikelihood: %g\n", Likelihood_Minimum); 
       printf("%s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Val);
       printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val);
-      //#endif
-    
+      
       free (W_GRID);
-
+      Press_Key(); 
+  }
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 
   Observed_Data_Free(Data); free(Data);
-
+  
   if (TYPE_of_TIME_DEPENDENCE == 1)       // -t4 1
     Time_Dependence_Control_Free( &Time_Dependence, &Table );
-
+  
 #if defined CPGPLOT_REPRESENTATION
   P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
   cpgclos();
@@ -474,4 +550,18 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 	* y_Value = y_Data[k_MIN];  
 }
       
-
+void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
+						int i, 
+						double **  Empirical_Data_Matrix )
+{
+  /* This is just to save the output variables corresponding to the i-th realization 
+     generated by the function  M_O_D_EL___S_T_O( &Table ) into a straightforward 
+     Empirical Data Matrix with the 'Psedo Data' that has been generated in the 
+     i-th realization. 
+  */
+  int k,j;
+  for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++)
+    for(j=0; j < Table->T->I_Time; j++)
+	  Empirical_Data_Matrix[k][j] = Table->T->Variable[i][k][j];
+  
+}

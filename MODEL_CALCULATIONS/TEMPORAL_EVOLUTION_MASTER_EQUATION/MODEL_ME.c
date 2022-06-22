@@ -56,7 +56,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   int SAME_PLOT = 1;
   j = Table->T->I_Time - 1;
   assert(Table->MEq->n_DIMENSION <= 2);
-  for ( i=0; i< Table->MEq->n_DIMENSION; i++ )
+  for ( i=0; i < Table->MEq->n_DIMENSION; i++ )
     C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
   							  Table->T->Time_Vector[j],
   							  SAME_PLOT );
@@ -69,6 +69,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   assert(Table->MEq->n_DIMENSION <= 2);
   Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Table,
 							      j, Table->T->Time_Vector[j] );
+  
 #endif
   
 #if defined CPGPLOT_REPRESENTATION
@@ -104,12 +105,17 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 
   FILE * fp = fopen("Data_ODE_vs_ME_Marginals_0.dat", "w");
   for(i=0; i<TIMES; i++)
-    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],  Table->CPG->y_Time[0][i], Table->Matrix_Output_Variables[0][i]);  
+    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],
+	    Table->CPG->y_Time[0][i], Table->Matrix_Output_Variables[0][i]);  
   fclose(fp);
-         fp = fopen("Data_ODE_vs_ME_Marginals_1.dat", "w");
-  for(i=0; i<TIMES; i++)
-    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],  Table->CPG->y_Time[1][i], Table->Matrix_Output_Variables[1][i]);  
-  fclose(fp);
+  
+  if( Table->SUB_OUTPUT_VARIABLES > 1 ){
+    fp = fopen("Data_ODE_vs_ME_Marginals_1.dat", "w");
+    for(i=0; i<TIMES; i++)
+      fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],
+	      Table->CPG->y_Time[1][i], Table->Matrix_Output_Variables[1][i]);  
+    fclose(fp);
+  }
   
   Master_Equation_Free ( MEq );
 
@@ -208,10 +214,15 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
     
     if( Table->T->Variable[i][n][j] == 0.0 ) {
       if (count < F) count++;
-      else           y[i_valid++] = Table->T->Variable[i][n][j];
+      else {
+	assert( Table->T->Variable[i][n][j] < No_of_POINTS );
+	y[i_valid++] = Table->T->Variable[i][n][j];
+      }
     }
-    else
+    else {
+      assert( Table->T->Variable[i][n][j] < No_of_POINTS );
       y[i_valid++] = Table->T->Variable[i][n][j];
+    }
   }
   valid_realizations = i_valid;
   
@@ -290,8 +301,8 @@ void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table
      This empirical distributions can be compared with the probability distribution 
      from the numerical integration of the master equation only if the first output variable
      is also the first dynamic variable and so on. If the output variables are NOT the same 
-     dynamic variables encoded in the master equation (also in the same order), this comparision 
-     will, of course, fail.
+     as dynamic variables encoded in the master equation (also in the same order), this 
+     comparision will, of course, fail.
 
      For a 2D system, the output file will be a 4-columns file with this structure: 
 
@@ -335,15 +346,19 @@ void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table
       
       if( Table->T->Variable[i][0][j] == 0.0 ) {
 	if (count < F) count++;
-	else           x[i_valid++] = Table->T->Variable[i][0][j];
+	else {
+	  assert( Table->T->Variable[i][0][j] < ME->n_x );
+	  x[i_valid++] = Table->T->Variable[i][0][j];
+	}
       }
       else {
+	assert( Table->T->Variable[i][0][j] < ME->n_x );
 	x[i_valid++] = Table->T->Variable[i][0][j];
       }
     }
     valid_realizations = i_valid;
 	    
-    probability_distribution_from_stochastic_realizations( y, valid_realizations, 
+    probability_distribution_from_stochastic_realizations( x, valid_realizations, 
 							   P_n, ME->n_x );
 
     for(i = 0; i<ME->n_x; i++)
@@ -402,6 +417,7 @@ void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table
     Press_Key();
     exit(0); 
   }
+  
   fclose(fp); 
 }
 

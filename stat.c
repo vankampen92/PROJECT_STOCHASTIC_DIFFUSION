@@ -2,23 +2,23 @@
 
 void Apply_Negative_Control(double * y, int K)
 {
-  /* Some times negative values make no sense... 
+  /* Some times negative values make no sense...
      Let us get rid of them */
-  int i; 
+  int i;
   for(i=0; i<K; i++) y[i] = MAX(y[i], 0.0);
 }
 
 
 int X_apx_Y( double X, double Y, double ACU)
 {
-  /* When are two double variables approximately 
+  /* When are two double variables approximately
      equal within some level of accuracy ? */
 
   int R;
 
   if ( fabs(X - Y) < ACU ) R = 1; /* The two number are appox the same within ACU */
   else                     R = 0; /* The two number differ in more than ACU       */
-  
+
   return(R);
 }
 
@@ -52,20 +52,20 @@ void herror(int flag, int n0, int Pop0, int iter)
 }
 
 void STAT_memory_Corrupcion_Check_Utility()
-{    
+{
   /* M E M O R Y    C O R R U P T I O N   T E S T * * */
-  
+
   /* Usually, when memory corruption has occurred without
      a crash, and so without notice... further allocation-
-     de-allocation requests make the running program 
-     totally crash (segmentation fault) because memmory 
-     handling has been corrupted. By calling this 
-     funciton all over your code, you will be able to track 
+     de-allocation requests make the running program
+     totally crash (segmentation fault) because memmory
+     handling has been corrupted. By calling this
+     funciton all over your code, you will be able to track
      down when the unadverted corruption actually occurred.
-     
+
      You may call this function by writing an only line of code:
-     
-     STAT_memory_Corrupcion_Check_Utility(); 
+
+     STAT_memory_Corrupcion_Check_Utility();
   */
   /* This function is part of the my stat.c library.
   */
@@ -76,19 +76,19 @@ void STAT_memory_Corrupcion_Check_Utility()
   merda = (int *)malloc( 100 * sizeof(int) );
   printf("merda allocation succeeded = %d\n", quanta_merda);
   printf("merda DE-allocation trial = %d\n", quanta_merda);
-  free (merda) ; 
+  free (merda) ;
   printf("merda de-allocation succeeded = %d\n", quanta_merda);
   printf("/* M E M O R Y   I S   I N   G O O D   S H A P E */\n");
   printf("/* * * * * * * * * * * * * * * * * * * * * * * * */\n");
-  
+
   quanta_merda++;
   /* * * * * * * * * * * * * * * * * * * * * * * * * */
 }
 
 void Calculation_of_Local_Machine_MAX_min_allowed_float_numbers (float * xmin, float * xmax)
 {
-  /* Evaluation of the largest (xmax) and the tiniest (xmin) 
-     numbers my machine can handle 
+  /* Evaluation of the largest (xmax) and the tiniest (xmin)
+     numbers my machine can handle
   */
     int ibeta; int it; int irnd; int ngrd; int machep; int negep;
     int iexp; int minexp; int maxexp; float eps; float epsneg;
@@ -98,7 +98,7 @@ void Calculation_of_Local_Machine_MAX_min_allowed_float_numbers (float * xmin, f
            xmin, xmax);
 }
 
-/* B E G I N : Some functions to calculate easy statistics */ 
+/* B E G I N : Some functions to calculate easy statistics */
 void Finding_AdjacenceMatrix_Passive(int Sp, int **A, float **M)
 {
   /* Finding the adjacent matrix... */
@@ -138,13 +138,13 @@ void Finding_AdjacenceMatrix_Active(int Sp, int **A, float **M)
 void show_IntegerMatrix(int **M, int Sp)
 {
   int i,j, Nx,Ny, n_sys;
-  
+
   /* n_sys = system("clear"); */
 
-  //Nx = Sp+1 > 27 ? 27:Sp+1; 
+  //Nx = Sp+1 > 27 ? 27:Sp+1;
   //Ny = Sp+1 > 17 ? 17:Sp+1;
 
-  Nx = Sp > 27 ? 27:Sp; 
+  Nx = Sp > 27 ? 27:Sp;
   Ny = Sp > 17 ? 17:Sp;
   printf("Printing adjacent matrix...\n");
 
@@ -164,11 +164,11 @@ void show_IntegerMatrix(int **M, int Sp)
 void show_FloatMatrix(float **M, int Sp)
 {
   int i,j, Nx,Ny, n_sys;
-  
+
   /*n_sys = system("clear");*/
   printf("Printing colonization matrix...\n");
 
-  Nx = Sp+1 > 27 ? 27:Sp+1; 
+  Nx = Sp+1 > 27 ? 27:Sp+1;
   Ny = Sp+1 > 17 ? 17:Sp+1;
 
   printf("* :\t");
@@ -187,7 +187,7 @@ void show_FloatMatrix(float **M, int Sp)
 void show_a_view_FloatMatrix(float **M, int Nx_0, int Nx, int Ny_0, int Ny)
 {
   int i,j;
-  
+
   printf("* :\t");
   for(i=Nx_0; i<=Nx; i++) printf("%5d  ",i);
   printf("\n\n");
@@ -204,7 +204,7 @@ void show_a_view_FloatMatrix(float **M, int Nx_0, int Nx, int Ny_0, int Ny)
 void show_DoubleMatrix(double **M, int Nx, int Ny)
 {
   int i,j, n_sys;
-  
+
   /*n_sys = system("clear");*/
   printf("Printing matrix...\n");
 
@@ -227,7 +227,7 @@ void show_DoubleMatrix(double **M, int Nx, int Ny)
 void show_DoubleMatrix_Name(double **M, int Nx, int Ny, char * A)
 {
   int i,j, n_sys;
-  
+
   /*n_sys = system("clear");*/
   //printf("Printing matrix...\n");
 
@@ -279,10 +279,10 @@ void show_a_vector_in_a_row_Double(double *Vector, int No)
 
 int potencia(int a, int n)
 {
-  /* An integer a raised to the power of an integer n */ 
+  /* An integer a raised to the power of an integer n */
   int i;
   int R;
-  
+
   R = 1;
   for(i=0; i<n; i++)
     R *= a;
@@ -335,11 +335,11 @@ double logProchrammer(double I, int n)
 }
 
 #if defined NUMERICAL_RECIPES
-double lnGamma(int n)  
-/* 
-   The factorial of the integer $n-1$ approximated by the gamma function when it is greater 
-   than 10 and computed exactly when lower. The output is given as the logarithm of that 
-   factorial 
+double lnGamma(int n)
+/*
+   The factorial of the integer $n-1$ approximated by the gamma function when it is greater
+   than 10 and computed exactly when lower. The output is given as the logarithm of that
+   factorial
 */
 {
   double f;
@@ -385,15 +385,15 @@ float Euclidean_distance(float x1,float y1, float x2,float y2)
 
 double mean_amplitude(float *X, int No)
 {
-  /* This is the mean value of the series X[] */	
+  /* This is the mean value of the series X[] */
   int i;
   double mean;
-  
+
   mean = 0.;
   for(i=1; i<=No; i++) mean += X[i];
-  
+
   mean /= (double)No;
-  
+
   return mean;
 }
 
@@ -403,12 +403,12 @@ double mean_squared_amplitude(float *X, int No)
      series X[]. This is not the variance */
   int i;
   double mean;
-  
+
   mean = 0.;
   for(i=1; i<=No; i++) mean += X[i]*X[i];
-  
+
   mean /= (double)No;
-  
+
   return mean;
 }
 
@@ -420,9 +420,9 @@ float Average_float_Vector(float *Pop, int Sp)
 
     Sum = 0.;
     for (i=1; i<= Sp; i++) Sum += Pop[i];
-    
-    Ave = Sum/(float)Sp;  
-    
+
+    Ave = Sum/(float)Sp;
+
     return Ave;
 }
 
@@ -435,9 +435,9 @@ double Average_int_Vector(int *Pop, int Sp)
 
     Sum = 0.;
     for (i=1; i<= Sp; i++) Sum += (double)Pop[i];
-    
-    Ave = Sum/(double)Sp;  
-    
+
+    Ave = Sum/(double)Sp;
+
     return Ave;
 }
 
@@ -448,29 +448,29 @@ void moving_Average_double_Vector(double * Pop, double * movPop, int Sp, int N)
     /* Achtung: the order must be an even (2, 4, ...) number!!! */
     int i,j;
     double Sum, Ave;
-    
+
     if(N%2 == 0){
       for (i=N/2; i< Sp-N/2; i++){
 
 	Sum = 0.;
 	for (j = i-N/2; j < i+N/2; j++) Sum += Pop[j];
-	
+
 	Ave = Sum/(double)N;
-	
+
 	movPop[i] = Ave;
       }
     }
     else{
       printf(" In this implementation (moving_Average_double_Vector() in stat.c)\n");
       printf(" The order of the moving average most be an\n");
-      printf(" even number. This program will self-desctruct now!!\n"); 
+      printf(" even number. This program will self-desctruct now!!\n");
       exit(0);
     }
-    
+
     /* Completing the ends of the vector with movPop[N/2] and movPop[Sp-N/2-1] */
 
     for(i=0; i<N/2; i++) movPop[i] = movPop[N/2];
-    
+
     for(i=Sp-N/2; i< Sp; i++) movPop[i] = movPop[Sp - N/2 - 1];
 }
 
@@ -482,9 +482,9 @@ double Average_double_Vector(double *Pop, int Sp)
 
     Sum = 0.;
     for (i=0; i < Sp; i++) Sum += Pop[i];
-    
-    Ave = Sum/(double)Sp;  
-    
+
+    Ave = Sum/(double)Sp;
+
     return Ave;
 }
 
@@ -492,13 +492,13 @@ double average_squared_error_per_point(double * C, double * y, int N)
 {
   int i;
   double x;
-  
+
   x = 0.0;
 
   for (i=0; i < N; i++){
-    
+
     x += (C[i] - y[i])*(C[i] - y[i]);
-    
+
   }
 
   x /= (double)N;
@@ -531,7 +531,7 @@ void Average_and_Variance_double_Vector(double *Pop, int Sp, double *Ave, double
     double Sum;
 
     (*Ave) = 0.; (*Var) = 0.;
-    
+
     for (i = 0; i < Sp; i++){
       (*Ave) += Pop[i];
       (*Var) += Pop[i]*Pop[i];
@@ -541,7 +541,7 @@ void Average_and_Variance_double_Vector(double *Pop, int Sp, double *Ave, double
       (*Ave) = (*Ave)/(double)Sp;
       (*Var) = (*Var)/(double)Sp;
     }
-    
+
     (*Var) = (*Var) - (*Ave)*(*Ave);
 }
 
@@ -550,19 +550,19 @@ double Correlation_double_Vector(double * y_0, double * y_1, int N)
   int i;
   double corr;
 
-  double AVE_0, VAR_0; 
+  double AVE_0, VAR_0;
   double AVE_1, VAR_1;
 
   Average_and_Variance_double_Vector(y_0, N, &AVE_0, &VAR_0 );
   Average_and_Variance_double_Vector(y_1, N, &AVE_1, &VAR_1 );
-  
+
   corr = 0.0;
   for(i = 0; i<N; i++) {
     corr += (y_0[i] - AVE_0) * (y_1[i] - AVE_1) / (double)N;
   }
-  
-  corr = corr / sqrt(VAR_0 * VAR_1); 
-  
+
+  corr = corr / sqrt(VAR_0 * VAR_1);
+
   return (corr);
 }
 
@@ -583,10 +583,10 @@ void Average_Variance_and_Absolute_Deviation_double_Vector(double *Pop, int i_0,
     (*Var) = (*Var)/(double)Sp;
     (*Var) = (*Var) - (*Ave)*(*Ave);
 
-    if( (*Var) < 0) { 
-      for(i=i_0; i<Sp; i++) printf("%g, ", Pop[i]); 
-    } 
-    
+    if( (*Var) < 0) {
+      for(i=i_0; i<Sp; i++) printf("%g, ", Pop[i]);
+    }
+
     assert( Sp > 0);
     assert( (*Var) >= 0 );
 
@@ -611,7 +611,7 @@ double Variance_double_Vector(double *Pop, int Sp)
     Var = Var/(double)Sp;
 
     Var = Var - Ave*Ave;
-    
+
     return (Var);
 }
 
@@ -629,7 +629,7 @@ float Variance_float_Vector(float *Pop, int Sp)
     Ave = Ave/(float)Sp;
     Var = Var/(float)Sp;
     Var = sqrt(Var - Ave*Ave);
-    
+
     return Var;
 }
 
@@ -637,12 +637,12 @@ float Average(int Pop[], float C[], int Sp)
 {
   int i, kount;
   float x;
-  
-  kount = 0; 
+
+  kount = 0;
   for (i=1; i<= Sp; i++) kount += Pop[i];
   x = 0.;
   for (i=1; i<= Sp; i++)
-    x += Pop[i]/(float)kount * C[i];   
+    x += Pop[i]/(float)kount * C[i];
   return x;
 }
 
@@ -650,100 +650,100 @@ float Average(int Pop[], float C[], int Sp)
 void set_to_value_double (double *pN, int S, double value)
 {
   int i;
-  for (i=0; i<S; i++) *pN++ = value;     
+  for (i=0; i<S; i++) *pN++ = value;
 }
 
 void set_to_value_double_1_N (double *pN, int S, double value)
 {
   int i;
-  for (i=1; i<=S; i++) *pN++ = value;     
+  for (i=1; i<=S; i++) *pN++ = value;
 }
 
 void set_to_value_float_1_N (float *pN, int S, float value)
 {
   int i;
-  for (i=1; i<=S; i++) *pN++ = value;     
+  for (i=1; i<=S; i++) *pN++ = value;
 }
 
 void set_matrix_to_value_double (double **pN, int S, double value)
 {
   int i,j;
   for (j=0; j<=S; j++)
-    for (i=0; i<=S; i++) pN[i][j]= value;     
+    for (i=0; i<=S; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_double_NxNy (double **pN, int Nx, int Ny, double value)
 {
   int i,j;
   for (j=0; j<Ny; j++)
-    for (i=0; i<Nx; i++) pN[i][j]= value;     
+    for (i=0; i<Nx; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_double_1_Nx_1_Ny (double **pN, int Nx, int Ny, double value)
 {
   int i,j;
   for (j=1; j<=Ny; j++)
-    for (i=1; i<=Nx; i++) pN[i][j]= value;     
+    for (i=1; i<=Nx; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_float_1_Nx_1_Ny (float **pN, int Nx, int Ny, float value)
 {
   int i,j;
   for (j=1; j<=Ny; j++)
-    for (i=1; i<=Nx; i++) pN[i][j]= value;     
+    for (i=1; i<=Nx; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_double_ColumnsRows(double **pN, int Rows, int Columns, double value)
 {
   int i,j;
   for (j=0; j<Columns; j++)
-    for (i=0; i<Rows; i++) pN[i][j]= value;     
+    for (i=0; i<Rows; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_float(float **pN, int S, float value)
 {
   int i,j;
   for (j=0; j<=S; j++)
-    for (i=0; i<=S; i++) pN[i][j]= value;     
+    for (i=0; i<=S; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_float_NxNy (float **pN, int Nx, int Ny, float value)
 {
   int i,j;
   for (j=0; j<Ny; j++)
-    for (i=0; i<Nx; i++) pN[i][j]= value;     
+    for (i=0; i<Nx; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_float_ColumnsRows(float **pN, int Rows, int Columns, float value)
 {
   int i,j;
   for (j=0; j < Columns; j++)
-    for (i=0; i < Rows; i++) pN[i][j]= value;     
+    for (i=0; i < Rows; i++) pN[i][j]= value;
 }
 
 void set_matrix_to_value_int_ColumnsRows(int **pN, int Rows, int Columns, int value)
 {
   int i,j;
   for (j=0; j < Columns; j++)
-    for (i=0; i < Rows; i++) pN[i][j]= value;     
+    for (i=0; i < Rows; i++) pN[i][j]= value;
 }
 
 void set_to_value_float (float *pN, int S, float value)
 {
   int i;
-  for (i=0; i<S; i++) *pN++ = value;     
+  for (i=0; i<S; i++) *pN++ = value;
 }
 
 void set_to_value_int (int *pN, int S, int value)
 {
   int i;
-  for (i=0; i<S; i++) *pN++ = value;     
+  for (i=0; i<S; i++) *pN++ = value;
 }
 
 void dvector_to_float(double *y, float *f_y, int n)
 {
   int i;
-  
+
   double * dummy_y;
   float  * dummy_f_y;
 
@@ -751,7 +751,7 @@ void dvector_to_float(double *y, float *f_y, int n)
   dummy_f_y = f_y;
 
   for(i=0; i<n; i++) {
-    *dummy_f_y++ = *dummy_y++; 
+    *dummy_f_y++ = *dummy_y++;
     /* f_y[i] = (float)y[i]; */
     /* if(f_y[i] == 0.0) {
          printf("vector(%d) = %f\t%g\n",i,f_y,y);
@@ -767,18 +767,18 @@ void offsetting_float(float *y, int n)
   for(i=n; i>0; i--) y[i] = y[i-1];
 }
 
-/* 
-   Functions to sample data sets following particular statistical distributions 
+/*
+   Functions to sample data sets following particular statistical distributions
 */
 double SamplingBeta_Distribution(double u, double beta)
 {
   /* This is the Beta distribution of parameters (u, beta) just when u is equal to 1. */
   double x, L;
-  
+
   assert(u == 1.);
   L = 1./beta * log(1. - drand48());
   x = 1. - exp(L);
-  
+
   return x;
 }
 
@@ -789,8 +789,8 @@ long int random_int_lrand48(int a1, int a2)
   long int n_random;
 
   n = a2 - a1 + 1;
-  n_random = a1 + lrand48()%n; 
-  
+  n_random = a1 + lrand48()%n;
+
   return (n_random);
 }
 
@@ -800,16 +800,16 @@ int random_int_drand48(int a1, int a2)
   int n;
   int n_random;
   int stat_Bool;
-  
+
   n = a2 - a1 + 1;
   stat_Bool = 0;
   while (stat_Bool == 0){
-    
+
     n_random = (int)ceil( (double)a1 + drand48() * (double)n );
-    
+
     if(n_random <= a2) stat_Bool = 1;
   }
-  
+
   return (n_random);
 }
 
@@ -821,11 +821,11 @@ int sample_NegBinom(double lambda, double nu)
   int deviate;
   long idum = -6509;
   double q,F, Sum;
-  
+
   if(nu > 0.){
     q = lambda/nu;
     x = drand48();
-    i = 0; 
+    i = 0;
     Sum = 0;
     while(Sum < x){
       Sum += NegBinom_Prob(q, nu, i++);
@@ -845,24 +845,24 @@ int sample_NegBinom_Truncate(double lambda, double nu, int N_max)
   int deviate;
   long idum = -6509;
   double q,F, Sum;
-    
+
   q = lambda/nu;
   x = drand48();
-  i = 0; 
+  i = 0;
   Sum = 0;
   while((Sum < x) && (i < N_max)){
     Sum += NegBinom_Prob(q, nu, i++);
   }
   deviate = i-1;
-  
+
   return (deviate);
 }
 
 double Gamma_Density_Ditribution(float n, float g, double tau)
 {
   double logGamma, p;
-  
-  logGamma = n*log((double)g*(double)n)-gammln(n)+(n-1)*log(tau)-g*n*tau;   
+
+  logGamma = n*log((double)g*(double)n)-gammln(n)+(n-1)*log(tau)-g*n*tau;
 
   p = exp(logGamma);
   return (p);
@@ -872,7 +872,7 @@ double Poisson(double lambda, int n)
 {
   double Pn;
 
-  Pn = -lambda + (double)n * log(lambda) - gammln((float)n+1.); 
+  Pn = -lambda + (double)n * log(lambda) - gammln((float)n+1.);
   Pn = exp(Pn);
   return (Pn);
 }
@@ -881,8 +881,8 @@ double Log_Poisson(double lambda, int n)
 {
   double Pn;
 
-  Pn = -lambda + (double)n * log(lambda) - gammln((float)n+1.); 
-  
+  Pn = -lambda + (double)n * log(lambda) - gammln((float)n+1.);
+
   return (Pn);
 }
 
@@ -894,12 +894,12 @@ double Binomial_Betai(int N, double p, int k)
   double P_k, P_k_1;
 
   P_k = betai(k, N-k+1,(float)p); P_k_1 = betai(k, N- k + 2,(float)p);
-  
+
   Bin = P_k - P_k_1;
 
-  return(Bin);				   
+  return(Bin);
 }
-#endif 
+#endif
 
 double Combinatorial_Number(int N, int n)
 {
@@ -925,7 +925,7 @@ double log_Combinatorial_Number(int N, int n)
   for(i=0; i<n; i++){
     logCombinatorial_Number += log((double)(N-i)) - log((double)(n-i));
   }
- 
+
   return(logCombinatorial_Number);
 }
 
@@ -936,17 +936,17 @@ double Binomial(int N, double p, int n)
   double Bin;
   double logCombinatorial_Number;
   int i;
- 
-  logCombinatorial_Number = 0.;  
+
+  logCombinatorial_Number = 0.;
   for(i=0; i<n; i++){
     logCombinatorial_Number += log((double)(N-i)) - log((double)(n-i));
   }
-  
+
   Bin = logCombinatorial_Number + (double)n*log(p) + (double)(N-n)*log(1.-p);
 
   Bin = exp(Bin);
 
-  return(Bin);				   
+  return(Bin);
 }
 
 double log_Binom_Prob(int N, double p, int n)
@@ -956,15 +956,15 @@ double log_Binom_Prob(int N, double p, int n)
   double Bin;
   double logCombinatorial_Number;
   int i;
- 
-  logCombinatorial_Number = 0.;  
+
+  logCombinatorial_Number = 0.;
   for(i=0; i<n; i++){
     logCombinatorial_Number += log((double)(N-i)) - log((double)(n-i));
   }
-  
+
   Bin = logCombinatorial_Number + (double)n*log(p) + (double)(N-n)*log(1.-p);
 
-  return(Bin);				   
+  return(Bin);
 }
 
 double NegBinom_Prob(double q, double nu, int n)
@@ -972,10 +972,10 @@ double NegBinom_Prob(double q, double nu, int n)
   int i;
   double value;
   double logFac;
-  
+
   logFac = 0.;
   for(i=n; i>1; i--) logFac += log((double)i);
-  
+
   value = gammln((float)nu+(float)n) - gammln((float)nu) - logFac + n*log(q) - (nu+n)*log(1+q);
 
   value = exp(value);
@@ -986,10 +986,10 @@ double Log_NegBinom_Prob(double q, double nu, int n)
 {
   double P;
   double x;
- 
+
   x = (double)n + nu - 1.;
   P = logCombiNumber(x,n) + (double)n*log(q) - ((double)n+nu)*log(1.+ q);
-  
+
   return(P);
 }
 
@@ -998,10 +998,10 @@ double log_NegBinom_Prob(double q, double nu, int n)
   int i;
   double value;
   double logFac;
-  
+
   logFac = 0.;
   for(i=n; i>1; i--) logFac += log((double)i);
-  
+
   value = gammln((float)nu+(float)n) - gammln((float)nu) - logFac + n*log(q) - (nu+n)*log(1+q);
 
   return(value);
@@ -1055,14 +1055,14 @@ float Shannon(int Abundance[], int Sp)
   for(i=1;i<=Sp;i++)
     if(Abundance[i]>0){
       p = (float)Abundance[i]/(float)sum;
-      H += -p*log(p);    
+      H += -p*log(p);
     }
   return H;
 }
 
-/* 
-   Hitograms and empirical distributions from real data 
-*/      
+/*
+   Hitograms and empirical distributions from real data
+*/
 void revert(int n, float V[])
 {
   int i;
@@ -1082,7 +1082,7 @@ void abundance_distribution_non_optimized(int Pop[], int Sp, double Relative_Abu
       Relative_Abundance[No+1]++;
     else
       for(j=0; j<=No; j++){
-	if(Pop[i] == j) 
+	if(Pop[i] == j)
 	  Relative_Abundance[j]++;
       }
   }
@@ -1095,26 +1095,26 @@ void abundance_distribution_int(int Pop[], int Sp, int * Relative_Abundance, int
     if(Pop[i] > No)
       Relative_Abundance[No+1]++;
     else /* if(Pop[i]>0) */
-      Relative_Abundance[Pop[i]]++; 
+      Relative_Abundance[Pop[i]]++;
   }
 }
 
 void probability_distribution_from_stochastic_realizations(double * y, int Realizations,
 							   double * p, int p_DIM )
 {
-  /* Input: 
-     . y is an array with a number of 'Realizations' of a stochastic variable that takes 
-     integer values.  
+  /* Input:
+     . y is an array with a number of 'Realizations' of a stochastic variable that takes
+     integer values.
      . p_DIM is the max dimension of the p array
-     
-     Output: 
-     . p is the distribution (normalized to one) with the relative appearance of those 
-     integer values in the array y. 
 
-     For this algorithm to work, p_DIM > MAX_i ( y[i] ), and p should have been initialized 
-     with calloc() to make sure all its entries are zero. 
+     Output:
+     . p is the distribution (normalized to one) with the relative appearance of those
+     integer values in the array y.
+
+     For this algorithm to work, p_DIM > MAX_i ( y[i] ), and p should have been initialized
+     with calloc() to make sure all its entries are zero.
   */
-  
+
   int i, Pop;
   for(i=0; i < Realizations; i++){
     Pop = (int)y[i];
@@ -1122,6 +1122,7 @@ void probability_distribution_from_stochastic_realizations(double * y, int Reali
     else {
       printf(" The dimension of the distribution vector, p, is too low (p_DIM = %d)\n", p_DIM);
       printf(" It is lower than required. p_DIM should be larger or equal to MAX_i ( y[i] )\n");
+      printf(" Population at Realization %d-th: Pop = %d\n", i, Pop);
       printf(" This p vector should be allocated with a higher dimension.\n");
       printf(" The program will exit\n");
       exit(0);
@@ -1136,33 +1137,33 @@ void probability_distribution_from_stochastic_realizations_2D(double * x, double
 							      double ** p,
 							      int p_DIM_x, int p_DIM_y )
 {
-  /* Input: 
-     . x is an array with a number of 'Realizations' of the first stochastic variable that takes 
-     integer values.  
-     . x is an array with a number of 'Realizations' of the first stochastic variable that takes 
+  /* Input:
+     . x is an array with a number of 'Realizations' of the first stochastic variable that takes
+     integer values.
+     . x is an array with a number of 'Realizations' of the first stochastic variable that takes
      . p_DIM_x is the max dimension of the p array along the first dimension
      . p_DIM_y is the max dimension of the p array along the second dimension
-     
+
      To be clear, the result of the i-th replicate was
-     
-     (x[i], y[i]) 
+
+     (x[i], y[i])
 
      and so on and so forth from i=0 to i=Realizations-1
 
-     Output: 
-     . p is the distribution (normalized to one) with the relative appearance of those 
-     integer values in the data (x, y). 
+     Output:
+     . p is the distribution (normalized to one) with the relative appearance of those
+     integer values in the data (x, y).
 
-     For this algorithm to work, p_DIM_x > MAX_i ( x[i] ), and p_DIM_y > MAX_i ( y[i] ), 
-     but 'p' should have been initialized with calloc() to make sure all its entries are 
-     zero. 
+     For this algorithm to work, p_DIM_x > MAX_i ( x[i] ), and p_DIM_y > MAX_i ( y[i] ),
+     but 'p' should have been initialized with calloc() to make sure all its entries are
+     zero.
   */
-  
+
   int i, Pop_x, Pop_y;
   for(i=0; i < Realizations; i++){
     Pop_x = (int)x[i];
     Pop_y = (int)y[i];
-    
+
     if(Pop_x < p_DIM_x && Pop_y < p_DIM_y )  p[Pop_x][Pop_y]++;
     else {
       printf(" The dimension of the distribution matrix, p, is too low (p_DIM_x = %d)\n", p_DIM_x);
@@ -1176,14 +1177,14 @@ void probability_distribution_from_stochastic_realizations_2D(double * x, double
     }
   }
 
-  Norma_2D_Nx_Ny(p, p_DIM_x, p_DIM_y ); 
+  Norma_2D_Nx_Ny(p, p_DIM_x, p_DIM_y );
 }
 
 void Norma_2D_Nx_Ny(double **Relative_Abundance, int No_x, int No_y)
 {
   int i,j;
   double summ;
-  
+
   summ = 0.;
   for(i=0; i< No_x; i++)
     for(j=0; j< No_y; j++)
@@ -1192,7 +1193,7 @@ void Norma_2D_Nx_Ny(double **Relative_Abundance, int No_x, int No_y)
   for(i=0; i< No_x; i++)
     for(j=0; j< No_y; j++)
       Relative_Abundance[i][j] /= summ;
-}  
+}
 
 
 
@@ -1203,7 +1204,7 @@ void abundance_distribution(int Pop[], int Sp, double Relative_Abundance[], int 
     if(Pop[i] > No)
       Relative_Abundance[No+1]++;
     else /* if(Pop[i]>0) */
-      Relative_Abundance[Pop[i]]++; 
+      Relative_Abundance[Pop[i]]++;
   }
 }
 
@@ -1211,15 +1212,15 @@ void abundance_distribution_2D(int Pop[], double **Relative_Abundance, int No)
 {
   int i,j;
   int m, n;
-  
+
   m = Pop[0] + Pop[1];
   n = Pop[1];
 
   for(i=0; i<=No; i++)
     for(j=0; j<=No; j++)
-      if(n == i && m == j) 
+      if(n == i && m == j)
 	Relative_Abundance[n][m]++;
-      
+
   if(n > No || m > No)
     Relative_Abundance[No+1][No+1]++;
 }
@@ -1231,7 +1232,7 @@ void histograma(int i, double Relative_Probability[], int No)
   else if(i > No)
     Relative_Probability[No+1]++;
 }
-    
+
 void histogram_x_axes(double X[], int noBar, double x_i, double x_s)
 {
   int i;
@@ -1266,14 +1267,14 @@ void histogram(double Time[], int no, double Pn[], int B, double x_i, double x_s
 void Norma_Total_a_J(float *Relative_Abundance, int a, int J)
 {
   /* Normalizing a vector defined form i=a to i=J
-     Usually $a$ is either a = 0 or a = 1 
+     Usually $a$ is either a = 0 or a = 1
   */
   int i;
   double summ;
   float *Dumm;
   summ = 0.; Dumm = &Relative_Abundance[a];
   for(i=a; i<= J; i++) summ += *Dumm++;
-  
+
   if(summ > 0.){
     Dumm = &Relative_Abundance[a];
     for(i=a; i<= J; i++) *Dumm++ /= summ;
@@ -1321,8 +1322,8 @@ void Norma_Total_0_J_Percentage(double *Relative_Abundance, int J)
     printf("ERROR... Summ = 0 --> Non-normalizable probability\n");
     exit(0);
   }
-  
-} 
+
+}
 
 void Norma(double Relative_Abundance[], int No)
 {
@@ -1336,7 +1337,7 @@ void Norma(double Relative_Abundance[], int No)
     printf("ERROR... Summ = 0 --> Non-normalizable probability\n");
     exit(0);
   }
-} 
+}
 
 void Norm_P_n_m(int ND, double **P, double Norm)
 {
@@ -1361,7 +1362,7 @@ void Norma_2D(double **Relative_Abundance, int No)
 
   for(j=0; j<= No; j++)
     for(i=0; i<= No; i++) Relative_Abundance[i][j] /= summ;
-}  
+}
 
 #if defined NUMERICAL_RECIPES
 void rank_Abundance_Pop_YX_n(int Pop[], int n, double Rank[])
@@ -1369,18 +1370,18 @@ void rank_Abundance_Pop_YX_n(int Pop[], int n, double Rank[])
   /* One thousand is the maximum number of species in the system */
   int i,m;
   float *Pop_O;
-  
+
   Pop_O = vector(1,n);
   m = 0;
   for (i=1; i<=n; i++)
     if(Pop[i] > 0)
-      Pop_O[++m] = -Pop[i]; 
+      Pop_O[++m] = -Pop[i];
   sort(m,Pop_O);  /* revert(n+1,Pop_O); */
   for (i=0; i<m; i++) Rank[i] += -(double)Pop_O[i+1];
   //for (i=m; i<n; i++) Rank[i] += 0.;
   /* Rank[0] is storing the maximum value of the n-dimensional vector
-     (Pop[1],...,Pop[n]), where Rank[i=n] would be actually always equal to zero, 
-     if Rank[i] were defined from i=0 to i=n. 
+     (Pop[1],...,Pop[n]), where Rank[i=n] would be actually always equal to zero,
+     if Rank[i] were defined from i=0 to i=n.
   */
   free_vector(Pop_O, 1,n);
 }
@@ -1390,19 +1391,19 @@ void rank_Abundance_0(int Pop[], int n, double Rank[])
   /* Notice that Pop[] must be non-negative vector */
   int i,m;
   float *Pop_O;
-  
+
   Pop_O = vector(1,n);
   m = 0;
   for (i=0; i<n; i++)
     if(Pop[i] > 0)
-      Pop_O[++m] = -Pop[i]; 
+      Pop_O[++m] = -Pop[i];
   sort(m,Pop_O);
   /* revert(m+1,Pop_O); */
   for (i=0; i<m; i++) Rank[i] += -(double)Pop_O[i+1];
   //for (i=m; i<n; i++) Rank[i] += 0.;
   /* Rank[0] is storing the maximum value of the n-dimensional vector
-     (Pop[0],...,Pop[n-1]), where Rank[i=n] would be actually always equal to zero, 
-     if Rank[i] were defined from i=0 to i=n. 
+     (Pop[0],...,Pop[n-1]), where Rank[i=n] would be actually always equal to zero,
+     if Rank[i] were defined from i=0 to i=n.
   */
   free_vector(Pop_O, 1,n);
 }
@@ -1413,12 +1414,12 @@ void ordering_Vector_double(double *X, int n, int HOW)
   /* if HOW =-1, the output vector is ordered in decreasing values */
   int i,m;
   float *Pop_O;
-  
+
   Pop_O = vector(1,n);
   m = 0;
   for (i=0; i<n; i++)
-    Pop_O[++m] = (float)HOW *(float)X[i];  /* Pop_O[++m] = (float)X[i] 
-                                                Output vector ordered in 
+    Pop_O[++m] = (float)HOW *(float)X[i];  /* Pop_O[++m] = (float)X[i]
+                                                Output vector ordered in
 						increasing values */
   sort(m,Pop_O);
   for (i=0; i<n; i++)
@@ -1430,28 +1431,28 @@ void ordering_Vector_double(double *X, int n, int HOW)
 
 void ordering_Vector_2_double(double *X, double *Y, int n, int HOW)
 {
-  /* Sorts arrays X into ascending order using Quicksort, while mantaining the 
+  /* Sorts arrays X into ascending order using Quicksort, while mantaining the
      corresponding rearrangement of the array Y */
   /* if HOW = 1, the output vector is ordered in increasing values */
   /* if HOW =-1, the output vector is ordered in decreasing values */
   int i,m;
   float *Pop_O, *Pop_A;
-  
+
   Pop_O = vector(1,n); Pop_A = vector(1,n);
   m = 0;
   for (i=0; i<n; i++){
     m++;
-    Pop_O[m] = (float)HOW *(float)X[i];  /* Pop_O[++m] = (float)X[i] 
-                                                Output vector ordered in 
+    Pop_O[m] = (float)HOW *(float)X[i];  /* Pop_O[++m] = (float)X[i]
+                                                Output vector ordered in
 						increasing values */
     Pop_A[m] = (float)Y[i];
   }
   sort2(m,Pop_O,Pop_A);
   for (i=0; i<n; i++){
-      X[i] = (double)HOW * (double)Pop_O[i+1]; /* 
+      X[i] = (double)HOW * (double)Pop_O[i+1]; /*
 						  X[i] = (double)Pop_O[i+1]
 				                  Output vector odered in
-						  increasing values 
+						  increasing values
 					       */
       Y[i] = (double)Pop_A[i+1];
   }
@@ -1463,18 +1464,18 @@ void rank_Abundance_Ave(double Pop[], int n, double Rank[], double Rank_Var[])
   int i,m;
   float *Pop_O;
   double *Rank_new;
-  
+
   Rank_new = dvector(0,n-1);
   Pop_O = vector(1,n);
-  m = 0; 
+  m = 0;
   for (i=0; i<n; i++)
     if(Pop[i] > 0.)
-      Pop_O[++m] = -(float)Pop[i]; 
+      Pop_O[++m] = -(float)Pop[i];
   sort(m,Pop_O);
   /* revert(n+1,Pop_O); */
   for (i=0; i<m; i++) Rank_new[i] = -(double)Pop_O[i+1];
   for (i=m; i<n; i++) Rank_new[i] = 0.;
-  Norma_Total_0_J(Rank_new,n-1); 
+  Norma_Total_0_J(Rank_new,n-1);
 
   for (i=0; i<n; i++){
     Rank[i] += Rank_new[i];
@@ -1483,7 +1484,7 @@ void rank_Abundance_Ave(double Pop[], int n, double Rank[], double Rank_Var[])
   free_dvector(Rank_new, 0,n-1);
   free_vector(Pop_O, 1,n);
 }
-#endif 
+#endif
 
 void Ave_Var(double *Ave, double *Var, int Max_Sp, int n)
 {
@@ -1506,7 +1507,7 @@ void accum_Histogram(double *Sim, int No, double *y, double *y_V)
   }
 }
 
-void accum_Diversity_Histogram(int *Divers, int No, double *y, double *y_V)  
+void accum_Diversity_Histogram(int *Divers, int No, double *y, double *y_V)
 {
   int i;
 
@@ -1532,7 +1533,7 @@ double vector_MAX_double(double * P, int n_0, int No)
   /* MAX value among P[n_0], ..., P[No-1] */
   int i;
   double F, max_Value;
-  
+
   F = P[n_0];
   for(i=n_0; i<No; i++){
     F = MAX(P[i],F);
@@ -1547,11 +1548,11 @@ double vector_MAX_Index_double(double * P, int n_0, int No, int * I)
   /* MAX value among P[n_0], ..., P[No-1] */
   int i;
   double F, max_Value;
-  
+
   F = P[n_0];
   for(i=n_0; i<No; i++){
 
-    if ( F <= P[i] ) { 
+    if ( F <= P[i] ) {
       (*I) = i;
       F = P[i];
     }
@@ -1568,7 +1569,7 @@ int vector_MAX_int(int * P, int n_0, int No)
   /* MAX value among P[n_0], ..., P[No-1] */
   int i;
   int F, max_Value;
-  
+
   F = P[n_0];
   for(i=n_0; i<No; i++){
     F = MAX(P[i],F);
@@ -1584,7 +1585,7 @@ double vector_MIN_double(double * P, int n_0, int No)
   /* MIN value among P[n_0], ..., P[No-1] */
   int i;
   double F, min_Value;
-  
+
   F = P[n_0];
   for(i=n_0; i<No; i++){
     F = MIN(P[i],F);
@@ -1598,7 +1599,7 @@ int discrete_MAX_double(double *P, int No)
 {
   int i, i_max;
   double F;
-  
+
   F = P[0];
   for(i=0; i<No; i++){
     if(P[i] >= F) i_max = i;
@@ -1609,19 +1610,19 @@ int discrete_MAX_double(double *P, int No)
 }
 
 /* Functions to save a vector in a predefined, ordered file */
-void Saving_to_File_int(char Prefix[], double Time[], int Number[], 
+void Saving_to_File_int(char Prefix[], double Time[], int Number[],
 		    int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
   */
   int i;
-  char file[12]; 
+  char file[12];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   fp = fopen(file, "w");
   for(i=0; i<Points; i++)
@@ -1632,30 +1633,30 @@ void Saving_to_File_int(char Prefix[], double Time[], int Number[],
 void name_Ordered(char Prefix[], int File_Number, char Sufix[], char *File)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
-     File_Number-th stochastic realization.
-     Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-  */
-  int i; 
-  
-  File[0]='\0';    
-  fitxer(File, Prefix, File_Number, Sufix);
-  printf("Generated File name: %s\n",File);
-}
-
-void Saving_to_File_distribution(char Prefix[], double Ps[], 
-				 int Points, int File_Number)
-{
-  /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
   */
   int i;
-  char file[40]; 
+
+  File[0]='\0';
+  fitxer(File, Prefix, File_Number, Sufix);
+  printf("Generated File name: %s\n",File);
+}
+
+void Saving_to_File_distribution(char Prefix[], double Ps[],
+				 int Points, int File_Number)
+{
+  /* The number of species inhabiting the lattice changes in number with time.
+     This function saves the temporal evolution of this quantitity of the
+     File_Number-th stochastic realization.
+     Dependencies: Saving_to_File() -> fitxer() -> inttochar().
+  */
+  int i;
+  char file[40];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving Distribution in the file %s\n",file);
   fp = fopen(file, "w");
@@ -1666,14 +1667,14 @@ void Saving_to_File_distribution(char Prefix[], double Ps[],
   printf("Success: Distribution has been saved in the file %s!\n",file);
 }
 
-void Saving_to_File_float_float(char Prefix[], float Time[], float Number[], 
+void Saving_to_File_float_float(char Prefix[], float Time[], float Number[],
 				int Points, int File_Number, int ZEROS)
 {
   int i;
-  char file[24]; 
+  char file[24];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s ... ...\t",file);
   fp = fopen(file, "w");
@@ -1690,19 +1691,19 @@ void Saving_to_File_float_float(char Prefix[], float Time[], float Number[],
   printf("File %s has been successfully saved!!!\n",file);
 }
 
-void Saving_to_File_float(char Prefix[], double Time[], float Number[], 
+void Saving_to_File_float(char Prefix[], double Time[], float Number[],
 			  int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
   */
   int i;
-  char file[12]; 
+  char file[12];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   fp = fopen(file, "w");
   for(i=0; i<Points; i++)
@@ -1710,7 +1711,7 @@ void Saving_to_File_float(char Prefix[], double Time[], float Number[],
   fclose(fp);
 }
 
-void saving_Time_Two_Float_vectors(char *file, 
+void saving_Time_Two_Float_vectors(char *file,
 				  float *time, float *x, float *y, int nP)
 {
   int i;
@@ -1731,24 +1732,24 @@ void Reading_from_File_double_nxy_Counting_Rows(char * File_Name,
 						int n_XY,
 						int * No)
 {
-  /* This function counts the nubmer of rows (int * No) of the file while to read 
-     It checks if the vector and Matrix to read will be too large for the quantity 
-     of memory reserved in main code (through MAX_No_of_ROWS) 
+  /* This function counts the nubmer of rows (int * No) of the file while to read
+     It checks if the vector and Matrix to read will be too large for the quantity
+     of memory reserved in main code (through MAX_No_of_ROWS)
   */
   int n, j;
   double x,y;
   FILE *fp;
 
-  int Max_No_of_ROWS; 
-  
-  printf("\n[Entering function Reading_from_File_double_nxy() from stat.c ]\n    Reading File %s...\n", 
+  int Max_No_of_ROWS;
+
+  printf("\n[Entering function Reading_from_File_double_nxy() from stat.c ]\n    Reading File %s...\n",
 	 File_Name); //Press_Key();
 
-  if((fp=fopen(File_Name,"r")) == NULL) { 
+  if((fp=fopen(File_Name,"r")) == NULL) {
     printf("File non-existent! Cannot open file.\n");
     exit(1);
   }
-  
+
   n=0;
   while ( fscanf(fp, "%lf\t", &x) != EOF ){
     x_Data[n] = x;
@@ -1756,13 +1757,13 @@ void Reading_from_File_double_nxy_Counting_Rows(char * File_Name,
       fscanf(fp, "%lf\t", &y);
       y_Data[j][n] = y;
     }
-    
-    n++;  
-    assert( n <= MAX_No_of_ROWS );  
+
+    n++;
+    assert( n <= MAX_No_of_ROWS );
   }
-  
+
   * No = n; /* Number of rows (for instance, times) in the file to read */
-  
+
   fclose(fp);
   printf("    File %s has been read successfully\n", File_Name); //Press_Key();
   printf("[Exiting function Reading_from_File_double_nxy() from stat.c]\n\n");
@@ -1774,7 +1775,7 @@ void Reading_from_File_double_nxy(char * File_Name, double * x_Data, double ** y
   double x,y;
   FILE *fp;
 
-  printf("\n[Entering function Reading_from_File_double_nxy() from stat.c ]\n    Reading File %s...\n", 
+  printf("\n[Entering function Reading_from_File_double_nxy() from stat.c ]\n    Reading File %s...\n",
 	 File_Name); //Press_Key();
   if((fp=fopen(File_Name,"r")) == NULL) {
     printf("File non-existent! Cannot open file.\n");
@@ -1797,15 +1798,15 @@ void Reading_from_File_double_y(char * File_Name, double ** y_Data, int No_Rows,
   double y;
   FILE *fp;
 
-  printf("\n[Entering function Reading_from_File_double_y() from stat.c ]\n    Reading File %s...\n", 
+  printf("\n[Entering function Reading_from_File_double_y() from stat.c ]\n    Reading File %s...\n",
 	 File_Name); //Press_Key();
   if((fp=fopen(File_Name,"r")) == NULL) {
     printf("File non-existent! Cannot open file.\n");
     exit(1);
   }
   for(i=0; i < No_Rows; i++){
-    for(j=0; j < No_Cols; j++) { 
-      if ( j == (No_Cols-1) ) { fscanf(fp, "%lf\n", &y); y_Data[i][j] = y; } 
+    for(j=0; j < No_Cols; j++) {
+      if ( j == (No_Cols-1) ) { fscanf(fp, "%lf\n", &y); y_Data[i][j] = y; }
       else                    { fscanf(fp, "%lf\t", &y); y_Data[i][j] = y; }
     }
     //for(j=0; j < No_Cols; j++){ printf("%g\t", y_Data[i][j]); }
@@ -1823,10 +1824,10 @@ void Saving_to_File_double_y(char * File_Name, double ** y_Data, int No_Rows, in
   double y;
   FILE *fp;
 
-  printf("\n[Entering function Saving_to_File_double_y() from stat.c ]\n  Saving File %s...\n", 
+  printf("\n[Entering function Saving_to_File_double_y() from stat.c ]\n  Saving File %s...\n",
 	 File_Name); //Press_Key();
 
-  fp=fopen(File_Name, "w"); 
+  fp=fopen(File_Name, "w");
   for(i=0; i < No_Rows; i++){
     for(j=0; j < No_Cols; j++) { fprintf(fp, "%g\t", y_Data[i][j]); }
     fprintf(fp, "\n");
@@ -1837,16 +1838,16 @@ void Saving_to_File_double_y(char * File_Name, double ** y_Data, int No_Rows, in
   printf("[Exiting function Saving_to_File_double_y() from stat.c]\n\n");
 }
 
-void Reading_from_File_double_TwoCol(char *file, double Time[], double Number[], 
+void Reading_from_File_double_TwoCol(char *file, double Time[], double Number[],
 				     int Points)
 {
   int i;
   FILE *fp;
   double x,y;
-  
+
   printf("[Entering reading function]\n");
   printf(" Trying Reading File %s [ %d rows to read ] \n", file, Points);
-  
+
   if((fp=fopen(file,"r")) == NULL) {
     printf("  File non-existent in current working directory. Cannot open file.\n");
     exit(1);
@@ -1865,26 +1866,26 @@ void Reading_from_File_double_TwoCol(char *file, double Time[], double Number[],
 
 }
 
-void Saving_to_File_Lattice_double(char *Prefix, double *x, double *y, double **Lattice, int Nx, int Ny, 
+void Saving_to_File_Lattice_double(char *Prefix, double *x, double *y, double **Lattice, int Nx, int Ny,
 				   int File_Number)
 {
   /* The number of individuals inhabiting the lattice changes in number with time.
      This function saves an snabshot at a given time and creates a file according to
      File_Number-th label.
-     Dependencies: Saving_to_File() -> fitxer() -> inttochar(). 
+     Dependencies: Saving_to_File() -> fitxer() -> inttochar().
   */
   int i,j;
-  char file[40]; 
+  char file[40];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
 
   for(i=0; i<Nx; i++){
     for(j=0; j<Ny; j++){
-      fprintf(fp,"%g\t%g\t%g\n", x[i], y[j], Lattice[i][j]); 
+      fprintf(fp,"%g\t%g\t%g\n", x[i], y[j], Lattice[i][j]);
     }
   }
   fclose(fp);
@@ -1892,41 +1893,41 @@ void Saving_to_File_Lattice_double(char *Prefix, double *x, double *y, double **
   printf("File %s saved successfully!\n",file);
 }
 
-void Saving_to_File_double(char *Prefix, double Time[], double Number[], 
+void Saving_to_File_double(char *Prefix, double Time[], double Number[],
 			   int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-     Two colomns saving file... 
+     Two colomns saving file...
   */
   int i;
   char file[100];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
   for(i=0; i<Points; i++)
     fprintf(fp,"%g\t%g\n",Time[i], Number[i]);
   fclose(fp);
-} 
+}
 
 void Saving_to_File_double_1COL(char *Prefix, double Number[], int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-     Two colomns saving file... 
+     Two colomns saving file...
   */
   int i;
   char file[50];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
@@ -1937,57 +1938,57 @@ void Saving_to_File_double_1COL(char *Prefix, double Number[], int Points, int F
 
 void Saving_to_File_double_1Col(char *Prefix, double Number[], int Points)
 {
-  /* 
-     One column file is saved... 
+  /*
+     One column file is saved...
   */
   int i;
   char file[40];
   FILE *fp;
   char *f;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   f = strcat(file, Prefix);
   f = strcat(file, ".dat");
-  
+
   printf("Saving file %s\n",file);
-  
+
   fp = fopen(file, "w"); for(i=0; i<Points; i++) fprintf(fp,"%g\n",Number[i]);  fclose(fp);
 }
 
-void Saving_to_File_double_Average_plusminus_VAR(char Prefix[], double Time[], double Number[], 
+void Saving_to_File_double_Average_plusminus_VAR(char Prefix[], double Time[], double Number[],
 						 double Var[], int Points, int File_Number)
 {
   /* File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-     Three colomns saving file!!!! 
+     Three colomns saving file!!!!
   */
   int i;
-  char file[50]; 
+  char file[50];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
   for(i=0; i<Points; i++)
     fprintf(fp,"%g\t%g\t%g\t%g\n",Time[i], Number[i]-Var[i], Number[i], Number[i]+Var[i]);
   fclose(fp);
-} 
+}
 
-void Saving_to_File_double_3Col(char Prefix[], double Time[], double Number[], 
+void Saving_to_File_double_3Col(char Prefix[], double Time[], double Number[],
 				double Var[], int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-     Three colomns saving file!!!! 
+     Three colomns saving file!!!!
   */
   int i;
-  char file[50]; 
+  char file[50];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
@@ -1996,21 +1997,21 @@ void Saving_to_File_double_3Col(char Prefix[], double Time[], double Number[],
   fclose(fp);
 }
 
-void Saving_to_File_double_4Col(char Prefix[], 
-				double Time[], double y_1[], double y_2[], double y_3[], 
+void Saving_to_File_double_4Col(char Prefix[],
+				double Time[], double y_1[], double y_2[], double y_3[],
 				int Points, int File_Number)
 {
   /* The number of species inhabiting the lattice changes in number with time.
-     This function saves the temporal evolution of this quantitity of the 
+     This function saves the temporal evolution of this quantitity of the
      File_Number-th stochastic realization.
      Dependencies: Saving_to_File() -> fitxer() -> inttochar().
-     Three colomns saving file!!!! 
+     Three colomns saving file!!!!
   */
   int i;
-  char file[40]; 
+  char file[40];
   FILE *fp;
-  
-  file[0]='\0';    
+
+  file[0]='\0';
   fitxer(file, Prefix, File_Number, ".dat");
   printf("Saving file %s\n",file);
   fp = fopen(file, "w");
@@ -2025,7 +2026,7 @@ void save_a_Matrix_to_File_int(char Prefix[],int No,int **InEvol, int NoRow,int 
   char file[12];
   FILE *fp;
 
-  file[0]='\0';    
+  file[0]='\0';
   fitxer(file, Prefix, No, ".dat");
 
   fp = fopen(file, "w");
@@ -2044,7 +2045,7 @@ void save_a_Matrix_to_File_float(char Prefix[],int No,float **InEvol, int NoRow,
   char file[12];
   FILE *fp;
 
-  file[0]='\0';    
+  file[0]='\0';
   fitxer(file, Prefix, No, ".dat");
 
   fp = fopen(file, "w");
@@ -2057,14 +2058,14 @@ void save_a_Matrix_to_File_float(char Prefix[],int No,float **InEvol, int NoRow,
   fclose(fp);
 }
 
-void save_a_TimeMatrix_to_File_int(char Prefix[], int No, double Time[], int **InEvol, 
+void save_a_TimeMatrix_to_File_int(char Prefix[], int No, double Time[], int **InEvol,
 				   int NoRow,int NoCol)
 {
   int i,j;
   char file[12];
   FILE *fp;
 
-  file[0]='\0';    
+  file[0]='\0';
   fitxer(file, Prefix, No, ".dat");
 
   fp = fopen(file, "w");
@@ -2077,14 +2078,14 @@ void save_a_TimeMatrix_to_File_int(char Prefix[], int No, double Time[], int **I
   fclose(fp);
 }
 
-void save_a_TimeMatrix_to_File_float(char Prefix[],int No, double Time[], float **fEvol, 
+void save_a_TimeMatrix_to_File_float(char Prefix[],int No, double Time[], float **fEvol,
 				     int NoRow,int NoCol)
 {
   int i,j;
   char file[12];
   FILE *fp;
 
-  file[0]='\0';    
+  file[0]='\0';
   fitxer(file, Prefix, No, ".dat");
 
   fp = fopen(file, "w");
@@ -2100,13 +2101,13 @@ void save_a_TimeMatrix_to_File_float(char Prefix[],int No, double Time[], float 
 /* Related functions on which Saving_to_file *** functions depend */
 void fitxer (char file[], char a[], int b, char c[])
 {
-  /* This function returns the name of a file where 'char a[]' is the prefix, 
+  /* This function returns the name of a file where 'char a[]' is the prefix,
      'int b' is an ordering number i 'char c[]' is a sufix.
      For instance, noSp_ +  5 + .dat = noSp_5.dat.
   */
   char *pFile;
   char num[12];
-  
+
   pFile = strcat(file,a);
   inttochar(b,num);
   pFile = strcat(file,num);
@@ -2120,19 +2121,19 @@ void label_Name( char * Name_OUT, char * Name_IN )
      nees to be allocated in memmory in advance
   */
   char * f;
-  
+
   Name_OUT[0] ='\0';
   f = strcat( Name_OUT, Name_IN );
 }
 
 void fileName (char file[], char a[], char c[])
 {
-  /* This function returns the name of a file where 'char a[]' is the prefix, 
+  /* This function returns the name of a file where 'char a[]' is the prefix,
      and 'char c[]' is a sufix. If a[] = 'Barcelona' and c[]='.dat'
      for instance, then barcelona + .dat = barcelona.dat would the output
   */
   char *pFile;
-  
+
   pFile = strcat(file,a);
   pFile = strcat(file,c);
 }
@@ -2143,9 +2144,9 @@ void inttochar(int b, char num[])
   int i, x, xif;
   int div;
 
-  div=1; xif=1; 
+  div=1; xif=1;
   kount = 0;
-  while (xif != 0){    
+  while (xif != 0){
     div *= 10;
     xif = b/div;
     kount++;
@@ -2161,11 +2162,11 @@ void inttochar(int b, char num[])
 
 int doubletochar(double value, char * Number)
 {
-  /* 
+  /*
      . value is the double precision number to be
      converted
 
-     . Number [] MUST be big enough to hold all 
+     . Number [] MUST be big enough to hold all
      the characters of your number!!
 
      . mm is the number of meaningful digits will retained
@@ -2184,26 +2185,26 @@ void Saving_floatVector(char* immVector, float *mVector, int Sp)
 {
   int i;
   FILE *fp;
-  
+
   fp = fopen(immVector, "w");
-  
+
   for(i=0; i<Sp; i++)
     fprintf(fp, "%f\n", mVector[i]);
-  
-  fclose(fp);   
+
+  fclose(fp);
 }
 
 void Saving_intVector(char* immVector, int *mVector, int Sp)
 {
   int i;
   FILE *fp;
-  
+
   fp = fopen(immVector, "w");
-  
+
   for(i=0; i<Sp; i++)
     fprintf(fp, "%d\n", mVector[i]);
- 
-  fclose(fp);   
+
+  fclose(fp);
 }
 
 void Reading_floatVector(char* File, float *mVector, int Sp)
@@ -2212,7 +2213,7 @@ void Reading_floatVector(char* File, float *mVector, int Sp)
   int i;
   FILE *pf;
   float D;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   mVector[0] = 0.;
@@ -2228,7 +2229,7 @@ void Reading_doubleVector(char* File, double *mVector, int Sp)
   int i;
   FILE *pf;
   double D;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
 
@@ -2251,7 +2252,7 @@ void Reading_intVector(char* File, int *mVector, int Sp)
   int i;
   FILE *pf;
   int D;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
 
@@ -2274,7 +2275,7 @@ void Reading_float_iniVector(char* File, float *mVector, int Sp)
   int i;
   FILE *pf;
   float D;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   for(i=0; i<Sp; i++){
@@ -2287,11 +2288,11 @@ int Sum_iVector(int *mVector, int Sp)
 {
 
   int i, Summ;
-  
+
   Summ = 0;
   for(i=0; i<Sp; i++)
     Summ += mVector[i];
-  
+
   return Summ;
 }
 
@@ -2300,11 +2301,11 @@ double Sum_dVector(double *mVector, int Sp)
 
   int i;
   double Summ;
-  
+
   Summ = 0.;
   for(i=0; i<Sp; i++)
     Summ += mVector[i];
-  
+
   return Summ;
 }
 
@@ -2312,11 +2313,11 @@ int Sum_Diversity(int *mVector, int Sp)
 {
 
   int i, Summ;
-  
+
   Summ = 0;
   for(i=0; i<Sp; i++)
     Summ += mVector[i] * i;
-  
+
   return Summ;
 }
 
@@ -2325,11 +2326,11 @@ double Sum_Diversity_double(double *mVector, int Sp)
 
   int i;
   double Summ;
-  
+
   Summ = 0;
   for(i=0; i<Sp; i++)
     Summ += mVector[i] * i;
-  
+
   return Summ;
 }
 
@@ -2338,12 +2339,12 @@ void Reading_DiversityData(char* File, int *Species, int Data)
   int i;
   FILE *pf;
   int n, Sp;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   for(i=0; i<Data; i++){
     fscanf(pf, "%d\t%d\n", &n, &Sp);
-    Species[n] = Sp; 
+    Species[n] = Sp;
   }
   fclose(pf);
 }
@@ -2354,7 +2355,7 @@ void Reading_DiversityData_double(char* File, int *Species, int Data)
   FILE *pf;
   int n;
   double Sp;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   for(i=0; i<Data; i++){
@@ -2370,7 +2371,7 @@ void Reading_DiversityData_double_BIS(char* File, double *Species, int Data)
   FILE *pf;
   int n;
   double Sp;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   for(i=0; i<Data; i++){
@@ -2385,12 +2386,12 @@ void Reading_DiversityData_ONE_COLUMN(char* File, int *Species, int Data)
   int i;
   FILE *pf;
   int n, Sp;
-  
+
   printf("Reading %s... \n", File);
   pf = fopen(File, "r");
   for(i=0; i<Data; i++){
     fscanf(pf, "%d\n", &Sp);
-    Species[i] = Sp; 
+    Species[i] = Sp;
   }
   fclose(pf);
 }
@@ -2398,14 +2399,14 @@ void Reading_DiversityData_ONE_COLUMN(char* File, int *Species, int Data)
 
 void linearEqSystem_2dim(double *p0, double *p1, double *p2, double *Sol)
 {
-  /* 
+  /*
      The equation is given as:
      p0[0] = p1[0] * x + p2[0] * y;
      p0[1] = p1[1] * x + p2[1] * y;
-     
+
      Here, x = Sol[0] and y = Sol[1];
   */
-  
+
   Sol[0] = (p2[1]*p0[0] - p0[1]*p2[0])/(p1[0]*p2[1]-p1[1]*p2[0]);
   Sol[1] = (p1[1]*p0[0] - p0[1]*p1[0])/(p1[1]*p2[0]-p1[0]*p2[1]);
 }
@@ -2417,38 +2418,38 @@ int Finding_a_Value_int(const int * N, int S, int value,  int * i_th)
      value is found and the last position, i-th, where this actually
      happens.
   */
-  int i;					
+  int i;
   int n;
-  
+
   n = 0;
   for (i=0; i<S; i++){
-    
+
     if(N[i] == value){
-      
+
       (* i_th) = i;
       n++;
-  
+
     }
   }
-  
+
   return(n);
 }
 
 void create_Title_MONTH_YEAR(char * Title, char * Pre_Title, int i, int Initial_Year, int Initial_Month)
 {
   /* Enough memmory has been allocated for Title when Title is passed to this function */
- 
+
   int j;
   char *pFile;
   char CURRENT_YEAR[5];
-  char ** MONTH; 
+  char ** MONTH;
   char * CURRENT_MONTH;
   int Year, Month;
 
   MONTH = (char**)malloc( 12 * sizeof(char *) );
   for (j = 0; j<12; j++) {
     MONTH[j] = (char*)malloc( 3 * sizeof(char) );
-    MONTH[j][0]='\0';   
+    MONTH[j][0]='\0';
   }
 
   pFile = strcat(MONTH[0], "Jan");
@@ -2466,13 +2467,13 @@ void create_Title_MONTH_YEAR(char * Title, char * Pre_Title, int i, int Initial_
 
   for (j = 0; j<12; j++) {
     CURRENT_MONTH = MONTH[j];
-    printf("%s ", CURRENT_MONTH); 
+    printf("%s ", CURRENT_MONTH);
   }
   printf("\n");
-  
+
   Year  = Initial_Year  + i/12;
   Month = Initial_Month + i%12;
-  
+
   inttochar(Year, CURRENT_YEAR);
   CURRENT_MONTH = MONTH[Month];
 
@@ -2489,13 +2490,13 @@ int Number_of_Octaves( int max_A, double * x, int MAX_NUMBER_of_OCTAVES_EVER)
 {
       int n_Bin;
       int i, j, Inf, Sup;
-      
+
       Inf = 1; Sup = 1; i=0;
       while(Sup < max_A){
 	Inf = Sup;
 	Sup = 2 * Sup;
-	
-	if (i < MAX_NUMBER_of_OCTAVES_EVER) 
+
+	if (i < MAX_NUMBER_of_OCTAVES_EVER)
 	  x[i] = sqrt((double)Inf * (double)(Sup-1));
 	else
 	  {
@@ -2507,8 +2508,7 @@ int Number_of_Octaves( int max_A, double * x, int MAX_NUMBER_of_OCTAVES_EVER)
 	i++;
       }
 
-      n_Bin = i;     
-    
+      n_Bin = i;
+
       return(n_Bin); /* Number of Bins in the plot representation */
 }
-
