@@ -547,7 +547,76 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 
 	* Likelihood_Minimum = Minimum_Value; 
 	* x_Value = x_Data[j_MIN];
-	* y_Value = y_Data[k_MIN];  
+	* y_Value = y_Data[k_MIN];
+
+	void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
+				     int No_of_POINTS_1, int Input_Parameter_1,
+				     int No_of_POINTS_2, int Input_Parameter_2,
+				     double * W_GRID,
+				     double * Likelihood_Minimum,
+				     double * x_Value, 
+				     double * y_Value)
+{
+	int n, k, j, i;
+	int k_MIN, j_MIN; 
+	double Minimum_Value, Value, Value_0, Value_1;
+	
+	Parameter_Space * S = Table->S;
+	/* BEGIN : Allocating memory for saving data to plot a bifurcation  * * * * * * */
+	/*         diagram for each variable  * * * * * * * * * * * * * * * * * * * * * */  
+	double      ** z_SOL  = (double **)malloc( No_of_POINTS_2 * sizeof(double *) );
+	for( i = 0; i < No_of_POINTS_2; i++){
+	  z_SOL[i] = (double *)malloc( No_of_POINTS_1 * sizeof(double) );
+	}
+	double * x_Data  = (double *)malloc(No_of_POINTS_1 * sizeof(double) ); 
+	double * y_Data  = (double *)malloc(No_of_POINTS_2 * sizeof(double) ); 
+	/*   END : Allocating memory for saving dynamical data * * * * * * * * * * * *  */
+
+	Minimum_Value = W_GRID[0]; 
+	n = 0; 
+	for( k = 0; k < No_of_POINTS_2; k++ ) {
+  
+	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
+	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
+	  
+	  Value = Value_0 + k * (Value_1 - Value_0)/(double)(No_of_POINTS_2 - 1);
+	  y_Data[k]= Value;
+	  
+	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
+	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
+	  
+	  for( j = 0; j < No_of_POINTS_1; j++ ){
+	    
+	    Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
+	    
+	    x_Data[j] = Value;
+	    
+	    z_SOL[k][j]    = W_GRID[n++]; 
+
+	    Minimum_Value = MIN(Minimum_Value, z_SOL[k][j]);
+
+	    if(Minimum_Value == z_SOL[k][j]) {
+	      k_MIN = k;
+	      j_MIN = j; 
+	    }
+	  }
+	}
+
+	//#if defined VERBOSE
+	printf("Optimal Negative logLikelihood: %g\n", Minimum_Value); 
+	printf("%s=%f\t", Table->Symbol_Parameters[Input_Parameter_1], x_Data[j_MIN]);
+	printf("%s=%f\n", Table->Symbol_Parameters[Input_Parameter_2], y_Data[k_MIN]);
+	//#endif
+
+	* Likelihood_Minimum = Minimum_Value; 
+	* x_Value = x_Data[j_MIN];
+	* y_Value = y_Data[k_MIN];
+	
+	/* BEGIN : Free memory!!!                                     * * * * * * */
+	for( i = 0; i < No_of_POINTS_2; i++) free(z_SOL[i]); 
+	free(z_SOL);
+	free(x_Data); free(y_Data); 
+	/*   END : Free memmory!!!                                    * * * * * * */
 }
       
 void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
