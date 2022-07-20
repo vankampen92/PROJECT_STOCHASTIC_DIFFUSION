@@ -36,7 +36,8 @@ void T_I_M_E___C_O_N_T_R_O_L___A_L_L_O_C( Time_Control * Time, Parameter_Table *
 
 #if defined VERBOSE
   printf(" Time_Control is being allocated: \n");
-  printf(" %d output variables of length %d points will allocated\n", P->SUB_OUTPUT_VARIABLES, I_Time);
+  printf(" %d output variables of length %d points will allocated\n",
+	 P->SUB_OUTPUT_VARIABLES, I_Time);
 #endif
 
   Time->summ_var   = (double **)calloc( P->SUB_OUTPUT_VARIABLES, sizeof(double *) );

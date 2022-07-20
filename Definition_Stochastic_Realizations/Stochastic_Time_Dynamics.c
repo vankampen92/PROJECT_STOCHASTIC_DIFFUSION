@@ -123,7 +123,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       /* Saving and representing at values close to Time_values[j] * * * * * * * * * * * * */
       /* Notice that Time_Current is always the last time which is the closest possible to
 	 (and a little bit larger than) the time stored in Time->Time_Vector[j].           */
-      j_Good++; /* Counting good times */
+      j_Good++;            /* Counting good times of the i-th realization  */
+      Time->count[j]++;    /* Counting good realizations corresponding to the j-th time */ 
+
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
 	kk = Table->OUTPUT_VARIABLE_INDEX[k];
 	value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables,
@@ -142,7 +144,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       else {            P->CPG->x_Time[j_Good]    = Time->Time_Vector[j]; }
 #endif
       Time->time_DEF[j_Good] = Time_Current;
-      Time->count[j]++;
+      
       Time->Accumulated_Variable[i][j] = (double)new;
 
       Time_Initial = Time->Time_Vector[j-1];
@@ -239,6 +241,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
   int FROZEN_SYSTEM               = 0;
   (*Bad_Times)                    = 0; j_Good = 0;
+  
   for( j = 1; j < TIMES; j++ ) {
     /* This loop advances the system sequentially from
        intitial time 0 to 1st time , ...,  from time (j-1) to j, and so on.

@@ -1,144 +1,107 @@
 #include <MODEL.h>
 
-extern gsl_rng * r;
-
-extern int TYPE_of_TIME_DEPENDENCE;
-
-int M_O_D_E_L___M_E( Parameter_Table * Table )
+void Stationary_Probability_Distribution (Parameter_Table * Table)
 {
-  int i,j,k, n;
-  int I_Time, no_Patch;
-  int Bad_Times;
-  double t; 
-  Time_Control * Time;
-  Time_Dependence_Control * TDC; 
+  double K_R, y_R, Theta;
+  double Theory;
+  double qI, q, p, C0,Cn;
+  int    n_A, nA2;                     /* Total Number of Consumers */
+  int n, k, m;
 
-  Time = Table->T;
-  TDC  = Table->TDC; 
+  Master_Equation * ME = Table->MEq;
+  
+  K_R   = (double)Table->K_R;
+  y_R   = Table->TOTAL_No_of_RESOURCES; /* Resource density (in number of resource units) */
+  Theta = Table->Alpha_C_0 * y_R/K_R;
 
-  int No_of_CONFIGURATIONAL_STATES;
-  int n_DIMENSION;
-  int n_x, n_y, n_z;
-  Model_Parameters_Master_Equation(Table,
-				   &No_of_CONFIGURATIONAL_STATES,
-				   &n_DIMENSION,
-				   &n_x, &n_y, &n_z);
+  q  = Theta/Table->Nu_C_0;
+
+  qI = Table->Nu_C_0/Theta;
   
-  Master_Equation * MEq = (Master_Equation *)calloc( 1, sizeof(Master_Equation) );
-  /* MEq and Table will be two data structures that point to each other */
-  Table->MEq = MEq;           
-  MEq->Table = Table;
-  
-  Master_Equation_Allocation ( MEq,
-			       No_of_CONFIGURATIONAL_STATES,
-			       n_DIMENSION,
-			       n_x, n_y, n_z );
+  p  = Table->Eta_C_0/Table->Chi_C_0 * K_R;
  
-  Master_Equation_Initialization ( MEq,
-				   No_of_CONFIGURATIONAL_STATES,
-				   n_DIMENSION,
-				   n_x, n_y, n_z );
-  
-  Labels_for_Marginal_Probabilities( Table ); 
-  
-  /* Master Equation Numerical Integration                 */
-  /* BEGIN: Core part (integration of the master equation) */
-  printf("Entering Numerical Integration of the Master Equation...\n");   Press_Key();
-  int ME_SYSTEM = master_equation_time_dynamics( Table );
-  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Press_Key();
-  /*   END: ------------------------------------------ */
+  n_A = Table->TOTAL_No_of_CONSUMERS;
 
-  /* BEGIN : Stationary Probability Distribution (only for some of the models) -------
-   */
-#ifdef DIFFUSION_BD_2D
-  
-  Stationary_Probability_Distribution( Table );
-  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
-#elif defined DIFFUSION_HII_1D  
+  assert(n_A%2 == 0);            /* Total Number of Consumers is an even number */   
 
-  Stationary_Probability_Distribution( Table );
-  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
-#endif
-  Press_Key();
-  /*  END : ------------------------------------------------------------------------*/
+  nA2 = n_A/2;                   /*                                             */
   
+  C0 = ME->PS_nm[0][0] = 1.0;    /* Normalization Constant                      */
+  
+  for(n = 1; n<nA2; n++) {
+    Cn = ME->PS_nm[n][n]  = PS_nn_Function(n, nA2, C0, p);
+    
+    for(k = 1; k<= n; k++) 
+      ME->PS_nm[n+k][n-k] = PS_nk_Function(n, k, Cn, qI); 
 
-#if defined STOCHASTIC_REALIZATIONS  
- /* BEGIN : Representing distributions associated to output variables across 
-            stochastic realization 
- */  
-#if defined CPGPLOT_REPRESENTATION
-  int SAME_PLOT = 1;
-  j = Table->T->I_Time - 1;
-  assert(Table->MEq->n_DIMENSION <= 2);
-  for ( i=0; i < Table->MEq->n_DIMENSION; i++ ) {
-    C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
-  							  Table->T->Time_Vector[j],
-  							  SAME_PLOT );
+    for(k = 1; k<= n; k++) 
+      ME->PS_nm[n-k][n+k] = PS_nk_Function(n, k, Cn, q); 
+  }
+
+  /* Normalization                                                             */
+  Norma_2D_Nx_Ny(ME->PS_nm, ME->n_x, ME->n_y);
   
-    C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
-    Press_Key();
+  /* Calculation of the Theoretical Marginals with the normalized distribution */
+  Marginal_Stationary_Probabilities_Calculation ( Table );
+}
+
+double PS_nn_Function( int n, int m, double C0, double p )
+{
+  int k; 
+  double x;
+
+  x = 0.0;
+  for(k = 0; k < n; k++) 
+    x += ( log((double)(m-k)) - 2.0*log((double)(n-k)) ); 
+
+  x += (double)n * log(p) + log(C0); 
+  
+  x = exp(x); 
+  
+  return(x);
+}
+
+double PS_nk_Function( int n, int k, double Cn, double q )
+{ 
+  double x;
+  int j;
+  
+  x = 0.0;
+  for(j = 0; j < k; j++) 
+    x += ( log((double)(n-j)) - log((double)(n+k-j)) ); 
+
+  x += (double)k * log(q) + log(Cn); 
+  
+  x = exp(x); 
+  
+  return(x);
+}
+
+void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table )
+{ 
+  int l, n, m, A_0;
+  int No_of_POINTS; 
+  double S;
+  
+  Master_Equation * ME = Table->MEq;
+  
+  A_0 = Table->TOTAL_No_of_CONSUMERS;
+
+  for( n = 0; n <= A_0; n++ ) {       /* Free Predators */
+    S = 0.0;
+    for( m = 0; m <= A_0 - n; m++ ) {
+      S += ME->PS_nm[n][m];
+    }
+    ME->PS_n_Marginal[n] = S;
   }
   
-#endif
- /*   END : Empirical Distribuiton Representation ----------------------------------*/
-  
-  /* Saving also the last time in a file */
-  j = Table->T->I_Time - 1;
-  assert(Table->MEq->n_DIMENSION <= 2);
-  Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Table,
-							      j, Table->T->Time_Vector[j] );
-  
-#endif
-  
-#if defined CPGPLOT_REPRESENTATION
-  //  Parameter Table dependent costumized plotting is defined in
-  //  ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
-  // Plotting the temporal evolution of the averages of the dynamical variables (which
-  // should match the output variables for this work) calculated with the marginals from
-  // the numerical integration of the master equation vs the densities calculated with
-  // the ODE system.
-  
-  int TIMES           = Table->T->I_Time;
-  //  Axes redefinition:
-  Table->CPG->CPG_RANGE_X_0 = 0.0;  Table->CPG->CPG_RANGE_X_1 = Table->CPG->x_Time[TIMES-1];  
-  Table->CPG->CPG_RANGE_Y_0 = 0.0;  Table->CPG->CPG_RANGE_Y_1 = (double)Table->No_of_INDIVIDUALS;
-  Table->CPG->CPG_SCALE_Y   = 1;    Table->CPG->CPG_SCALE_X   = 1;
-  SAME_PLOT = 0;
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T( SAME_PLOT,
-						       Table, TIMES,
-						       Table->CPG->x_Time,
-						       Table->Matrix_Output_Variables);
-  SAME_PLOT = 1;
-  Press_Key();
-  /* New colors and lines */
-  Table->CPG->color_Index   = 3;
-  Table->CPG->type_of_Width = 2;
-  Table->CPG->type_of_Line  = 2;
-  Table->CPG->type_of_Symbol = 5; 
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T( SAME_PLOT,
-						       Table, TIMES,
-						       Table->CPG->x_Time,
-						       Table->CPG->y_Time);
-#endif
-
-  FILE * fp = fopen("Data_ODE_vs_ME_Marginals_0.dat", "w");
-  for(i=0; i<TIMES; i++)
-    fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],
-	    Table->CPG->y_Time[0][i], Table->Matrix_Output_Variables[0][i]);  
-  fclose(fp);
-  
-  if( Table->SUB_OUTPUT_VARIABLES > 1 ){
-    fp = fopen("Data_ODE_vs_ME_Marginals_1.dat", "w");
-    for(i=0; i<TIMES; i++)
-      fprintf(fp, "%g\t%g\t%g\n", Table->CPG->x_Time[i],
-	      Table->CPG->y_Time[1][i], Table->Matrix_Output_Variables[1][i]);  
-    fclose(fp);
+  for( m = 0; m <= A_0; m++ ) {       /* Handling Predators */
+    S = 0.0;
+    for( n = 0; n <= A_0 - m; n++ ) {
+      S += ME->PS_nm[n][m];
+    }
+    ME->PS_m_Marginal[m] = S;
   }
-  
-  Master_Equation_Free ( MEq );
-
-  return(0);
 }
 
 void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table, 

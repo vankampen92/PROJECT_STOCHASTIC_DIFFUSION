@@ -51,7 +51,7 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
     case 18: p=strcat(Label, "\\gx\\u(C)\\d\\d0\\u");     
       break;
-    case 19: p=strcat(Label, "\\gh\\u(C)\\d\\d0\\u");     
+    case 19: p=strcat(Label, "\\gy\\u(C)\\d\\d0\\u");     
       break;
 
     case 20: p=strcat(Label, "\\gm\\u(C)\\d");

@@ -138,7 +138,7 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_ME.o MODEL_STO.o Commu
 	stat.o                                                                               \
 	CPGPLOT___X_Y___Parameter_Table.o                                                    \
 	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o    \
-	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o
+	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o Stationary_Probability_Distribution.o
 # \ Fixed_Points_All.o 
 # \ index.Definition${TYPE_of_INDEX}.o Error_Function.o 
 # Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
@@ -349,6 +349,9 @@ Model_Parameters_Master_Equation.o: ${ME_DIR_MODEL}Model_Parameters_Master_Equat
 
 ODE_sys_Master_Equation.o: ${ME_DIR_MODEL}ODE_sys_Master_Equation.c ${HEAD.H}
 	${CC} -c ${ME_DIR_MODEL}ODE_sys_Master_Equation.c $(CXXFLAGS)
+
+Stationary_Probability_Distribution.o: ${ME_DIR_MODEL}Stationary_Probability_Distribution.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Stationary_Probability_Distribution.c $(CXXFLAGS)
 
 # Auxiliary functions to specify model ODE definition
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}

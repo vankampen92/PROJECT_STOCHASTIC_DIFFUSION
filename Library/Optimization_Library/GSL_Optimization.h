@@ -15,6 +15,9 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
 
 double Function_to_Minimize( Parameter_Table * );
 
+void Confidence_Intervals_from_Likelihood_Profile( double * Profile, double * X, int N,
+						   double LIKELIHOOD_JUMP, 
+						   double * X_MLE, double * CI ); 
 
 double GSL_Function_to_Minimize( const gsl_vector * x, void * Par );
 
@@ -23,6 +26,10 @@ double GSL_Function_to_Minimize_AIDS( const gsl_vector * x, void * Par );
 double GSL_Function_to_Minimize_Error_Model( const gsl_vector * x, void * Par );
 
 double GSL_Function_to_Minimize_Binomial_Free_Consumers( const gsl_vector * x, void * Par );
+
+double GSL_Function_to_Minimize_Beddington_DeAngelis( const gsl_vector * x, void * Par ); 
+
+double GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0(const gsl_vector * x, void * Par);
 
 double GSL_neglog_Error_Probability_Model( double * Data, double * Theory,
 					   int N , int No_of_VARIABLES,

@@ -1,22 +1,30 @@
 #include <MODEL.h>
 
-void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table * Table)
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table)
 {
-    /*  This definition is contingent to TYPE of MODEL at work from the pre-defined family of models:
-	DIFFUSION_BD_2D, DIFFUSION_HII_1D, ...
+      /* BEGIN : -------------------------------------------------------------------------
+       * Definition Initial Condition:  
+       */
+      /* This definition is contingent to TYPE of MODEL at work from the pre-defined family 
+	 of models:
+	 DIFFUSION_BD_2D, DIFFUSION_HII_1D, and DIFFUSION_BD_2D (so far)
+	 ( Models where the TOTAL_No_of_CONSUMERS is a CONSTANT )
+      */
+      /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
+      /* double p_2;         */ /* -Hp2 */ /* See below the definition of the     */
+                                           /* TOTAL_No_of_FREE_CONSUMERS_TIME_0   */
+      Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
+      Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
 
-	This definitions can be used by both deterministic functions (associated to the ODE system
-	numerical integration) or the stochastic functions (related to either the generation of 
-	stochastic replicates of the integration of the master equation). 
-    */ 
-    Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
-    Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
-    
-    assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
-    assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
-    
-    Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
-    Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_CONSUMERS-Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+      assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
+      assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
+  
+      Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
+      Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_CONSUMERS - Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+      /* END ----------------------------------------------------------------------------
+	 This initial Condition involves no triplets at time t = 0.0 because the sum of states
+	 should add up the TOTAL No of CONSUMERS 
+      */
 }
   
 void Initial_Condition_Master_Equation( Parameter_Table * Table, double * y_INI )

@@ -11,6 +11,7 @@ IO_DIR=${PROJECT_DIR}Library/IO_Library/
 OPT_DIR= ${PROJECT_DIR}Library/Optimization_Library/
 ERROR_DIR=${PROJECT_DIR}Definition_Error_Model/
 WKD=${PROJECT_DIR}MODEL_CALCULATIONS/VISUAL_2DIM_PARAM_SCAN_LK_STATIONARITY/
+ME_DIR_GENERAL=${PROJECT_DIR}Definition_Master_Equation/# 
 C_NR=${PROJECT_DIR}Library/C_NumRecip/#############
 GSL_DA=${PROJECT_DIR}Library/GSL_RANDOM/###########
 HEAD.H =${PROJECT_DIR}Include/MODEL.h##############
@@ -49,6 +50,7 @@ EXTRA_INCLUDE_PATH+=-I${GSL_DA}####################
 EXTRA_INCLUDE_PATH+=-I${IO_DIR}
 EXTRA_INCLUDE_PATH+=-I${OPT_DIR}
 EXTRA_INCLUDE_PATH+=-I${ERROR_DIR}
+EXTRA_INCLUDE_PATH+=-I${ME_DIR_GENERAL}
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N   C O N T R O L I N G   N U M E R I C A L   R E C I P E S
 NR=NUMERICAL_RECIPES###############################
@@ -68,6 +70,7 @@ RANDOM_SEED=CURRENT_TIME_RDN_SEED####### 'CURRENT_TIME_RDN_SEED' / 'FILE_RND_SEE
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   M O D E L   D E F I N I T I O N #############
 MODEL=DIFFUSION_S_RESOURCES#  ######################################
 ODE_MODEL=${MODEL}####################
+ME_DIR_MODEL=${ME_DIR_GENERAL}${MODEL}/#############################
 ################################################### (see rainTemperature.c) ##################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   N U M E R I C A L   I N T E G R A T I O N  ##
 ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
@@ -98,7 +101,7 @@ EXE=${ODE_MODEL}
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
 LDFLAGS+=-lm -lgsl -lgslcblas -lda_IO -lda_Optimization -lDa_GSL_UTL -lda_Error -lNumRec -lNRUTL -L${C_NR} -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${ODE_MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -DHAVE_INLINE ${EXTERN} -g #-Wall
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${ODE_MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -DHAVE_INLINE ${EXTERN} -g #-Wall
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3
 # This makefile uses full power of conditional compilation. There is a bunch of variables that control this and
@@ -118,6 +121,7 @@ OBJECTS = main.o report.o argumentControl.o argumentControl_fprintf.o MODEL.o MO
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o                      \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o Random_Initial_Guess_within_Boundaries.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                                \
 	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o                                                      \
+	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o Stationary_Probability_Distribution.o                                                                                                                           \
 	Model_Variables_Code.o  definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o                    \
 	stat.o                             \
 	CPGPLOT___X_Y___Parameter_Table.o  \
@@ -320,6 +324,28 @@ Advance_Current_Time.o: ${STO_DIR_GENERAL}Advance_Current_Time.c ${HEAD.H}
 
 Choose_Village.o: ${STO_DIR_GENERAL}Choose_Village.c ${HEAD.H}
 	${CC} -c ${STO_DIR_GENERAL}Choose_Village.c $(CXXFLAGS)
+
+# Functions Controling the numerical integration of the master equation
+Master_Equation.o:	${ME_DIR_GENERAL}Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}Master_Equation.c $(CXXFLAGS)
+
+master_equation_time_dynamics.o: ${ME_DIR_GENERAL}master_equation_time_dynamics.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}master_equation_time_dynamics.c $(CXXFLAGS)
+
+master_equation_driver.o: ${ME_DIR_GENERAL}master_equation_driver.c ${HEAD.H}
+	${CC} -c ${ME_DIR_GENERAL}master_equation_driver.c $(CXXFLAGS)
+
+Initial_Condition_Master_Equation.o: ${ME_DIR_MODEL}Initial_Condition_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Initial_Condition_Master_Equation.c $(CXXFLAGS)
+
+Model_Parameters_Master_Equation.o: ${ME_DIR_MODEL}Model_Parameters_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Model_Parameters_Master_Equation.c $(CXXFLAGS)
+
+ODE_sys_Master_Equation.o: ${ME_DIR_MODEL}ODE_sys_Master_Equation.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}ODE_sys_Master_Equation.c $(CXXFLAGS)
+
+Stationary_Probability_Distribution.o: ${ME_DIR_MODEL}Stationary_Probability_Distribution.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Stationary_Probability_Distribution.c $(CXXFLAGS)
 
 # Auxiliary functions to specify model ODE definition
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}

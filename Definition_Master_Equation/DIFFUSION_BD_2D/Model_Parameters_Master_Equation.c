@@ -16,7 +16,7 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
   * No_of_CONFIGURATIONAL_STATES = (* No_of_CONFIGURATIONAL_STATES) / 2;
 
   printf("No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
-  Press_Key(); 
+  // Press_Key(); 
 }
 
 void Labels_for_Marginal_Probabilities (Parameter_Table * Table)
@@ -156,7 +156,6 @@ void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table)
 	   ME->Vector_Model_Variables[1]);
 }
 
-
 void Print_Probability_Distribution ( Parameter_Table * Table )
 { 
   int n, m, A_0;
@@ -172,8 +171,7 @@ void Print_Probability_Distribution ( Parameter_Table * Table )
       printf("%.2g ", ME->P_nm[n][m]);
     }
     printf("\n"); 
-  }
- 
+  } 
 }
 
 void Saving_Marginal_Distribution_Triplets(Parameter_Table * Table, int j, double Time_Current)

@@ -40,7 +40,7 @@
    . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 -3 -G1 3 -sT 1.0E-06 -sN 300 -sP 2 -H9 2.5 -I0 16 -m0 0.5 -M0 5.0 -A0 0.01 -d0 100 -H11 100.0 -I1 18 -m1 10 -M1 200.0 -A1 0.01 -d1 100 -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 -tn 3 -t0 0.0 -t1 50 -t4 0 -tR 100 -xn 0 -xN 40.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 40 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H10 10.0 -H12 0.05 -Hp1 0.3 -Hp2 0.5 -HN 40 -tE 0.1 -G30 R -Fn 0
 
    MODEL: HOLLING II. Scanning 2D Parameter Space (Alpha_C_0, Nu_C_0): 
-   . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 -3 -G1 3 -sT 1.0E-06 -sN 300 -sP 2 -H9 2.5 -I1 16 -m1 0.5 -M1 5.0 -A1 0.01 -d1 200 -H10 1.0 -I0 17 -m0 0.1 -M0 3.0 -A0 0.01 -d0 200  -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 -tn 3 -t0 0.0 -t1 1.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -HN 20 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 0.5 -tE 0.1 -G30 R -Fn 0
+   . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -H9 2.5 -I0 16 -m0 0.5 -M0 5.0 -A0 0.01 -d0 200 -H11 100.0 -I1 18 -m1 10 -M1 200.0 -A1 0.01 -d1 200  -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 -tn 10 -t0 0.0 -t1 1.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -HN 20 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 0.5 -tE 0.1 -G30 R -Fn 0
 
    . Use -Fn 0 to generate pseudo data. -tn collects an input parameter controling the number time data points up to statinarity. It is irrelevant is this application. The time that counts is -t1 [Last_Time], the last time the dynamics goes to. This should long enough for the system to reach stationarity. Therefore, -tn is used here to tell the program how many times you will repeat the same experiment (which consists in generating -tR [Realizations] up to time -t1 [Last_Time], where the system is supposed to have reached stationarity). 
 
@@ -327,10 +327,7 @@ int main(int argc, char **argv)
 
   Initial_Value_0 = AssignStructValue_to_VectorEntry(Input_Parameter_1, &Table);
   Initial_Value_1 = AssignStructValue_to_VectorEntry(Input_Parameter_2, &Table);  
-
-  FILE * FP_x = fopen("Confidence_Intervals_0.dat", "w"); 
-  FILE * FP_y = fopen("Confidence_Intervals_1.dat", "w"); 
-
+  
   int No_of_REPETITIONS = I_Time;  /* Here, the meaning of I_Time has been overloaded */ 
   for(k=0; k<No_of_REPETITIONS; k++) {
     printf("\tTotal number of experiment repetitions: %d (current repetion: %d)\n",
@@ -354,8 +351,6 @@ int main(int argc, char **argv)
     else
       Creating_Standard_Data_Matrix_from_Model ( &Table,  
 						 Empirical_Data_Matrix );
-
-    Realizations = Table.T->Realizations;
     
     double * Realizations_Vector = (double *)calloc(Realizations, sizeof(double));
     for (i=0; i<Realizations; i++)
@@ -402,20 +397,6 @@ int main(int argc, char **argv)
 								Function_to_Minimize, 
 								W_GRID, "Negative LogLikelihood",
 								X_LINEAR, Y_LINEAR);
-
-    /* BEGIN: Checking Joint Probability Distribution and Marginals */
-    AssignVectorEntry_to_Structure(&Table, Input_Parameter_1, Initial_Value_0);
-    AssignVectorEntry_to_Structure(&Table, Input_Parameter_2, Initial_Value_1);
-    
-    Stationary_Probability_Distribution (&Table);
-    
-    printf("P(0, 0) = %g\n", Table.MEq->PS_nm[0][0]);
-    printf("P(2, 6) = %g\n", Table.MEq->PS_nm[2][6]);
-    printf("P(14, 4) = %g\n", Table.MEq->PS_nm[14][4]);
-    
-    Press_Key();
-    /*   END: ----------------------------------------------------- */
-    
     Stationary_Distribution_Free( &Table );                   /* Memmory de-allocation */ 
     /*   E N D : ----------------------------------------------------------------------*/
     
@@ -488,10 +469,10 @@ int main(int argc, char **argv)
     /* Annotating the countours by hand */
     // cpgptxt(float x, float y, float angle, float fjust,  const char *text);
   
-    cpgslw(2); 
-    /* cpgptxt(0.00002, 62.0, 0.0, 0.0,  "1.0"); */
-    /* cpgptxt(0.0001, 78.0, 0.0, 0.0,   "2.5"); */
-    /* cpgptxt(0.0003, 92.0, 0.0, 0.0,  "5.0");  */
+    cpgslw(2);
+    cpgptxt(0.00002, 62.0, 0.0, 0.0,  "1.0");
+    cpgptxt(0.0001, 78.0, 0.0, 0.0,   "2.5");
+    cpgptxt(0.0003, 92.0, 0.0, 0.0,  "5.0");
     
     float x_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_1, City_Par_Values);
     float y_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_2, City_Par_Values);
@@ -522,40 +503,40 @@ int main(int argc, char **argv)
 
     /* B E G I N :   Drawing likelihood profiles -------------------------------------------*/
     Profiling_2D_Scanned_Function(&Table,
-    				  No_of_POINTS_1, Input_Parameter_1,
-    				  No_of_POINTS_2, Input_Parameter_2,
-    				  W_GRID,
-    				  Initial_Value_0,
-    				  Initial_Value_1,
-    				  Profile_x_Data, x_Data,
-    				  Profile_y_Data, y_Data);
+				  No_of_POINTS_1, Input_Parameter_1,
+				  No_of_POINTS_2, Input_Parameter_2,
+				  W_GRID,
+				  Initial_Value_0, 
+				  Initial_Value_1, 
+				  Profile_x_Data, x_Data, 
+				  Profile_y_Data, y_Data);
     int SAME_PLOT = 0;
     int SCALE_X   = 0;
     int SCALE_Y   = 1;
-    Table.CPG->color_Index   = 2;
+    Table.CPG->color_Index   = 2;  
     Table.CPG->type_of_Line  = 1;
-    Table.CPG->type_of_Width = 5;
+    Table.CPG->type_of_Width = 5; 
     Table.CPG->type_of_Symbol= 1;
     Table.CPG->CPG_RANGE_Y_0 = Likelihood_Minimum - 50.0;
     Table.CPG->CPG_RANGE_Y_1 = Likelihood_Minimum + 500.0;
     
     CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T(Table.CPG,
-    							SAME_PLOT,
-    							No_of_POINTS_1,
-    							x_Data, Profile_x_Data,
-    							Table.CPG->X_label,
-    							"Negative Log Likelihood",
-    							"",
-    							SCALE_X, SCALE_Y );
+							SAME_PLOT,
+							No_of_POINTS_1, 
+							x_Data, Profile_x_Data,  		   
+							Table.CPG->X_label, 
+							"Negative Log Likelihood", 
+							"",
+							SCALE_X, SCALE_Y );
     // Press_Key();
     CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T(Table.CPG,
-    							SAME_PLOT,
-    							No_of_POINTS_2,
-    							y_Data, Profile_y_Data,
-    							Table.CPG->Y_label,
-    							"Negative Log Likelihood",
-    							"",
-    							SCALE_X, SCALE_Y );
+							SAME_PLOT,
+							No_of_POINTS_2, 
+							y_Data, Profile_y_Data,  		   
+							Table.CPG->Y_label, 
+							"Negative Log Likelihood", 
+							"",
+							SCALE_X, SCALE_Y );
     /*    E N D :   Drawing likelihood profiles -------------------------------------------*/
     
     printf("Output values of Minimum_Parameter_2D_Scan(...) function:\n");
@@ -578,16 +559,8 @@ int main(int argc, char **argv)
     Confidence_Intervals_from_Likelihood_Profile( Profile_y_Data, y_Data, No_of_POINTS_2,
 						  LIKELIHOOD_JUMP, 
 						  &y_MLE, y_CI );
-    /* True Value,  MLE,  [ CI[0],  CI[1] ] */
-    fprintf(FP_x, "%g\t%g\t%g\t%g\n", Initial_Value_0, x_MLE, x_CI[0], x_CI[1]); 
-    fprintf(FP_y, "%g\t%g\t%g\t%g\n", Initial_Value_1, y_MLE, y_CI[0], y_CI[1]); 
-    
-    printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_1], Initial_Value_0,
-	   Table.Symbol_Parameters[Input_Parameter_1], x_MLE, x_CI[0], x_CI[1]);
-    printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_2], Initial_Value_1,
-	   Table.Symbol_Parameters[Input_Parameter_2], y_MLE, y_CI[0], y_CI[1]);
+    printf("%s=%f\t[%f, %f]\n", Table.Symbol_Parameters[Input_Parameter_1],x_MLE,x_CI[0],x_CI[1]);
+    printf("%s=%f\t\t[%f, %f]\n",Table.Symbol_Parameters[Input_Parameter_2],y_MLE,y_CI[0],y_CI[1]);
     free(x_CI); free(y_CI); 
     /*     E N D :  Calculating Confidence Intervals ------------------------------------------*/
 
@@ -665,7 +638,6 @@ int main(int argc, char **argv)
     free (Realizations_Vector); 
     // Press_Key();
   }
-  fclose(FP_x); fclose(FP_y);
   
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 
   Observed_Data_Free(Data); free(Data);
@@ -871,34 +843,13 @@ void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
      Empirical Data Matrix containing the 'Psedo Data' that has been generated in the 
      i-th realization. 
   */
-  int k,i;
-  int j    = Table->T->I_Time - 1; /* Value corresponding to very last time */
-  int F;       /* F: Number of errors at the j-th time across realizations; */
-  int count, i_valid, valid_realizations;
-  int No_of_POINTS; 
+  int k,j;
+  int i    = Table->T->I_Time - 1;       /* Value corresponding to very last time */
   
-  for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) {
-
-    count   = 0;
-    i_valid = 0;
-    F       =  Table->T->Realizations - Table->T->count[j];
-
-    for(i=0; i<Table->T->Realizations; i++) {
-      
-      if( Table->T->Variable[i][k][j] == 0.0 ) {
-	if (count < F)
-	  count++;
-	else
-	  Empirical_Data_Matrix[k][i_valid++] = Table->T->Variable[i][k][j];
-      }
-      else 
-	Empirical_Data_Matrix[k][i_valid++] = Table->T->Variable[i][k][j];
+  for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++)
+    for(j=0; j < Table->T->Realizations; j++)
+	  Empirical_Data_Matrix[k][j] = Table->T->Variable[j][k][i];
   
-    }
-    valid_realizations = i_valid;
-  }
-
-  Table->T->Realizations = valid_realizations; 
 }
 
 void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Table * Table)
@@ -918,13 +869,9 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     F->Function = GSL_Function_to_Minimize_Binomial_Free_Consumers;
     break;
     
-  case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */
-    if(Table->SUB_OUTPUT_VARIABLES == 1)
-      F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0;
-    else {
-      assert(Table->SUB_OUTPUT_VARIABLES == 2); 
-      F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis;
-    }
+  case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */ 
+    F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0;
+    // F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis;
     break;
       
   default:

@@ -17,6 +17,18 @@ void nm_to_i_Map(Parameter_Table * Table,
 
 double Sumando(int a_0, int m);
 
+void Stationary_Probability_Distribution(Parameter_Table * Table);
+
+void Stationary_Distribution_Allocation_Initialization( Parameter_Table * Table );
+
+void Stationary_Distribution_Free ( Parameter_Table * Table ); 
+
+double PS_nn_Function( int n, int m, double C0, double p );
+
+double PS_nk_Function( int n, int k, double Cn, double q );
+
+void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table );
+
 void Probability_Distribution_Vector_into_Matrix_Form( Master_Equation * ME );
 
 void Labels_for_Marginal_Probabilities (Parameter_Table * Table); 
@@ -50,6 +62,10 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
 							   int n, 
 							   double Time_Current,
 							   int SAME );
+
+void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table, 
+							     int n, 
+							     int SAME );
 
 void Saving_Marginal_Distribution(Parameter_Table * Table, int j, int n, double Time_Current); 
 
