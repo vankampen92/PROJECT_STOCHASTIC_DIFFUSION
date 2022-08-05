@@ -328,8 +328,8 @@ int main(int argc, char **argv)
   Initial_Value_0 = AssignStructValue_to_VectorEntry(Input_Parameter_1, &Table);
   Initial_Value_1 = AssignStructValue_to_VectorEntry(Input_Parameter_2, &Table);  
 
-  FILE * FP_x = fopen("Confidence_Intervals_0.dat", "w"); 
-  FILE * FP_y = fopen("Confidence_Intervals_1.dat", "w"); 
+  FILE * FP_x = fopen("Confidence_Intervals_0_HII.dat", "w"); 
+  FILE * FP_y = fopen("Confidence_Intervals_1_HII.dat", "w"); 
 
   int No_of_REPETITIONS = I_Time;  /* Here, the meaning of I_Time has been overloaded */ 
   for(k=0; k<No_of_REPETITIONS; k++) {
@@ -404,16 +404,16 @@ int main(int argc, char **argv)
 								X_LINEAR, Y_LINEAR);
 
     /* BEGIN: Checking Joint Probability Distribution and Marginals */
-    AssignVectorEntry_to_Structure(&Table, Input_Parameter_1, Initial_Value_0);
-    AssignVectorEntry_to_Structure(&Table, Input_Parameter_2, Initial_Value_1);
+    // AssignVectorEntry_to_Structure(&Table, Input_Parameter_1, Initial_Value_0);
+    // AssignVectorEntry_to_Structure(&Table, Input_Parameter_2, Initial_Value_1);
     
-    Stationary_Probability_Distribution (&Table);
+    // Stationary_Probability_Distribution (&Table);
     
-    printf("P(0, 0) = %g\n", Table.MEq->PS_nm[0][0]);
-    printf("P(2, 6) = %g\n", Table.MEq->PS_nm[2][6]);
-    printf("P(14, 4) = %g\n", Table.MEq->PS_nm[14][4]);
+    // printf("P(0, 0) = %g\n", Table.MEq->PS_nm[0][0]);
+    // printf("P(2, 6) = %g\n", Table.MEq->PS_nm[2][6]);
+    // printf("P(14, 4) = %g\n", Table.MEq->PS_nm[14][4]);
     
-    Press_Key();
+    // Press_Key();
     /*   END: ----------------------------------------------------- */
     
     Stationary_Distribution_Free( &Table );                   /* Memmory de-allocation */ 
