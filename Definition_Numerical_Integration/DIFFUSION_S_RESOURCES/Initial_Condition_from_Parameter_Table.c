@@ -39,9 +39,6 @@ void R_E_S_C_A_L_I_N_G___I_N_I_T_I_A_L___C_O_N_D_I_T_I_O_N_S ( Parameter_Table *
 
 void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table, double Value)
 {
-  /* Initial conditions from empirical data at the initial time ( -xn 0 ) */
-
-  /* Value should represent the inital value of exposed individuals in the first age class */
 
   int J,n,m;
   int J_X, J_Y;

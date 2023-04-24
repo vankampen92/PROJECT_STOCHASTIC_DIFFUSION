@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/dalonso/PROJECT_STOCHASTIC_DIFFUSION'
+make: Leaving directory '/home/dalonso/PROJECT_STOCHASTIC_DIFFUSION'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

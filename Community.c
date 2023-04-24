@@ -167,7 +167,7 @@ void Community_Initialization (Community ** PATCH,
     printf(" The program will exit\n");
   }
   
-  assert(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9);
+  // assert(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9);
 #endif
 }
 

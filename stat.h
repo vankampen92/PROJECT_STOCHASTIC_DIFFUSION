@@ -31,15 +31,12 @@
    GNU Scientic Library (GSL). 
 */
 
-/* Three common declation to make
-   numerical recipes library to be
-   built. They affect only a few
-   functions from the library,
-   which I have never used. 
+/* Three common declation to make numerical recipes library to be built. They affect only a few
+   functions from the library, which I have never used. 
 *//* * * * * * * * * * * * * * * * * */
-long int idum;
-unsigned long ija[1];
-double sa[1];
+// long int idum;
+// unsigned long ija[1];
+// double sa[1];
 /* * * * * * * * * * * * * * * * * */
 
 typedef struct positioninfo
