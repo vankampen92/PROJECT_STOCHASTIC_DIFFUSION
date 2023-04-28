@@ -99,8 +99,7 @@ float * customized_contour_levels_0( Parameter_CPGPLOT * C )
     return(clevels);
 }
 
-float * customized_contour_levels_1( Parameter_CPGPLOT * C,
-				     double Min_Value)
+float * customized_contour_levels_1( Parameter_CPGPLOT * C, double Min_Value)
 {
     int i;
 
@@ -141,7 +140,7 @@ int main(int argc, char **argv)
   if(argc>1) ArgumentControl(argc,argv);
   
   #include "include.Output_Variables.default.aux.c"
-  P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C(   &Table );
+  P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( &Table );
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( &Table, Index_Output_Variables );
   printf(" Parameter_Table structure has been correctly allocated and initiated\n");
 
@@ -916,6 +915,10 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     
   case 12: /* DIFFUSION_HII_1D * * * * * * * * * * * * * * * * * * * * * * */
     F->Function = GSL_Function_to_Minimize_Binomial_Free_Consumers;
+    break;
+
+  case **: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
+    F->Function = GSL_Function_to_Minimize_Multinomial_Free_Consumers;
     break;
     
   case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */

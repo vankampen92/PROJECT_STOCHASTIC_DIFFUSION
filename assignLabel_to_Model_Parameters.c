@@ -19,12 +19,22 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case  5:  p = strcat(Label, "No of (Resource) SPECIES");  /* Number of Resource Species */
       break;
+#ifdef DIFFUSION_HII_nD
+    case  6:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (1)");  
+      break;
+#else
     case  6:  p = strcat(Label, "External Immigration Rate (0)");  
       break;
+#endif
     case  7:  p = strcat(Label, "Decaying Rate (0)");
       break;
+#ifdef DIFFUSION_HII_nD
+    case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
+      break;
+#else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
       break;
+#endif
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
     case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */

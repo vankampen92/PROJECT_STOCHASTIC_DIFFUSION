@@ -127,6 +127,12 @@ typedef struct Parameter_Tableinfo
   double * Lambda_R;
   double * Delta_R; 
   
+  double * Alpha_C;
+  double * Nu_C;
+  
+  double * Theta_C_i;
+  double * y_R_i;
+  
 #if defined CPGPLOT_REPRESENTATION
 #include <include.CPG.global.h>
   Parameter_CPGPLOT * CPG;

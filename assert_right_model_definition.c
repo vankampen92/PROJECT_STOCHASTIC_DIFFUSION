@@ -48,4 +48,44 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 8 );
   
 #endif
+#if defined DIFFUSION_HII_2D
+  
+    assert ( P->TYPE_of_MODEL == 9 );
+  
+#endif
+#if defined DIFFUSION_STOLLENBERG_3D 
+  
+    assert ( P->TYPE_of_MODEL == 10 );
+  
+#endif
+#if defined DIFFUSION_HII_AC_2D
+  
+    assert ( P->TYPE_of_MODEL == 11 );
+  
+#endif
+#if defined  DIFFUSION_HII_1D
+  
+    assert ( P->TYPE_of_MODEL == 12 );
+  
+#endif
+#if defined DIFFUSION_BD_2D
+  
+    assert ( P->TYPE_of_MODEL == 13 );
+  
+#endif
+#if defined DIFFUSION_BD_3D
+  
+    assert ( P->TYPE_of_MODEL == 14 );
+  
+#endif
+#if defined DIFFUSION_STOLLENBERG_4D
+  
+    assert ( P->TYPE_of_MODEL == 15 );
+  
+#endif
+#if defined  DIFFUSION_HII_nD
+  
+    assert ( P->TYPE_of_MODEL == 16 );
+  
+#endif
 }

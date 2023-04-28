@@ -21,13 +21,22 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break; 
     case  5: p=strcat(Label,"S\\dR\\u");       
       break; 
-      
+#ifdef DIFFUSION_HII_nD
+    case  6: p=strcat(Label, "\\gn\\u(C)\\d\\d1\\u");  
+      break;
+#else
     case  6: p=strcat(Label, "\\gl\\u(R)\\d\\d0\\u");    
       break;
+#endif
     case  7: p=strcat(Label, "\\gd\\u(R)\\d\\d0\\u");    
       break; 
+#ifdef DIFFUSION_HII_nD
+    case  8: p=strcat(Label, "\\gn\\u(C)\\d\\d2\\u");  
+      break;
+#else
     case  8: p=strcat(Label, "\\gl\\u(R)\\d\\d1\\u");        
       break;
+#endif
     case  9: p=strcat(Label, "\\gd\\u(R)\\d\\d1\\u");    
       break; 
     case 10: p=strcat(Label, "K\\dR\\u");       
@@ -132,12 +141,25 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case  5: p=strcat(Label,"S_R");       
       break; 
 
+#ifdef DIFFUSION_HII_nD
+    case  6: p=strcat(Label, "Nu_C_1");  
+      break;
+#else
     case  6: p=strcat(Label,"Lambda_R_0");    /* -H0 */
       break;
+#endif
+
     case  7: p=strcat(Label,"Delta_R_0");     /* -H1 */  
       break; 
+
+#ifdef DIFFUSION_HII_nD
+    case  8: p=strcat(Label, "Nu_C_2");  
+      break;
+#else
     case  8: p=strcat(Label,"Lambda_R_1");    /* -H2 */
       break;
+#endif
+    
     case  9: p=strcat(Label,"Delta_R_1");     /* -H3 */  
       break; 
     case 10: p=strcat(Label,"K_R");           /* -HK */

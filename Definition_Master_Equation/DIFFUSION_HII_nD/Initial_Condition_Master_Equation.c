@@ -1,0 +1,51 @@
+#include <MODEL.h>
+
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table * Table)
+{
+    /*  This definition is contingent to TYPE of MODEL at work from the pre-defined family of 
+	models:
+	
+	DIFFUSION_BD_2D, DIFFUSION_HII_1D, ...
+
+	These definitions can be used by both deterministic functions (associated to the ODE 
+	system numerical integration) or the stochastic functions (related to either the 
+	generation of stochastic replicates of the integration of the master equation). 
+    */ 
+    Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
+    Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
+    
+    assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
+    assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
+    
+    Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
+}
+
+void Initial_Condition_Master_Equation( Parameter_Table * Table, double * y_INI )
+{
+  int i, No_of_CONFIGURATIONAL_STATES; 
+  int m_Time_0;
+  int n_0, a_0;
+  int n;
+
+  No_of_CONFIGURATIONAL_STATES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
+  a_0   = Table->TOTAL_No_of_CONSUMERS;
+
+  /* No of Free Consumers at time 0          */
+  m_Time_0 = Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+  /* No accumulated Feeding Events at time 0 */
+  n_0      = 0;                                        
+  
+  assert(m_Time_0 <= a_0); 
+ 
+  for (i=0; i<No_of_CONFIGURATIONAL_STATES; i++) {
+    
+    if( i == m_Time_0 ) y_INI[i] = 1.0;
+    else                y_INI[i] = 0.0;       
+    
+  }
+}
+
+							 
+  
+  
+  

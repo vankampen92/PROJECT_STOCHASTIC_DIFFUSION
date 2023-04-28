@@ -9,3 +9,5 @@ void Parameter_Table_Index_Update(int * , int , Parameter_Table * );
 void Parameter_Values_into_Parameter_Table(Parameter_Table * ); 
 
 void Resetting_Lambda_Delta_Vectors (Parameter_Table * ); 
+
+void Resetting_Alpha_Nu_Vectors (Parameter_Table * ); 

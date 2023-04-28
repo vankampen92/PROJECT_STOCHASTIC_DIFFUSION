@@ -96,9 +96,13 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
     exit(0); 
   }
   
-  Table->Lambda_R    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-  Table->Delta_R     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-  
+  Table->Lambda_R  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Delta_R   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Nu_C      = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Alpha_C   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Theta_C_i = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->y_R_i     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
   Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES_MAXIMUM,
 							  sizeof(double **) );
@@ -189,7 +193,13 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
 
   free(Table->Lambda_R);
   free(Table->Delta_R);
+
+  free(Table->Alpha_C);
+  free(Table->Nu_C);
  
+  free(Table->Theta_C_i);
+  free(Table->y_R_i);
+
   for(a=0; a<No_of_RESOURCES_MAXIMUM; a++) {  
     for(i=0; i<Table->No_of_CELLS; i++) 
       free(Table->Metapop_Connectivity_Matrix[a][i]); 
@@ -369,7 +379,10 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   */
   Resetting_Lambda_Delta_Vectors (Table); 
-  
+
+#ifdef DIFFUSION_HIIl_nD
+  Resetting_Alpha_Nu_Vectors (Table);     
+#endif  
   /* END -------------------------------------------------*/
 }
 
@@ -392,7 +405,61 @@ void Resetting_Lambda_Delta_Vectors (Parameter_Table * Table)
       Table->Delta_R[i]  = Table->Delta_R_0;
     }
   }
-  
+}
+
+void Resetting_Alpha_Nu_Vectors (Parameter_Table * Table)
+{
+  /* When a Holling Type II consumer feed on multiple resources */
+  int i;
+
+  if (Table->No_of_RESOURCES > 0 ) {
+    Table->Alpha_C[0] = Table->Alpha_C_0;
+    Table->Nu_C[0]    = Table->Nu_C_0;
+  }
+  if (Table->No_of_RESOURCES > 1 ) {
+    Table->Alpha_C[1] = Table->Alpha_C_0;  /* Overloading: */
+    Table->Nu_C[1]    = Table->Lambda_R_0; /* Lambda_R_0 = Nu_C_1 */
+  }
+  if (Table->No_of_RESOURCES > 2 ) {
+    Table->Alpha_C[2] = Table->Alpha_C_0;  /* Overloading: */
+    Table->Nu_C[2]    = Table->Lambda_R_1; /* Lambda_R_1 = Nu_C_2 */
+  }
+  if (Table->No_of_RESOURCES > 3 ) {
+    for(i=3; i < Table->No_of_RESOURCES; i++) {
+      Table->Alpha_C[i]  = Table->Alpha_C_0;
+      Table->Nu_C[i]  = Table->Nu_C_0;
+    }
+  }
+}
+
+void Resetting_Multiresource_Levels (Parameter_Table * Table)
+{
+  /* When a Holling Type II consumer feeds on multiple resources */
+  /* In this example, the different resource densities are arbitrarily fixed...   
+  */
+  int j;
+  double K_R;
+
+  K_R = (double)Table->K_R; 
+
+  if (Table->No_of_RESOURCES > 0 ) {
+    Table->y_R_i[0]        = 0.5 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_C_i[0]    = Table->Alpha_C[0] * Table->y_R_i[0]/K_R;
+  }
+  if (Table->No_of_RESOURCES > 1 ) {
+    Table->y_R_i[1]        = 0.3 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_C_i[1]    = Table->Alpha_C[1] * Table->y_R_i[1]/K_R;
+  }
+  if (Table->No_of_RESOURCES > 2 ) {
+    Table->y_R_i[2] = 0.2 / ((double)(Table->No_of_Resources) - 2.0) * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_C_i[2] = Table->Alpha_C[2] * Table->y_R_i[2]/K_R;
+  }
+  if (Table->No_of_RESOURCES > 3 ) {
+    for(j=3; j < Table->No_of_RESOURCES; j++) {
+      Table->y_R_i[j]  = 0.2 / ((double)(Table->No_of_Resources) - 2.0) * Table->TOTAL_No_of_RESOURCES;
+      Table->Theta_C_i[j]  = Table->Alpha_C[j] * Table->y_R_i[j]/K_R;
+    }
+  }
 }
 
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
@@ -483,7 +550,4 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
 
   P->No_of_RESOURCES    = No_of_RESOURCES;
-
-  
-
 }

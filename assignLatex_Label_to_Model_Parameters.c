@@ -20,12 +20,22 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break;
     case  5:  p = strcat(Label , "No of RESOURCES"); /*  4 */
       break;
+#ifdef DIFFUSION_HII_nD
+    case  6:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (1)");  
+      break;
+#else
     case  6:  p = strcat(Label, "External Immigration Rate (0)");  
       break;
+#endif
     case  7:  p = strcat(Label, "Decaying Rate (0)");
       break;
+#ifdef DIFFUSION_HII_nD
+    case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
+      break;
+#else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
       break;
+#endif
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
     case 10:  p = strcat(Label, "Patch Carrying Capacity");   /* Patch Carrying Capacity */
@@ -129,12 +139,22 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
       break;
     case  5:  p = strcat(Label, "$S_R$");        
       break;
+#ifdef DIFFUSION_HII_nD
+    case  6:  p=strcat(Label,"$\\nu^{(C)}_1$");
+      break;
+#else
     case  6:  p = strcat(Label, "$\\lambda^{(R)}_0$");  
       break;
+#endif
     case  7:  p = strcat(Label, "$\\delta^{(R)}_0$");
       break;
+#ifdef DIFFUSION_HII_nD
+    case  8:  p=strcat(Label,"$\\nu^{(C)}_2$");
+    break;
+#else
     case  8:  p = strcat(Label, "$\\lambda^{(R)}_1$");  
       break;
+#endif
     case  9:  p = strcat(Label, "$\\delta^{(R)}_1$");
       break;
     case 10:  p = strcat(Label, "$K_R$");   /* Patch Carrying Capacity */

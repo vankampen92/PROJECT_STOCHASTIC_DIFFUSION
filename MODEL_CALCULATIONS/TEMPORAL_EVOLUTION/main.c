@@ -121,7 +121,6 @@ int main(int argc, char **argv)
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( &Table, Index_Output_Variables );
   printf(" Parameter_Table structure has been correctly allocated and initiated\n");
 
-
   /* B E G I N : Reserving memmory for Parameter Space */
 #include <include.Parameter_Space.default.aux.c>
   if( No_of_PARAMETERS == Table.TOTAL_No_of_MODEL_PARAMETERS ) {
@@ -196,7 +195,14 @@ int main(int argc, char **argv)
   if(Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14) 
     /* Models where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
-    
+ 
+  if(Table.TYPE_of_MODEL == 16) {
+    /* Model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
+    /* and they feed on multiple resources                 */
+    Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
+    Resetting_Multiresource_Levels (&Table);    
+  }
+
   /* Deterministic Time Dynamics */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
@@ -207,6 +213,7 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
+#ifndef DIFFUSION_HII_nD /* Stochastic multi-resource Holling Type II dynamics not yet implemented */
   /* Stochastic Time Dynamics: A number of stochastic realizations     */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
@@ -214,6 +221,8 @@ int main(int argc, char **argv)
 #endif
 #endif
 #endif
+#endif
+
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];
@@ -248,32 +257,5 @@ int main(int argc, char **argv)
 
   printf("\nEnd of progam\n");
   return (0);
-}
-
-void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table)
-{
-      /* BEGIN : -------------------------------------------------------------------------
-       * Definition Initial Condition:  
-       */
-      /* This definition is contingent to TYPE of MODEL at work from the pre-defined family 
-	 of models:
-	 DIFFUSION_BD_2D, DIFFUSION_HII_1D, and DIFFUSION_BD_2D (so far)
-	 ( Models where the TOTAL_No_of_CONSUMERS is a CONSTANT )
-      */
-      /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
-      /* double p_2;         */ /* -Hp2 */ /* See below the definition of the     */
-                                           /* TOTAL_No_of_FREE_CONSUMERS_TIME_0   */
-      Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
-      Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
-
-      assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
-      assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
-  
-      Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
-      Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_CONSUMERS - Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
-      /* END ----------------------------------------------------------------------------
-	 This initial Condition involves no triplets at time t = 0.0 because the sum of states
-	 should add up the TOTAL No of CONSUMERS 
-      */
 }
   
