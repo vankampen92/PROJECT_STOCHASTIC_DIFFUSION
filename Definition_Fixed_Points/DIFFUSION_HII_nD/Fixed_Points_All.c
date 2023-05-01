@@ -58,6 +58,7 @@ void Fixed_Points_Linear_System_HII_nD(Parameter_Table * Table, gsl_vector * y)
   gsl_matrix * a = gsl_matrix_alloc(n, n);
   gsl_vector * b = gsl_vector_alloc(n);
   gsl_vector * x = gsl_vector_alloc(n);  /* Solution Vector */
+  gsl_permutation * p = gsl_permutation_alloc(n);
 
   for(i=0; i<n; i++) 
     if(i<n-1) gsl_vector_set(b, i, 0.0);
