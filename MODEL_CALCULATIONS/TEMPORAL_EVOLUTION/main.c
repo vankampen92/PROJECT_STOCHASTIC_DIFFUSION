@@ -97,6 +97,21 @@ gsl_rng * r; /* Global generator defined in main.c */
    Feeding experiments at a constant number of total consumers: 
    .~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
 
+   MODEL = DIFFUSION_HII_nD
+   Feeding experiments at a constant number of total consumers: 
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 \
+                          -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
+                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+
+   -HuR -HuC are the jumping rates (only relevant if there are more than one cell or patch in the system)
+   -H0 -H2 -H5  are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
+   -H20 is the establishment rate 
+   -H1  -H3  -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules, and Delta_C_0 for both searching and handling consumers)
+   -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
+   -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
+
    More examples in ./command_line_examples.txt.
 */
 
@@ -196,10 +211,11 @@ int main(int argc, char **argv)
     /* Models where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
  
-  if(Table.TYPE_of_MODEL == 16) {
-    /* Model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
-    /* and they feed on multiple resources                 */
+  if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
+    /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
+    /* and they feed on multiple resources                      */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
+    Resetting_Alpha_Nu_Vectors (&Table);
     Resetting_Multiresource_Levels (&Table);    
   }
 
@@ -207,14 +223,14 @@ int main(int argc, char **argv)
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
   
-  // Some models (such as DIFFUSION_1R1C_2D) do no have a stochastic
+  // Some models (such as DIFFUSION_1R1C_2D and so on) do no have a stochastic
   // counter-part implemented yet!
 #ifndef DIFFUSION_1R1C_2D
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
 #ifndef DIFFUSION_HII_nD /* Stochastic multi-resource Holling Type II dynamics not yet implemented */
-  /* Stochastic Time Dynamics: A number of stochastic realizations     */
+  /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
 #endif

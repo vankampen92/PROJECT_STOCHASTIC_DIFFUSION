@@ -98,9 +98,9 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   
   Table->Lambda_R  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Delta_R   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-  Table->Nu_C      = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Nu_Consumers      = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Alpha_C   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-  Table->Theta_C_i = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Theta_Consumers = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->y_R_i     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
 
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
@@ -195,9 +195,9 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
   free(Table->Delta_R);
 
   free(Table->Alpha_C);
-  free(Table->Nu_C);
+  free(Table->Nu_Consumers);
  
-  free(Table->Theta_C_i);
+  free(Table->Theta_Consumers);
   free(Table->y_R_i);
 
   for(a=0; a<No_of_RESOURCES_MAXIMUM; a++) {  
@@ -379,10 +379,6 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   */
   Resetting_Lambda_Delta_Vectors (Table); 
-
-#ifdef DIFFUSION_HIIl_nD
-  Resetting_Alpha_Nu_Vectors (Table);     
-#endif  
   /* END -------------------------------------------------*/
 }
 
@@ -414,28 +410,34 @@ void Resetting_Alpha_Nu_Vectors (Parameter_Table * Table)
 
   if (Table->No_of_RESOURCES > 0 ) {
     Table->Alpha_C[0] = Table->Alpha_C_0;
-    Table->Nu_C[0]    = Table->Nu_C_0;
+    Table->Nu_Consumers[0]    = Table->Nu_C_0;
   }
   if (Table->No_of_RESOURCES > 1 ) {
     Table->Alpha_C[1] = Table->Alpha_C_0;  /* Overloading: */
-    Table->Nu_C[1]    = Table->Lambda_R_0; /* Lambda_R_0 = Nu_C_1 */
+    Table->Nu_Consumers[1]    = Table->Lambda_R_0; /* Nu_Consumers_1 would be Lambda_R_0 */
   }
   if (Table->No_of_RESOURCES > 2 ) {
     Table->Alpha_C[2] = Table->Alpha_C_0;  /* Overloading: */
-    Table->Nu_C[2]    = Table->Lambda_R_1; /* Lambda_R_1 = Nu_C_2 */
+    Table->Nu_Consumers[2] = Table->Lambda_R_1; /* Nu_Consumers_2 would be Lambda_R_1 */
   }
   if (Table->No_of_RESOURCES > 3 ) {
     for(i=3; i < Table->No_of_RESOURCES; i++) {
       Table->Alpha_C[i]  = Table->Alpha_C_0;
-      Table->Nu_C[i]  = Table->Nu_C_0;
+      Table->Nu_Consumers[i]  = Table->Nu_C_0;
     }
   }
 }
 
 void Resetting_Multiresource_Levels (Parameter_Table * Table)
 {
-  /* When a Holling Type II consumer feeds on multiple resources */
-  /* In this example, the different resource densities are arbitrarily fixed...   
+  /* When a Holling Type II consumer feeds on multiple resources, and this multiple 
+     resources are maintained, each of them at a constant density 
+  */
+  /* In this example, the different resource densities are arbitrarily fixed. 
+     A total resource density is set to R (TOTAL_No_of_RESOURCES), and then:  
+     1st Resource Density: 0.5 * R
+     2on Resource Density: 0.3 * R
+     and the rest of resources share the 0.2 * R that is left. 
   */
   int j;
   double K_R;
@@ -444,20 +446,20 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table)
 
   if (Table->No_of_RESOURCES > 0 ) {
     Table->y_R_i[0]        = 0.5 * Table->TOTAL_No_of_RESOURCES;
-    Table->Theta_C_i[0]    = Table->Alpha_C[0] * Table->y_R_i[0]/K_R;
+    Table->Theta_Consumers[0]    = Table->Alpha_C[0] * Table->y_R_i[0]/K_R;
   }
   if (Table->No_of_RESOURCES > 1 ) {
     Table->y_R_i[1]        = 0.3 * Table->TOTAL_No_of_RESOURCES;
-    Table->Theta_C_i[1]    = Table->Alpha_C[1] * Table->y_R_i[1]/K_R;
+    Table->Theta_Consumers[1]    = Table->Alpha_C[1] * Table->y_R_i[1]/K_R;
   }
   if (Table->No_of_RESOURCES > 2 ) {
-    Table->y_R_i[2] = 0.2 / ((double)(Table->No_of_Resources) - 2.0) * Table->TOTAL_No_of_RESOURCES;
-    Table->Theta_C_i[2] = Table->Alpha_C[2] * Table->y_R_i[2]/K_R;
+    Table->y_R_i[2] = 0.2 / ((double)(Table->No_of_RESOURCES) - 2.0) * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[2] = Table->Alpha_C[2] * Table->y_R_i[2]/K_R;
   }
   if (Table->No_of_RESOURCES > 3 ) {
     for(j=3; j < Table->No_of_RESOURCES; j++) {
-      Table->y_R_i[j]  = 0.2 / ((double)(Table->No_of_Resources) - 2.0) * Table->TOTAL_No_of_RESOURCES;
-      Table->Theta_C_i[j]  = Table->Alpha_C[j] * Table->y_R_i[j]/K_R;
+      Table->y_R_i[j]  = 0.2 / ((double)(Table->No_of_RESOURCES) - 2.0) * Table->TOTAL_No_of_RESOURCES;
+      Table->Theta_Consumers[j]  = Table->Alpha_C[j] * Table->y_R_i[j]/K_R;
     }
   }
 }

@@ -4,9 +4,9 @@
 
 #define No_of_RESOURCES_MAXIMUM 1         /* S *//* Number of Local States */
 
-#define MODEL_STATE_VARIABLES_MAXIMUM 40000  /* If M is the number of cells, then */
-                                              /* Model dimension maximum is S * M */
-#define OUTPUT_VARIABLES_TRUE_DERIVED 9       /* See definition_OutPut_Variables.c */
+#define MODEL_STATE_VARIABLES_MAXIMUM 40000 /* If M is the number of cells, then */
+                                            /* Model dimension maximum is S * M */
+#define OUTPUT_VARIABLES_TRUE_DERIVED 9     /* See definition_OutPut_Variables.c */
 
 #define OUTPUT_VARIABLES_GENUINE_MAXIMUM 10 /* Number Output Variables        */
                                          /* (other than MODEL_STATE_VARIABLES) */

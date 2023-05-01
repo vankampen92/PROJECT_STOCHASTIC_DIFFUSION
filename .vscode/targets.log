@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Apr 28 15:25:29 2023
+# Make data base, printed on Sat Apr 29 20:05:45 2023
 
 # Variables
 
@@ -61,7 +61,7 @@ VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/704ed70d4fd1c6bd6
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.M9A031
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.153731
 # default
 .LOADED := 
 # default
@@ -99,7 +99,7 @@ MAKEFILE_LIST :=
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 8087
+VSCODE_PID = 10037
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -107,7 +107,7 @@ XDG_SESSION_TYPE = wayland
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2065,unix/vankampen92:/tmp/.ICE-unix/2065
+SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2102,unix/vankampen92:/tmp/.ICE-unix/2102
 # automatic
 *F = $(notdir $*)
 # environment
@@ -157,7 +157,7 @@ LC_TIME = es_ES.UTF-8
 # environment
 SNAP = /snap/code/126
 # environment
-INVOCATION_ID = 5c1d1b3918054d9e8defdb06b25a71b7
+INVOCATION_ID = 5b34ad22673c4f3d8bc4ca74d4640deb
 # environment
 SNAP_REVISION = 126
 # environment
@@ -195,7 +195,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2088
+SYSTEMD_EXEC_PID = 2127
 # environment
 DISPLAY = :0
 # environment
@@ -209,11 +209,11 @@ SNAP_DATA = /var/snap/code/126
 # environment
 SNAP_CONTEXT = IW4Qn8rFuCFeZjEnf0jXXFVR7ihvRlNVpjXOJVtkYpLiggVXGK2c
 # environment
-MANAGERPID = 1874
+MANAGERPID = 1905
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 8038
+GIO_LAUNCHED_DESKTOP_FILE_PID = 9980
 # environment
 _ = /snap/code/126/usr/share/code/code
 # environment
@@ -225,7 +225,7 @@ GDK_PIXBUF_MODULE_FILE = /home/dalonso/snap/code/common/.cache/gdk-pixbuf-loader
 # environment
 GIO_MODULE_DIR = /home/dalonso/snap/code/common/.cache/gio-modules
 # environment
-JOURNAL_STREAM = 8:26510
+JOURNAL_STREAM = 8:29516
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -278,9 +278,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 # Load=132/1024=13%, Rehash=0, Collisions=5/159=3%
 
 # Pattern-specific Variable Values
-
  
 make: *** No rule to make target 'all'.  Stop.
+
 
 # No pattern-specific variable values.
 
@@ -344,6 +344,6 @@ GNUmakefile:
 # strcache performance: lookups = 70 / hit rate = 4%
 # hash-table stats:
 # Load=67/8192=1%, Rehash=0, Collisions=0/70=0%
-# Finished Make data base on Fri Apr 28 15:25:29 2023
+# Finished Make data base on Sat Apr 29 20:05:45 2023
 
  

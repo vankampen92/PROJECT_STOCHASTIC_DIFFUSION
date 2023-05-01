@@ -49,8 +49,6 @@ int master_equation_time_dynamics( Parameter_Table * Table );
 
 void Initial_Condition_Master_Equation( Parameter_Table * Table, double * y_INI );
 
-void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table * Table); 
-
 void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
 							 int j,
 							 int n, 

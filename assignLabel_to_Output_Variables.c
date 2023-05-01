@@ -1,11 +1,17 @@
 #include <MODEL.h>
 
+/* Output Variables: 
+  
+    Local Variables, Genuine Variables, The Rest of Model Variables 
+  */
+
+
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
   int k, i, n, m;
   char * p;
-  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
 
+  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
 
   Defining_Output_Variables_Labels (Table, L);
@@ -24,33 +30,33 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
       if (k>0 && k<=Table->N_E) {
-	sprintf(n_Label, "%d", k-1);
-	i = 1;
+	      sprintf(n_Label, "%d", k-1);
+	      i = 1;
       }
       else if (k>Table->N_E &&   k<=2*Table->N_E) {
-	sprintf(n_Label, "%d", k-1-Table->N_E);
-	i = 2;
+	      sprintf(n_Label, "%d", k-1-Table->N_E);
+	      i = 2;
       }
       else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) {
-	i = 3;
-	n = (k-1-2*Table->N_E)%Table->N_E;
-	m = (k-1-2*Table->N_E)/Table->N_E;
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", n);
-	p = strcat(Label, "]");
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", m);
-	p = strcat(Label, "]");
+	      i = 3;
+	      n = (k-1-2*Table->N_E)%Table->N_E;
+	      m = (k-1-2*Table->N_E)/Table->N_E;
+	      p = strcat(Label, "[");
+	      sprintf(n_Label, "%d", n);
+	      p = strcat(Label, "]");
+	      p = strcat(Label, "[");
+	      sprintf(n_Label, "%d", m);
+	      p = strcat(Label, "]");
       }
       else {
-	n_Label[0] = '\0';
-	i = 0;
+	      n_Label[0] = '\0';
+	      i = 0;
       }
       p = strcat(Label, "n[");
       p = strcat(Label, L[i]);
       if (i>0) {
-	p = strcat(Label, "_");
-	p = strcat(Label, n_Label);
+	      p = strcat(Label, "_");
+	      p = strcat(Label, n_Label);
       }
       p = strcat(Label, "]");
     }
@@ -66,31 +72,31 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
     switch(j)
       {
       case  0:
-	p = strcat(Label , "<n>");       /*  0: Density: No of Individuals per Cell */
+	      p = strcat(Label , "<n>");       /*  0: Density: No of Individuals per Cell */
         break;
       case  1:
-	p = strcat(Label , "s");         /*  1: SDV: No of Individuals per Cell */
+	      p = strcat(Label , "s");         /*  1: SDV: No of Individuals per Cell */
         break;
       case  2:
-	p = strcat(Label , "N");         /*  2: Total No of Individuals */
+	      p = strcat(Label , "N");         /*  2: Total No of Individuals */
         break;
       case  3:
-	p = strcat(Label , "n[R]");         /*  3: Resources */
+	      p = strcat(Label , "n[R]");         /*  3: Resources */
         break;
       case  4:
-	p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
+	      p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
         break;
       case  5:
-	p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */
+	      p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */
         break;
       case  6:
-	p = strcat(Label , "n[RA]");        /*  6: Total Handling Consumers */
+	      p = strcat(Label , "n[RA]");        /*  6: Total Handling Consumers */
         break;
       case  7:
-	p = strcat(Label , "n[ARA]");       /*  7: Total Triplets */
+	      p = strcat(Label , "n[ARA]");       /*  7: Total Triplets */
         break;
       case  8:
-	p = strcat(Label , "n[C]");       /*  8: Total Population Consumers */
+      	p = strcat(Label , "n[C]");       /*  8: Total Population Consumers */
         break;
 
 
@@ -130,33 +136,33 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
       if (k>0 && k<=Table->N_E) {
-	sprintf(n_Label, "%d", k-1);
-	i = 1;
+	      sprintf(n_Label, "%d", k-1);
+	      i = 1;
       }
       else if (k>Table->N_E &&   k<=2*Table->N_E) {
-	sprintf(n_Label, "%d", k-1-Table->N_E);
-	i = 2;
+	      sprintf(n_Label, "%d", k-1-Table->N_E);
+	      i = 2;
       }
       else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) {
-	i = 3;
-	n = (k-1-2*Table->N_E)%Table->N_E;
-	m = (k-1-2*Table->N_E)/Table->N_E;
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", n);
-	p = strcat(Label, "]");
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", m);
-	p = strcat(Label, "]");
+	      i = 3;
+	      n = (k-1-2*Table->N_E)%Table->N_E;
+	      m = (k-1-2*Table->N_E)/Table->N_E;
+	      p = strcat(Label, "[");
+	      sprintf(n_Label, "%d", n);
+	      p = strcat(Label, "]");
+	      p = strcat(Label, "[");
+	      sprintf(n_Label, "%d", m);
+	      p = strcat(Label, "]");
       }
       else {
-	n_Label[0] = '\0';
-	i = 0;
+	      n_Label[0] = '\0';
+	      i = 0;
       }
       p = strcat(Label, "n[");
       p = strcat(Label, L[i]);
       if (i>0) {
-	p = strcat(Label, "_");
-	p = strcat(Label, n_Label);
+	      p = strcat(Label, "_");
+	      p = strcat(Label, n_Label);
       }
       p = strcat(Label, "]");
     }
@@ -214,7 +220,9 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
 
 void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 {
+  int i; 
   char * p;
+  char * q; 
 
   switch(Table->TYPE_of_MODEL)
     {
@@ -313,6 +321,16 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       p = strcat(L[2], "A");
       p = strcat(L[3], "RA");
 
+      break;
+
+    case  16:    /* DIFFUSION_HII_nD: Local Variables: Handling Consumers for each Resource Type */
+      q = (char *)calloc(10, sizeof(char));
+      for(i=0; i<Table->No_of_RESOURCES; i++){
+        sprintf(q, "%d", i); 
+        p = strcat(L[i], "C_");
+        p = strcat(L[i], q);
+      }
+      free(q);
       break;
 
 

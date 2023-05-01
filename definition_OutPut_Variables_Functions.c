@@ -36,7 +36,7 @@ double Total_Population_Free_Consumers(double * Y, Parameter_Table * Table)
     x = 0.0;
     for(j=0; j<Table->N_E; j++){
       for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-	if(i%Table->LOCAL_STATE_VARIABLES == (j+1)) x += Y[i]; 
+	      if(i%Table->LOCAL_STATE_VARIABLES == (j+1)) x += Y[i]; 
     }
   }
 
@@ -58,7 +58,7 @@ double Total_Population_Mature_Consumers(double * Y, Parameter_Table * Table)
     x = 0.0;
     for(j=Table->i_0; j<Table->N_E; j++){
       for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-	if(i%Table->LOCAL_STATE_VARIABLES == (j+1)) x += Y[i]; 
+	        if(i%Table->LOCAL_STATE_VARIABLES == (j+1)) x += Y[i]; 
     }
   }
 
@@ -80,7 +80,7 @@ double Total_Population_Handling_Consumers(double * Y, Parameter_Table * Table)
     x = 0.0;
     for(j=0; j<Table->N_E; j++){
       for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-	if( i%Table->LOCAL_STATE_VARIABLES == (j + 1 + Table->N_E) ) x += Y[i]; 
+	      if( i%Table->LOCAL_STATE_VARIABLES == (j + 1 + Table->N_E) ) x += Y[i]; 
     }
   }
 
@@ -102,7 +102,7 @@ double Total_Population_Triplet_Consumers(double * Y, Parameter_Table * Table)
     x = 0.0;
     for(j=0; j<( Table->N_E*(Table->N_E +2 )); j++){
       for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-	if( i%Table->LOCAL_STATE_VARIABLES == (j + 1 + 2*Table->N_E) ) x += Y[i]; 
+	      if( i%Table->LOCAL_STATE_VARIABLES == (j + 1 + 2*Table->N_E) ) x += Y[i]; 
     }
   }
 

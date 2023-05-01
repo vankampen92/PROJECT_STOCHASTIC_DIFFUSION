@@ -13,3 +13,5 @@ double Function_to_Type_of_Stability( Parameter_Table * Table );
 void Stationary_Solution_Feasibility_Control (Parameter_Table * Table ); 
 
 void assert_positive_model_parameters (Parameter_Table * Table ); 
+
+void Fixed_Points_Linear_System_HII_nD(Parameter_Table * Table, gsl_vector * y);

@@ -200,12 +200,11 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
       }
       
       if (NEGATIVE_VALUE == 1) 	{
-	State = -State;
-	break;
+	      State = -State;
+	      break;
       }
   }/* ------> go further to the next time step */
-
-
+  
   // fclose(FP);
 
 #if defined VERBOSE

@@ -69,7 +69,7 @@ STO=STOCHASTIC_OPTIMIZATION#################### Possibilities: 'STOCHASTIC_OPTIM
 V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
 CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
-STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
+STATIONARITY=STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P A R A M E T E R   S P A C E ###############
 TYPE_of_BOUNDARY=###

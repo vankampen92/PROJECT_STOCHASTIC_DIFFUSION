@@ -11,3 +11,5 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * );
 void Resetting_Lambda_Delta_Vectors (Parameter_Table * ); 
 
 void Resetting_Alpha_Nu_Vectors (Parameter_Table * ); 
+
+void Resetting_Multiresource_Levels (Parameter_Table * Table);

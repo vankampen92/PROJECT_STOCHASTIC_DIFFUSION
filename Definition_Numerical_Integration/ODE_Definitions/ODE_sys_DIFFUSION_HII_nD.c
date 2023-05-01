@@ -33,27 +33,24 @@ int function (double t, const double y[], double dydt[], void *params)
 
     y_R = 0;
     for (i = 0; i < Table->LOCAL_STATE_VARIABLES; i++ ) {
-      RA    = j*Table->LOCAL_STATE_VARIABLES + i;
-      y_R += y[RA];   /*  Tota number of handling predators */
+      n    = j*Table->LOCAL_STATE_VARIABLES + i;
+      y_R += y[n];   /*  Tota number of handling predators */
     }
 
     for (i = 0; i < Table->No_of_RESOURCES; i++ ) {
-      RA    = j*Table->LOCAL_STATE_VARIABLES + i;
-      
-      dydt[RA]  = Table->Theta_C_i[i] * (A_0 - y_R) - Table->Nu_C[i]*y[RA];
+      n    = j*Table->LOCAL_STATE_VARIABLES + i;
+      dydt[n]  = Table->Theta_Consumers[i] * (A_0 - y_R) - Table->Nu_Consumers[i]*y[n];
+    }
   }
-
 
   if(Table->No_of_CELLS > 1) { 
     n= 0; 
     for (j=0; j<Table->No_of_CELLS; j++) { 
-      
       for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) { 
-	dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, i, j) * y[n];;
-	n++;
+	      dydt[n] += In_Mu(Table, n, i, j, y) - Out_Mu_Per_Capita(Table, i, j) * y[n];;
+	      n++;
       }
     }
   }
-  
   return GSL_SUCCESS;
 }

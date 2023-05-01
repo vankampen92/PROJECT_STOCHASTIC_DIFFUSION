@@ -104,10 +104,10 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Delta_R = P_Source->Delta_R; 
 
   P_Destination->Alpha_C = P_Source->Alpha_C;
-  P_Destination->Nu_C    = P_Source->Nu_C;
+  P_Destination->Nu_Consumers    = P_Source->Nu_Consumers;
 
   P_Destination->y_R_i     = P_Source->y_R_i;
-  P_Destination->Theta_C_i = P_Source->Theta_C_i;
+  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 }
 
 void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
@@ -219,10 +219,10 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Delta_R  = Table->Delta_R; 
 
   P->Alpha_C = Table->Alpha_C;
-  P->Nu_C    = Table->Nu_C;
+  P->Nu_Consumers    = Table->Nu_Consumers;
 
   P->y_R_i     = Table->y_R_i;
-  P->Theta_C_i = Table->Theta_C_i;
+  P->Theta_Consumers = Table->Theta_Consumers;
 }
 
 void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, Parameter_Model * P_Source)
@@ -328,10 +328,10 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->Delta_R = P_Source->Delta_R; 
 
   P_Destination->Alpha_C = P_Source->Alpha_C;
-  P_Destination->Nu_C = P_Source->Nu_C;
+  P_Destination->Nu_Consumers = P_Source->Nu_Consumers;
 
   P_Destination->y_R_i     = P_Source->y_R_i;
-  P_Destination->Theta_C_i = P_Source->Theta_C_i;
+  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 }
 
 void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
@@ -436,10 +436,10 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->Delta_R = P_Source->Delta_R; 
 
   P_Destination->Alpha_C = P_Source->Alpha_C;
-  P_Destination->Nu_C = P_Source->Nu_C;
+  P_Destination->Nu_Consumers = P_Source->Nu_Consumers;
 
   P_Destination->y_R_i     = P_Source->y_R_i;
-  P_Destination->Theta_C_i = P_Source->Theta_C_i;
+  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 }
 
 void Vector_Entries_into_Parameter_Model ( const gsl_vector * X, Parameter_Model * P,

@@ -128,9 +128,9 @@ typedef struct Parameter_Tableinfo
   double * Delta_R; 
   
   double * Alpha_C;
-  double * Nu_C;
+  double * Nu_Consumers;
   
-  double * Theta_C_i;
+  double * Theta_Consumers;
   double * y_R_i;
   
 #if defined CPGPLOT_REPRESENTATION

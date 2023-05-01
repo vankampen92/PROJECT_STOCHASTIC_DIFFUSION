@@ -14,3 +14,5 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
 void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * Table,
 							     double Value_0,
 							     double Value_1); 
+
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table * Table);

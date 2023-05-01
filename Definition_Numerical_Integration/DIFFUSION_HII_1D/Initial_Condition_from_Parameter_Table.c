@@ -139,3 +139,22 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
   }
 }
 
+void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table * Table)
+{
+    /*  This definition is contingent to TYPE of MODEL at work from the pre-defined family of 
+	models:
+	
+	DIFFUSION_BD_2D, DIFFUSION_HII_1D, ...
+
+	These definitions can be used by both deterministic functions (associated to the ODE 
+	system numerical integration) or the stochastic functions (related to either the 
+	generation of stochastic replicates of the integration of the master equation). 
+    */ 
+    Table->TOTAL_No_of_RESOURCES  = (int)(Table->p_1 * (double)Table->K_R);
+    Table->TOTAL_No_of_CONSUMERS  = Table->No_of_INDIVIDUALS;  /* -HN 20 as input argument */ 
+    
+    assert(Table->p_2 <= 1.0 && Table->p_2 >= 0.0);  // 
+    assert(Table->p_1 <= 1.0 && Table->p_1 >= 0.0);  // Fractions!!!  
+    
+    Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table->p_2*(double)Table->TOTAL_No_of_CONSUMERS);
+}

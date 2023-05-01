@@ -13,5 +13,4 @@
                                          /* 11 = 2 (Local States) + 9 (True Derived) */
                                          /* See definition_OutPut_Variables.c  */
 
-#define OUTPUT_VARIABLES_MAXIMUM 80011  /* MODEL_STATE_VARIABLES_MAXIMUM +
-					   OUTPUT_VARIABLES_GENUINE_MAXIMUM */
+#define OUTPUT_VARIABLES_MAXIMUM 80011  /* MODEL_STATE_VARIABLES_MAXIMUM + OUTPUT_VARIABLES_GENUINE_MAXIMUM */

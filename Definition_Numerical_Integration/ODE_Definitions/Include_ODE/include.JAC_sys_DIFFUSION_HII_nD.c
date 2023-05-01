@@ -5,11 +5,11 @@ double x;
   for(i=0; i<Table->No_of_RESOURCES; i++) {
     for(k=0; k<Table->No_of_RESOURCES; k++) {
       if( i == k ) {
-        x = -(Table->Nu_C[i] + Table->Theta_C[k]);  
+        x = -(Table->Nu_Consumers[i] + Table->Theta_Consumers[k]);  
         gsl_matrix_set(m, i, k, x);
       }
       else {
-        x = -Table->Theta_C[k];  
+        x = -Table->Theta_Consumers[k];  
         gsl_matrix_set(m, i, k, x);
       }
     }

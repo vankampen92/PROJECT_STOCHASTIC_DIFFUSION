@@ -46,6 +46,7 @@
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_multimin.h>
+#include <gsl/gsl_linalg.h>
 #endif
 
 #include <stat.h>
