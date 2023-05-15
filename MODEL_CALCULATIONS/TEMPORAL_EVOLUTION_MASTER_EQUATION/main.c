@@ -140,8 +140,10 @@ int main(int argc, char **argv)
   assert(Table.p_2 <= 1.0 && Table.p_2 >= 0.0);  // 
   assert(Table.p_1 <= 1.0 && Table.p_1 >= 0.0);  // Fractions!!!  
   
-  Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0 = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
+  Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0     = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
   Table.TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table.TOTAL_No_of_CONSUMERS - Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0;
+  Table.TOTAL_No_of_FREE_CONSUMERS            = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
+  Table.TOTAL_No_of_HANDLING_CONSUMERS        = Table.TOTAL_No_of_CONSUMERS - Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   /* END ----------------------------------------------------------------------------
      This initial Condition involves no triplets at time t = 0.0 because the sum of states
      should add up the TOTAL No of CONSUMERS 

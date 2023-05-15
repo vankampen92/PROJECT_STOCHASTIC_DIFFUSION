@@ -1,6 +1,7 @@
 #include <MODEL.h>
 
 extern gsl_rng * r;   /* Global generator (define at the main program level */
+
 #define RANDOM gsl_rng_uniform_pos(r)
 
 /* This function advances the system one single time step, by changing
@@ -47,13 +48,12 @@ int Advance_Current_Time( Parameter_Table * Table,
     (*Time_Current) += inter_event_time;
     
     /* BEGIN : Stochastic Dynamic is actually performed : 
-               The Community "Village" is updated accoundingly 
+               The Community "Village" is updated accordingly 
     */
-    Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
+      Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
     if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
-
   }
   else{    
 
@@ -80,8 +80,7 @@ int Advance_Current_Time( Parameter_Table * Table,
   /*   END: Calculation of Total Rate of Change */
 
 #if defined VERBOSE
-  printf(" Total population across the system at current time (t = %g)\n", 
-	 (*Time_Current) );
+  printf(" Total population across the system at current time (t = %g)\n", (*Time_Current) );
   
   Print_Meta_Community_Patch_System (Table);
 #endif

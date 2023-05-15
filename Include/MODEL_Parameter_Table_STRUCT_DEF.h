@@ -148,17 +148,17 @@ typedef struct Parameter_Tableinfo
   int TOTAL_No_of_EVENTS;                         /* Stochastic Dynamics */
   /* Number of common events that can occur to every Species: */
   int No_of_EVENTS;                               /* Stochastic Dynamics */
-
   /* 
      TOTAL_No_of_EVENTS = No_of_EVENTS * No_of_RESOURCES if all species can undergo 
      exactly the same processes 
   */
-
   /* Master Equation Numerical Integration */
   int TOTAL_No_of_RESOURCES;
   int TOTAL_No_of_CONSUMERS;
   int TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   int TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
+  int TOTAL_No_of_FREE_CONSUMERS;
+  int TOTAL_No_of_HANDLING_CONSUMERS; 
 
 }Parameter_Table;
 

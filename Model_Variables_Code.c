@@ -706,8 +706,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       case 16: /* DIFFUSION_HII_nD * * * * * * * * * * * * * * * * * * * * * * */
 	    /* Number of events that can occur to a single Species: */
-      Table->No_of_EVENTS       = 4;  /* (Only Diffusion + External Immigration + Attack + Handling) */
-      Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES;
+      Table->No_of_EVENTS       = 2;  /* (Attack + Handling) */
+      Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES + 2;
+      /* The last two events correspond to diffusion or jump of a free consumers 
+         from the focal cell to a neighboring cell and external immigration of 
+         free consumers respectively.  
+      */
       Table->LOCAL_STATE_VARIABLES = Table->No_of_RESOURCES;
       
       n = 0;
@@ -729,7 +733,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
        
       Table->Index[n++] = 10; /* Resource Carrying Capacity */ 
       
-      Table->Index[n++]   = 16; /* Consumer Attack Rate (on average) */
+      Table->Index[n++] = 16; /* Consumer Attack Rate (on average), Alpha_C_0*/
 
       Table->Index[n++]   = 17; /* Nu = 1/Tau, Tau, Handling Time (on average) on Resource 0 */
 
@@ -957,8 +961,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -969,8 +973,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */

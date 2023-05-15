@@ -3,27 +3,66 @@
 void Event_Adjacence_List_Initialization(Community ** PATCH,
 					 Parameter_Model * P)
 {
-  int i, m, no;
+  int i, j, k, Sp, n, m, no;
+  int TOTAL_No_of_EVENTS;
   
-  no  = P->No_of_CELLS;
-  m   = P->TOTAL_No_of_EVENTS; 
-
   int ** AD; 
 
   no  = P->No_of_CELLS;
- 
+  m   = P->TOTAL_No_of_EVENTS; 
+  Sp  = P->No_of_RESOURCES; 
+
+  assert(no == 1);
+
   for(i=0; i<no; i++){
-    
+    TOTAL_No_of_EVENTS = 0;
+
     AD = PATCH[i]->Event_Adjacence_List;
+     
+    for(j=0; j<Sp; j++) {
+      
+      /* Attack   */
+      n = 0;
+      for(k=0; k<Sp; k++) { 
+        AD[j*P->No_of_EVENTS][n++]    = k*P->No_of_EVENTS;
+      }
+      AD[j*P->No_of_EVENTS][n++]      = j*P->No_of_EVENTS + 1;
+      AD[j*P->No_of_EVENTS][n++]      = Sp*P->No_of_EVENTS;
+      AD[j*P->No_of_EVENTS][m] = n;
+      TOTAL_No_of_EVENTS++;
 
-    AD[0][0] = 0; AD[0][1] = 2;                 AD[0][m] = 2;
+      /* Handling */
+      n=0;
+      for(k=0; k<Sp; k++) { 
+        AD[j*P->No_of_EVENTS+1][n++]    = k*P->No_of_EVENTS;
+      }
+      AD[j*P->No_of_EVENTS+1][n++]      = j*P->No_of_EVENTS + 1;
+      AD[j*P->No_of_EVENTS+1][n++]      = Sp*P->No_of_EVENTS;  
+      AD[j*P->No_of_EVENTS+1][m] = n;
+      TOTAL_No_of_EVENTS++;  
+    }   
 
-    AD[1][0] = 0; AD[1][1] = 2;                 AD[1][m] = 2;
+    assert(TOTAL_No_of_EVENTS == (m-2));
 
-    AD[2][0] = 0; AD[2][1] = 2; AD[2][2] = 3;   AD[2][m] = 3;
+    /* Out-Migration */
+    n = 0;
+    for(k=0; k<Sp; k++) { 
+        AD[Sp*P->No_of_EVENTS][n++]  = k*P->No_of_EVENTS;
+    }
+    AD[Sp*P->No_of_EVENTS][n++]  = Sp*P->No_of_EVENTS;
+    AD[Sp*P->No_of_EVENTS][m] = n;
+    TOTAL_No_of_EVENTS++;
 
-    AD[3][0] = 0; AD[3][1] = 2; AD[3][2] = 3;   AD[3][m] = 3;
+    /* In-Migration */
+    n = 0;
+    for(k=0; k<Sp; k++) { 
+        AD[Sp*P->No_of_EVENTS][n++]  = k*P->No_of_EVENTS;
+    }
+    AD[Sp*P->No_of_EVENTS][n++]  = Sp*P->No_of_EVENTS;
+    AD[Sp*P->No_of_EVENTS][m] = n;
+    TOTAL_No_of_EVENTS++;
 
+    assert(TOTAL_No_of_EVENTS == m);
   }
 }
 

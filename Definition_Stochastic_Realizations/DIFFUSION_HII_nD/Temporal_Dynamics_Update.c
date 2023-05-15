@@ -45,27 +45,30 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 
     if (Type_of_Event < n ) {
       
-      assert( Type_of_Event != 0 ) ; /* Because these are out
-					migration events. Only
-					possible when x patch 
-					is different from y patch
-							   */
-      
+      assert( Type_of_Event < Table->TOTAL_No_of_EVENTS-2 ) ; 
+                                      /* Because these are out
+					                              migration events. Only
+					                              possible when x patch 
+					                              is different from y patch
+							                        */
       Pa    = My_Community[x];
-      // Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); is not necessary here!!!  
+
+      // Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); is not necessary here
+      // because no event induces a change in the total rate that depends itself on 
+      // the state of the system
       
       m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-							 to event 'Type_of_Event'???
-							 Lenght of the adjacence list 
-							 of 'Type_of_Event'
-						      */
+							                                           to event 'Type_of_Event'???
+							                                           Lenght of the adjacence list 
+							                                           of 'Type_of_Event'
+						                                          */
       Delta_Rate = 0.0; 
       for(i=0; i<m; i++) {
-	k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
-	Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
-	Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
+							                                             to event 'Type_of_Event'???
+							                                          */
+	      Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
       }
 
       Pa->ratePatch    += Delta_Rate; 				
@@ -81,26 +84,25 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       exit(0); 
     }   
   }
-  else {         /* MOVEMENT EVENT involving two Patches */
-		 /* Out migration sending one individual (C) 
-		    out from patch 'x' to patch 'y'      */
+  else {  /* MOVEMENT EVENT involving two Patches */
+		      /* Out migration sending one individual (C) out from patch 'x' to patch 'y' */
     
-    assert( Type_of_Event == 0 ) ; 
+    assert(Type_of_Event >= Table->TOTAL_No_of_EVENTS-2); 
     
     /* Changes in rates due to the loss of an individual in patch x */
     Pa    = My_Community[x];
     Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-						       to event 'Type_of_Event'???
-						       Lenght of the adjacence list 
-						       of 'Type_of_Event'
-						    */
+						                                           to event 'Type_of_Event'???
+						                                           Lenght of the adjacence list 
+						                                           of 'Type_of_Event'
+						                                        */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							 to event 'Type_of_Event'???
-						      */
+							                                           to event 'Type_of_Event'???
+						                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
     }
@@ -108,24 +110,23 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     Rate->Total_Rate += Delta_Rate; 				
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
       
-    
     /* Changes in rates due to the adquisition of an individual in patch y */
     Pa    = My_Community[y];
     Updating_Event_Delta_Matrix(Pa, Type_of_Event+1, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event+1][n]; /* How many events are connected 
-							 to event 'Type_of_Event+1'???
-							 Lenght of the adjacence list 
-							 of 'Type_of_Event+1', 
-							 because 1 is the event  
-							 involving the increase of 
-							 the consumer 
-						      */
+							                                           to event 'Type_of_Event+1'???
+							                                           Lenght of the adjacence list 
+							                                           of 'Type_of_Event+1', 
+							                                           because 1 is the event  
+							                                           involving the increase of 
+							                                           the consumer 
+						                                          */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event+1][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
+							                                             to event 'Type_of_Event'???
+							                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
     }
@@ -148,6 +149,10 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table)
 {
+  /* This should be activated only in case change the total rate after one event has 
+     taken place ("the Deltas") depend themselves on the state of the system, 
+     which is not the case in DIFFUSION_HII_nD 
+  */
   double ** Delta_Matrix = Pa->Event_Delta_Matrix;
 
   int * n = Pa->n;

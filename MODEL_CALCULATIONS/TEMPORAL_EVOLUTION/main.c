@@ -229,11 +229,11 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
-#ifndef DIFFUSION_HII_nD /* Stochastic multi-resource Holling Type II dynamics not yet implemented */
+  // #ifndef DIFFUSION_HII_nD /* Stochastic multi-resource Holling Type II dynamics not yet implemented */
   /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
-#endif
+  // #endif
 #endif
 #endif
 #endif

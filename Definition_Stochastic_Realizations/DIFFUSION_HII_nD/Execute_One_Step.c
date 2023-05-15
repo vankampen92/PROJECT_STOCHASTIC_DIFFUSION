@@ -17,7 +17,7 @@ void Execute_One_Step(Community ** SP,
 		      double max_Probability,
 		      int * Event, int * x_Patch)
 {
-  int x, y, n_Event, n, n_Event_Sp, Sp, j;
+  int x, y, n_Event, k, n, n_Event_Sp, Sp, j;
   Community * Patch;
   Parameter_Model * P = Table->P;
 
@@ -36,11 +36,16 @@ void Execute_One_Step(Community ** SP,
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
 
-  if(Table->TOTAL_No_of_EVENTS > 1)
-    n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
-
+  if(Table->TOTAL_No_of_EVENTS > 1) {
+    n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; 
+    /* n_Event should be bounded 
+       between 0 and Table->No_of_RESOURCES*Table->No_of_EVENTS -1 
+    */
+    n_Event_Sp = n_Event%Table->No_of_EVENTS;
+    Sp         = n_Event/Table->No_of_EVENTS;
+  }
   else {
-    printf(" The total number of events tant potentially could happen patch %d\n", x);
+    printf(" The total number of events that potentially could happen patch %d\n", x);
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
     printf(" Something very wrong with your code\n");
     printf(" The program will exit\n");
@@ -48,57 +53,85 @@ void Execute_One_Step(Community ** SP,
     exit(0);
   }
 
-  A   = x*Table->LOCAL_STATE_VARIABLES + Table->A;
+  j = x*Table->No_of_RESOURCES + Sp;
 
-  assert( n_Event < Table->TOTAL_No_of_EVENTS );
-
+  assert( P->No_of_CELLS == 1);
+  assert(n_Event < Table->TOTAL_No_of_EVENTS-2); 
+  /* No movement between patches or immgration from outsite the system is allowed */
   // Print_Meta_Community_Patch_System (Table);
-
-  switch( n_Event )
-    {
+   
+  if (n_Event < Table->TOTAL_No_of_EVENTS-2) { 
     
-    case  0:  /* Out-Migration (A --> A-1) from patch x and some other patch gains one */
-              /* Out A: only diffusion of free consumers */
-      Positivity_Control( 0, Table, x, A, Y[A], J[A] );
+    switch( n_Event_Sp )
+    {
+    case 0: /* Consumer Consumption of Resource and dimmer formation */ /* R + A ---> RA */
+      
+      Y[j]++; J[j]++;  Patch->n[Sp]++;            /* Dimer formation */
 
+      Table->TOTAL_No_of_FREE_CONSUMERS--;
+      
+      break;
+
+    case 1: /* Dimmer degratation back into a free individual consumers */ /* RA ---> A  */
+      
+      Positivity_Control( n_Event, Table, x, j, Y[j], J[j] );
+      Y[j]--; J[j]--;  Patch->n[Sp]--;
+
+      Table->TOTAL_No_of_FREE_CONSUMERS++;
+
+      break;
+
+    default:
+    /* Something is very very wrong!!! */
+      printf("The number of event occurring should be 0 and %d*%d-1\n", 
+        Table->No_of_RESOURCES, Table->No_of_EVENTS);
+      printf("Event to Occur = %d\n", n_Event);
+      Press_Key();
+      exit(0);
+    }
+  }
+  else {
+    
+    /* DIFFUSION_HII_nD will never go through this else, because 
+       no movement between patches or immgration from outsite the system is allowed 
+    */  
+    k = n_Event - Table->No_of_RESOURCES*Table->No_of_EVENTS;
+
+    switch( k )
+    {
+    case  0:  /* Out-Migration (A --> A-1) from patch x and some other patch gains one */
+              /* Out A: only diffusion of free consumers    */
+              /* 'A' is not defined properly for this model */
+              /* 'A' should be equal to 
+                Table->No_of_RESOURCES*Table->No_of_EVENTS, 
+                the index of the variable representing free consumers 
+              */  
+      Positivity_Control( n_Event, Table, x, A, Y[A], J[A] );
       Y[A]--; J[A]--; Patch->n[Table->A]--;
 
       y = Some_Other_Patch_Population_Increase(x, Table->A, Table);
 
       break;
 
-   case  1:  /* External Immigration from outside the system (A --> A+1) *//* External Imm A */
+    case  1:  /* External Immigration from outside the system (A --> A+1) *//* External Imm A */
 
-      Y[A]++; J[A]++;  Patch->n[Table->A]++;
-
-      break;
-
-    case 2: /* Consumer Consumption of Resource and dimmer formation */ /* R + A ---> RA */
-      
-      Positivity_Control( 2, Table, x, A, Y[A], J[A] );
-      Y[A]--; J[A]--;  Patch->n[Table->A]--;
-      
-      break;
-
-    case 3: /* Dimmer degratation back into a free individual consumers */ /* RA ---> A  */
-      
       Y[A]++; J[A]++;  Patch->n[Table->A]++;
 
       break;
 
     default:
     /* Something is very very wrong!!! */
-      printf("The number of event occurring should be between 0 and 0\n");
+      printf("At this point, the number of event occurring should be eitenr 0 or 1\n");
       printf("Event to Occur = %d\n", n_Event);
       Press_Key();
       exit(0);
     }
+  }
 
   (*Event) = n_Event;  x_Patch[0] = x;  x_Patch[1] = y;
 }
 
-int Some_Other_Patch_Population_Increase(int x, int Sp,
-					 Parameter_Table * Table)
+int Some_Other_Patch_Population_Increase(int x, int Sp, Parameter_Table * Table)
 {
   /* Input:
 
@@ -126,8 +159,7 @@ int Some_Other_Patch_Population_Increase(int x, int Sp,
   return(Patch[x]->Patch_Connections[n_Patch]);
 }
 
-void Positivity_Control( int Event, Parameter_Table * Table,
-			 int x, int jS, double Y, int J)
+void Positivity_Control( int Event, Parameter_Table * Table, int x, int jS, double Y, int J)
 {
   int i, Q, nS, Non_Positive;
   Community ** Patch = Table->Patch_System;
@@ -149,8 +181,10 @@ void Positivity_Control( int Event, Parameter_Table * Table,
     printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
     printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
     printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
+
     for(i=0; i<Table->TOTAL_No_of_EVENTS; i++) 
       printf ("Event: %d\t Rate of Event No %d: %g\n", Event, i, Patch[x]->rToI[i]);
+    
     for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) 
       printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
 

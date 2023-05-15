@@ -27,7 +27,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   assert(Sp == 1);
   
   No_of_EVENTS            = pa->TOTAL_No_of_EVENTS; /* Total No of Events 
-						       within each local population */  
+						                                           within each local population */  
 
   Immigration_Preassure_on_Focal_Patch_Initialization( My_Community, pa );
 

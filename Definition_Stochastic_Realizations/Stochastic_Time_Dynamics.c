@@ -86,7 +86,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
       {
-	FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
+	      FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
       }
     /*     E N D
      * -------------------------------------------------------------------
@@ -97,8 +97,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     EXTINCTION = 0;
 
     if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
-      Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables,
-								  Table );
+      Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables, Table );
       if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
     
     // EXTINCTION = Extinction_Control_Condition(Table);
@@ -127,17 +126,16 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       Time->count[j]++;    /* Counting good realizations corresponding to the j-th time */ 
 
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
-	kk = Table->OUTPUT_VARIABLE_INDEX[k];
-	value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables,
-					    Time->Time_Vector[0], Table);
-	Time->summ[k][j] += value;
-	Time->summ_var[k][j] += value * value;
+	      kk = Table->OUTPUT_VARIABLE_INDEX[k];
+	      value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables, Time->Time_Vector[0], Table);
+	      Time->summ[k][j] += value;
+	      Time->summ_var[k][j] += value * value;
 
 #if defined CPGPLOT_REPRESENTATION
- 	P->CPG->y_Time[k][j_Good] = value;
+ 	      P->CPG->y_Time[k][j_Good] = value;
 #endif
-	Time->Variable[i][k][j]   = value;
-	Table->Vector_Output_Variables[k] = value;
+	      Time->Variable[i][k][j]   = value;
+	      Table->Vector_Output_Variables[k] = value;
       }
 #if defined CPGPLOT_REPRESENTATION
       if( FROZEN_SYSTEM == 0 ){ P->CPG->x_Time[j_Good]    = Time_Current; }
@@ -164,7 +162,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       /* BEGIN : Writing a costumized file ... */
       fprintf(FP,"%g", Time_Current);
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
-	fprintf(FP,"\t%g", Table->Vector_Output_Variables[k]);
+	      fprintf(FP,"\t%g", Table->Vector_Output_Variables[k]);
       }
       fprintf(FP,"\n");
       /*   END: Writing costumized file        */
@@ -254,7 +252,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
       {
-	FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
+	      FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
       }
     /*     E N D
      * -------------------------------------------------------------------
@@ -291,14 +289,13 @@ int Stochastic_Time_Dynamics_Numerical( int i,
       
       j_Good++; /* Counting good times */
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
-	kk = Table->OUTPUT_VARIABLE_INDEX[k];
-	value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables,
-					    Time->Time_Vector[0], Table);
-	Time->summ[k][j] += value;
-	Time->summ_var[k][j] += value * value;
+	      kk = Table->OUTPUT_VARIABLE_INDEX[k];
+	      value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables, Time->Time_Vector[0], Table);
+	      Time->summ[k][j] += value;
+	      Time->summ_var[k][j] += value * value;
 
-	Time->Variable[i][k][j]   = value;
-	Table->Vector_Output_Variables[k] = value;
+	      Time->Variable[i][k][j]   = value;
+	      Table->Vector_Output_Variables[k] = value;
       }
 
       Time->time_DEF[j_Good] = Time_Current;

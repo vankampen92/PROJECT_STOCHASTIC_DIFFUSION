@@ -8,9 +8,9 @@
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table);
 
 void Temporal_Dynamics_Update( Community ** My_Community,
-			       Parameter_Table * Table,
-			       Stochastic_Rate * Rate,
-			       int Type_of_Event, int * Patch)
+			                         Parameter_Table * Table,
+			                         Stochastic_Rate * Rate,
+			                         int Type_of_Event, int * Patch )
 {
   /* This function calculates the stochastic rates after the execution of a stochastic event
      in terms of the old ones, with no recalculation. This is a way to optimize the algorithm.
@@ -24,8 +24,8 @@ void Temporal_Dynamics_Update( Community ** My_Community,
      . Rate         is a pointer to the structure Stocastic Rate 
      . Type_of_Event is a label to the event occurring in a Patch 
      . Patch        is an array containing the two patches involved in a movement event. 
-                    Patch[0] is the patch sending the individual
-		    Patch[1] is the patch receiving the individual. 
+                    Patch[0] is the patch sending the individual amd Patch[1] is the patch 
+                    receiving the individual. 
 
      Output arguments: 
      . Rate         Stochastic Rate is updated from previous value (without recalculating)
@@ -61,11 +61,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 						      */
       Delta_Rate = 0.0; 
       for(i=0; i<m; i++) {
-	k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
-	Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
-	Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
+                                                            to event 'Type_of_Event'???
+		                                                    */
+	      Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
       }
 
       Pa->ratePatch    += Delta_Rate; 				
@@ -82,8 +82,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     }   
   }
   else {         /* MOVEMENT EVENT involving two Patches */
-		 /* Out migration sending one individual (C) 
-		    out from patch 'x' to patch 'y'      */
+		 /* Out migration sending one individual out from patch 'x' to patch 'y'      */
     
     assert( Type_of_Event == 0 ) ; 
     
@@ -92,15 +91,15 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-						       to event 'Type_of_Event'???
-						       Lenght of the adjacence list 
-						       of 'Type_of_Event'
-						    */
+						                                          to event 'Type_of_Event'???
+						                                          Lenght of the adjacence list 
+						                                          of 'Type_of_Event'
+						                                        */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							 to event 'Type_of_Event'???
-						      */
+							                                          to event 'Type_of_Event'???
+						                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
     }
@@ -108,19 +107,17 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     Rate->Total_Rate += Delta_Rate; 				
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
       
-    
     /* Changes in rates due to the adquisition of an individual in patch y */
     Pa    = My_Community[y];
     Updating_Event_Delta_Matrix(Pa, Type_of_Event+1, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event+1][n]; /* How many events are connected 
-							 to event 'Type_of_Event+1'???
-							 Lenght of the adjacence list 
-							 of 'Type_of_Event+1', 
-							 because 1 is the event  
-							 involving the increase of 
-							 the consumer 
-						      */
+							                                           to event 'Type_of_Event+1'???
+							                                           Lenght of the adjacence list 
+							                                           of 'Type_of_Event+1', 
+							                                           because 1 is the event  
+							                                           involving the increase of the consumer 
+						                                          */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event+1][i]; /* Which events are connected 

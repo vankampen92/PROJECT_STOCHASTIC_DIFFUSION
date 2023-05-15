@@ -10,11 +10,11 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
   int N, no, Sp;
 
   Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species
-					potentially coexisting locally,
-					and, therefore, also the
-					Total Number of State Variables
-					fully determining the local state
-				     */
+					                              potentially coexisting locally,
+					                              and, therefore, also the
+					                              Total Number of State Variables
+					                              fully determining the local state
+				                             */
   no    = P->No_of_CELLS;
 
   N     = P->TOTAL_No_of_EVENTS;
@@ -155,19 +155,18 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_BD_3D            TYPE_of_MODEL = 14
      . MODEL=DIFFUSION_HII_2D           TYPE_of_MODEL = 9
      . MODEL=DIFFUSION_HII_1D           TYPE_of_MODEL = 12
+     . MODEL=DIFFUSION_HII_nD           TYPE_of_MODEL = 16
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9){
+  if(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
     Event_Delta_Matrix_Initialization(PATCH, P);
     Event_Adjacence_List_Initialization(PATCH, P);
   }
   else{
     printf(" Stochastic optimization has not been implemented for this model\n");
-    printf(" The program will exit\n");
+    Press_Key();
   }
-  
-  // assert(P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9);
 #endif
 }
 

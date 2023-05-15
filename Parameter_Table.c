@@ -437,7 +437,7 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table)
      A total resource density is set to R (TOTAL_No_of_RESOURCES), and then:  
      1st Resource Density: 0.5 * R
      2on Resource Density: 0.3 * R
-     and the rest of resources share the 0.2 * R that is left. 
+     For the rest of resources, they share the 0.2 * R that is left. 
   */
   int j;
   double K_R;

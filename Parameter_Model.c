@@ -98,6 +98,8 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->TOTAL_No_of_CONSUMERS = P_Source->TOTAL_No_of_CONSUMERS;
   P_Destination->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
+  P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
+  P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
   /* Pointers assignation */
   P_Destination->Lambda_R = P_Source->Lambda_R;
@@ -213,6 +215,8 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->TOTAL_No_of_CONSUMERS = Table->TOTAL_No_of_CONSUMERS;
   P->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   P->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
+  P->TOTAL_No_of_FREE_CONSUMERS = Table->TOTAL_No_of_FREE_CONSUMERS;
+  P->TOTAL_No_of_HANDLING_CONSUMERS = Table->TOTAL_No_of_HANDLING_CONSUMERS;
 
   /* Pointers assignation */
   P->Lambda_R = Table->Lambda_R;
@@ -322,6 +326,8 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->TOTAL_No_of_CONSUMERS = P_Source->TOTAL_No_of_CONSUMERS;
   P_Destination->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
+  P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
+  P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
   /* Pointers assignation */
   P_Destination->Lambda_R = P_Source->Lambda_R;
@@ -430,6 +436,8 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->TOTAL_No_of_CONSUMERS = P_Source->TOTAL_No_of_CONSUMERS;
   P_Destination->TOTAL_No_of_FREE_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_FREE_CONSUMERS_TIME_0;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = P_Source->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0;
+  P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
+  P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
   /* Pointers assignation */
   P_Destination->Lambda_R = P_Source->Lambda_R;
