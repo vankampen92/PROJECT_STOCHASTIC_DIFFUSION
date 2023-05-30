@@ -48,24 +48,20 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   printf("Numerical Integration of the Master Equation succeeded!!!\n");  Press_Key();
   /*   END: ------------------------------------------ */
 
-  /* BEGIN : Stationary Probability Distribution (only for some of the models) -------
-   */
+  /* BEGIN : Stationary Probability Distribution (only for some of the models) -----*/
 #ifdef DIFFUSION_BD_2D
-  
   Stationary_Probability_Distribution( Table );
   printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
 #elif defined DIFFUSION_HII_1D  
-
   Stationary_Probability_Distribution( Table );
   printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
 #endif
   Press_Key();
   /*  END : ------------------------------------------------------------------------*/
   
-
 #if defined STOCHASTIC_REALIZATIONS  
  /* BEGIN : Representing distributions associated to output variables across 
-            stochastic realization 
+            stochastic realizations 
  */  
 #if defined CPGPLOT_REPRESENTATION
   int SAME_PLOT = 1;

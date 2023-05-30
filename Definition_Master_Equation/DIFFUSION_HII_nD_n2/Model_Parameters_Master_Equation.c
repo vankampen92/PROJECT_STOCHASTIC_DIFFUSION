@@ -7,12 +7,13 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
 {
   Master_Equation * ME = Table->MEq; 
   
-  * n_DIMENSION = Table->No_of_RESOURCES;
+  * n_DIMENSION = 2;
   * n_z         = 1;
   * n_y         = 1 + Table->TOTAL_No_of_CONSUMERS;  
   * n_x         = 1 + Table->TOTAL_No_of_CONSUMERS;
   
-  * No_of_CONFIGURATIONAL_STATES = Func_Hyper( * n_DIMENSION, Table->TOTAL_No_of_CONSUMERS );
+  * No_of_CONFIGURATIONAL_STATES = (Table->TOTAL_No_of_CONSUMERS + 1)*(Table->TOTAL_No_of_CONSUMERS + 2);
+  * No_of_CONFIGURATIONAL_STATES = (* No_of_CONFIGURATIONAL_STATES) / 2;
 
   printf("No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
   // Press_Key(); 

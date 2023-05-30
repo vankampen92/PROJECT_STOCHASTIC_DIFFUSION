@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu May 11 13:42:29 2023
+# Make data base, printed on Sat May 27 00:37:23 2023
 
 # Variables
 
@@ -41,7 +41,7 @@ QT_ACCESSIBILITY = 1
 # environment
 SNAP_INSTANCE_NAME = code
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/128/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/129/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -51,17 +51,17 @@ PWD = /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-XDG_DATA_DIRS = /home/dalonso/snap/code/128/.local/share:/home/dalonso/snap/code/128:/snap/code/128/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+XDG_DATA_DIRS = /home/dalonso/snap/code/129/.local/share:/home/dalonso/snap/code/129:/snap/code/129/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/6a995c4f4cc2ced6e3237749973982e751cb0bf9
+VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/b3e4e68a0bc097f0ae7907b217c1119af9e03435
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.LPZS41
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.MXTV51
 # default
 .LOADED := 
 # default
@@ -97,7 +97,7 @@ MAKEFILE_LIST :=
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 5182
+VSCODE_PID = 25095
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -105,7 +105,7 @@ XDG_SESSION_TYPE = wayland
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2066,unix/vankampen92:/tmp/.ICE-unix/2066
+SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2084,unix/vankampen92:/tmp/.ICE-unix/2084
 # automatic
 *F = $(notdir $*)
 # environment
@@ -119,7 +119,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","osLocale":"en-us","availableLanguages":{}
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-GTK_PATH = /snap/code/128/usr/lib/x86_64-linux-gnu/gtk-3.0
+GTK_PATH = /snap/code/129/usr/lib/x86_64-linux-gnu/gtk-3.0
 # environment
 GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 # makefile
@@ -153,11 +153,11 @@ SNAP_USER_COMMON = /home/dalonso/snap/code/common
 # environment
 LC_TIME = es_ES.UTF-8
 # environment
-SNAP = /snap/code/128
+SNAP = /snap/code/129
 # environment
-INVOCATION_ID = 1aa1ff20d8c74b4a9137360f4c07a0b6
+INVOCATION_ID = bf47ba63fd364dce8b548ad3772de482
 # environment
-SNAP_REVISION = 128
+SNAP_REVISION = 129
 # environment
 SNAP_REAL_HOME = /home/dalonso
 # environment
@@ -181,7 +181,7 @@ DESKTOP_SESSION = ubuntu
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
-LOCPATH = /snap/code/128/usr/lib/locale
+LOCPATH = /snap/code/129/usr/lib/locale
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
@@ -193,7 +193,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2084
+SYSTEMD_EXEC_PID = 2126
 # environment
 DISPLAY = :0
 # environment
@@ -203,17 +203,17 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SNAP_DATA = /var/snap/code/128
+SNAP_DATA = /var/snap/code/129
 # environment
 SNAP_CONTEXT = IW4Qn8rFuCFeZjEnf0jXXFVR7ihvRlNVpjXOJVtkYpLiggVXGK2c
 # environment
-MANAGERPID = 1871
+MANAGERPID = 1912
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 5084
+GIO_LAUNCHED_DESKTOP_FILE_PID = 25042
 # environment
-_ = /snap/code/128/usr/share/code/code
+_ = /snap/code/129/usr/share/code/code
 # environment
 LC_PAPER = es_ES.UTF-8
 # environment
@@ -223,7 +223,7 @@ GDK_PIXBUF_MODULE_FILE = /home/dalonso/snap/code/common/.cache/gdk-pixbuf-loader
 # environment
 GIO_MODULE_DIR = /home/dalonso/snap/code/common/.cache/gio-modules
 # environment
-JOURNAL_STREAM = 8:35505
+JOURNAL_STREAM = 8:35139
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -237,11 +237,11 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 VSCODE_IPC_HOOK = /run/user/1000/vscode-86b08775-1.78-main.sock
 # environment
-GTK_EXE_PREFIX = /snap/code/128/usr
+GTK_EXE_PREFIX = /snap/code/129/usr
 # environment
 SNAP_NAME = code
 # environment
-GSETTINGS_SCHEMA_DIR = /home/dalonso/snap/code/128/.local/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /home/dalonso/snap/code/129/.local/share/glib-2.0/schemas
 # environment
 IM_CONFIG_PHASE = 1
 # default
@@ -249,7 +249,7 @@ IM_CONFIG_PHASE = 1
 # automatic
 <F = $(notdir $<)
 # environment
-SNAP_VERSION = 6a995c4f
+SNAP_VERSION = b3e4e68a
 # environment
 VSCODE_CRASH_REPORTER_SANDBOXED_HINT = 1
 # default
@@ -263,7 +263,7 @@ SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
-SNAP_USER_DATA = /home/dalonso/snap/code/128
+SNAP_USER_DATA = /home/dalonso/snap/code/129
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -281,16 +281,13 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 25821185): 60 files, no impossibilities.
+# . (device 66306, inode 25821185): 59 files, no impossibilities.
 
-# 60 files, no impossibilities in 1 directories.
+# 59 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 # No implicit rules.
- 
-make: *** No rule to make target 'all'.  Stop.
-
 
 # Files
 
@@ -300,6 +297,9 @@ Makefile:
 #  File does not exist.
 #  File has been updated.
 #  Failed to be updated.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 # Not a target:
 .DEFAULT:
@@ -336,12 +336,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 68 / storage = 1467 B / avg = 21 B
-# current buf: size = 8162 B / used = 1467 B / count = 68 / avg = 21 B
+# strcache buffers: 1 (0) / strings = 67 / storage = 1458 B / avg = 21 B
+# current buf: size = 8162 B / used = 1458 B / count = 67 / avg = 21 B
 
-# strcache performance: lookups = 71 / hit rate = 4%
+# strcache performance: lookups = 70 / hit rate = 4%
 # hash-table stats:
-# Load=68/8192=1%, Rehash=0, Collisions=0/71=0%
-# Finished Make data base on Thu May 11 13:42:29 2023
+# Load=67/8192=1%, Rehash=0, Collisions=0/70=0%
+# Finished Make data base on Sat May 27 00:37:23 2023
 
  
