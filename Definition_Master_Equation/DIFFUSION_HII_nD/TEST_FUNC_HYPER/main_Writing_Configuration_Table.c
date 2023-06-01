@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <assert.h>
 
+typedef struct configurationinfo
+{
+  int * n;    /* Pointer to a configuration of the type (n_1, ..., n_D) of dimension D */
+  int * anUp; /* Vector of indeces to neighgoring configurations of dimension D + 1    */
+  int * anDw; 
+              /* anUp[D] = a, where a is the no of UP neighboring configurations, a <= D   */
+              /* anUp[D] = a, where a is the no of DOWN neighboring configurations, a <= D */
+}configuration;
+
 /* Compilation:
  * :~$ gcc -c main_Writing_Configuration_Table.c 
  * 
@@ -187,7 +196,7 @@ void Writing_General_Configuration_Table(int D,
     for(j=0; j < D; j++)
       printf(" %d ", Configuration_Table[i][j]);
     printf("]\n");
-    if(i<20) getchar();
+    if (i < 20 || i > S-20) getchar();
   }      
 }      
 
@@ -224,12 +233,43 @@ void Pickup_a_Configuration_from_Table(int D,
     for(j=0; j < D; j++)
       printf(" %d ", Configuration_Table[Index][j]);
   printf("]\n");
-  getchar();
+  // getchar();
 }        
+
+int Vector_of_Adjacent_Configurations(int * Configuration, int D, int n_0, int d,  
+                                      int ** Nei, int * Index_Nei)
+{
+  int i, j, n, a; 
+
+  n=0; 
+  for(i=0; i<D; i++) 
+    n += Configuration[i];   /* Controling Hyperplane Condtion!!! */
+  
+  a = 0;
+  for(i=0; i<D; i++) {
+     
+    if( (Configuration[i]+d) >= 0 && (n+d) <= n_0 ) {
+      for(j=0; j<D; j++) {
+        if (j == i) Nei[a][j] = Configuration[j] + d;
+        else        Nei[a][j] = Configuration[j];      
+      }  
+      a++;
+    }  
+  }
+
+  for(i=0; i<a; i++) {
+    Index_Nei[i] = Configuration_to_i_Map(Nei[i], D, n_0);
+  }
+  
+  /* No of Neighboring configurations */
+  return(a);
+}
 
 void Writing_Configuration_Table(unsigned int D, unsigned int n_0, int ** Configuration_Table);
 unsigned long long int Func_Hyper_Brut_Force_D2(unsigned int D, unsigned int n_0);
 unsigned long long int Func_Hyper_Brut_Force_D5(unsigned int D, unsigned int n_0);
+void Generating_Network_of_Configurations(configuration ** Co, int ** Configuration_Table, 
+                                          int D, int S, int n_0); 
 
 int main()
 {
@@ -303,8 +343,66 @@ int main()
   Writing_General_Configuration_Table(D, 1, Configuration);
   Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
   
-  printf("Number of Resources (Dimensions): %d\n\n", D);
+  /* There are up to D neighboring configurations around a given entered configuration */
+  int a; /* No of Neighboring Configurations (a <= D)                                  */
+  int * Index_Nei = (int *)calloc(D, sizeof(int));
+  int ** Nei = (int **)calloc(D, sizeof(int *));
+  for(i=0; i<D; i++)
+    Nei[i] = (int *)calloc(D, sizeof(int));
+  
+  a = Vector_of_Adjacent_Configurations(Configuration[0], D, n_0, +1, Nei, Index_Nei);
+  printf(" (1) There are %d neighboring configurations around ", a);
+  Writing_General_Configuration_Table(D, 1, Configuration);  
+  printf(" transitioning DOWN into it:\n");
+  Writing_General_Configuration_Table(D, a, Nei);
 
+  printf(" (2) There are %d neighforing configurations around ", a);
+  Writing_General_Configuration_Table(D, 1, Configuration);
+  printf(" transitioning DOWN into it:\n\n");  
+  for(i=0; i<a; i++){
+    Index = Index_Nei[i];
+    Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+  }
+
+  a = Vector_of_Adjacent_Configurations(Configuration[0], D, n_0, -1, Nei, Index_Nei);
+  printf(" (1) There are %d neighboring configurations around ", a);
+  Writing_General_Configuration_Table(D, 1, Configuration);  
+  printf(" transitioning UP into it:\n");
+  Writing_General_Configuration_Table(D, a, Nei);
+
+  printf(" (2) There are %d neighboring configurations around ", a);
+  Writing_General_Configuration_Table(D, 1, Configuration);  
+  printf(" transitioning UP into it:\n\n");
+  for(i=0; i<a; i++){
+    Index = Index_Nei[i];
+    Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+  }
+
+  printf(" Defining the network of all configuration states... ... \n");
+  getchar();
+  /* Defining the network of all configuration states */
+  configuration ** Co = (configuration **)calloc(S, sizeof(configuration *));
+  for (i=0; i<S; i++) {
+    Co[i] = (configuration *)calloc(1, sizeof(configuration));
+    Co[i]->n = Configuration_Table[i]; 
+    Co[i]->anDw = (int *)calloc(D + 1, sizeof(int));
+    Co[i]->anUp = (int *)calloc(D + 1, sizeof(int));   
+  }
+  Generating_Network_of_Configurations(Co, Configuration_Table, D, S, n_0);
+  // Printing_Network_of_Configurations(Co, D, S);
+
+  for (i=0; i<S; i++) {
+    free(Co[i]->anDw);
+    free(Co[i]->anUp); 
+    free(Co[i]);  
+  }
+  free (Co);
+ 
+  free(Index_Nei); 
+  for (i = 0; i < D; i++) 
+    free(Nei[i]);
+  free(Nei);
+ 
   free(Configuration[0]);
   free(Configuration);
 
@@ -383,3 +481,46 @@ unsigned long long int Func_Hyper_Brut_Force_D5(unsigned int D,
 
   return(S);
 }
+
+void Generating_Network_of_Configurations(configuration ** Co, int ** Configuration_Table, 
+                                          int D, int S, int n_0)
+  {
+    int Vector_of_Adjacent_Configurations(int * , int, int , int , int ** , int *);
+    int i, j, a, Index; 
+
+    int ** Nei = (int **)calloc(D, sizeof(int *));
+    for(i=0; i<D; i++)
+      Nei[i] = (int *)calloc(D, sizeof(int));
+
+    for (i=0; i<S; i++) {
+      Co[i]->n = Configuration_Table[i];
+
+      a = Vector_of_Adjacent_Configurations(Co[i]->n, D, n_0, +1, Nei, Co[i]->anUp);
+      Co[i]->anUp[D] = a; 
+
+      printf(" There are %d neighboring configurations around c[%d]=[ ", a, i);
+      for(j=0; j<D; j++) printf("%d ", Co[i]->n[j]);
+      printf("] transitioning down into it:\n");
+      for(j=0; j<a; j++){
+        Index = Co[i]->anUp[j];
+        Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+      }
+
+      a = Vector_of_Adjacent_Configurations(Co[i]->n, D, n_0, -1, Nei, Co[i]->anDw);
+      Co[i]->anDw[D] = a; 
+
+      printf(" There are %d neighboring configurations around c[%d]=[ ", a, i);
+      for(j=0; j<D; j++) printf("%d ", Co[i]->n[j]);
+      printf("] transitioning up into it:\n");
+      for(j=0; j<a; j++){
+        Index = Co[i]->anDw[j];
+        Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+      } 
+
+      printf("...\n\n");
+    }
+
+    for(i=0; i<D; i++)
+      free(Nei[i]);
+    free(Nei);
+  }

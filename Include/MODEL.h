@@ -19,20 +19,24 @@
 
 #define MAX_No_of_CONFIGURATIONAL_STATES 1000000 /* Max No of Eqs in the Master Equation */   
 
-#define No_of_TDC_FUNC_AUX_PARAM_MAX 10   /* Maximum No of Time Dependence Function Auxiliary
-                                             Parameters required to define the potential  
-                                             functional time dependence of each model parameter
-                                          */
-#define DEPENDENT_PARAMETERS_MAXIMUM 30   /* Maximum number of potentially forced parameters */
+#define No_of_TDC_FUNC_AUX_PARAM_MAX 10 /* Maximum No of Time Dependence Function Auxiliary 
+                                        // Parameters required to define the potential 
+                                        // functional time dependence of each model parameter 
+                                        // */
 
-#define MODEL_PARAMETERS_MAXIMUM 30      /* Maximum No of MODEL (input) PARAMETERS */
-                                         /* The total number of parameters in all 
-					    model-paramater-related assign functions.
-					    This is the whole parameter pool from which a 
-					    parameter subspace can be defined for 
-					    optimization searches and parameter scans  
-					    for any specified model
-					 */
+#define DEPENDENT_PARAMETERS_MAXIMUM 30 /* Maximum number of potentially forced parameters */
+
+#define MODEL_PARAMETERS_MAXIMUM 30     /* Maximum No of MODEL (input) PARAMETERS */
+                                        /* The total number of parameters in all 
+					                              model-paramater-related assign functions.
+					                              This is the whole parameter pool from which a 
+					                              parameter subspace can be defined for 
+					                              optimization searches and parameter scans  
+					                              for any specified model
+					                         */
+#define ME_n_DIMENSION_MAXIMUM 20       /* Maximum dimension of the probability distribution 
+                                        // in a master equation */
+
 #ifdef DIFFUSION_1RnC_E
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
 #elif defined DIFFUSION_1R1C

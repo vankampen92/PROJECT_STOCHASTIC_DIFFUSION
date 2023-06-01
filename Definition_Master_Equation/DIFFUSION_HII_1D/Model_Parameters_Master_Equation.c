@@ -123,8 +123,7 @@ void Print_Probability_Distribution ( Parameter_Table * Table )
     printf("%.2g ", ME->P_n[n]);
     
   printf("\n"); 
-    
- 
+  
 }
 
 

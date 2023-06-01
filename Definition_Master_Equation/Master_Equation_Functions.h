@@ -7,7 +7,13 @@ void JACOBIAN_Matrix_ME(gsl_matrix * m, const double *y, double t, int W, Parame
 void Model_Parameters_Master_Equation(Parameter_Table * Table,
 				      int * No_of_CONFIGURATIONAL_STATES,
 				      int * n_DIMENSION,
-				      int * n_x, int * n_y, int * n_z); 
+				      int * n_x, int * n_y, int * n_z);
+#if defined DIFFUSION_HII_nD
+/* Declaration of the auxiliary functions required to the deal with 
+   the space of configurations for this particualr model 
+*/
+#include "./DIFFUSION_HII_nD/Model_Parameters_Master_Equation.h"
+#endif
 
 void i_to_nm_Map(Parameter_Table * Table,
 		 int i, int * n_i, int * m_i);

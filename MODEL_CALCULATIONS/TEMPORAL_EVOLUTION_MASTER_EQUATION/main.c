@@ -166,19 +166,27 @@ int main(int argc, char **argv)
 #ifdef DIFFUSION_BD_2D
   /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
-						      parameter set as defined through
-						      either the command line or the 
-						      default files is used!!! 
-						   */
+						                                          parameter set as defined through
+						                                          either the command line or the 
+						                                          default files is used!!! 
+						                                       */
   M_O_D_E_L___M_E( &Table );
 #elif defined DIFFUSION_HII_1D  
   /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
-						      parameter set as defined through
-						      either the command line or the 
-						      default files is used!!! 
-						   */
+						                                          parameter set as defined through
+						                                          either the command line or the 
+						                                          default files is used!!! 
+						                                       */
   M_O_D_E_L___M_E( &Table );
+#elif defined DIFFUSION_HII_nD  
+  /* Stochastic Master Equation Time Evolution */
+  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
+						                                          parameter set as defined through
+						                                          either the command line or the 
+						                                          default files is used!!! 
+						                                       */
+  M_O_D_E_L___M_E( &Table ); 
 #endif
   
   /* BEGIN : -------------------------------------------------------------------------

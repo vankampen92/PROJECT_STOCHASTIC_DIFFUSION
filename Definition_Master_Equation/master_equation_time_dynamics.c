@@ -18,14 +18,14 @@
 int master_equation_time_dynamics( Parameter_Table * Table )
 {
   /* This function performs a numerical integration of the master equation for a system 
-     avancing from a time to the next as stored in Time->Time_Vector[], and save a file 
-     corresponding to this numerical integration.
+     advancing from a time to the next time as stored in Time->Time_Vector[], and saves a 
+     file corresponding to this numerical integration.
 
      This function makes two essential calls:
 
      1. Initial_Condition_Master_Equation (...), which sets up initial conditions. 
 
-     2. master_equation_driver(...), which performs the actual numerical integration
+     2. master_equation_driver(...), which performs the actual generic numerical integration
 
      In addition, it depends on the following functions:
      1. Time_Dependence_Apply (...), which, in turn, calls Time_Dependence_Function(...),
@@ -92,6 +92,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 #endif 
   Press_Key();
 #endif
+
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
     kk = Table->OUTPUT_VARIABLE_INDEX[k];
     value = definition_OutPut_Variables(kk,
@@ -163,202 +164,3 @@ int master_equation_time_dynamics( Parameter_Table * Table )
   
   return(State);
 }
-
-void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
-							 int j,
-							 int n, 
-							 double Time_Current,
-							 int SAME )
-{
-  /* This function plots marginal probability distributions. As input, it takes Table. 
-     A member of Table is MEq, which stores all the necessary information to plot the 
-     whole distribution and, of course, its marginals.
-     
-     This function will plot the marginals, depending on an input parameter, an integer,
-     n, defining the marginal to plot: 
-     . n=0, first dimension
-     . n=1, second dimension
-     . n=2, third dimension
-  */
-  
-  /* Notice that the probability distribution and marginals in the two dimensions are 
-     associated to a Time_Current around the j-th time in Time_Vector[j] 
-  */
-  int Horizontal_Plot_Position, Vertical_Plot_Position;
-  int i;
-  int No_of_POINTS;
-  static double Current_Time = 0.0;
-  double Last_Time;
-
-  Parameter_CPGPLOT * CPG = Table->CPG_STO; 
-  Master_Equation * ME = Table->MEq;
-
-  cpgslct(CPG->DEVICE_NUMBER);      /* Selecting Device */
-  
-  double * y;
-  double * x; 
-  
-  if( ME->n_DIMENSION == 1 ) {
-    assert(ME->n_DIMENSION == 1); 
-    y = ME->P_n_Marginal;
-    x = (double *)calloc(ME->n_x, sizeof(double));
-    for(i=0; i<ME->n_x; i++) x[i] = (double)i;
-    No_of_POINTS = ME->n_x;
-  }
-  else if ( ME->n_DIMENSION == 2 ) {
-    assert(ME->n_DIMENSION == 2);
-    if ( n == 0 ) {
-      y = ME->P_n_Marginal;
-      x = (double *)calloc(ME->n_x, sizeof(double));
-      for(i=0; i<ME->n_x; i++) x[i] = (double)i;
-      No_of_POINTS = ME->n_x;
-    }
-    else if ( n == 1 ) { 
-      y = ME->P_m_Marginal;
-      x = (double *)calloc(ME->n_y, sizeof(double));
-      for(i=0; i<ME->n_y; i++) x[i] = (double)i;
-      No_of_POINTS = ME->n_y;
-    }
-    else {
-      printf(" Error in master_equation_time_dynamics.c\n");
-      printf(" The program will exit\n");
-      exit(0);
-    }
-  }
-  else {
-    printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
-    printf("The program will exit\n");
-    Press_Key();
-    exit(0); 
-  }
-  
-  CPG->CPG_RANGE_X_0 = -0.5;  CPG->CPG_RANGE_X_1 = No_of_POINTS - 0.5;
-  CPG->CPG_RANGE_Y_0 =  0.0;  CPG->CPG_RANGE_Y_1 = 1.0;  
-  
-  double x_Time_Position = 0.90 * (float)CPG->CPG_RANGE_X_1;
-  double y_Time_Position = 0.90 * (float)CPG->CPG_RANGE_Y_1;
-
-  char * Plot_Title = (char *)calloc( 100, sizeof(char));
-  char * Plot_Time  = (char *)calloc( 50, sizeof(char));
-  char * Time_Eraser = (char *)calloc(50, sizeof(char));
-  
-  Last_Time     = Current_Time;
-  Current_Time  = Time_Current; 
-  sprintf(Plot_Time, "Time = %5.2f", Current_Time);
-  sprintf(Time_Eraser, "Time = %5.2f", Last_Time);
-
-  Plot_Title[0] ='\0';
-  sprintf(Plot_Title, "Time = %5.2f", Current_Time);
-
-  CPG->type_of_Line   = 4;
-  CPG->type_of_Symbol = 25;
-  CPG->type_of_Width  = 3;
-
-  if (SAME > 0) {
-    if (CPG->CPG__PANEL__X > 0 && CPG->CPG__PANEL__Y > 0 ){
-      Horizontal_Plot_Position  = n%CPG->CPG__PANEL__X + 1;
-      Vertical_Plot_Position    = n/CPG->CPG__PANEL__X + 1;
-    }
-    else {
-      Vertical_Plot_Position    = n%abs(CPG->CPG__PANEL__Y) + 1;
-      Horizontal_Plot_Position  = n/abs(CPG->CPG__PANEL__Y) + 1;;
-    } 
-    cpgpanl(Horizontal_Plot_Position, Vertical_Plot_Position);
-    // printf("k = %d\t Horizontal Position = %d\t Vertical Position = %d\n",
-    //	       k, Horizontal_Plot_Position, Vertical_Plot_Position);
-    // Press_Key();
-  }
-  
-  CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
-							No_of_POINTS, 
-							x, y,
-							ME->Marginal_Probability_Label[n], 
-							"Probability", 
-							Plot_Title,
-							1, 1 );
-  cpgsch(2.0);
-  cpgsci(0);
-  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 1.0, Time_Eraser);
-  cpgsci(1);
-  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 1.0, Plot_Time);
-  // cpgsch(char_Size);
-
-  free(Plot_Title); free(Plot_Time); free(Time_Eraser);
-  free(x); 
-}
-
-void Saving_Marginal_Distribution(Parameter_Table * Table, int j, int n, double Time_Current)
-{
-  /* This function saves marginal probability distributions at a particular time, 
-     Time_Current. As an input argument, it takes Table. A member of Table is MEq, 
-     which stores all the necessary information to save the whole distribution and, 
-     of course, its marginals.
-     
-     This function will plot the marginals, depending on an input parameter, an integer,
-     n, defining the marginal to plot: 
-     . n=0, first dimension
-     . n=1, second dimension
-     . n=2, third dimension (not coded yet!!!)
-   */
-  
-  /* Notice that the probability distribution and marginals in the two dimensions are 
-     associated to a Time_Current around the j-th time in Time_Vector[j] 
-  */
-  int i;
-  int No_of_POINTS;
-  
-  Master_Equation * ME = Table->MEq;
-  
-  double * y;
-  double * x; 
-  
-  if( ME->n_DIMENSION == 1 ) {
-    assert(ME->n_DIMENSION == 1); 
-    y = ME->P_n_Marginal;
-    x = (double *)calloc(ME->n_x, sizeof(double));
-    for(i=0; i<ME->n_x; i++) x[i] = (double)i;
-    No_of_POINTS = ME->n_x;
-  }
-  else if ( ME->n_DIMENSION == 2 ) {
-    assert(ME->n_DIMENSION == 2);
-    if ( n == 0 ) {
-      y = ME->P_n_Marginal;
-      x = (double *)calloc(ME->n_x, sizeof(double));
-      for(i=0; i<ME->n_x; i++) x[i] = (double)i;
-      No_of_POINTS = ME->n_x;
-    }
-    else if ( n == 1 ) { 
-      y = ME->P_m_Marginal;
-      x = (double *)calloc(ME->n_y, sizeof(double));
-      for(i=0; i<ME->n_y; i++) x[i] = (double)i;
-      No_of_POINTS = ME->n_y;
-    }
-    else {
-      printf(" Error in master_equation_time_dynamics.c\n");
-      printf(" The program will exit\n");
-      exit(0);
-    }
-  }
-  else {
-    printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
-    printf("The program will exit\n");
-    Press_Key();
-    exit(0); 
-  }
-
-  char * NumDim   = (char *)calloc(10, sizeof(char));
-  char * Marginal = (char *)calloc(100, sizeof(char));
-  char * pFile;
-
-  sprintf(NumDim, "%d", n);
-  pFile = strcat(Marginal, "Marginal_Probability_");
-  pFile = strcat(Marginal, NumDim);
-  pFile = strcat(Marginal, "_Time_");
-
-  printf("Saving Marginal Probability for Dimension %d at Time %g\n", n, Time_Current);  
-  Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);  
-  
-  free(Marginal); free(NumDim); 
-  free(x); 
-}
-
