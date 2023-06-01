@@ -326,48 +326,49 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 
     if( Table->TYPE_of_MODEL == 0 || Table->TYPE_of_MODEL == 1 )
       for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++) 
-	for(i=0; i<Table->No_of_CELLS; i++)
-	  for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	      for(i=0; i<Table->No_of_CELLS; i++)
+	        for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	          Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
     
     else if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 10 || Table->TYPE_of_MODEL == 13)
       for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
-	if(a == 0)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-	else if (a == 1)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C;
+	      if(a == 0)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	      else if (a == 1)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C;
         else if (a == 2)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0 * Table->Mu_C;
-	else 
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	          Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0 * Table->Mu_C;
+	      else 
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
     
-    else if (Table->TYPE_of_MODEL == 15)  /* DIFFUSION_STOLLENBERG_4D */
+    else if (Table->TYPE_of_MODEL == 15 || Table->TYPE_of_MODEL == 16)  
+    /* DIFFUSION_STOLLENBERG_4D or DIFFUSION_HII_nD */
       for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
-	if(a == 0)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-	else if (a == 1)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
+	      if(a == 0)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	      else if (a == 1)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
         else if (a == 2)
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C;
-	else 
-	  for(i=0; i<Table->No_of_CELLS; i++)
-	    for(j=0; j<Table->No_of_NEIGHBORS; j++)
-	      Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
-
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C;
+	      else 
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
+              
     else{
       printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
 	     Table->TYPE_of_MODEL);
@@ -405,7 +406,7 @@ void Resetting_Lambda_Delta_Vectors (Parameter_Table * Table)
 
 void Resetting_Alpha_Nu_Vectors (Parameter_Table * Table)
 {
-  /* When a Holling Type II consumer feed on multiple resources */
+  /* DIFFUSION_HII_nD: when a Holling Type II consumer feed on multiple resources */
   int i;
 
   if (Table->No_of_RESOURCES > 0 ) {

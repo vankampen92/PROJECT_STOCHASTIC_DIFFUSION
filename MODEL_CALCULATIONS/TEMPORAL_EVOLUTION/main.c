@@ -98,17 +98,29 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
 
    MODEL = DIFFUSION_HII_nD
-   Feeding experiments at a constant number of total consumers: 
+   Feeding experiments at a constant number of total consumers (-HN 20): 
    .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 \
                           -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
-                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
 
-   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 0.5 -H10 10.0  -Hp1 0.3725 -Hp2 0.5 -HN 20
+   
+   Relevant input arguments for model DIFFUSION_HII_nD:
 
+   -HK  [N or Total Carrying Capacity (for resources)]
+   -Hp1 [approx y_R = f_i * p1 * N: Different resource levels at time 0.0, with f_i = 0.5, 0.3, 0.2, but this can be changed] 
+   -Hp2 [Total No of Free Consumers at time 0.0 = p2 * No_of_CONSUMERS]
+   -HN 20 [Total No of CONSUMERS]
+   -H9 and -H10 [Alpha_C_0 and Nu_C_0 for 1st Resource Type. Alpha_C_0 is the same for all resource types, but this can be changed.  
+   -H0 and -H2 are Lambda_R_0 and Lambda_R1, which are overloaded to create extra handling rates (Nu), for the 2nd and 3rd resource type. 
+   Notice that for this model -H5 should be always zero. 
+   -H11 and H12 [Xhi_C_0 and Eta_C_0 are not relevant here. They are only in models with predator interference]. 
+   
+In general:
    -HuR -HuC are the jumping rates (only relevant if there are more than one cell or patch in the system)
    -H0 -H2 -H5  are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
    -H20 is the establishment rate 
-   -H1  -H3  -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules, and Delta_C_0 for both searching and handling consumers)
+   -H1 -H3  -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules/resources, and Delta_C_0 for both searching and handling consumers)
    -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
    -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
 
@@ -229,11 +241,11 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
-  // #ifndef DIFFUSION_HII_nD /* Stochastic multi-resource Holling Type II dynamics not yet implemented */
+
   /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
-  // #endif
+
 #endif
 #endif
 #endif
