@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun  1 21:19:58 2023
+# Make data base, printed on Thu Jun  1 21:21:27 2023
 
 # Variables
 
@@ -97,7 +97,7 @@ MAKEFILE_LIST :=
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 3241
+VSCODE_PID = 5299
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -211,7 +211,7 @@ MANAGERPID = 1951
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3190
+GIO_LAUNCHED_DESKTOP_FILE_PID = 5247
 # environment
 _ = /snap/code/129/usr/share/code/code
 # environment
@@ -278,13 +278,13 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
- 
-make: *** No rule to make target 'all'.  Stop.
-
 
 # Directories
 
 # . (device 66306, inode 25821185): 59 files, no impossibilities.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 # 59 files, no impossibilities in 1 directories.
 
@@ -342,6 +342,6 @@ GNUmakefile:
 # strcache performance: lookups = 70 / hit rate = 4%
 # hash-table stats:
 # Load=67/8192=1%, Rehash=0, Collisions=0/70=0%
-# Finished Make data base on Thu Jun  1 21:19:58 2023
+# Finished Make data base on Thu Jun  1 21:21:27 2023
 
  
