@@ -270,7 +270,6 @@ unsigned long long int Func_Hyper_Brut_Force_D2(unsigned int D, unsigned int n_0
 unsigned long long int Func_Hyper_Brut_Force_D5(unsigned int D, unsigned int n_0);
 void Generating_Network_of_Configurations(configuration ** Co, int ** Configuration_Table, 
                                           int D, int S, int n_0); 
-
 int main()
 {
   int i, k;

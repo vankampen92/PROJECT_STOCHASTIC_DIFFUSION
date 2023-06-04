@@ -4,6 +4,7 @@
     "C_Cpp.dimInactiveRegions": false,
     "files.associations": {
         "model_define_max_variables_diffusion_1r1c_2d_sto_4d.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "gsl_matrix.h": "c"
     }
 }

@@ -7,8 +7,8 @@
 #define EXTINCTION_CONTROL
 
 int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
-						     Parameter_Table * Table,
-						     int * Bad_Times )
+		  				                                       Parameter_Table * Table,
+						                                         int * Bad_Times )
 {
   /* This function perform one single stochastic realization (i-th),
      sample the system at times stored in Time->Time_Vector[],
@@ -169,9 +169,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     }
 
 #if defined VERBOSE
-    printf(" Total population across the system at current time (t = %g)\n", 
-	   Time_Current );
-    
+    printf(" Total population across the system at current time (t = %g)\n", Time_Current );
     Print_Meta_Community_Patch_System (Table);
     Press_Key();
 #endif
@@ -209,7 +207,6 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   Rate         = Time->Rate;
 
   /* BEGIN : Initial Conditions -------------------------------------------------------------*/
-  
   // printf(" Before  Initial_Conditions_Stochastic_Dynamics(...)\n");
   Initial_Conditions_Stochastic_Dynamics( Table, Table->Vector_Model_Variables );
   // printf(" After Initial_Conditions_Numerical_Integration(...). Initial Conditions:  ");
@@ -305,11 +302,8 @@ int Stochastic_Time_Dynamics_Numerical( int i,
       Time_Initial = Time->Time_Vector[j-1];
       Time_Final   = Time->Time_Vector[j];
     }
-
 #if defined VERBOSE
-    printf(" Total population across the system at current time (t = %g)\n", 
-	   Time_Current );
-    
+    printf(" Total population across the system at current time (t = %g)\n",  Time_Current );
     Print_Meta_Community_Patch_System (Table);
     Press_Key();
 #endif

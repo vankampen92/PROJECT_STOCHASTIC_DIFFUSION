@@ -84,19 +84,17 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     // This is the reason we need an 'extern int TYPE_of_TIME_DEPENDENCE' above!!!
     if (TYPE_of_TIME_DEPENDENCE == 1) {
       if(TDC->TYPE_2_PARAMETERS > 0) {
-	for(i = 0; i < TDC->TYPE_2_PARAMETERS; i++) {
-	  k = i + TDC->TYPE_0_PARAMETERS + TDC->TYPE_1_PARAMETERS;
-	  for(j = 0; j<TDC->No_of_TIMES; j++) {
-	    t = Time->Time_Vector[j];
-	    TDC->Dependent_Parameter[k][j] =Time_Dependence_Resolve(Table,
-								    TDC->Index_Dependent_Parameters[k],
-								    TDC->Forcing_Pattern_Parameters[k], t);
-	    
-	  }
-	}
+	      for(i = 0; i < TDC->TYPE_2_PARAMETERS; i++) {
+	        k = i + TDC->TYPE_0_PARAMETERS + TDC->TYPE_1_PARAMETERS;
+          for(j = 0; j<TDC->No_of_TIMES; j++) {
+            t = Time->Time_Vector[j];
+            TDC->Dependent_Parameter[k][j] =Time_Dependence_Resolve(Table,
+            TDC->Index_Dependent_Parameters[k],
+            TDC->Forcing_Pattern_Parameters[k], t);
+          }
+	      }
       }
     }
-
     // GSL_Init_Random_Seed(r); /* According to Computer time */
     /* Input variables: 
        . i, lable of current realization 
@@ -105,8 +103,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
          If Bad_Times is high, interval times should be choosen smaller 
     */
     int FROZEN_SYSTEM = S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S ( n,
-									  Table, &Bad_Times );
-    
+									                                                        Table, 
+                                                                          &Bad_Times );
     /* End of the i-th STOCHASTIC REALIZATIONS */
     printf("Realization: %d of a total of %d\n", n+1, Table->T->Realizations);
     printf("Time failed in %d occasions out of %d time steps\n", Bad_Times, I_Time);
@@ -115,7 +113,6 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 
     /* Only selection those stochastic realizations according to certain criterion */
     if(FROZEN_SYSTEM == 0) n++;  
-
   }
   /* END: End of STOCHASTIC REALIZATIONS */
 
@@ -127,14 +124,13 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   printf( " will be calculated now...\n");
   Press_Key();
   int DATA_POINTS = Time_Control_AVE_VAR_SAVE_VARIABLES( Table );
-  printf(" Temporal series of %d (out of %d) data points\n",
-	 DATA_POINTS, I_Time);
+  printf(" Temporal series of %d (out of %d) data points\n", DATA_POINTS, I_Time);
 
 #if defined CPGPLOT_REPRESENTATION
   // SAME_PLOT = 1; 
   // C_P_G___S_U_B___P_L_O_T_T_I_N_G___E_R_R_O_R___B_A_R ( Table, SAME_PLOT, 
-  //							DATA_POINTS, Table->T->time_DEF, 
-  //							Table->T->AVE, Table->T->VAR ); 
+  //							                                         DATA_POINTS, Table->T->time_DEF, 
+  //							                                         Table->T->AVE, Table->T->VAR ); 
 #endif
   /*   END : Averaging stochastic realizations            */  
 

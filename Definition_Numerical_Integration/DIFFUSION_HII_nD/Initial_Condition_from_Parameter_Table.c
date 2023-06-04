@@ -130,7 +130,7 @@ void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * T
   printf ("TOTAL No of HANDLING CONSUMERS at TIME_0: %g\n", x); 
   x = (double)Table->TOTAL_No_of_CONSUMERS - x;  
   printf ("TOTAL No of FREE CONSUMERS at TIME_0: %g (%g)\n", x, Value_0) ; 
-  printf ("Handling consumers are equally distributed accross behavioural types!!!\n");
+  // printf ("Handling consumers are equally distributed accross behavioural types!!!\n");
 }
 
 void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Table * Table, 

@@ -315,12 +315,12 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
     /// Setting up Constant Metapopulation Connectivity Matrix:
     for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++) 
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->No_of_CELLS; j++)
-	  if (j != i) 
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
-	  else
-	    Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
-  }
+	      for(j=0; j<Table->No_of_CELLS; j++)
+	        if (j != i) 
+	          Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
+	        else
+	          Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
+          }
   else {
     assert(Table->TYPE_of_NETWORK == 1) ;
 
@@ -432,7 +432,7 @@ void Resetting_Alpha_Nu_Vectors (Parameter_Table * Table)
 void Resetting_Multiresource_Levels (Parameter_Table * Table)
 {
   /* When a Holling Type II consumer feeds on multiple resources, and this multiple 
-     resources are maintained, each of them at a constant density 
+     resources are maintained, each of them at a constant density level
   */
   /* In this example, the different resource densities are arbitrarily fixed. 
      A total resource density is set to R (TOTAL_No_of_RESOURCES), and then:  
@@ -465,6 +465,25 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table)
   }
 }
 
+void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
+{
+  int i; 
+  double Density; 
+
+  printf("Resource Type \t Nu\t Alpha\t Theta\t Density (y/K)\n");
+  for(i=0; i<Table->No_of_RESOURCES; i++) {
+    
+    Density = Table->y_R_i[i]/(double)Table->K_R;
+    
+    printf("%d:\t", i);
+    printf("Nu_%d = %g\t", i, Table->Nu_Consumers[i]);
+    printf("Alpha_%d = %g\t", i, Table->Alpha_C[i]);
+    printf("Theta_%d = %g\t", i, Table->Theta_Consumers[i]);
+    printf("Density_%d = %g\n", i, Density);
+  }
+
+  Press_Key();
+} 
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */
 /*   int i;                                                                   */

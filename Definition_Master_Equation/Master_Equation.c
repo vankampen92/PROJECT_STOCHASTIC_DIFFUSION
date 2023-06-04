@@ -31,16 +31,15 @@ void Master_Equation_Allocation ( Master_Equation * ME,
   
   ME->Probability_Distribution=(double *)calloc(No_of_CONFIGURATIONAL_STATES, sizeof(double));
 
-  ME->Probability_Distribution_Time_0 = (double *)calloc(No_of_CONFIGURATIONAL_STATES,
-							sizeof(double));
+  ME->Probability_Distribution_Time_0 = (double *)calloc(No_of_CONFIGURATIONAL_STATES,sizeof(double));
 
-  ME->MPD = (double **)calloc(n_DIMENSION, sizeof(int *));
+  ME->MPD = (double **)calloc(n_DIMENSION, sizeof(double *));
     for(i=0; i<n_DIMENSION; i++)
-      ME->MPD[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(int));
+      ME->MPD[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(double));
 
-  ME->MPD_S = (double **)calloc(n_DIMENSION, sizeof(int *));
+  ME->MPD_S = (double **)calloc(n_DIMENSION, sizeof(double *));
     for(i=0; i<n_DIMENSION; i++)
-      ME->MPD_S[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(int));
+      ME->MPD_S[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(double));
 
   if (n_DIMENSION == 1) {
     ME->PS_n = (double *)calloc(n_x, sizeof(double) );       /* Stationary Distribution */
@@ -87,7 +86,8 @@ void Master_Equation_Allocation ( Master_Equation * ME,
     printf(" This number of defined in MODEL.h super header file\n");
     printf(" Your probability distribution seems to have %d dimensions!!!\n", n_DIMENSION);
     printf(" Notice that when n_DIMENSION is bigger than 3, the probability distributions\n");
-    printf(" are not defined as tensor objects!!!\n"); 
+    printf(" are not defined as tensor objects, but as vectors over configurations,\n");
+    printf(" where y[i] is the probability corresponding to the i-th configuration.\n"); 
     assert(n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
   }
 
@@ -106,6 +106,7 @@ void Master_Equation_Allocation ( Master_Equation * ME,
     ME->Co[i] = (configuration *)calloc(1, sizeof(configuration));
     ME->Co[i]->anDw = (int *)calloc(n_DIMENSION + 1, sizeof(int));
     ME->Co[i]->anUp = (int *)calloc(n_DIMENSION + 1, sizeof(int));  
+    ME->Co[i]->n = (int *)calloc(n_DIMENSION, sizeof(int)); 
   }
 }
 
@@ -186,9 +187,13 @@ void Master_Equation_Free ( Master_Equation * ME )
    
   }
   else {
-    printf(" This structure is only prepared to accept maximum three dimensions, but\n");
-    printf(" you probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION); 
-    assert(ME->n_DIMENSION < 4);
+    printf(" This structure is only prepared to accept a maximum number of dimensions.\n");
+    printf(" This number is defined in MODEL.h super header file\n");
+    printf(" Your probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION);
+    printf(" Notice that when n_DIMENSION is bigger than 3, the probability distributions\n");
+    printf(" are not defined as tensor objects, but as vectors over configurations,\n");
+    printf(" where y[i] is the probability corresponding to the i-th configuration.\n"); 
+    assert(ME->n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
   }
 
   free(ME->n_D);
@@ -202,6 +207,7 @@ void Master_Equation_Free ( Master_Equation * ME )
     free(ME->TabConfi[i]);
     free(ME->Co[i]->anDw);
     free(ME->Co[i]->anUp);
+    free(ME->Co[i]->n);
     free(ME->Co[i]);
   }
   free(ME->TabConfi);

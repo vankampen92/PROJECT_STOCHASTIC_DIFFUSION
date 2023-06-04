@@ -173,11 +173,11 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     /*   END: Writing costumized file        */
 
 #if defined VERBOSE
-      printf("Output variables at time t = %g\n", Time_Current);
-      for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
-	printf("\ty[%d]=%g", k,Table->Vector_Output_Variables[k]);
-      }
-      printf("\n\n"); // Press_Key();
+    printf("Output variables at time t = %g\n", Time_Current);
+    for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
+      printf("\ty[%d]=%g", k,Table->Vector_Output_Variables[k]);
+    }
+    printf("\n\n"); // Press_Key();
 #endif
 
    // double No_of_XX, No_of_WW, No_of_TOTAL_Women;

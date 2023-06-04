@@ -26,7 +26,13 @@ gsl_rng * r; /* Global generator defined in main.c */
    
    . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 1 -G1 1 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 14 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 1.0 -H11 0.0 -H12 0.0 -Hp1 0.3750 -Hp2 0.5 -HN 20
 
-   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 10 -t0 0.0 -t1 15 -t4 0 -tR 10000 -xn 0 -xN 40.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 40 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3 -Hp2 0.05 -HN 40 -tE 0.1
+   . ~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                          -n 2 -v0 0 -v1 1 -tn 10 -t0 0.0 -t1 15 -t4 0 -tR 10000 -tE 0.1 \
+                          -xn 0 -xN 40.0 \
+                          -G0 1 -G1 2 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 40 \
+                          -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 \
+                          -HK 10000 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 \
+                          -Hp1 0.3 -Hp2 0.05 -HN 40 
 
    -HuR -HuC are the jumping rates
    -H0  -H5  are the external immigration (Lambda_R_0 and Lambda_C_0)
@@ -37,6 +43,39 @@ gsl_rng * r; /* Global generator defined in main.c */
   -Hp2: No of Free Predator a Time 0 Fraction 
   -HN: No_of_INDIVIDUALS (TOTAL No of CONSUMERS)
 
+  MODEL = DIFFUSION_HII_nD
+   Feeding experiments at a constant number of total consumers (-HN 20): 
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 \
+                          -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
+                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \
+                          -n 3 -v0 0 -v1 1 -v2 2 \
+                          -G0 1 -G1 3 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 8 \
+                          -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -tE 0.2 \
+                          -HuR 0.0 -HuC 0.0 -H5 0.0 \
+                          -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 10.0 \
+                          -Hp1 0.3725 -Hp2 1.0 -HN 20 
+
+   .~S ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \
+                          -n 3 -v0 0 -v1 1 -v2 2 \
+                          -G0 1 -G1 3 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 8 \
+                          -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -tE 0.2 \
+                          -HuR 0.0 -HuC 0.0 -H5 0.0 \
+                          -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 0.1 \
+                          -Hp1 0.3725 -Hp2 1.0 -HN 20 
+                          
+   Relevant input arguments for model DIFFUSION_HII_nD:
+
+   -HK  [N or Total Carrying Capacity (for resources)]
+   -Hp1 [approx y_R = f_i * p1 * N: Different resource levels at time 0.0, with f_i = 0.5, 0.3, 0.2, but this can be changed] 
+   -Hp2 [Total No of Free Consumers at time 0.0 = p2 * No_of_CONSUMERS]
+   -HN 20 [Total No of CONSUMERS]
+   -H9 and -H10 [Alpha_C_0 and Nu_C_0 for 1st Resource Type. Alpha_C_0 is the same for all resource types, but this can be changed.  
+   -H0 and -H2 are Lambda_R_0 and Lambda_R1, which are overloaded to create extra handling rates (Nu), for the 2nd and 3rd resource type. 
+   Notice that for this model -H5 should be always zero (No immigration of consumers: No of CONSUMERS is constant). 
+   -H11 and H12 [Xhi_C_0 and Eta_C_0 are not relevant here. They are only in models with predator interference]. 
+   
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
 
@@ -131,29 +170,20 @@ int main(int argc, char **argv)
   /* double p_1;         */ /* -Hp1 */ /* Resource Carrying Capacity Fraction */ 
   /* double p_2;         */ /* -Hp2 */ /* See below the definition of the
                                        /* TOTAL_No_of_FREE_CONSUMERS_TIME_0 */
+  if(Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14) 
+    /* Models where the TOTAL_No_of_CONSUMERS is a CONSTANT */
+    Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
   
-  // void Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
-  
-  Table.TOTAL_No_of_RESOURCES  = (int)(Table.p_1 * (double)Table.K_R);
-  Table.TOTAL_No_of_CONSUMERS  = Table.No_of_INDIVIDUALS;  /* -HN 20 or -HN 40 as an input argument */ 
-
-  assert(Table.p_2 <= 1.0 && Table.p_2 >= 0.0);  // 
-  assert(Table.p_1 <= 1.0 && Table.p_1 >= 0.0);  // Fractions!!!  
-  
-  Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0     = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
-  Table.TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = Table.TOTAL_No_of_CONSUMERS - Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0;
-  Table.TOTAL_No_of_FREE_CONSUMERS            = (int)(Table.p_2*(double)Table.TOTAL_No_of_CONSUMERS);
-  Table.TOTAL_No_of_HANDLING_CONSUMERS        = Table.TOTAL_No_of_CONSUMERS - Table.TOTAL_No_of_FREE_CONSUMERS_TIME_0;
-  /* END ----------------------------------------------------------------------------
-     This initial Condition involves no triplets at time t = 0.0 because the sum of states
-     should add up the TOTAL No of CONSUMERS 
-  */
+  if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
+    /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
+    /* and they feed on multiple resources                      */
+    Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
+    Resetting_Alpha_Nu_Vectors (&Table);
+    Resetting_Multiresource_Levels (&Table);  
+    Writing_Alpha_Nu_Theta_Vectors(&Table);  
+  }
   /* Deterministic Time Dynamics */
-  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
-						      parameter set as defined through
-						      either the command line or the 
-						      default files is used!!! 
-						   */
+  Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
 
 #if defined STOCHASTIC_REALIZATIONS

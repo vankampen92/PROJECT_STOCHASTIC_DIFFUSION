@@ -17,9 +17,10 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
   * n_z         = 1 + Table->TOTAL_No_of_CONSUMERS;
   * n_y         = 1 + Table->TOTAL_No_of_CONSUMERS;
   
-  * No_of_CONFIGURATIONAL_STATES = Func_Hyper( * n_DIMENSION, Table->TOTAL_No_of_CONSUMERS );
+  * No_of_CONFIGURATIONAL_STATES = Func_Hyper( Table->No_of_RESOURCES, Table->TOTAL_No_of_CONSUMERS );
 
-  printf("No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
+  printf(" No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
+  printf(" TOTAL No of CONSUMERS        = %d\n", * n_DIMENSION);
   // Press_Key(); 
 }
 
@@ -114,7 +115,7 @@ void Marginal_Probability_Calculation ( Parameter_Table * Table )
       for (n = 0; n<= A_0; n++) {
         ME->MPD[k][n] = 0.0;
         for(i=0; i<ME->No_of_CONFIGURATIONAL_STATES; i++)
-          if (ME->Co[i]->n[k] = n) 
+          if (ME->Co[i]->n[k] == n) 
             ME->MPD[k][n] += y[i];
       }
       /* Normalizing */
@@ -135,6 +136,7 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table )
   Master_Equation * ME = Table->MEq;
   A_0 = Table->TOTAL_No_of_CONSUMERS;
 
+  assert (Table->No_of_RESOURCES == ME->n_DIMENSION );
   
   if( ME->n_DIMENSION == 2) {
     Probability_Distribution_Vector_into_Matrix_Form( ME );
@@ -151,7 +153,7 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table )
     for( m = 0; m <= A_0; m++ ) {       /* Second Dimension:  No of Handling Consumers */
       for( n = 0; n <= A_0 - m; n++ ) { /* on second resource [1] */
         S += (double)m * ME->P_nm[n][m];
-     }
+      }
     }
     ME->Vector_Model_Variables[1] = S;
   }
@@ -162,13 +164,19 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table )
     for (k = 0; k<ME->n_DIMENSION; k++) {
       S = 0.0; 
       for (n = 0; n<= A_0; n++) {
-        for(i=0; i<ME->No_of_CONFIGURATIONAL_STATES; i++)
-          if (ME->Co[i]->n[k] = n) 
-            S += (double)n * y[i];
-      }
+        for(i=0; i<ME->No_of_CONFIGURATIONAL_STATES; i++) {
 
+          printf(" P( c(%d)=[ ", i);
+          for(m=0; m<ME->n_DIMENSION; m++) {
+            printf("%d  ", ME->Co[i]->n[m]);
+          }
+          printf(" ] ) = %g\n", y[i]);
+             
+          if (ME->Co[i]->n[k] == n) S += (double)n * y[i];
+        }
+      }
       ME->Vector_Model_Variables[k] = S;
-    }   
+    }
   }
 }
 
@@ -191,7 +199,9 @@ void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table)
       printf("<n>[%d] = %g\t", k, ME->Vector_Model_Variables[k]);
     
     printf("\n");
-  }  
+  } 
+
+  Press_Key(); 
 }
 
 void Print_Probability_Distribution ( Parameter_Table * Table )
@@ -201,16 +211,17 @@ void Print_Probability_Distribution ( Parameter_Table * Table )
   Master_Equation * ME = Table->MEq;
   A_0 = Table->TOTAL_No_of_CONSUMERS;
  
-  assert(ME->n_DIMENSION == 2);
+  if (ME->n_DIMENSION == 2) {
 
-  Probability_Distribution_Vector_into_Matrix_Form( ME );
+    Probability_Distribution_Vector_into_Matrix_Form( ME );
 
-  for( n = 0; n <= A_0; n++ ) {
-    for( m = 0; m <= A_0 - n; m++ ) {
-      printf("%.2g ", ME->P_nm[n][m]);
-    }
-    printf("\n"); 
-  } 
+    for( n = 0; n <= A_0; n++ ) {
+      for( m = 0; m <= A_0 - n; m++ ) {
+        printf("%.2g ", ME->P_nm[n][m]);
+      }
+      printf("\n"); 
+    } 
+  }
 }
 
 void Saving_Marginal_Distributions(Parameter_Table * Table, int j, double Time_Current)
@@ -547,14 +558,20 @@ int Vector_of_Adjacent_Configurations(int * Configuration, int D, int n_0, int d
 void Generating_Network_of_Configurations(configuration ** Co, int ** Configuration_Table, 
                                           int D, int S, int n_0)
   {
-    int i, j, a, Index; 
+    int i, j, a, m, Index; 
 
     int ** Nei = (int **)calloc(D, sizeof(int *));
     for(i=0; i<D; i++)
       Nei[i] = (int *)calloc(D, sizeof(int));
 
     for (i=0; i<S; i++) {
-      Co[i]->n = Configuration_Table[i];
+      
+          printf(" P( c(%d)=[ ", i);
+          for(m=0; m < D; m++) {
+            Co[i]->n[m] = Configuration_Table[i][m];
+            printf("%d  ", Co[i]->n[m]);
+          }
+          printf(" ] ) = 0.0\n"); 
 
       a = Vector_of_Adjacent_Configurations(Co[i]->n, D, n_0, +1, Nei, Co[i]->anUp);
       Co[i]->anUp[D] = a; 

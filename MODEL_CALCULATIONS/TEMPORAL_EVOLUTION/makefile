@@ -88,7 +88,8 @@ ODE_DEF=${ODE_DIR_GENERAL}ODE_Definitions/###########################
 ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
 TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
 ######################################## Possibilities:
-######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be provided in JAC_sys${SYS}.c.
+######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be 
+########################################  provided in JAC_sys${SYS}.c.
 ######################################## 'GSL_RKF45' is a general purpose integrator.
 ######################################## 'GSL_BSIMP' and GSL_RKF45 uses adaptive steps
 ######################################## 'GSL_RK4' does not uses adaptive steps

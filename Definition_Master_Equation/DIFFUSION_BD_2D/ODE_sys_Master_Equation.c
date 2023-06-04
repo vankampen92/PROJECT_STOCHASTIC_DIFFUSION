@@ -18,7 +18,7 @@ int function_ME (double t, const double y[], double dydt[], void *params)
 
   Sp = Table->No_of_RESOURCES;
   assert( Sp == 1 );
-  assert( Table->No_of_CELLS == 1); 
+  assert( Table->No_of_CELLS == 1 ); 
 
   K_R   = (double)Table->K_R;
   n_R   = Table->TOTAL_No_of_RESOURCES;   /* which determines resource density */

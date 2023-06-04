@@ -12,15 +12,15 @@ int function_ME (double t, const double y[], double dydt[], void *params)
   double AdUP, AdDW, OutUP, OutDW; 
   
   Parameter_Table * Table = (Parameter_Table *)params;
-
+  
   Master_Equation * ME    = Table->MEq; 
 
-  assert (Table->No_of_RESOURCES == ME->n_DIMENSION );
-  assert( Table->No_of_CELLS == 1); 
+  assert( Table->No_of_RESOURCES == ME->n_DIMENSION );
+  assert( Table->No_of_CELLS == 1 ); 
 
   D     = Table->No_of_RESOURCES;
   a_0   = Table->TOTAL_No_of_CONSUMERS; 
-  No_of_CONFIGURATIONAL_STATES = Table->MEq->No_of_CONFIGURATIONAL_STATES;
+  No_of_CONFIGURATIONAL_STATES = ME->No_of_CONFIGURATIONAL_STATES;
 
   for (i=0; i<No_of_CONFIGURATIONAL_STATES; i++) {
 

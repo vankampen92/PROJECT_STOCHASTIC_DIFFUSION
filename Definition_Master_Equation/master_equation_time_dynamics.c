@@ -78,11 +78,10 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 #if defined CPGPLOT_REPRESENTATION
   int SAME = 0;
   j = 0;
-  assert(Table->MEq->n_DIMENSION <= 2);
   for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {  
     C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							i, Time_Current,
-							SAME);
+							                                          i, Time_Current,
+							                                          SAME);
     /* BEGIN: Saving Marginal for current time */
     Saving_Marginal_Distribution(Table, j, i, Time_Current);
     /*   END: -------------------------------- */ 
@@ -90,7 +89,9 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 #if defined DIFFUSION_BD_2D    
   Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
 #endif 
-  Press_Key();
+  #if defined VERBOSE
+    Press_Key();
+  #endif
 #endif
 
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
@@ -101,6 +102,8 @@ int master_equation_time_dynamics( Parameter_Table * Table )
     Table->Matrix_Output_Variables[k][0] = value;
   }
   
+  // STAT_memory_Corrupcion_Check_Utility();
+
   SAME = 0;
   for( j = 1; j < TIMES; j++ ) {
     /* This loop advances the system sequentially from
@@ -109,15 +112,15 @@ int master_equation_time_dynamics( Parameter_Table * Table )
        this loop does not advance the system any more
     */
     if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) Time_Dependence_Apply( Table, Time_Current );
-/*-------------------------------------------------------------------*/
-/* B E G I N :
- *  CORE POINT HERE: Numerical Integration of the master equation up to the next time
- */
-    State = master_equation_driver( Table, j, &Time_Current );
-    /* Normalization: */
-    Normalization_Master_Equation(Table);
     
-/*     E N D : ------------------------------------------------------*/
+    /*-------------------------------------------------------------------*/
+    /* B E G I N :
+     *  CORE POINT HERE: Numerical Integration of the master equation up to the next time
+     */
+      State = master_equation_driver( Table, j, &Time_Current );
+    /* Normalization: */
+      Normalization_Master_Equation(Table);
+    /* E N D : ------------------------------------------------------*/
 
     if (State != GSL_SUCCESS) break;
 
@@ -137,8 +140,8 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 
     for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {
       C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							  i, Time_Current,
-							  SAME);
+							                                            i, Time_Current,
+							                                            SAME);
       /* BEGIN: Saving Marginal for current time */
       Saving_Marginal_Distribution(Table, j, i, Time_Current);
       /*   END: -------------------------------- */

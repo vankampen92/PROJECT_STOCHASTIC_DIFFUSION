@@ -20,9 +20,9 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   int n_x, n_y, n_z;
 
   Model_Parameters_Master_Equation(Table,
-				   &No_of_CONFIGURATIONAL_STATES,
-				   &n_DIMENSION,
-				   &n_x, &n_y, &n_z);
+				                           &No_of_CONFIGURATIONAL_STATES,
+				                           &n_DIMENSION,
+				                           &n_x, &n_y, &n_z);
   
   Master_Equation * MEq = (Master_Equation *)calloc( 1, sizeof(Master_Equation) );
   /* MEq and Table will be two data structures that point to each other */
@@ -30,19 +30,19 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   MEq->Table = Table;
   
   Master_Equation_Allocation ( MEq,
-			       No_of_CONFIGURATIONAL_STATES,
-			       n_DIMENSION,
-			       n_x, n_y, n_z );
+			                         No_of_CONFIGURATIONAL_STATES,
+			                         n_DIMENSION,
+			                         n_x, n_y, n_z );
 
   Master_Equation_Initialization ( MEq,
-				   No_of_CONFIGURATIONAL_STATES,
-				   n_DIMENSION,
-				   n_x, n_y, n_z );
+				                           No_of_CONFIGURATIONAL_STATES,
+				                           n_DIMENSION,
+				                           n_x, n_y, n_z );                             
   
   Master_Equation_Configurational_State_Setup ( MEq );
   
   Labels_for_Marginal_Probabilities( Table ); 
-  
+
   /* Master Equation Numerical Integration                 */
   /* BEGIN: Core part (integration of the master equation) */
   printf("Entering Numerical Integration of the Master Equation...\n");   Press_Key();
@@ -73,8 +73,8 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   
   for ( i=0; i < Table->MEq->n_DIMENSION; i++ ) {
     C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
-  							  Table->T->Time_Vector[j],
-  							  SAME_PLOT );
+  							                                          Table->T->Time_Vector[j],
+  							                                          SAME_PLOT );
   #ifdef DIFFUSION_BD_2D
     C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
   #elif defined DIFFUSION_HII_1D  
@@ -87,9 +87,10 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   
   /* Saving also the last time in a file */
   j = Table->T->I_Time - 1;
-  assert(Table->MEq->n_DIMENSION <= 2);
-  Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Table,
-							      j, Table->T->Time_Vector[j] );  
+  if(Table->MEq->n_DIMENSION <= 2)
+    Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Table,
+							                                                  j, 
+                                                                Table->T->Time_Vector[j] );  
 #endif
   
 #if defined CPGPLOT_REPRESENTATION

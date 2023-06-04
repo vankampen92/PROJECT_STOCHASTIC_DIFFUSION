@@ -41,7 +41,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   if (Table->No_of_CELLS > 4)
     Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
   else if (Table->No_of_CELLS == 1)
-    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 ) {
+    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
 						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
 						   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
@@ -87,16 +87,15 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     // This is the reason we need an 'extern int TYPE_of_TIME_DEPENDENCE' above!!!
     if (TYPE_of_TIME_DEPENDENCE == 1) {
       if(TDC->TYPE_2_PARAMETERS > 0) {
-	for(i = 0; i < TDC->TYPE_2_PARAMETERS; i++) {
-	  k = i + TDC->TYPE_0_PARAMETERS + TDC->TYPE_1_PARAMETERS;
-	  for(j = 0; j<TDC->No_of_TIMES; j++) {
-	    t = Time->Time_Vector[j];
-	    TDC->Dependent_Parameter[k][j] =Time_Dependence_Resolve(Table,
-								    TDC->Index_Dependent_Parameters[k],
-								    TDC->Forcing_Pattern_Parameters[k], t);
-	    
-	  }
-	}
+	      for(i = 0; i < TDC->TYPE_2_PARAMETERS; i++) {
+	        k = i + TDC->TYPE_0_PARAMETERS + TDC->TYPE_1_PARAMETERS;
+	        for(j = 0; j<TDC->No_of_TIMES; j++) {
+	          t = Time->Time_Vector[j];
+	          TDC->Dependent_Parameter[k][j] =Time_Dependence_Resolve(Table,
+						TDC->Index_Dependent_Parameters[k],
+						TDC->Forcing_Pattern_Parameters[k], t);
+	        }
+	      }     
       }
     }
 
