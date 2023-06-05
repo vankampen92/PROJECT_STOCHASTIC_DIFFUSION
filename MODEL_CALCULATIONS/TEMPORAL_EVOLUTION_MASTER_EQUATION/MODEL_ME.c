@@ -57,6 +57,9 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 #elif defined DIFFUSION_HII_1D  
   Stationary_Probability_Distribution( Table );
   printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
+#elif defined DIFFUSION_HII_nD
+  Stationary_Probability_Distribution( Table );
+  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
 #endif
   Press_Key();
   /*  END : ------------------------------------------------------------------------------*/
@@ -67,20 +70,24 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
  */  
 #if defined CPGPLOT_REPRESENTATION
   int SAME_PLOT = 1;
-  j = Table->T->I_Time - 1;
-  
-  // assert(Table->MEq->n_DIMENSION <= 2);
+  // j = Table->T->I_Time - 1;
   
   for ( i=0; i < Table->MEq->n_DIMENSION; i++ ) {
-    C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
-  							                                          Table->T->Time_Vector[j],
-  							                                          SAME_PLOT );
+
   #ifdef DIFFUSION_BD_2D
     C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
   #elif defined DIFFUSION_HII_1D  
     C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
+  #elif defined DIFFUSION_HII_nD  
+    C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
   #endif
     Press_Key();
+    for(j=1; j<Table->T->I_Time; j++) {
+      C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
+  							                                            Table->T->Time_Vector[j],
+  							                                            SAME_PLOT );
+      Press_Key();
+    }
   }
 #endif
  /*   END : Empirical Distribuiton Representation ----------------------------------*/

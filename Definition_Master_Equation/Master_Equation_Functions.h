@@ -8,36 +8,30 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
 				      int * No_of_CONFIGURATIONAL_STATES,
 				      int * n_DIMENSION,
 				      int * n_x, int * n_y, int * n_z);
-#if defined DIFFUSION_HII_nD
-/* Declaration of the auxiliary functions required to the deal with 
-   the space of configurations for this particualr model 
+
+/* Declaration of extra auxiliary functions required to the deal with 
+   the space of configurations for particualr models 
 */
-#include "./DIFFUSION_HII_nD/Model_Parameters_Master_Equation.h"
+#if defined DIFFUSION_HII_nD
+	#include "./DIFFUSION_HII_nD/Model_Parameters_Master_Equation.h"
 #endif
-
-void i_to_nm_Map(Parameter_Table * Table,
-		 int i, int * n_i, int * m_i);
-
-void nm_to_i_Map(Parameter_Table * Table,
-		 int * i, int n, int m);
-
-double Sumando(int a_0, int m);
-
-void Stationary_Probability_Distribution(Parameter_Table * Table);
+#if defined DIFFUSION_BD_2D
+	#include "./DIFFUSION_BD_2D/Model_Parameters_Master_Equation.h"
+#endif
 
 void Stationary_Distribution_Allocation_Initialization( Parameter_Table * Table );
 
 void Stationary_Distribution_Free ( Parameter_Table * Table ); 
 
-double PS_nn_Function( int n, int m, double C0, double p );
-
-double PS_nk_Function( int n, int k, double Cn, double q );
-
-void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table );
-
 void Probability_Distribution_Vector_into_Matrix_Form( Master_Equation * ME );
 
 void Labels_for_Marginal_Probabilities (Parameter_Table * Table); 
+
+void Stationary_Probability_Distribution(Parameter_Table * Table);
+
+void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table );
+
+void D_Normalilzation_Probability_Distribution( Parameter_Table * Table ); 
 
 void Marginal_Probability_Calculation ( Parameter_Table * Table );
 
@@ -78,3 +72,5 @@ void Saving_Marginal_Distribution_Triplets(Parameter_Table * Table, int j, doubl
 void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table * Table,
 								 int j,
 								 double Time_Current);
+
+

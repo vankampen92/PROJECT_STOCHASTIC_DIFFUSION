@@ -102,8 +102,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
     Table->Matrix_Output_Variables[k][0] = value;
   }
   
-  // STAT_memory_Corrupcion_Check_Utility();
-
+  /* Main Loop: Advancing Time accoding to a Time (predefined) Vector */
   SAME = 0;
   for( j = 1; j < TIMES; j++ ) {
     /* This loop advances the system sequentially from
@@ -124,7 +123,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 
     if (State != GSL_SUCCESS) break;
 
-#if defined CPGPLOT_REPRESENTATION
+    #if defined CPGPLOT_REPRESENTATION
     /* This should be only activated in case we want to animate ODE time evolution by
        representing the solution as time progresses                                       
     */
@@ -139,9 +138,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
     }
 
     for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {
-      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							                                            i, Time_Current,
-							                                            SAME);
+      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i, Time_Current, SAME );
       /* BEGIN: Saving Marginal for current time */
       Saving_Marginal_Distribution(Table, j, i, Time_Current);
       /*   END: -------------------------------- */

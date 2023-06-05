@@ -71,7 +71,6 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
       printf(" distributjion the higher dimension: %d\n", n);
       printf(" The program will exit\n");
       exit(0);
-      exit(0);
     }
   }
   else {

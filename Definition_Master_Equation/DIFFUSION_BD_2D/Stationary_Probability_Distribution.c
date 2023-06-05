@@ -1,5 +1,8 @@
 #include <MODEL.h>
 
+double PS_nn_Function( int n, int m, double C0, double p );
+double PS_nk_Function( int n, int k, double Cn, double q ); 
+
 void Stationary_Probability_Distribution (Parameter_Table * Table)
 {
   double K_R, y_R, Theta;

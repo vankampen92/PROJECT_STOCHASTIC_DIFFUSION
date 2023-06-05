@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jun  4 00:14:32 2023
+# Make data base, printed on Mon Jun  5 16:51:27 2023
 
 # Variables
 
@@ -61,7 +63,7 @@ VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/b3e4e68a0bc097f0a
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.7O7Y51
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.CXNX51
 # default
 .LOADED := 
 # default
@@ -97,7 +99,7 @@ MAKEFILE_LIST :=
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 3528
+VSCODE_PID = 43434
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -105,7 +107,7 @@ XDG_SESSION_TYPE = wayland
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2078,unix/vankampen92:/tmp/.ICE-unix/2078
+SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2197,unix/vankampen92:/tmp/.ICE-unix/2197
 # automatic
 *F = $(notdir $*)
 # environment
@@ -155,7 +157,7 @@ LC_TIME = es_ES.UTF-8
 # environment
 SNAP = /snap/code/129
 # environment
-INVOCATION_ID = 258626a5998a425fa3a9a7222d736e73
+INVOCATION_ID = ed80b08ca86c49fbafe7122c27826ca0
 # environment
 SNAP_REVISION = 129
 # environment
@@ -193,7 +195,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2097
+SYSTEMD_EXEC_PID = 2217
 # environment
 DISPLAY = :0
 # environment
@@ -207,11 +209,11 @@ SNAP_DATA = /var/snap/code/129
 # environment
 SNAP_CONTEXT = IW4Qn8rFuCFeZjEnf0jXXFVR7ihvRlNVpjXOJVtkYpLiggVXGK2c
 # environment
-MANAGERPID = 1883
+MANAGERPID = 2001
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3476
+GIO_LAUNCHED_DESKTOP_FILE_PID = 43387
 # environment
 _ = /snap/code/129/usr/share/code/code
 # environment
@@ -223,7 +225,7 @@ GDK_PIXBUF_MODULE_FILE = /home/dalonso/snap/code/common/.cache/gdk-pixbuf-loader
 # environment
 GIO_MODULE_DIR = /home/dalonso/snap/code/common/.cache/gio-modules
 # environment
-JOURNAL_STREAM = 8:32552
+JOURNAL_STREAM = 8:34488
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -290,9 +292,6 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 # No implicit rules.
 
 # Files
- 
-make: *** No rule to make target 'all'.  Stop.
-
 
 # Not a target:
 Makefile:
@@ -313,6 +312,7 @@ all:
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 
 # Not a target:
 makefile:
@@ -342,6 +342,6 @@ GNUmakefile:
 # strcache performance: lookups = 70 / hit rate = 4%
 # hash-table stats:
 # Load=67/8192=1%, Rehash=0, Collisions=0/70=0%
-# Finished Make data base on Sun Jun  4 00:14:32 2023
+# Finished Make data base on Mon Jun  5 16:51:27 2023
 
  

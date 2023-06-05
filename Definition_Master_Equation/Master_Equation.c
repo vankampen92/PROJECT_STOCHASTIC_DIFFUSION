@@ -45,7 +45,6 @@ void Master_Equation_Allocation ( Master_Equation * ME,
     ME->PS_n = (double *)calloc(n_x, sizeof(double) );       /* Stationary Distribution */
     ME->P_n  = (double *)calloc(n_x, sizeof(double) );
     ME->P_n_Marginal = (double *)calloc(n_x, sizeof(double));
-
     ME->PS_n_Marginal = (double *)calloc(n_x, sizeof(double));
   }
   else if (n_DIMENSION == 2) {

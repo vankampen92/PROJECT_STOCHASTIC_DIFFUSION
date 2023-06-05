@@ -88,7 +88,12 @@ void Marginal_Probability_Calculation ( Parameter_Table * Table )
   Master_Equation * ME = Table->MEq;  
   A_0 = Table->TOTAL_No_of_CONSUMERS;
 
-  if( ME->n_DIMENSION == 2) {
+  if( ME->n_DIMENSION == 1) {
+    for( n = 0; n <= A_0; n++ ) { 
+      ME->P_n_Marginal[n] = ME->P_n[n];
+    }
+  }
+  else if( ME->n_DIMENSION == 2) {
     Probability_Distribution_Vector_into_Matrix_Form( ME );
 
     for( n = 0; n <= A_0; n++ ) {       /* Fist Dimension: No of Handling Consumers */
