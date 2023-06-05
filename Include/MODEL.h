@@ -17,7 +17,7 @@
    which defines the maxim dinension of the whole parameter space for that particular model 
 */
 
-#define MAX_No_of_CONFIGURATIONAL_STATES 1000000 /* Max No of Eqs in the Master Equation */   
+#define MAX_No_of_CONFIGURATIONAL_STATES 100000000 /* Max No of Eqs in the Master Equation */   
 
 #define No_of_TDC_FUNC_AUX_PARAM_MAX 10 /* Maximum No of Time Dependence Function Auxiliary 
                                         // Parameters required to define the potential 

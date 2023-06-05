@@ -84,10 +84,13 @@ void Master_Equation_Allocation ( Master_Equation * ME,
   else {
     printf(" This structure is only prepared to accept a maximum number of dimensions.\n");
     printf(" This number of defined in MODEL.h super header file\n");
-    printf(" Your probability distribution seems to have %d dimensions!!!\n", n_DIMENSION);
+    printf(" Your probability distribution has %d dimensions!!!\n", n_DIMENSION);
     printf(" Notice that when n_DIMENSION is bigger than 3, the probability distributions\n");
     printf(" are not defined as tensor objects, but as vectors over configurations,\n");
     printf(" where y[i] is the probability corresponding to the i-th configuration.\n"); 
+    i = ME_n_DIMENSION_MAXIMUM;
+    printf(" If n_DIMENSION (%d) is bigger than ME_n_DIMENSION_MAXIMUM (%d) the program will exit\n", 
+    ME->n_DIMENSION, i);
     assert(n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
   }
 
@@ -189,10 +192,13 @@ void Master_Equation_Free ( Master_Equation * ME )
   else {
     printf(" This structure is only prepared to accept a maximum number of dimensions.\n");
     printf(" This number is defined in MODEL.h super header file\n");
-    printf(" Your probability distribution seems to have %d dimensions!!!\n", ME->n_DIMENSION);
+    printf(" Your probability distribution has %d dimensions!!!\n", ME->n_DIMENSION);
     printf(" Notice that when n_DIMENSION is bigger than 3, the probability distributions\n");
     printf(" are not defined as tensor objects, but as vectors over configurations,\n");
     printf(" where y[i] is the probability corresponding to the i-th configuration.\n"); 
+    i = ME_n_DIMENSION_MAXIMUM;
+    printf(" If n_DIMENSION (%d) is bigger than ME_n_DIMENSION_MAXIMUM (%d) the program will exit\n", 
+    ME->n_DIMENSION, i);
     assert(ME->n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
   }
 

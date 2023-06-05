@@ -165,13 +165,6 @@ void Marginal_Probability_Averages_Calculation ( Parameter_Table * Table )
       S = 0.0; 
       for (n = 0; n<= A_0; n++) {
         for(i=0; i<ME->No_of_CONFIGURATIONAL_STATES; i++) {
-
-          printf(" P( c(%d)=[ ", i);
-          for(m=0; m<ME->n_DIMENSION; m++) {
-            printf("%d  ", ME->Co[i]->n[m]);
-          }
-          printf(" ] ) = %g\n", y[i]);
-             
           if (ME->Co[i]->n[k] == n) S += (double)n * y[i];
         }
       }
@@ -206,12 +199,12 @@ void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table)
 
 void Print_Probability_Distribution ( Parameter_Table * Table )
 { 
-  int n, m, A_0;
+  int i, n, m, A_0;
   
   Master_Equation * ME = Table->MEq;
   A_0 = Table->TOTAL_No_of_CONSUMERS;
  
-  if (ME->n_DIMENSION == 2) {
+  if (ME->n_DIMENSION <= 2) {
 
     Probability_Distribution_Vector_into_Matrix_Form( ME );
 
@@ -221,6 +214,17 @@ void Print_Probability_Distribution ( Parameter_Table * Table )
       }
       printf("\n"); 
     } 
+  }
+  else {
+    double * y = ME->Probability_Distribution;
+    
+    for(i=0; i<ME->No_of_CONFIGURATIONAL_STATES; i++) {
+      printf(" P( c(%d)=[ ", i);
+      for(m=0; m<ME->n_DIMENSION; m++) {
+        printf("%d  ", ME->Co[i]->n[m]);
+      }
+      printf("] ) = %g\n", y[i]);
+    }
   }
 }
 
@@ -263,17 +267,17 @@ void Saving_Marginal_Distributions(Parameter_Table * Table, int j, double Time_C
     Marginal[0] = '\0';
     pFile = strcat(Marginal, "Marginal_Probability_0");
     pFile = strcat(Marginal, "_Time_");
-    printf("Saving Marginal Probability (Dimension = 0) at Time %g\n", Time_Current);  
     Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);
-
+    printf("%s: Marginal Probability (Dimension = 0) at Time %g saved!!!\n", Marginal, Time_Current);  
+    
     for (n=0; n < No_of_POINTS; n++) 
       y[n] = ME->P_m_Marginal[n]; 
     
     Marginal[0] = '\0';
     pFile = strcat(Marginal, "Marginal_Probability_1");
-    pFile = strcat(Marginal, "_Time_");
-    printf("Saving Marginal Probability (Dimension = 0) at Time %g\n", Time_Current);  
-    Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);  
+    pFile = strcat(Marginal, "_Time_");  
+    Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);
+    printf("%s: Marginal Probability (Dimension = 1) at Time %g saved!!!\n", Marginal, Time_Current);  
   }
   else {
     assert(ME->n_DIMENSION == Table->No_of_RESOURCES);
@@ -286,9 +290,9 @@ void Saving_Marginal_Distributions(Parameter_Table * Table, int j, double Time_C
       pFile = strcat(Marginal, "Marginal_Probability_");
       sprintf(Dimension, "%d", k);
       pFile = strcat(Marginal, Dimension);  
-      pFile = strcat(Marginal, "_Time_");
-      printf("Saving Marginal Probability (Dimension = %d) at Time %g\n", k, Time_Current);  
+      pFile = strcat(Marginal, "_Time_");  
       Saving_to_File_double(Marginal, x, y, No_of_POINTS, j);
+      printf("%s: Marginal Probability (Dimension = %d) at Time %g saved!!!\n", Marginal, k, Time_Current);
     }
   }
 
