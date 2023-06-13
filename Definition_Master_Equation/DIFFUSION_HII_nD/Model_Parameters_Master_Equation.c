@@ -438,7 +438,7 @@ unsigned long long int General_Configuration_Table(unsigned int D, unsigned int 
     d++;
   }
 
-  /* Output: Storing Configuration Table at D dimensions: */
+  /* Output: Storing final Configuration Table at D dimensions: */
   for(i=0; i < S; i++) 
      for(j=0; j < D; j++)
        Configuration_Table[i][j] = Configuration[D-1][i][j];
@@ -575,36 +575,40 @@ void Generating_Network_of_Configurations(configuration ** Co, int ** Configurat
 
     for (i=0; i<S; i++) {
       
-          printf(" P( c(%d)=[ ", i);
+          // printf(" P( c(%d)=[ ", i);
           for(m=0; m < D; m++) {
             Co[i]->n[m] = Configuration_Table[i][m];
-            printf("%d  ", Co[i]->n[m]);
+            // printf("%d  ", Co[i]->n[m]);
           }
-          printf(" ] ) = 0.0\n"); 
+          // printf(" ] ) = 0.0\n"); 
 
       a = Vector_of_Adjacent_Configurations(Co[i]->n, D, n_0, +1, Nei, Co[i]->anUp);
-      Co[i]->anUp[D] = a; 
+      Co[i]->anUp[D] = a;
 
+#if defined VERBOSE
       printf(" There are %d neighboring configurations around c[%d]=[ ", a, i);
       for(j=0; j<D; j++) printf("%d ", Co[i]->n[j]);   /* Configuration[i] = [n_1, ..., n_S] */
       printf("] transitioning down into it:\n");
+#endif       
       for(j=0; j<a; j++){
         Index = Co[i]->anUp[j];
-        Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+        // Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
       }
 
       a = Vector_of_Adjacent_Configurations(Co[i]->n, D, n_0, -1, Nei, Co[i]->anDw);
       Co[i]->anDw[D] = a; 
 
+#if defined VERBOSE
       printf(" There are %d neighboring configurations around c[%d]=[ ", a, i);
       for(j=0; j<D; j++) printf("%d ", Co[i]->n[j]);   /* Configuration[i] = [n_1, ..., n_S] */
       printf("] transitioning up into it:\n");
+#endif
       for(j=0; j<a; j++){
         Index = Co[i]->anDw[j];
-        Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
+        // Pickup_a_Configuration_from_Table(D, Index, Configuration_Table);
       } 
 
-      printf("...\n\n");
+      // printf("...\n\n");
     }
 
     for(i=0; i<D; i++)

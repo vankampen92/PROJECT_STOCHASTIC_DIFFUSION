@@ -22,7 +22,9 @@ void Master_Equation_Allocation ( Master_Equation * ME,
 
      If the natural support of P(n, m, l) does not go from n=0 to n_x, m=0 to n_y, and 
      l=0 to n_z, then P(n, m, l) will take zero values out of its actual support (see 
-     calloc() calls for zero allocations below).    
+     calloc() calls for zero allocations below). For the sake of saving memmory, when 
+     n_DIMENSION is bigger than 3, the probability distribution are no longer stored as 
+     tensor objects.    
   */ 
   int i, j;
   Parameter_Table * Table = (Parameter_Table *)ME->Table; 
@@ -89,7 +91,7 @@ void Master_Equation_Allocation ( Master_Equation * ME,
     printf(" where y[i] is the probability corresponding to the i-th configuration.\n"); 
     i = ME_n_DIMENSION_MAXIMUM;
     printf(" If n_DIMENSION (%d) is bigger than ME_n_DIMENSION_MAXIMUM (%d) the program will exit\n", 
-    ME->n_DIMENSION, i);
+    n_DIMENSION, i);
     assert(n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
   }
 
@@ -314,7 +316,7 @@ void Master_Equation_Stationary_Distribution_Allocation ( Master_Equation * ME,
   else {
     printf(" This structure is only prepared to accept a maximum number of dimensions.\n");
     printf(" This number of defined in MODEL.h super header file\n");
-    printf(" Your probability distribution seems to have %d dimensions!!!\n", n_DIMENSION);
+    printf(" Your probability distribution has %d dimensions!!!\n", n_DIMENSION);
     printf(" Notice that when n_DIMENSION is bigger than 3, the probability distributions\n");
     printf(" are not defined as tensor objects!!!\n"); 
     assert(n_DIMENSION <= ME_n_DIMENSION_MAXIMUM);
@@ -406,6 +408,8 @@ void Stationary_Distribution_Allocation_Initialization( Parameter_Table * Table 
 				   n_DIMENSION,
 				   n_x, n_y, n_z );
   
+  Master_Equation_Configurational_State_Setup ( MEq );
+
   Labels_for_Marginal_Probabilities( Table ); 
 }
 

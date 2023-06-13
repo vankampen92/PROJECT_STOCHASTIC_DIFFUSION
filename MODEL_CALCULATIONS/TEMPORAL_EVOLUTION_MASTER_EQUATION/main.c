@@ -45,9 +45,13 @@ gsl_rng * r; /* Global generator defined in main.c */
 
   MODEL = DIFFUSION_HII_nD
    Feeding experiments at a constant number of total consumers (-HN 20): 
-   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 \
-                          -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
-                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 
+   			  -n 3 -v0 0 -v1 1 -v2 2 \
+			  -G0 1 -G1 3 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
+			  -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 \
+			  -HuR 0.0 -HuC 0.0 -H5 0.0 \
+			  -HK 1000 -H0 5.0 -H2 1.0 -H9 2.5 -H10 10.0 \
+			  -Hp1 0.3725 -Hp2 0.5 -HN 20
 
    .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \
                           -n 3 -v0 0 -v1 1 -v2 2 \
@@ -57,14 +61,22 @@ gsl_rng * r; /* Global generator defined in main.c */
                           -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 10.0 \
                           -Hp1 0.3725 -Hp2 1.0 -HN 20 
 
-   .~S ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
                           -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4\
                           -G0 1 -G1 5 -G2 1 -G3 0.0 -G4 3.5 -G5 1 -G6 0.0 -G7 8 \
                           -tn 10 -t0 0.0 -t1 3.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
                           -HuR 0.0 -HuC 0.0 -H5 0.0 \
                           -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 0.1 \
                           -Hp1 0.3725 -Hp2 1.0 -HN 20 
-                          
+   
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 10 -HM 1 -HX 1 -HY 1 \
+                          -n 10 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 -v5 5 -v6 6 -v7 6 -v8 8 -v9 9\
+                          -G0 2 -G1 5 -G2 1 -G3 0.0 -G4 3.5 -G5 1 -G6 0.0 -G7 8 \
+                          -tn 10 -t0 0.0 -t1 3.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
+                          -HuR 0.0 -HuC 0.0 -H5 0.0 \
+                          -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 0.1 \
+                          -Hp1 0.3725 -Hp2 1.0 -HN 20
+
    Relevant input arguments for model DIFFUSION_HII_nD:
 
    -HK  [N or Total Carrying Capacity (for resources)]

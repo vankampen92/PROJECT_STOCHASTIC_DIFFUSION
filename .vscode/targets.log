@@ -1,5 +1,5 @@
-make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
+make all -f /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/${cwd} --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/: Is a directory.  Stop.
 
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun  5 16:51:27 2023
+# Make data base, printed on Tue Jun 13 11:42:05 2023
 
 # Variables
 
@@ -43,7 +43,7 @@ QT_ACCESSIBILITY = 1
 # environment
 SNAP_INSTANCE_NAME = code
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/129/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/130/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -53,17 +53,17 @@ PWD = /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-XDG_DATA_DIRS = /home/dalonso/snap/code/129/.local/share:/home/dalonso/snap/code/129:/snap/code/129/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+XDG_DATA_DIRS = /home/dalonso/snap/code/130/.local/share:/home/dalonso/snap/code/130:/snap/code/130/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/b3e4e68a0bc097f0ae7907b217c1119af9e03435
+VSCODE_CODE_CACHE_PATH = /home/dalonso/.config/Code/CachedData/b380da4ef1ee00e224a15c1d4d9793e27c2b6302
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.CXNX51
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.51WI61
 # default
 .LOADED := 
 # default
@@ -73,7 +73,7 @@ MAKEFLAGS = pqrR
 # makefile
 CURDIR := /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -94,12 +94,12 @@ XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 +D = $(patsubst %/,%,$(dir $+))
 # environment
 XDG_SESSION_DESKTOP = ubuntu
-# makefile
-MAKEFILE_LIST := 
+# makefile (from '/home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/', line 1)
+MAKEFILE_LIST := /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 43434
+VSCODE_PID = 25880
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -107,7 +107,7 @@ XDG_SESSION_TYPE = wayland
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2197,unix/vankampen92:/tmp/.ICE-unix/2197
+SESSION_MANAGER = local/vankampen92:@/tmp/.ICE-unix/2192,unix/vankampen92:/tmp/.ICE-unix/2192
 # automatic
 *F = $(notdir $*)
 # environment
@@ -121,7 +121,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","osLocale":"en-us","availableLanguages":{}
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-GTK_PATH = /snap/code/129/usr/lib/x86_64-linux-gnu/gtk-3.0
+GTK_PATH = /snap/code/130/usr/lib/x86_64-linux-gnu/gtk-3.0
 # environment
 GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 # makefile
@@ -155,11 +155,11 @@ SNAP_USER_COMMON = /home/dalonso/snap/code/common
 # environment
 LC_TIME = es_ES.UTF-8
 # environment
-SNAP = /snap/code/129
+SNAP = /snap/code/130
 # environment
-INVOCATION_ID = ed80b08ca86c49fbafe7122c27826ca0
+INVOCATION_ID = 6e3c5be08f9d403a81cc4952874b4eb7
 # environment
-SNAP_REVISION = 129
+SNAP_REVISION = 130
 # environment
 SNAP_REAL_HOME = /home/dalonso
 # environment
@@ -183,8 +183,8 @@ DESKTOP_SESSION = ubuntu
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
-LOCPATH = /snap/code/129/usr/lib/locale
-# 'override' directive
+LOCPATH = /snap/code/130/usr/lib/locale
+# environment
 GNUMAKEFLAGS := 
 # environment
 LOGNAME = dalonso
@@ -195,7 +195,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2217
+SYSTEMD_EXEC_PID = 2210
 # environment
 DISPLAY = :0
 # environment
@@ -205,17 +205,17 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SNAP_DATA = /var/snap/code/129
+SNAP_DATA = /var/snap/code/130
 # environment
 SNAP_CONTEXT = IW4Qn8rFuCFeZjEnf0jXXFVR7ihvRlNVpjXOJVtkYpLiggVXGK2c
 # environment
-MANAGERPID = 2001
+MANAGERPID = 1991
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 43387
+GIO_LAUNCHED_DESKTOP_FILE_PID = 25832
 # environment
-_ = /snap/code/129/usr/share/code/code
+_ = /snap/code/130/usr/share/code/code
 # environment
 LC_PAPER = es_ES.UTF-8
 # environment
@@ -225,7 +225,7 @@ GDK_PIXBUF_MODULE_FILE = /home/dalonso/snap/code/common/.cache/gdk-pixbuf-loader
 # environment
 GIO_MODULE_DIR = /home/dalonso/snap/code/common/.cache/gio-modules
 # environment
-JOURNAL_STREAM = 8:34488
+JOURNAL_STREAM = 8:35241
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -237,13 +237,13 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-86b08775-1.78-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-86b08775-1.79-main.sock
 # environment
-GTK_EXE_PREFIX = /snap/code/129/usr
+GTK_EXE_PREFIX = /snap/code/130/usr
 # environment
 SNAP_NAME = code
 # environment
-GSETTINGS_SCHEMA_DIR = /home/dalonso/snap/code/129/.local/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /home/dalonso/snap/code/130/.local/share/glib-2.0/schemas
 # environment
 IM_CONFIG_PHASE = 1
 # default
@@ -251,9 +251,7 @@ IM_CONFIG_PHASE = 1
 # automatic
 <F = $(notdir $<)
 # environment
-SNAP_VERSION = b3e4e68a
-# environment
-VSCODE_CRASH_REPORTER_SANDBOXED_HINT = 1
+SNAP_VERSION = b380da4e
 # default
 SUFFIXES := 
 # environment
@@ -265,7 +263,7 @@ SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
-SNAP_USER_DATA = /home/dalonso/snap/code/129
+SNAP_USER_DATA = /home/dalonso/snap/code/130
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -275,7 +273,7 @@ LC_IDENTIFICATION = es_ES.UTF-8
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # variable set hash-table stats:
-# Load=131/1024=13%, Rehash=0, Collisions=5/158=3%
+# Load=130/1024=13%, Rehash=0, Collisions=5/143=3%
 
 # Pattern-specific Variable Values
 
@@ -283,22 +281,21 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 25821185): 59 files, no impossibilities.
 
-# 59 files, no impossibilities in 1 directories.
+# No files, no impossibilities in 0 directories.
 
 # Implicit Rules
 
+ 
 # No implicit rules.
 
 # Files
 
 # Not a target:
-Makefile:
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
+/home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .DEFAULT:
@@ -309,39 +306,24 @@ Makefile:
 # Not a target:
 all:
 #  Command line target.
-#  Implicit rule search has been done.
-#  File does not exist.
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
- 
-
-# Not a target:
-makefile:
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
-
-# Not a target:
-GNUmakefile:
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
 
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
+# Load=4/1024=0%, Rehash=0, Collisions=0/5=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 67 / storage = 1458 B / avg = 21 B
-# current buf: size = 8162 B / used = 1458 B / count = 67 / avg = 21 B
+# strcache buffers: 1 (0) / strings = 6 / storage = 99 B / avg = 16 B
+# current buf: size = 8162 B / used = 99 B / count = 6 / avg = 16 B
 
-# strcache performance: lookups = 70 / hit rate = 4%
+# strcache performance: lookups = 9 / hit rate = 33%
 # hash-table stats:
-# Load=67/8192=1%, Rehash=0, Collisions=0/70=0%
-# Finished Make data base on Mon Jun  5 16:51:27 2023
+# Load=6/8192=0%, Rehash=0, Collisions=0/9=0%
+# Finished Make data base on Tue Jun 13 11:42:05 2023
 
  
