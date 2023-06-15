@@ -83,7 +83,6 @@ int Advance_Current_Time( Parameter_Table * Table,
   
   Print_Meta_Community_Patch_System (Table);
 #endif
-
   
   return(0);
 }

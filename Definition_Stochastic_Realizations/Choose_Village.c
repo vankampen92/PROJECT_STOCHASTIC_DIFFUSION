@@ -39,7 +39,7 @@ int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Paramet
   No_of_Villages = Par->No_of_CELLS;
 
   double x = Par->Treeroot->value * RANDOM; 
-  p = choose_Individual_Event(Par->Treeroot, x);  
+  p = choose_Individual_Event(Par->Treeroot, x);  /* From treenode.c library */
   
   /* p should go from (0) to (No of Villages-1) */
   assert(p >= 0 && p < No_of_Villages); 
