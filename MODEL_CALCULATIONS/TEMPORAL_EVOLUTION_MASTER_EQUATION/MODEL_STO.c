@@ -66,12 +66,17 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   Community ** PATCH = (Community **)malloc( P->No_of_CELLS * sizeof(Community *) );
   Community_Allocation( PATCH, P ); 
   Community_Initialization (PATCH, P);
-  /* The Parameter Model structure also keeps the three memmory addresses pointing to 
-   * the Patch System, the Time Control structure, and the CPG structure to plot   
+  /* The Parameter Table (and Parameter Model) structures also keep the three memmory addresses 
+   * pointing to the Patch System (Parameter_Model), the Time Control structure, the CPG plotting 
+   * structure, and the two structures controling the binary tree of 'treenode' type: 'Treeroot' and 'Leaves' 
+   * (also stored in Parameter Model).    
    */
   Table->Patch_System = PATCH;
+  Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */
+  P->Treeroot = Table->Treeroot; 
+  P->Leaves   = Table->Leaves; 
   /* END ----------------------------------------------------------------------------
-   */
+  */
   
 #if defined CPGPLOT_REPRESENTATION  /* Initial Plotting Time evolution: just frames!!! */
   int SAME_PLOT = 0;
@@ -106,9 +111,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
        . Bad_Times is a measure of the performance of the sampling frequency. 
          If Bad_Times is high, interval times should be choosen smaller 
     */
-    int FROZEN_SYSTEM = S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S ( n,
-									  Table, &Bad_Times );
-    
+    int FROZEN_SYSTEM = S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S ( n, Table, 
+                                                                          &Bad_Times );
     /* End of the i-th STOCHASTIC REALIZATIONS */
     printf("Realization: %d of a total of %d\n", n+1, Table->T->Realizations);
     printf("Time failed in %d occasions out of %d time steps\n", Bad_Times, I_Time);
@@ -146,6 +150,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
+  deleteTree(Table->Treeroot);
   
   return(0);
 }

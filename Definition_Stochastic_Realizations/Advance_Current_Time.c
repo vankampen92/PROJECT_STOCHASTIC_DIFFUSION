@@ -1,7 +1,6 @@
 #include <MODEL.h>
 
 extern gsl_rng * r;   /* Global generator (define at the main program level */
-
 #define RANDOM gsl_rng_uniform_pos(r)
 
 /* This function advances the system one single time step, by changing
@@ -16,7 +15,7 @@ extern gsl_rng * r;   /* Global generator (define at the main program level */
 */
 
 int Advance_Current_Time( Parameter_Table * Table, 
-			  Stochastic_Rate * Rate, double * Time_Current, int * New )
+			                    Stochastic_Rate * Rate, double * Time_Current, int * New )
 {
   /* (*New) counts the number of infection events */ 
   int k;
@@ -50,7 +49,7 @@ int Advance_Current_Time( Parameter_Table * Table,
     /* BEGIN : Stochastic Dynamic is actually performed : 
                The Community "Village" is updated accordingly 
     */
-      Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
+    Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
     if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */

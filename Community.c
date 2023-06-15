@@ -99,7 +99,7 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
 }
 
 void Community_Initialization (Community ** PATCH,
-			       Parameter_Model * P )
+			                         Parameter_Model * P )
 {
   int i, j, Sp, no;
 
@@ -234,31 +234,30 @@ void Network_Structure_Inititialization (Community ** PATCH,
 
       for(i=0; i<no; i++){
 
-	PATCH[i]->center.x = gsl_rng_uniform(r) * PATCH[i]->X_DIMENSION;
-	PATCH[i]->center.y = gsl_rng_uniform(r) * PATCH[i]->Y_DIMENSION;
+	      PATCH[i]->center.x = gsl_rng_uniform(r) * PATCH[i]->X_DIMENSION;
+	      PATCH[i]->center.y = gsl_rng_uniform(r) * PATCH[i]->Y_DIMENSION;
 
-	for( a=0; a<Sp; a++ ) {
+	        for( a=0; a<Sp; a++ ) {
 
-	  n=0;
-	  Total_Per_Capita_Out_Migration_Rate = 0.0;
-	  for(j=0; j<no; j++){
-	    if( i != j) {
-	      PATCH[i]->NEI[n] = PATCH[j];
+	          n=0;
+	          Total_Per_Capita_Out_Migration_Rate = 0.0;
+	          for(j=0; j<no; j++){
+	            if( i != j) {
+	              PATCH[i]->NEI[n] = PATCH[j];
 
-	      PATCH[i]->Out_Migration_Vector[a][n] = PATCH[i]->Metapop_Connectivity_Matrix[a][j][i];
-	      PATCH[i]->In_Migration_Vector[a][n]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
+	              PATCH[i]->Out_Migration_Vector[a][n] = PATCH[i]->Metapop_Connectivity_Matrix[a][j][i];
+	              PATCH[i]->In_Migration_Vector[a][n]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
 
-	      PATCH[i]->Patch_Connections[n] = j;
+	              PATCH[i]->Patch_Connections[n] = j;
 
-	      Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][n];
-	      n++;
-	    }
-	  }
-	  PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
-	}
-
-	PATCH[i]->No_NEI = no-1; /* All patches are connected to i */
-	assert(no-1 == n);
+	              Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][n];
+	              n++;
+	            }
+	          }
+	          PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
+      	  }
+        PATCH[i]->No_NEI = no-1; /* All patches are connected to i */
+	      assert(no-1 == n);
       }
       break;
 
@@ -426,5 +425,30 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 
     printf("\n");
 
+  }
+}
+
+void Community_Binary_Tree_Initialization (Parameter_Table * Table)
+{
+  int i, No_of_CELLS, No_of_LEAVES, No_of_TREE_LEVELS;
+
+  /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
+  No_of_CELLS              = Table->No_of_CELLS; 
+
+  if (No_of_CELLS > 1) {
+    i = 0; 
+    while( No_of_CELLS < power_int(2, i) || No_of_CELLS > power_int(2, i+1)) {
+      i++; 
+      No_of_LEAVES      = power_int(2, i);
+      No_of_TREE_LEVELS = i; 
+    }
+    Table->No_of_LEAVES      = No_of_LEAVES;
+    Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; 
+
+    Table->Leaves = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
+    for(i=0; i<No_of_LEAVES; i++){ 
+      Table->Leaves[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
+      Table->Leaves[i]->order = i;
+    }
   }
 }

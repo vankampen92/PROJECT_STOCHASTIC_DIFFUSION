@@ -52,8 +52,7 @@ typedef struct Time_Dependence_Controlinfo
   double * Time_Vector;
 
   double ** TDC_Function_Params;  /* For each (potential) time dependent model parameter of type 2,
-				    this is an array with the parameters that control the 
-				    function that links time with true model parameters. 
-				  */
-
+				                             this is an array with the parameters that control the 
+				                             function that links time with true model parameters. 
+				                          */
 }Time_Dependence_Control;

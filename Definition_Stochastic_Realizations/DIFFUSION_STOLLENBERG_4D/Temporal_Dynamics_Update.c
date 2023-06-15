@@ -8,9 +8,9 @@
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table);
 
 void Temporal_Dynamics_Update( Community ** My_Community,
-			       Parameter_Table * Table,
-			       Stochastic_Rate * Rate,
-			       int Type_of_Event, int * Patch)
+			                         Parameter_Table * Table,
+			                         Stochastic_Rate * Rate,
+			                         int Type_of_Event, int * Patch)
 {
   /* This function calculates the stochastic rates after the execution of a stochastic event
      in terms of the old ones, with no recalculation. This is a way to optimize the algorithm.
@@ -34,6 +34,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   int i, n, m, k; 
   int x, y; 
   double Delta_Rate;
+  treenode * Leaf; 
   
   Community * Pa;
   double OutMigration; 
@@ -42,35 +43,37 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   
   x = Patch[0]; y = Patch[1];
   
-  if ( x == y ) { /* LOCAL PROCESS on a single Patch x */
-
+  if ( x == y ) {  /* LOCAL PROCESS on a single Patch x */
     if (Type_of_Event < n ) {
       
       assert( Type_of_Event != 0 && Type_of_Event != 6 ) ; /* Because these are out
-							      migration events. Only
-							      possible when x patch 
-							      is different from y patch
-							   */
-      
+							                                                migration events. Only
+							                                                possible when x patch 
+							                                                is different from y patch
+							                                             */
       Pa    = My_Community[x];
       Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); 
       
       m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-							 to event 'Type_of_Event'???
-							 i.e., the lenght of the adjacence  
-							 list of 'Type_of_Event'
-						      */
+							                                           to event 'Type_of_Event'???
+							                                           i.e., the lenght of the adjacence  
+							                                           list of 'Type_of_Event'
+						                                          */
       Delta_Rate = 0.0; 
       for(i=0; i<m; i++) {
-	k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
-	Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
-	Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	        k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
+							                                               to event 'Type_of_Event'???
+							                                            */
+	        Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	        Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
       }
-
       Pa->ratePatch    += Delta_Rate; 				
-      Rate->Total_Rate += Delta_Rate; 				
+      Rate->Total_Rate += Delta_Rate;
+      
+      /* Updating of the Binary Tree to Sample Discrete Distribution */  
+      Leaf = Table->Leaves[x];
+      sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+      
       Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
     }
     else {
@@ -82,11 +85,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       exit(0); 
     }   
   }
-  else {         /* MOVEMENT EVENT involving two Patches */
-		 /* Out migration sending one individual (RP or C, 
-		    RA individuals do not move) out 
-		    from patch 'x' into patch 'y'      */
-    
+  else {  /* MOVEMENT EVENT involving two Patches */       
+		      /* Out migration sending one individual (RP or C, 
+		         RA individuals do not move) out 
+		         from patch 'x' into patch 'y'      
+          */
     assert( Type_of_Event == 0 || Type_of_Event == 6 ) ; 
     
     /* Changes in rates due to the loss of an individual in patch x */
@@ -94,46 +97,55 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-						       to event 'Type_of_Event'???
-						       Lenght of the adjacence list 
-						       of 'Type_of_Event'
-						    */
+						                                           to event 'Type_of_Event'???
+						                                           Lenght of the adjacence list 
+						                                           of 'Type_of_Event'
+						                                        */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							 to event 'Type_of_Event'???
-						      */
+							                                           to event 'Type_of_Event'???
+						                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
     }
     Pa->ratePatch    += Delta_Rate; 				
     Rate->Total_Rate += Delta_Rate; 				
-    Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
-      
-    
+     
+    /* Updating of the Binary Tree to Sample Discrete Distribution */  
+    Leaf = Table->Leaves[x];
+    sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);  
+
+    Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch ); 
+
     /* Changes in rates due to the adquisition of an individual in patch y */
     Pa    = My_Community[y];
     Updating_Event_Delta_Matrix(Pa, Type_of_Event+1, Table);
     
     m = Pa->Event_Adjacence_List[Type_of_Event+1][n]; /* How many events are connected 
-							 to event 'Type_of_Event+1'???
-							 Lenght of the adjacence list 
-							 of 'Type_of_Event+1', 
-							 because 1 or 7 are events  
-							 involving the increase of 
-							 the propagule or the consumer
-							 population, respectively
-						    */
+							                                           to event 'Type_of_Event+1'???
+							                                           Lenght of the adjacence list 
+							                                           of 'Type_of_Event+1', 
+							                                           because 1 or 7 are events  
+							                                           involving the increase of 
+							                                           the propagule or the consumer
+							                                           population, respectively
+						                                          */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
       k = Pa->Event_Adjacence_List[Type_of_Event+1][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
+							                                             to event 'Type_of_Event'???
+							                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
     }
     Pa->ratePatch    += Delta_Rate; 				
     Rate->Total_Rate += Delta_Rate; 				
+
+    /* Updating of the Binary Tree to Sample Discrete Distribution */
+    Leaf = Table->Leaves[y];  
+    sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
   }
   

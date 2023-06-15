@@ -18,6 +18,8 @@ int Advance_Current_Time( Parameter_Table * Table,
 
 int Choose_Village(double max_Probability, Community ** Pop, Parameter_Model * Par);
 
+int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Parameter_Model * Par);
+
 void Execute_One_Step(Community ** SP,
 		      Parameter_Table * Table,
 		      double max_Probability, 

@@ -47,6 +47,9 @@ typedef struct Parameter_Modelinfo
   
   double *** Metapop_Connectivity_Matrix;
 
+  treenode * Treeroot;                            /* Binary Sampling of a Discrete Distrubution */
+  treenode ** Leaves;                             /* Leaves contain rates of individual events  */
+
   /* Master Equation Numerical Integration */
   int TOTAL_No_of_RESOURCES;
   int TOTAL_No_of_CONSUMERS;

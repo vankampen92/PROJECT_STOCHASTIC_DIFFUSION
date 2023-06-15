@@ -1,4 +1,4 @@
-make all -f /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/${cwd} --print-data-base --no-builtin-variables --no-builtin-rules --question
+/usr/bin/make all -f /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/${cwd} --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/: Is a directory.  Stop.
 
 # GNU Make 4.3
@@ -8,7 +8,7 @@ make: *** /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/: Is a directory.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun 13 11:42:05 2023
+# Make data base, printed on Tue Jun 13 13:00:33 2023
 
 # Variables
 
@@ -35,7 +35,7 @@ VSCODE_CWD = /home/dalonso
 # environment
 LC_ADDRESS = es_ES.UTF-8
 # default
-MAKE_COMMAND := make
+MAKE_COMMAND := /usr/bin/make
 # environment
 QT_ACCESSIBILITY = 1
 # automatic
@@ -99,7 +99,7 @@ MAKEFILE_LIST := /home/dalonso/PROJECT_STOCHASTIC_DIFFUSION/
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 25880
+VSCODE_PID = 39678
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -213,7 +213,7 @@ MANAGERPID = 1991
 # environment
 LC_MEASUREMENT = es_ES.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 25832
+GIO_LAUNCHED_DESKTOP_FILE_PID = 39626
 # environment
 _ = /snap/code/130/usr/share/code/code
 # environment
@@ -286,7 +286,6 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Implicit Rules
 
- 
 # No implicit rules.
 
 # Files
@@ -323,7 +322,8 @@ all:
 
 # strcache performance: lookups = 9 / hit rate = 33%
 # hash-table stats:
+ 
 # Load=6/8192=0%, Rehash=0, Collisions=0/9=0%
-# Finished Make data base on Tue Jun 13 11:42:05 2023
+# Finished Make data base on Tue Jun 13 13:00:33 2023
 
  

@@ -19,8 +19,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -42,8 +42,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -79,8 +79,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -122,8 +122,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;	    
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
 
@@ -132,12 +132,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* A_R: Index for the mature population contributing to reproduction */
       
       for(i=0; i<Table->N_E; i++) {
-	Table->A_P[i]  = Table->R + 1 + i;
-	Table->RA_P[i] = Table->R + Table->N_E + 1 + i ; 
+	      Table->A_P[i]  = Table->R + 1 + i;
+	      Table->RA_P[i] = Table->R + Table->N_E + 1 + i ; 
       }
       for(i=0; i<Table->N_E; i++)
-	for(j=0; j<Table->N_E; j++) 
-	  Table->ARA_P[i][j] = i + j*Table->N_E + Table->R + 2*Table->N_E + 1; 
+	      for(j=0; j<Table->N_E; j++) 
+	        Table->ARA_P[i][j] = i + j*Table->N_E + Table->R + 2*Table->N_E + 1; 
 
       /* List of (Potentially searcheable) model parameters */
       n = 0;
@@ -341,12 +341,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
 
       if ( Table->No_of_RESOURCES > 0 ) {
-	Table->Index[n++] = 6; /* External Immigration Rate (0) */
-	Table->Index[n++] = 7; /* Death Rate (0) */
+	      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+	      Table->Index[n++] = 7; /* Death Rate (0) */
       }
       if ( Table->No_of_RESOURCES > 1 ) {
-	Table->Index[n++] = 8;  
-	Table->Index[n++] = 9; 
+	      Table->Index[n++] = 8;  
+	      Table->Index[n++] = 9; 
       }
       Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
       
@@ -377,8 +377,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
       
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -390,12 +390,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
       
       if ( Table->No_of_RESOURCES > 0 ) {
-	Table->Index[n++] = 6; /* External Immigration Rate (0) */
-	Table->Index[n++] = 7; /* Death Rate (0) */
+	      Table->Index[n++] = 6; /* External Immigration Rate (0) */
+	      Table->Index[n++] = 7; /* Death Rate (0) */
       }
       if ( Table->No_of_RESOURCES > 1 ) {
-	Table->Index[n++] = 8;  
-	Table->Index[n++] = 9; 
+	      Table->Index[n++] = 8;  
+	      Table->Index[n++] = 9; 
       }
       Table->Index[n++]   = 10; /* Resource Carrying Capacity */ 
       
@@ -410,10 +410,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++]   = 20; /* Consumer Movement Rate  */
 
       Table->Index[n++]   = 26; /* Energy Loss Rate (here, fraction of 
-				   conumed resourced that are NOT transformed 
-				   into new consumers 
-				*/
-      
+				                           conumed resourced that are NOT transformed 
+				                           into new consumers 
+				                        */ 
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
@@ -425,15 +424,14 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* Four total events: Diffusion + Immigration + Attack + Handling */
       Table->LOCAL_STATE_VARIABLES = 2; /* 1 A + 1 RA        */
                                         /* Only free consumers (A) and
-					   handling consumers  (RA) 
-					*/
-      
+					                                 handling consumers  (RA) 
+					                              */
       assert(Table->No_of_RESOURCES == 1);
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -464,13 +462,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
       Table->LOCAL_STATE_VARIABLES = 3; /* 1 R + 1 C + 1 D                 */
                                         /* D \equiv RC (handling consumer) */
-      
       assert(Table->No_of_RESOURCES == 1);
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class */
@@ -591,8 +588,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
 	    
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
@@ -629,9 +626,9 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       
       n = 0;
       for(i=0; i<Table->No_of_CELLS; i++)
-	for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
-	  n++;
-	    
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
       Table->R = 0;  Table->AC = 0; Table->A = 0; Table->RA = 1; Table->ARA = 2; 
@@ -814,8 +811,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;	    
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;	    
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
 
@@ -853,8 +850,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -865,8 +862,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -877,8 +874,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -889,8 +886,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -901,8 +898,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -913,8 +910,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -937,8 +934,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */
@@ -949,8 +946,8 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
        
       /* Conventions */
       P->K   = n-1;     /* Label last class            */

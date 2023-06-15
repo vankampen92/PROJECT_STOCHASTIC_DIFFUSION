@@ -78,6 +78,22 @@ typedef struct totalRateinfo
   double Stochastic_Time;
 }Stochastic_Rate;
 
+#ifndef BINARY_TREE_STRUCTURE 
+  #define BINARY_TREE_STRUCTURE
+  typedef struct treenode
+  {
+    /* In this implementation, only true tree leaves are ordered      */
+    /* The order of internal nodes is not initialized                 */
+    int    level; /* Tree Level (0: root; n: leaves)                  */
+    int    order; /* Order within the leaf level, from 0 to 2^n - 1   */
+    double value;
+
+    struct treenode * left;
+    struct treenode * right;
+    struct treenode * parent;
+  }treenode;
+#endif
+
 #include "MODEL_Trend_Control_STRUCT_DEF.h"
 
 #include "MODEL_Time_Control_STRUCT_DEF.h"

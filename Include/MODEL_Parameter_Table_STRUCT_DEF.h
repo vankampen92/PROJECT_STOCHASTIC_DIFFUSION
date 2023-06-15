@@ -143,8 +143,13 @@ typedef struct Parameter_Tableinfo
   int * Vector_Model_Int_Variables_Time_0;        /* Stochastic Dynamics */
 
   double *** Metapop_Connectivity_Matrix; 
-  Community ** Patch_System;                      /* Stochastic Dynamics */
+  Community ** Patch_System;
 
+  int No_of_LEAVES;                               /* Imporant assert:                           */
+  int No_of_TREE_LEVELS;                          /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
+  treenode * Treeroot;                            /* Binary Sampling of a Discrete Distrubution */
+  treenode ** Leaves;                             /* Leaves contain rates of individual events  */
+                        
   int TOTAL_No_of_EVENTS;                         /* Stochastic Dynamics */
   /* Number of common events that can occur to every Species: */
   int No_of_EVENTS;                               /* Stochastic Dynamics */

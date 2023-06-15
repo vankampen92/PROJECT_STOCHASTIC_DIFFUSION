@@ -57,8 +57,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
     kk = Table->OUTPUT_VARIABLE_INDEX[k];
     value = definition_OutPut_Variables(kk,
-					Table->Vector_Model_Variables,
-					Time->Time_Vector[0], Table);
+					                              Table->Vector_Model_Variables,
+					                              Time->Time_Vector[0], Table);
 #if defined CPGPLOT_REPRESENTATION
     P->CPG->y_Time[k][0] = value;
 #endif
@@ -69,6 +69,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
      the different configurational changes or events to occur
   */
   Temporal_Dynamics(PATCH, Table, Rate);
+  /* Initial setup of the binary tree with total rates of every patch at the leaves 
+  */
+  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);   
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
@@ -150,8 +153,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 
 #if defined CPGPLOT_REPRESENTATION    /* Plotting Time evolution */
       /* BEGIN: Grafical Representation per SUCCESSFUL time step */
-      C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S( Table->CPG->DEVICE_NUMBER,
-      						       1+i, j_Good, Table );
+      C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S(Table->CPG->DEVICE_NUMBER,
+      						                                    1+i, j_Good, Table );
       if( Table->No_of_CELLS > 4 ) 
       /* GRID REPRESENTATION */
 	Community_Scatter_Plot_Representation(Table, i, j);   
@@ -184,7 +187,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 					Parameter_Table * Table,
 					int * Bad_Times )
 {
-  /* This verstion of the same function does the same as before, this is, 
+  /* This version of the same function does the same as before, this is, 
      it performs one single stochastic realization (the i-th one). 
      No saving into files nor visually representing anything.  
   */
@@ -221,9 +224,8 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
     kk = Table->OUTPUT_VARIABLE_INDEX[k];
     value = definition_OutPut_Variables(kk,
-					Table->Vector_Model_Variables,
-					Time->Time_Vector[0], Table);
-
+					                              Table->Vector_Model_Variables,
+					                              Time->Time_Vector[0], Table);
     Time->Variable[i][k][0]           = value;
     Table->Vector_Output_Variables[k] = value;
   }
@@ -231,6 +233,9 @@ int Stochastic_Time_Dynamics_Numerical( int i,
      the different configurational changes or events to occur
   */
   Temporal_Dynamics(PATCH, Table, Rate);
+  /* Initial setup of the binary tree with total rates of every patch at the leaves 
+  */
+  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */

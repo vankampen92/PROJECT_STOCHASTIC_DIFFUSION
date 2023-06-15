@@ -5,6 +5,9 @@
 
 void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stochastic_Rate * Rate)
 {
+  /* This function calculates the rates of all possible events from scratch, across and within cells 
+     given certain system confituration as defined in My_Community 
+  */
   int i,j,k,n, Sp;
   Community * P;
   int MODEL_STATE_VARIABLES;
@@ -17,10 +20,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
   
-  P = My_Community[0]; /* P could be used as a pointer to the zero-th to be incremented 
-			  if necessary (not used like that in this implementation) 
-		       */
-  
+  P = My_Community[0];  /* P could be used as a pointer to the zero-th to be incremented 
+			                    if necessary (not used like that in this implementation) 
+		                    */
   No_of_CELLS             = pa->No_of_CELLS;
   MODEL_STATE_VARIABLES   = pa->MODEL_STATE_VARIABLES;
   Sp                      = pa->No_of_RESOURCES; 
@@ -95,7 +97,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
     
-    /* 9: Attack: Consumer Consumption of a Resource Item and dimmer formation */
+    /* 9: Attack: Consumer Consumption of a Resource Item and Dimmer Formation */
     P->rate[n]= Table->Alpha_C_0*(double)P->n[R]/K_R;      P->rToI[n]= P->rate[n]*(double)P->n[A];
     P->ratePatch += P->rToI[n];
     n++;
@@ -105,7 +107,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
-    /* RA relax back into A: RA ---> A */
+    /* 11: Production of new Consumer Individuals */
     P->rate[n] = Table->Beta_C;                            P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
     P->ratePatch += P->rToI[n];
     n++;
@@ -115,6 +117,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
+    Table->Leaves[i]->value = P->ratePatch;
     assert( n == Table->TOTAL_No_of_EVENTS );
     
     Rate->Total_Rate += P->ratePatch;

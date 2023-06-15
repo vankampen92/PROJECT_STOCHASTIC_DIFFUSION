@@ -5,6 +5,9 @@
 
 void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stochastic_Rate * Rate)
 {
+  /* This function calculates the rates of all possible events from scratch, across and within cells 
+     given certain system confituration as defined in My_Community 
+  */
   int i,j,k,n, Sp;
   Community * P;
   int MODEL_STATE_VARIABLES;
@@ -66,7 +69,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
       P->ratePatch += P->rToI[n];
       n++;
     }
-    /*     n: Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
+      /*     n: Consumer Out-Migration (A --> A-1) and some other patch gains one */ 
       OutMigration = P->Total_Per_Capita_Out_Migration_Rate[0];
       assert( 4 * Table->Mu_C ==  OutMigration );
       assert( OutMigration == 0.0 );   /* No movement between patches in a one-patch system!!! */

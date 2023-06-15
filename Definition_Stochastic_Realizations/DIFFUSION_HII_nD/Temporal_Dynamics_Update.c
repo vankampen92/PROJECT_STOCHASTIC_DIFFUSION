@@ -54,8 +54,8 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       Pa    = My_Community[x];
 
       // Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); is not necessary here
-      // because no event induces a change in the total rate that depends itself on 
-      // the state of the system
+      // because no event induces a change in any other event rate that in turn depends   
+      // itself on the state of the system
       
       m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
 							                                           to event 'Type_of_Event'???
@@ -74,9 +74,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       Pa->ratePatch    += Delta_Rate; 				
       Rate->Total_Rate += Delta_Rate; 				
       Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
+
+      
     }
     else {
-      printf(" Error in Temporal Dynamics Update!!!\n");
+      printf(" Error in Temporal Dynamics Update ()!!!\n");
       printf(" Type of Event occurring is too large.\n");
       printf(" It can only be labeled from 0 or %d\n", m-1);
       printf(" but events is seemingly labeled as %d\n", Type_of_Event); 

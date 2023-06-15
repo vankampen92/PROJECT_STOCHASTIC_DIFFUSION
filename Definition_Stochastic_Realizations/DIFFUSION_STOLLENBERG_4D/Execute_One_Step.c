@@ -5,7 +5,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MODEL.h>
 
-extern gsl_rng * r;   /* Global generator (define at the main program level */
+extern gsl_rng * r;   /* Global generator variable defined at the main program level */
 #define RANDOM gsl_rng_uniform_pos(r)
 
 void assert_Total_Population (Parameter_Table * Table, double * Y);
@@ -14,9 +14,9 @@ void Print_Discrete_Probability_Distribution(Parameter_Table * Table, int Event,
 #define ASSERTION_TRUE
 
 void Execute_One_Step(Community ** SP,
-		      Parameter_Table * Table,
-		      double max_Probability,
-		      int * Event, int * x_Patch)
+		                  Parameter_Table * Table,
+		                  double max_Probability,
+		                  int * Event, int * x_Patch)
 {
   int x, y, n_Event, n, n_Event_Sp, Sp, j;
   Community * Patch;
@@ -31,8 +31,9 @@ void Execute_One_Step(Community ** SP,
   /* Hierarchic procedure to find the even to occur... */
   /* The event occurs in one of the local populations  */
   if(P->No_of_CELLS == 1) x = y = 0;
-  else                    x = y = Choose_Village(max_Probability, SP, P);
-
+  else                    x = y = Choose_Village_Binary_Tree(max_Probability, SP, P);
+                      //  x = y = Choose_Village(max_Probability, SP, P);
+                      
   /* x and y will end up differing only in case there is movemnt event!!! */
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
@@ -170,7 +171,7 @@ void Execute_One_Step(Community ** SP,
 }
 
 int Some_Other_Patch_Population_Increase(int x, int Sp,
-					 Parameter_Table * Table)
+					                               Parameter_Table * Table)
 {
   /* Input:
 
