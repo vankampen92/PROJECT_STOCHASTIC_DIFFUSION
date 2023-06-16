@@ -108,7 +108,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     n++;
 
     /* 11: Production of new Consumer Individuals */
-    P->rate[n] = Table->Beta_C;                            P->rToI[n]= P->rate[n]*(double)P->n[RA]; 
+    P->rate[n] = Table->Beta_C;                            P->rToI[n] = P->rate[n]*(double)P->n[RA]; 
     P->ratePatch += P->rToI[n];
     n++;
 

@@ -158,26 +158,34 @@ treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n)
     /* Create 2^{n-1} parents, recursively */
     double S; 
     int i, M; 
+    treenode * root; 
 
-    M = power_int(2, n-1);
-    treenode ** Parents = (treenode **)malloc(M * sizeof(treenode *));
-    for(i=0; i<M; i++) {
-        printf(" Parent: %d\n", i);
-        S = Leaves[2*i]->value + Leaves[2*i+1]->value;         
-        Parents[i] = createtreenode(S, NULL, n-1);
-        Parents[i]->left   = Leaves[2*i];
-        Parents[i]->right  = Leaves[2*i+1];
-        Leaves[2*i]->parent   = Parents[i]; 
-        Leaves[2*i+1]->parent = Parents[i];
+    if( n >= 1) {
+        M = power_int(2, n-1);
+        treenode ** Parents = (treenode **)malloc(M * sizeof(treenode *));
+        for(i=0; i<M; i++) {
+            // printf(" Parent: %d\n", i);
+        
+            S = Leaves[2*i]->value + Leaves[2*i+1]->value;         
+            Parents[i] = createtreenode(S, NULL, n-1);
+            Parents[i]->left   = Leaves[2*i];
+            Parents[i]->right  = Leaves[2*i+1];
+            Leaves[2*i]->parent   = Parents[i]; 
+            Leaves[2*i+1]->parent = Parents[i];
 
-        printtreenode(Parents[i]);
+        // printtreenode(Parents[i]);
+        } 
+        root = Parents[0]; 
+
+        if( n > 1 ) 
+            root = createBinaryTree_DiscreteDistribution(Parents, n-1);
+        else  
+            return root;
+    }
+    else {
+        root = Leaves[0];
+        return root; 
     } 
-    treenode * root = Parents[0]; 
-
-    if( n > 1 ) 
-        root = createBinaryTree_DiscreteDistribution(Parents, n-1);
-    else  
-        return root;  
 }
 
 void sum_Delta_upto_Root(treenode * root, treenode * Leaf, double Delta)
@@ -207,3 +215,4 @@ int choose_Individual_Event(treenode * root, double x)
         choose_Individual_Event(node->right, x);
     }   
 }
+

@@ -72,8 +72,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    * (also stored in Parameter Model).    
    */
   Table->Patch_System = PATCH;
-  Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */
-  P->Treeroot = Table->Treeroot; 
+  Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
   P->Leaves   = Table->Leaves; 
   /* END ----------------------------------------------------------------------------
   */

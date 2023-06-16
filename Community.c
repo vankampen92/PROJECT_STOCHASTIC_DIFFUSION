@@ -433,22 +433,24 @@ void Community_Binary_Tree_Initialization (Parameter_Table * Table)
   int i, No_of_CELLS, No_of_LEAVES, No_of_TREE_LEVELS;
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
-  No_of_CELLS              = Table->No_of_CELLS; 
-
+  No_of_CELLS       = Table->No_of_CELLS; 
+  No_of_TREE_LEVELS = 0;   /* Only the root!!! */
+  No_of_LEAVES      = 1;   /* The root!!!      */
+  
+  i = 0; 
   if (No_of_CELLS > 1) {
-    i = 0; 
     while( No_of_CELLS < power_int(2, i) || No_of_CELLS > power_int(2, i+1)) {
-      i++; 
-      No_of_LEAVES      = power_int(2, i);
-      No_of_TREE_LEVELS = i; 
+      i++;  
     }
-    Table->No_of_LEAVES      = No_of_LEAVES;
-    Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; 
+    No_of_LEAVES      = power_int(2, i+1);
+    No_of_TREE_LEVELS = i+1;
+  }
+  Table->No_of_LEAVES      = No_of_LEAVES;
+  Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; 
 
-    Table->Leaves = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
-    for(i=0; i<No_of_LEAVES; i++){ 
+  Table->Leaves = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
+  for(i=0; i<No_of_LEAVES; i++){ 
       Table->Leaves[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
       Table->Leaves[i]->order = i;
-    }
   }
 }

@@ -71,7 +71,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   Temporal_Dynamics(PATCH, Table, Rate);
   /* Initial setup of the binary tree with total rates of every patch at the leaves 
   */
-  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);   
+  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
+  P->Treeroot     = Table->Treeroot; 
+  printf(" Binary Tree to Sample Discrte Distribution has been successcully created [Realization: %d]\n", i ); 
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
@@ -236,6 +238,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   /* Initial setup of the binary tree with total rates of every patch at the leaves 
   */
   Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
+  P->Treeroot = Table->Treeroot;
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
