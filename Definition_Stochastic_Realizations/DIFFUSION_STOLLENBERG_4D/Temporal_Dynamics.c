@@ -117,7 +117,10 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     n++;
 
+    #if defined BINARY_TREE_OPTIMIZATION
     Table->Leaves[i]->value = P->ratePatch;
+    #endif
+
     assert( n == Table->TOTAL_No_of_EVENTS );
     
     Rate->Total_Rate += P->ratePatch;

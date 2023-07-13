@@ -31,9 +31,13 @@ void Execute_One_Step(Community ** SP,
   /* Hierarchic procedure to find the even to occur... */
   /* The event occurs in one of the local populations  */
   if(P->No_of_CELLS == 1) x = y = 0;
-  else                    x = y = Choose_Village_Binary_Tree(max_Probability, SP, P);
-                      //  x = y = Choose_Village(max_Probability, SP, P);
-                      
+  else {
+    #if defined BINARY_TREE_OPTIMIZATION
+      x = y = Choose_Village_Binary_Tree(max_Probability, SP, P);
+    #else
+      x = y = Choose_Village(max_Probability, SP, P);
+    #endif
+  }
   /* x and y will end up differing only in case there is movemnt event!!! */
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */

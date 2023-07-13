@@ -155,32 +155,47 @@ int power_int(int a, int n)
 
 treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n)
 {
-    /* Create 2^{n-1} parents, recursively */
+    /* Create 2^{n-1} treenode parents from leaves, only if necessary, but 
+       always sum leaf level recursively to set up the partial sums that will 
+       maintain the discrite distribution ready to be sampled. 
+    */
     double S; 
     int i, M; 
     treenode * root; 
+    treenode ** Parents;
 
     if( n >= 1) {
         M = power_int(2, n-1);
-        treenode ** Parents = (treenode **)malloc(M * sizeof(treenode *));
+
+        Parents = (treenode **)malloc(M * sizeof(treenode *));
+        
         for(i=0; i<M; i++) {
             // printf(" Parent: %d\n", i);
         
-            S = Leaves[2*i]->value + Leaves[2*i+1]->value;         
-            Parents[i] = createtreenode(S, NULL, n-1);
-            Parents[i]->left   = Leaves[2*i];
-            Parents[i]->right  = Leaves[2*i+1];
-            Leaves[2*i]->parent   = Parents[i]; 
-            Leaves[2*i+1]->parent = Parents[i];
-
-        // printtreenode(Parents[i]);
+            S = Leaves[2*i]->value + Leaves[2*i+1]->value;  
+        
+            if(Leaves[2*i]->parent == NULL) {       
+                Parents[i] = createtreenode(S, NULL, n-1);
+                Parents[i]->left   = Leaves[2*i];
+                Parents[i]->right  = Leaves[2*i+1];
+                Leaves[2*i]->parent   = Parents[i]; 
+                Leaves[2*i+1]->parent = Parents[i];
+            }
+            else {
+                Parents[i] = Leaves[2*i]->parent;
+                Parents[i]->value = S; 
+            } 
+            // printtreenode(Parents[i]);
         } 
+
         root = Parents[0]; 
 
-        if( n > 1 ) 
+        if( n > 1 ) {
             root = createBinaryTree_DiscreteDistribution(Parents, n-1);
-        else  
+        }
+        else {
             return root;
+        }
     }
     else {
         root = Leaves[0];

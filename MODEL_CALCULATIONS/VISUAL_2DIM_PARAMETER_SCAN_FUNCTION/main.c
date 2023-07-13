@@ -74,7 +74,7 @@ Index  Argument   Parameter Definition
 24:   -H17 1.0    Consumer growth rate (Beta_C)
 29:   -H20 5.0    Resource Establishment Rate (Eta_R, only DIFFUSION_STOLLENBERG_4D)
 
-Index is the number key in full list of model parameters (see assigb functions). 
+Index is the number key in full list of model parameters (see assig_ functions). 
 They are main function input arguments, for instnace:  
              -I0 16 Consumer Attack Rate 
              -I1 17 Consumer Handling Time
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 							       sizeof(double) );
   /* B E G I N : Main Function Call -------------------------------------------------*/  
   double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
-  /* int Status =  generic_Function_Parameter_2Dim_Scan(&Table,                            */
+  /* int Status =  generic_Function_Parameter_2Dim_Scan(&Table,                      */
   /* 						     No_of_POINTS_1, Input_Parameter_1,    */
   /* 						     No_of_POINTS_2, Input_Parameter_2,    */
   /* 						     Function_to_Type_of_Stability,        */

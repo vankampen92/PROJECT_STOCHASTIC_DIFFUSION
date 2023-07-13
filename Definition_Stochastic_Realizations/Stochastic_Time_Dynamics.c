@@ -69,14 +69,18 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
      the different configurational changes or events to occur
   */
   Temporal_Dynamics(PATCH, Table, Rate);
+
+  #if defined BINARY_TREE_OPTIMIZATION
   /* Initial setup of the binary tree with total rates of every patch at the leaves 
   */
   Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
   P->Treeroot     = Table->Treeroot; 
-  printf(" Binary Tree to Sample Discrte Distribution has been successcully created [Realization: %d]\n", i ); 
+  printf(" Binary Tree (from Leaves) to Sample Discrte Distribution has been successcully created [Realization: %d]\n", 
+           i ); 
+  #endif         
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
-  /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
+  /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;  */
   int FROZEN_SYSTEM               = 0;
   (*Bad_Times)                    = 0; j_Good = 0;
   for( j = 1; j < TIMES; j++ ) {
@@ -179,6 +183,10 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     Press_Key();
 #endif
   }/* go further to the next time           */
+
+#if defined BINARY_TREE_OPTIMIZATION
+  // deleteBinaryTree_DiscreteDistribution(Table->Treeroot); // Delete the Tree from root but not Leaves!!! 
+#endif
 
   fclose(FP);
 

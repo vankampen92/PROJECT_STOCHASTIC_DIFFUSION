@@ -10,7 +10,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
 void Temporal_Dynamics_Update( Community ** My_Community,
 			                         Parameter_Table * Table,
 			                         Stochastic_Rate * Rate,
-			                         int Type_of_Event, int * Patch)
+			                         int Type_of_Event, int * Patch )
 {
   /* This function calculates the stochastic rates after the execution of a stochastic event
      in terms of the old ones, with no recalculation. This is a way to optimize the algorithm.
@@ -26,7 +26,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
      . Type_of_Event is a label to the event occurring in a Patch 
      . Patch        is an array containing the two patches involved in a movement event. 
                     Patch[0] is the patch sending the individual
-		    Patch[1] is the patch receiving the individual. 
+		                Patch[1] is the patch receiving the individual. 
 
      Output arguments: 
      . Rate         Stochastic Rate is updated from previous value (without recalculating)
@@ -70,9 +70,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
       Pa->ratePatch    += Delta_Rate; 				
       Rate->Total_Rate += Delta_Rate;
       
-      /* Updating of the Binary Tree to Sample Discrete Distribution */  
-      Leaf = Table->Leaves[x];
-      sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+      #if defined BINARY_TREE_OPTIMIZATION
+        /* Updating of the Binary Tree to Sample Discrete Distribution */
+        Leaf = Table->Leaves[x];
+        sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+      #endif
       
       Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
     }
@@ -111,10 +113,12 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     }
     Pa->ratePatch    += Delta_Rate; 				
     Rate->Total_Rate += Delta_Rate; 				
-     
-    /* Updating of the Binary Tree to Sample Discrete Distribution */  
-    Leaf = Table->Leaves[x];
-    sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);  
+    
+    #if defined BINARY_TREE_OPTIMIZATION 
+      /* Updating of the Binary Tree to Sample Discrete Distribution */  
+      Leaf = Table->Leaves[x];
+      sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);  
+    #endif
 
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch ); 
 
@@ -142,9 +146,11 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     Pa->ratePatch    += Delta_Rate; 				
     Rate->Total_Rate += Delta_Rate; 				
 
-    /* Updating of the Binary Tree to Sample Discrete Distribution */
-    Leaf = Table->Leaves[y];  
-    sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+    #if defined BINARY_TREE_OPTIMIZATION
+      /* Updating of the Binary Tree to Sample Discrete Distribution */
+      Leaf = Table->Leaves[y];  
+      sum_Delta_upto_Root(Table->Treeroot, Leaf, Delta_Rate);
+    #endif
 
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );
   }

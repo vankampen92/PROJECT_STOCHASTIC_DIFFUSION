@@ -67,8 +67,10 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    * the Patch System, the Time Control structure, and the CPG structure to plot   
    */
   Table->Patch_System = PATCH;
+  #if defined BINARY_TREE_OPTIMIZATION
   Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
-  P->Leaves   = Table->Leaves; 
+  P->Leaves   = Table->Leaves;
+  #endif  
   /* END ----------------------------------------------------------------------------
    */
   
@@ -143,7 +145,10 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
+  #if defined BINARY_TREE_OPTIMIZATION
   deleteTree(Table->Treeroot);
+  free(Table->Leaves);
+  #endif
   
   return(0);
 }

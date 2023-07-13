@@ -917,7 +917,7 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     F->Function = GSL_Function_to_Minimize_Binomial_Free_Consumers;
     break;
 
-  case **: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
+  case 16: /* DIFFUSION_HII_nD * * * * * * * * * * * * * * * * * * * * * * */
     F->Function = GSL_Function_to_Minimize_Multinomial_Free_Consumers;
     break;
     

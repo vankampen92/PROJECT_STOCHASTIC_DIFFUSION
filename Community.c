@@ -225,7 +225,6 @@ void Network_Structure_Inititialization (Community ** PATCH,
 
   switch ( TYPE_of_NETWORK )
     {
-
     case 0: /* Fully Connected Graph */
 
       no        = PATCH[0]->No_of_CELLS;

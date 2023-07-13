@@ -149,7 +149,9 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
+  
   deleteTree(Table->Treeroot);
+  free(Table->Leaves);
   
   return(0);
 }
