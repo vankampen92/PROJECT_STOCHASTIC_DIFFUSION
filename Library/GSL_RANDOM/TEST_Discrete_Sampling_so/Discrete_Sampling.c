@@ -1,23 +1,35 @@
-#include "GSL_stat.h"
+#include <stdlib.h>
+#include <math.h>
+#include "Discrete_Sampling.h"
 
 /* Discrete Sampling provide a set of functions required in 
    a lot of stochastic models, one step stochastic simulations and 
    so on. 
-   
-   These functions are a GSL alternative to the functions in
-   stat_Discrete_Sampling.c. Obviously, all functions are 
-   overloaded and the compilation of both set of functions
-   at the same time is forbidden. It would produce an ERROR. 
-
-   Total independence from numerical recipes !!! 
 */
 
-extern gsl_rng * r; /* Global generator defined in main.c */
+// extern gsl_rng * r; /* Global generator defined in main.c */
+// #define RANDOM gsl_rng_uniform_pos(r)
 
-#define RANDOM gsl_rng_uniform_pos(r)
+/* The  drand48() returns nonnegative double-precision floating-point values 
+   uniformly distributed over the interval [0.0, 1.0)
+*/
+#define RANDOM drand48() 
 
 int Discrete_Sampling(double *a, int NoEvents)
 {
+  /* Input Arguments, 
+
+     . a[], a vector of probability rates (doubles) not 
+      necessariliy normalized.
+     . NoEvents is the length of the a[] array.
+
+     Ouput: 
+
+     This function returns the index of the "event-to-occur" and considers 
+     all events, but those with rate 0.0 have zero probability to
+     occur.
+  */
+
   int j, n, n_0, kount;
   double * R_A_T_E= (double *)calloc( NoEvents, sizeof(double) );
   int * Index     = (int *)calloc( NoEvents, sizeof(int) );
@@ -52,14 +64,22 @@ int Discrete_Sampling(double *a, int NoEvents)
 
 int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents)
 {
-  /* . rate is the normalization constant.
+  /* Imput Arguments: 
+
+     . rate is the normalization constant.
+     . NoEvents is the length of the R_A_T_E[] array.
      . R_A_T_E[] must store the non-normalized cummulative probability distribution,
-      where rate is the normalizing factor. If rate=1., the algorithm could be
-      improved but actually works quite well too.
-     . If R_A_T_E[] stores the discret probabililty distribution function, 
-      rather than the cummulative probability distribution, this algorithm 
-      does not work at all. In this case, the Discret_Sampling() algorith must be used 
-      first to create the cummulative probability distribution.
+      where rate is the normalizing factor. If rate=1.0, because the discrete probability
+      distribution has previously normalized, the algorithm could be improved but 
+      actually works quite well too.
+     . If R_A_T_E[] stores the discret probabililty distribution function, rather than 
+      the cummulative probability distribution, this algorithm does not work at all. 
+      In this case, the Discret_Sampling() algorith must be used first to create the 
+      cummulative probability distribution.
+
+     Output: 
+
+     . An integer, from 1 to NoEvents. 
   */
   int j1,j2,jm, kount;
   int stat_Bool;
@@ -96,16 +116,16 @@ int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents
       jm = (j1 + j2)/2; /* Integer division by 2 */
       x_m = R_A_T_E[jm]/rate;
       if(j1 == j2-1)  
-	stat_Bool = 1;       /* Brackening has succedeed  p(j1)< xr <= p(j2), p(i) = R_A_T_E[i]/rate */
+	      stat_Bool = 1;  /* Brackening has succedeed  p(j1)< xr <= p(j2), p(i) = R_A_T_E[i]/rate */
       else{
-	if((xr > x_m) && (xr <= x_2)){
-	  x_1 = x_m;
-	  j1  = jm;
-	}
-	else{
-	  x_2 = x_m;
-	  j2  = jm;
-	}
+	      if((xr > x_m) && (xr <= x_2)){
+	        x_1 = x_m;
+	        j1  = jm;
+	      }
+	      else{
+	        x_2 = x_m;
+	        j2  = jm;
+	      }
       }
     }
   }
@@ -136,67 +156,4 @@ int Discrete_Sampling_Cummulative(double rate, double *R_A_T_E, int NoEvents)
     }
   }
   return(0);
-}
-
-int Discrete_Sampling_Rejection_Method(double p_max, double * a, int NoEvents)
-{
-  int stat_Bool;
-  int xr;
-  double R_A_T_E;
-
-  stat_Bool = 0;
-  while(stat_Bool == 0){
-
-    xr = 1 + gsl_rng_uniform_int(r, NoEvents);
-    // xr = (int)random_int_lrand48(1, NoEvents);
-    R_A_T_E = a[xr-1]/p_max;
-    if(RANDOM < R_A_T_E)  stat_Bool = 1;
-  }  
-  
-  return xr;
-}
-
-int Discrete_Sampling_Old(double * a, int NoEvents)
-{
-  int j, kount;
-  double xr, rate;
-  double * R_A_T_E;
-  
-  xr = RANDOM;
-  R_A_T_E = (double *)calloc(NoEvents+1, sizeof(double) );
-  R_A_T_E[0] = 0.; 
-  for (j=0; j<NoEvents; j++)
-    R_A_T_E[j+1]= R_A_T_E[j] + a[j];
-  rate = R_A_T_E[NoEvents];
-  for (j=0; j<NoEvents; j++) 
-    R_A_T_E[j+1]/=rate; /* Normalizing rates...*/ 
-  kount = 0;
-  for (j=0; j<NoEvents; j++)               /* Deciding elemetary event to occur */
-    if((xr>R_A_T_E[j]) && (xr<=R_A_T_E[j+1])) kount = j+1;
-  
-  free (R_A_T_E);
-  return kount;
-}
-
-int Discrete_Sampling_BackUp(double *a, int NoEvents)
-{
-  int j, kount;
-  double * R_A_T_E= (double *)calloc( NoEvents, sizeof(double) );
-  /* This is exactly the same function as the function:
-    
-                 int Discrete_Sampling(...)
-     
-     but without optimizing, this is, considering all events 
-     even those with rate 0.0 (which have zero probability to
-     occur)
-  */
-  
-  R_A_T_E[0] = a[0];
-  for (j=1; j<NoEvents; j++)
-    R_A_T_E[j]= R_A_T_E[j-1] + a[j];
-  
-  kount = Discret_Sampling_High_Performance(R_A_T_E[NoEvents-1], R_A_T_E, NoEvents);
- 
-  free(R_A_T_E);
-  return kount;
 }
