@@ -72,8 +72,12 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    * (also stored in Parameter Model).    
    */
   Table->Patch_System = PATCH;
-  Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
-  P->Leaves   = Table->Leaves; 
+  
+  #if defined BINARY_TREE_OPTIMIZATION
+    Community_Binary_Tree_Allocation (Table);   /* See Community.c !!!  */
+    /* Allocation of the Binary Tree in Memmory (with zero values) !!! */
+    P->Leaves   = Table->Leaves; 
+  #endif
   /* END ----------------------------------------------------------------------------
   */
   
@@ -149,10 +153,11 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
-  
-  deleteTree(Table->Treeroot);
-  free(Table->Leaves);
-  
+
+  #if defined BINARY_TREE_OPTIMIZATION
+    Community_Binary_Tree_Free (Table);   /* See Community.c !!!  */
+  #endif
+    
   return(0);
 }
 

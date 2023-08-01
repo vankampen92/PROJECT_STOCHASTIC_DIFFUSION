@@ -18,11 +18,11 @@ EXTRA_LIBRARY_PATH+=-L${PWD}####################
 # LD_LIBRARY_PATH=${PWD}:${LD_LIBRARY_PATH}
 # export LD_LIBRARY_PATH
 
-OBJ = main.o Discrete_Sampling.o 
+OBJ = main.o # Discrete_Sampling.o 
 LIBRARY_OBJECTS = Discrete_Sampling.o
               
-LDFLAGS+=-lm # ${EXTRA_LIBRARY_PATH} -lDA_Discrete_Sampling 
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -g
+LDFLAGS+=-lm ${EXTRA_LIBRARY_PATH} -lDA_Discrete_Sampling 
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -g 
 
 CC  = gcc
 

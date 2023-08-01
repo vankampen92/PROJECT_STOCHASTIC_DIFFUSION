@@ -68,8 +68,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    */
   Table->Patch_System = PATCH;
   #if defined BINARY_TREE_OPTIMIZATION
-  Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
-  P->Leaves   = Table->Leaves;
+   Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
+   P->Leaves   = Table->Leaves;
   #endif  
   /* END ----------------------------------------------------------------------------
    */
@@ -145,9 +145,9 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
+  
   #if defined BINARY_TREE_OPTIMIZATION
-  deleteTree(Table->Treeroot);
-  free(Table->Leaves);
+    Community_Binary_Tree_Free (Table);   /* See Community.c !!!  */
   #endif
   
   return(0);

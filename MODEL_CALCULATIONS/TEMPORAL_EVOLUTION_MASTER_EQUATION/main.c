@@ -204,30 +204,20 @@ int main(int argc, char **argv)
 
   // Some models does no have a stochastic master equation
   // counter-part implemented yet! 
-  // At the moment, only DIFFUSION_BD_2D and DIFFUSION_HII_1D do
-#ifdef DIFFUSION_BD_2D
+  // At the moment, only DIFFUSION_BD_2D, DIFFUSION_HII_1D, 
+  // and DIFFUSION_HII_nD do
+
   /* Stochastic Master Equation Time Evolution */
   Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
 						                                          parameter set as defined through
 						                                          either the command line or the 
 						                                          default files is used!!! 
 						                                       */
+#ifdef DIFFUSION_BD_2D
   M_O_D_E_L___M_E( &Table );
 #elif defined DIFFUSION_HII_1D  
-  /* Stochastic Master Equation Time Evolution */
-  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
-						                                          parameter set as defined through
-						                                          either the command line or the 
-						                                          default files is used!!! 
-						                                       */
   M_O_D_E_L___M_E( &Table );
 #elif defined DIFFUSION_HII_nD  
-  /* Stochastic Master Equation Time Evolution */
-  Parameter_Values_into_Parameter_Table(&Table);   /* This is to make sure the same
-						                                          parameter set as defined through
-						                                          either the command line or the 
-						                                          default files is used!!! 
-						                                       */
   M_O_D_E_L___M_E( &Table ); 
 #endif
   

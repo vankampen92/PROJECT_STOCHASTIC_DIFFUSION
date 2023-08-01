@@ -384,8 +384,8 @@ void Writing_Adjacency_List_VonNeumann(Community ** PATCH)
       i_y = i%N_X;
       printf("%s %d %s (%d, %d) %s", "Local Population No", i, "located at node", i_x, i_y, "is conntected to [");
       for(j=0; j<PATCH[i]->No_NEI; j++) {
-	j_x = PATCH[i]->Patch_Connections[j]/N_X;
-	j_y = PATCH[i]->Patch_Connections[j]%N_X;
+	      j_x = PATCH[i]->Patch_Connections[j]/N_X;
+	      j_y = PATCH[i]->Patch_Connections[j]%N_X;
         printf("  [patch %d located at (%d, %d)]  ",
 	       PATCH[i]->Patch_Connections[j], j_x, j_y);
       }
@@ -429,7 +429,22 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 
 void Community_Binary_Tree_Initialization (Parameter_Table * Table)
 {
-  int i, No_of_CELLS, No_of_LEAVES, No_of_TREE_LEVELS;
+  /* This function sets up the partial sums of a previously allocated
+     binary tree that will maintain the discrete probability distribution 
+     always ready to be sampled. 
+  */
+
+  treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
+  treenode ** Leaves  = Table->Leaves; /* from level 0 (root) to level n (leaves) */
+
+  int n = Table->No_of_TREE_LEVELS; 
+
+  Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
+}
+
+void Community_Binary_Tree_Allocation (Parameter_Table * Table)
+{
+  int i, k, No_of_CELLS, No_of_LEAVES, No_of_TREE_LEVELS, No;
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
   No_of_CELLS       = Table->No_of_CELLS; 
@@ -451,5 +466,31 @@ void Community_Binary_Tree_Initialization (Parameter_Table * Table)
   for(i=0; i<No_of_LEAVES; i++){ 
       Table->Leaves[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
       Table->Leaves[i]->order = i;
+  } 
+
+  Table->Parent = (treenode ***)malloc(No_of_TREE_LEVELS * sizeof(treenode **));
+  for(k=0; k<No_of_TREE_LEVELS; k++){ 
+    No      = power_int(2, k);  /* Number of Leaves at level k */
+    Table->Parent[k] = (treenode **)malloc(No * sizeof(treenode *));
+    for(i=0; i<No; i++){ 
+      Table->Parent[k][i] = createtreenode(0.0, NULL, k);
+      Table->Parent[k][i]->order = i;
+    }
   }
+
+  Table->Treeroot = Binary_Tree_Setting_Structure(Table->Parent, 
+                                                  Table->Leaves, No_of_TREE_LEVELS);
+}
+
+void Community_Binary_Tree_Free (Parameter_Table * Table) 
+{
+  int k; 
+
+  deleteTree(Table->Treeroot);
+  free(Table->Leaves);  
+
+  for(k=0; k<Table->No_of_TREE_LEVELS; k++){ 
+    free(Table->Parent[k]);
+  }
+  free(Table->Parent); 
 }

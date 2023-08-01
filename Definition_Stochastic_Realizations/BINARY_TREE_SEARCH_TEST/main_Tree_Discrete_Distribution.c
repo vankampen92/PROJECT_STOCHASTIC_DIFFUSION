@@ -32,7 +32,7 @@ int main()
     printinorder(n1);
     printf("\n");
 
-    deleteTree(n1); // n1 is the root of all evil. 
+    deleteTree(n1); // n1 is the tree root (of all evil). 
 
     /* Second: Creating a binary tree to sample and
                update a discrete dirtribution:

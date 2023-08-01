@@ -149,6 +149,7 @@ typedef struct Parameter_Tableinfo
   int No_of_TREE_LEVELS;                          /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
   treenode * Treeroot;                            /* Binary Sampling of a Discrete Distrubution */
   treenode ** Leaves;                             /* Leaves contain rates of individual events  */
+  treenode *** Parent;                            /* Internal nodes at each tree level */
                         
   int TOTAL_No_of_EVENTS;                         /* Stochastic Dynamics */
   /* Number of common events that can occur to every Species: */

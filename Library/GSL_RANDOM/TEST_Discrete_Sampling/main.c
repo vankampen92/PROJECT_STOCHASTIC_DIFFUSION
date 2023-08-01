@@ -8,6 +8,7 @@ int main()
 {
     int i; 
     int M; 
+    int Event; 
 
     M  = 100000; /* M plays the role of the number of events. */
 
@@ -22,7 +23,7 @@ int main()
         printf( "Rate[%d] = %g\n", i, Rates[i] );
     }    
 
-    int Event = Discrete_Sampling(Rates, M);
+    Discrete_Sampling(Rates, &M, &Event);
 
     printf(" The winner event is... the %d-th!!!\n", Event);
     printf(" (from 1 to %d)\n", M);

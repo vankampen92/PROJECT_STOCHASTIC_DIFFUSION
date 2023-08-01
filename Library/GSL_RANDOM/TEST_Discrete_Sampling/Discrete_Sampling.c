@@ -15,21 +15,23 @@
 */
 #define RANDOM drand48() 
 
-int Discrete_Sampling(double *a, int NoEvents)
+void Discrete_Sampling(double * a, int * N, int * Event)
 {
   /* Input Arguments, 
 
      . a[], a vector of probability rates (doubles) not 
       necessariliy normalized.
-     . NoEvents is the length of the a[] array.
+     . * N stores the length of the a[] array.
 
      Ouput: 
+
+     . * Event, the index of the event to occur. 
 
      This function returns the index of the "event-to-occur" and considers 
      all events, but those with rate 0.0 have zero probability to
      occur.
   */
-
+  int NoEvents = * N; 
   int j, n, n_0, kount;
   double * R_A_T_E= (double *)calloc( NoEvents, sizeof(double) );
   int * Index     = (int *)calloc( NoEvents, sizeof(int) );
@@ -59,7 +61,9 @@ int Discrete_Sampling(double *a, int NoEvents)
   free(R_A_T_E);
   free(Index);
   
-  return kount;
+  // return kount;
+
+  * Event = kount; 
 }
 
 int Discret_Sampling_High_Performance(double rate, double *R_A_T_E, int NoEvents)

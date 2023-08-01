@@ -71,12 +71,12 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   Temporal_Dynamics(PATCH, Table, Rate);
 
   #if defined BINARY_TREE_OPTIMIZATION
-  /* Initial setup of the binary tree with total rates of every patch at the leaves 
-  */
-  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
-  P->Treeroot     = Table->Treeroot; 
-  printf(" Binary Tree (from Leaves) to Sample Discrte Distribution has been successcully created [Realization: %d]\n", 
-           i ); 
+    /* Initiate values of the binary tree with total rates of every patch at the leaves 
+     */
+    Community_Binary_Tree_Initialization (Table);
+    P->Treeroot = Table->Treeroot;
+    printf(" Binary Tree (from Leaves) to Sample Discrte Distribution has been successcully\n");
+    printf(" initiated [Realization: %d]\n", i ); 
   #endif         
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
@@ -185,7 +185,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   }/* go further to the next time           */
 
 #if defined BINARY_TREE_OPTIMIZATION
-  // deleteBinaryTree_DiscreteDistribution(Table->Treeroot); // Delete the Tree from root but not Leaves!!! 
+  // deleteBinaryTree_DiscreteDistribution(Table->Treeroot); 
+  // Delete the Tree from root but not Leaves!!! 
 #endif
 
   fclose(FP);
@@ -245,8 +246,10 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   Temporal_Dynamics(PATCH, Table, Rate);
   /* Initial setup of the binary tree with total rates of every patch at the leaves 
   */
-  Table->Treeroot = createBinaryTree_DiscreteDistribution(Table->Leaves, Table->No_of_TREE_LEVELS);
-  P->Treeroot = Table->Treeroot;
+  #if defined BINARY_TREE_OPTIMIZATION
+    Community_Binary_Tree_Initialization (Table);
+    P->Treeroot = Table->Treeroot;
+  #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;   */
