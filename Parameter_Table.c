@@ -429,6 +429,16 @@ void Resetting_Alpha_Nu_Vectors (Parameter_Table * Table)
   }
 }
 
+void Resetting_Alpha_Nu_Vectors_Constant (Parameter_Table * Table)
+{
+  /* DIFFUSION_HII_nD: when a Holling Type II consumer feed on multiple resources */
+  int i;
+  for(i=0; i<Table->No_of_RESOURCES; i++) {
+    Table->Nu_Consumers[i] = Table->Nu_C_0;
+    Table->Alpha_C[i]      = Table->Alpha_C_0;
+  }
+}
+
 void Resetting_Multiresource_Levels (Parameter_Table * Table)
 {
   /* When a Holling Type II consumer feeds on multiple resources, and this multiple 

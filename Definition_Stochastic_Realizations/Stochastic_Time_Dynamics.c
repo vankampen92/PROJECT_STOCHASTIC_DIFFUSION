@@ -220,7 +220,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   TIMES        = Time->I_Time;
   Rate         = Time->Rate;
 
-  /* BEGIN : Initial Conditions -------------------------------------------------------------*/
+    /* BEGIN : Initial Conditions -------------------------------------------------------------*/
   // printf(" Before  Initial_Conditions_Stochastic_Dynamics(...)\n");
   Initial_Conditions_Stochastic_Dynamics( Table, Table->Vector_Model_Variables );
   // printf(" After Initial_Conditions_Numerical_Integration(...). Initial Conditions:  ");

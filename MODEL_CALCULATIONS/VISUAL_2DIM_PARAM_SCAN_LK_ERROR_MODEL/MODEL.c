@@ -33,7 +33,7 @@ int M_O_D_E_L( Parameter_Table * Table )
   Table->Vector_Model_Variables_Time_0 = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double)); 
   Table->Vector_Model_Variables = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double) );
   
-    /* BEGIN : -------------------------------------------------------------------------
+  /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
   if(Table->No_of_CELLS > 4)

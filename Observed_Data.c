@@ -12,8 +12,8 @@ void Observed_Data_Alloc( Observed_Data * Data, int No_of_OBSERVED_VARIABLES, in
 }
 
 void Observed_Data_Initialization( Observed_Data * Data, int No_of_OBSERVED_VARIABLES,
-				   int No_of_TIMES, double ** Data_Matrix,
-				   const char * Name )
+				                           int No_of_TIMES, double ** Data_Matrix,
+				                           const char * Name )
 {
   int i, j;
   

@@ -1,6 +1,6 @@
 #include <MODEL.h>
 
-extern gsl_rng * r;
+  extern gsl_rng * r;
 
 void Initial_Condition_from_Parameter_Table(Parameter_Table * Table, double *Y)
 {
@@ -152,7 +152,7 @@ void Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Parameter_Tabl
   }
 }
 
-void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table)
+  void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table)
 {
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition:  

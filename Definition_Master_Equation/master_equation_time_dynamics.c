@@ -123,7 +123,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
 
     if (State != GSL_SUCCESS) break;
 
-    #if defined CPGPLOT_REPRESENTATION
+  #if defined CPGPLOT_REPRESENTATION
     /* This should be only activated in case we want to animate ODE time evolution by
        representing the solution as time progresses                                       
     */
@@ -143,11 +143,11 @@ int master_equation_time_dynamics( Parameter_Table * Table )
       Saving_Marginal_Distribution(Table, j, i, Time_Current);
       /*   END: -------------------------------- */
     }
-#if defined DIFFUSION_BD_2D    
-    Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
-#endif 
+    #if defined DIFFUSION_BD_2D    
+      Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
+    #endif 
     Press_Key();
-#endif 
+  #endif 
   }/* ------> go further to the next time step */
 
 #if defined VERBOSE

@@ -61,7 +61,9 @@ double GSL_Function_to_Minimize_Binomial_Free_Consumers( const gsl_vector * x, v
     
     for(i=0; i<Table->SUB_OUTPUT_VARIABLES; i++)
       for(j=0; j<No_of_POINTS; j++)
-	      /* Probability of each data across realization: -log( P(Data | parameters) ) */ 
+	      /* Probability of data given a choice of parameter values: 
+          -log( P(Data | parameters) ) 
+        */ 
 	      Theory[i][j] = neglogBinomial_Free_Consumers (Data[i][j], Table);
       
     int Theory_is_NOT_a_NUMBER = 0;

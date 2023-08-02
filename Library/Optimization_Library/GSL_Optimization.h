@@ -27,6 +27,8 @@ double GSL_Function_to_Minimize_Error_Model( const gsl_vector * x, void * Par );
 
 double GSL_Function_to_Minimize_Binomial_Free_Consumers( const gsl_vector * x, void * Par );
 
+double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x, void * Par );
+
 double GSL_Function_to_Minimize_Beddington_DeAngelis( const gsl_vector * x, void * Par ); 
 
 double GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0(const gsl_vector * x, void * Par);
