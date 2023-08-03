@@ -133,7 +133,7 @@ void Writing_Standard_Data_Matrix(double ** Matrix_Data,
 	  
 	  if(NAMES == 1) fprintf(stdout, "%s\t", Name_of_Rows[i] );
 	  
-	  for(j=0; j < N_column; j++) fprintf(stdout, "%g\t", Matrix_Data[i][j]);
+	  for(j=0; j < N_column; j++) fprintf(stdout, "%g  ", Matrix_Data[i][j]);
 	  
 	  fprintf(stdout, "\n");
 	}

@@ -82,7 +82,7 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
 
     for(j=0; j<No_of_POINTS; j++) {
 	  
-      t = Table->T->Time_Vector[j];
+      t = F->Data->Time_Data_Vector[j];
       
       n_H = 0; p_Sum = 0.0; 
       for(i=0; i<Table->SUB_OUTPUT_VARIABLES; i++) {

@@ -4,7 +4,7 @@
  *   . Table->Vector_Model_Int_Variables will store global variables across the patch system
  */
 
-#define EXTINCTION_CONTROL
+// #define EXTINCTION_CONTROL
 
 int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 		  				                                       Parameter_Table * Table,
@@ -44,6 +44,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   // printf(" After Initial_Conditions_Numerical_Integration(...). Initial Conditions:  ");
 
   Time_Current = Time->Time_Vector[0];
+  Time->Time_Vector_Real[i][0] = Time_Current;  
 
   if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) {
     /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
@@ -130,7 +131,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     else{
       /* Saving and representing at values close to Time_values[j] * * * * * * * * * * * * */
       /* Notice that Time_Current is always the last time which is the closest possible to
-	 (and a little bit larger than) the time stored in Time->Time_Vector[j].           */
+	      (and a little bit larger than) the time stored in Time->Time_Vector[j].           */
       j_Good++;            /* Counting good times of the i-th realization  */
       Time->count[j]++;    /* Counting good realizations corresponding to the j-th time */ 
 
@@ -140,16 +141,19 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 	      Time->summ[k][j] += value;
 	      Time->summ_var[k][j] += value * value;
 
-#if defined CPGPLOT_REPRESENTATION
- 	      P->CPG->y_Time[k][j_Good] = value;
-#endif
+        #if defined CPGPLOT_REPRESENTATION
+ 	        P->CPG->y_Time[k][j_Good] = value;
+        #endif
 	      Time->Variable[i][k][j]   = value;
 	      Table->Vector_Output_Variables[k] = value;
       }
-#if defined CPGPLOT_REPRESENTATION
-      if( FROZEN_SYSTEM == 0 ){ P->CPG->x_Time[j_Good]    = Time_Current; }
-      else {            P->CPG->x_Time[j_Good]    = Time->Time_Vector[j]; }
-#endif
+      Time->Time_Vector_Real[i][j] = Time_Current; 
+      
+      #if defined CPGPLOT_REPRESENTATION
+        if( FROZEN_SYSTEM == 0 ){ P->CPG->x_Time[j_Good]    = Time_Current; }
+        else {            P->CPG->x_Time[j_Good]    = Time->Time_Vector[j]; }
+      #endif
+      
       Time->time_DEF[j_Good] = Time_Current;
       
       Time->Accumulated_Variable[i][j] = (double)new;
@@ -162,12 +166,11 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S(Table->CPG->DEVICE_NUMBER,
       						                                    1+i, j_Good, Table );
       if( Table->No_of_CELLS > 4 ) 
-      /* GRID REPRESENTATION */
-	Community_Scatter_Plot_Representation(Table, i, j);   
-      // Press_Key(); 
+        /* GRID REPRESENTATION */
+	      Community_Scatter_Plot_Representation(Table, i, j);   
+        // Press_Key(); 
       /*   END: Grafical Representation per time step */
 #endif
-
       /* BEGIN : Writing a costumized file ... */
       fprintf(FP,"%g", Time_Current);
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
@@ -226,6 +229,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   // printf(" After Initial_Conditions_Numerical_Integration(...). Initial Conditions:  ");
 
   Time_Current = Time->Time_Vector[0];
+  Time->Time_Vector_Real[i][0] = Time_Current; 
 
   if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) {
     /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
@@ -244,7 +248,8 @@ int Stochastic_Time_Dynamics_Numerical( int i,
      the different configurational changes or events to occur
   */
   Temporal_Dynamics(PATCH, Table, Rate);
-  /* Initial setup of the binary tree with total rates of every patch at the leaves 
+  /* Set upf of the intial values of the binary tree with the total rates for every patch at 
+     the leaves 
   */
   #if defined BINARY_TREE_OPTIMIZATION
     Community_Binary_Tree_Initialization (Table);
@@ -301,8 +306,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
       printf("%d\t%g\t%g\n",j, Time_Current, Time->Time_Vector[j]);
 #endif
     }
-    else{
-      
+    else{ 
       j_Good++; /* Counting good times */
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
 	      kk = Table->OUTPUT_VARIABLE_INDEX[k];
@@ -313,6 +317,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 	      Time->Variable[i][k][j]   = value;
 	      Table->Vector_Output_Variables[k] = value;
       }
+      Time->Time_Vector_Real[i][j] = Time_Current; 
 
       Time->time_DEF[j_Good] = Time_Current;
       Time->count[j]++;

@@ -18,7 +18,7 @@ typedef struct Time_Controlinfo
 
   double *** Variable; 
 
-
+  double ** Time_Vector_Real; 
 }Time_Control;
 
 /* void T_I_M_E___S_T_R_U_C_T___A_L_L_O_C( Time_Control * Time, Parameter_Table * P, int I_Time); */

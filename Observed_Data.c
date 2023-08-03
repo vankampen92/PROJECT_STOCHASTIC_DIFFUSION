@@ -9,6 +9,8 @@ void Observed_Data_Alloc( Observed_Data * Data, int No_of_OBSERVED_VARIABLES, in
     Data->N[i] = (double *)calloc( No_of_TIMES, sizeof(double) );
 
   Data->Name = (char *)calloc(100, sizeof(char)); 
+
+  Data->Time_Data_Vector = (double *)calloc( No_of_TIMES, sizeof(double) );
 }
 
 void Observed_Data_Initialization( Observed_Data * Data, int No_of_OBSERVED_VARIABLES,
@@ -34,5 +36,7 @@ void Observed_Data_Free( Observed_Data * Data)
   for(i = 0; i<Data->No_of_VARIABLES; i++) free(Data->N[i]);
   free(Data->N);
   
-  free(Data->Name); 
+  free(Data->Name);
+
+  free(Data->Time_Data_Vector);  
 }

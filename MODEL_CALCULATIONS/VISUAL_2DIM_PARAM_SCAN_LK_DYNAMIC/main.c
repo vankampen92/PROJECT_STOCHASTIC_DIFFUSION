@@ -50,7 +50,7 @@
 
    MODEL: HOLLING II nD. Scanning 2D Parameter Space (Alpha_C_0, Nu_C_0 from 1st Resource Type) 
    . ~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
-                           -n 5 -v0 0 -v1 1 -v2 1 -v3 3 -v4 4 \
+                           -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 \
                            -G0 -3 -G1 3 \
                            -sT 1.0E-06 -sN 300 -sP 2 \
                            -H9 2.5 -I1 16 -m1 0.5 -M1 5.0 -A1 0.01 -d1 200 \
@@ -59,15 +59,16 @@
                            -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 20 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
                            -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 \
                            -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 1.0 \
-                           -G30 R -Fn 0
+                           -G30 L -Fn 0
    
    . Use -Fn 0 to generate pseudo data. 
-   . Notice that -tn collects an input parameter controling the number time data points. 
-   . Therefore, -tn overloaded here to tell the program how many times you will repeat the same 
-     experiment (which consists in generating -tR [Realizations] from time -t0 [Initial Time] 
+   . -tn collects an input parameter controling the number time data points. 
+   . '#define' REPETITIONS (see below) tells the program how many times you will repeat the 
+     same experiment (which consists in generating -tR [Realizations] from time -t0 [Initial Time] 
      up to time -t1 [Last Time].  
    . -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */
+#define REPETITIONS 100
 
 gsl_rng * r; /* Global generator defined in main.c */
 
@@ -307,7 +308,7 @@ int main(int argc, char **argv)
   
   /* B E G I N : Observed Data Control Initization (Reserving Memmory)          */
   Observed_Data * Data = (Observed_Data *)calloc(1, sizeof(Observed_Data));
-  Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, Realizations);
+  Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, Time.I_Time);
   printf(" Observed_Data structure has been correctly allocated\n");
   /*     E N D : -------------------------------------------------------------- */
   /* B E G I N : Reserving memmory for Parameter Fitting Structure */
@@ -360,7 +361,7 @@ int main(int argc, char **argv)
   FILE * FP_x = fopen("Confidence_Intervals_0_HII.dat", "w"); 
   FILE * FP_y = fopen("Confidence_Intervals_1_HII.dat", "w"); 
 
-  int No_of_REPETITIONS = I_Time;  /* Here, the meaning of I_Time has been overloaded */ 
+  int No_of_REPETITIONS = REPETITIONS;  
   for(k=0; k<No_of_REPETITIONS; k++) {
     printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
 	   No_of_REPETITIONS, k);
@@ -400,15 +401,16 @@ int main(int argc, char **argv)
 				                          SUB_OUTPUT_VARIABLES, Realizations,
 				                          1, Name_of_Rows,
 				                          0, Realizations_Vector);
-    printf("Row Empirical Data Representation:\n");
+    // printf("Row Empirical Data Representation:\n");
     // Press_Key();
-    // Representation of Psedo Data:
-    /* C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,             */
-    /* 								       Realizations,          */
-    /* 								       Realizations_Vector,   */
-    /* 								       Empirical_Data_Matrix, */
-    /* 								       0);                    */
-    // Press_Key();
+    // Representation of Psedo Data (check -G0 [] -G1 [] input arguments!!!)
+    /* C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,
+     								       Realizations,          
+     							 	       Realizations_Vector,   
+     								       Empirical_Data_Matrix, 
+     								       0);                 
+    Press_Key(); */
+
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
 				                          Realizations, Empirical_Data_Matrix,
@@ -517,7 +519,7 @@ int main(int argc, char **argv)
     printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Value);
     
     cpgslw(3);  /* Line width changing to 3     */
-    cpgsci(12); /* Color Index changing to 12   */
+    cpgsci(2); /* Color Index changing to 12   */
     cpgpt1(x_Value, y_Value, 23);  /* Symbol 23 */
   
     float * xs = (float *)calloc(2, sizeof(float) );
@@ -525,7 +527,7 @@ int main(int argc, char **argv)
     xs[0] = 0.5* x_Value;  xs[1] = x_Value; /* A 40 % reduction */ 
     ys[0] = y_Value;       ys[1] = y_Value;
     
-    cpg_XY_same_arrow( 2, xs, ys, 4, 1, 4);
+    cpg_XY_same_arrow( 2, xs, ys, 5, 1, 4);
     // cpg_XY_same_arrow( N, xs, ys, CPG->color_Index, CPG->type_of_Line, CPG->type_of_Width );
     
     free(xs);
@@ -583,6 +585,8 @@ int main(int argc, char **argv)
     printf("This is the mininum loglikelihood value over the 2D scan\n");
     printf("(within the subparameter space analyzed)\n");
 
+    printf("Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2)...\n");
+    Press_Key();
     /* B E G I N :  Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2) */
     printf("Confidence Intervals from Likelihood Profile:\n");
     double x_MLE = 0.0;
@@ -597,8 +601,8 @@ int main(int argc, char **argv)
 						                                      LIKELIHOOD_JUMP, 
 						                                      &y_MLE, y_CI );
     /* True Value,  MLE,  [ CI[0],  CI[1] ] */
-    fprintf(FP_x, "%g\t%g\t%g\t%g\n", Initial_Value_0, x_MLE, x_CI[0], x_CI[1]); 
-    fprintf(FP_y, "%g\t%g\t%g\t%g\n", Initial_Value_1, y_MLE, y_CI[0], y_CI[1]); 
+    fprintf(FP_x, "%g\t%g\t[%g, %g]\n", Initial_Value_0, x_MLE, x_CI[0], x_CI[1]); 
+    fprintf(FP_y, "%g\t%g\t[%g, %g]\n", Initial_Value_1, y_MLE, y_CI[0], y_CI[1]); 
     
     printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
 	   Table.Symbol_Parameters[Input_Parameter_1], Initial_Value_0,
@@ -650,13 +654,14 @@ int main(int argc, char **argv)
     					                           x_B, x_CI_B, x_T, x_CI_T,
     					                           y_L, y_CI_L, y_R, y_CI_R,
 					                               &Parameter_Ratio, Parameter_Ratio_CI);
-    
-    printf("%s=%f\t[%f, %f]\n",Table.Symbol_Parameters[Input_Parameter_1],x_B,x_CI_B[0],x_CI_B[1]);
-    printf("%s=%f\t[%f, %f]\n",Table.Symbol_Parameters[Input_Parameter_1],x_T,x_CI_T[0],x_CI_T[1]);
+    printf("%s=%f\t[%f, %f]\n",
+           Table.Symbol_Parameters[Input_Parameter_1],x_B,x_CI_B[0],x_CI_B[1]);
+    printf("%s=%f\t[%f, %f]\n",
+           Table.Symbol_Parameters[Input_Parameter_1],x_T,x_CI_T[0],x_CI_T[1]);
     printf("%s=%f\t\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_2], y_L, y_CI_L[0], y_CI_L[1]);
+	         Table.Symbol_Parameters[Input_Parameter_2], y_L, y_CI_L[0], y_CI_L[1]);
     printf("%s=%f\t\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_2], y_R, y_CI_R[0], y_CI_R[1]);
+	         Table.Symbol_Parameters[Input_Parameter_2], y_R, y_CI_R[0], y_CI_R[1]);
     
     printf("%s/%s = %f\t[%f, %f]\n",
 	   Table.Symbol_Parameters[Input_Parameter_2],
@@ -918,13 +923,16 @@ void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
 void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
 						                                  double **  Empirical_Data_Matrix )
 {
-  /* This to save the output variables corresponding to the realizations 
+  /* 
+     This to save the output variables corresponding to the realizations 
      generated by the function  M_O_D_EL___S_T_O( &Table ) into a straightforward 
      Empirical Data Matrix containing just the 'Pseudo Data' required for the likelihood 
      of the MODEL DIFFUSION_HII_nD to be calculated.
   */
   int k,i;
   int No_of_POINTS; 
+
+  Parameter_Fitting * F = (Parameter_Fitting *)Table->Fitting_Data; 
 
   assert(Table->T->Realizations >= Table->T->I_Time);
 
@@ -935,11 +943,17 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
          is stored in Empirical Data Matrix 
       */ 
 	    Empirical_Data_Matrix[k][i] = Table->T->Variable[i][k][i];
+
+      /* Associated times */
+      F->Data->Time_Data_Vector[i] = Table->T->Time_Vector_Real[i][i];          
     }
   }
-
-  Table->T->Realizations = Table->T->I_Time;  /* Each realization retains a 
-                                                 a different time 
+  Table->T->Realizations = Table->T->I_Time;  /* Each realization retains a different time. 
+                                                 For each realization, the data stored is the 
+                                                 configuration state at a final time, which will  
+                                                 increase from realization to realization. 
+                                                 There should be as many realizations as different  
+                                                 times in Time_Vector. 
                                               */ 
 }
 
@@ -974,9 +988,9 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     break;
       
   default:
-    printf(" This TYPE_of_MODEL (%d) code does not have\n", TYPE_of_MODEL);
-    printf(" an analytical form for the statioanry distribution\n"); 
-    printf(" Ony Models (9, 12, 13) are correctly defined\n");
+    printf(" This TYPE_of_MODEL (%d) code does not have\n", Table->TYPE_of_MODEL);
+    printf(" a defined likelihood to fit data\n"); 
+    printf(" Ony Models (9, 12, 13, 16) are correctly defined\n");
     printf(" DIFFUSION HII 2D, DIFFUSION HII 1D and DIFFUSION BD 2D\n");
     printf(" Check input argument list!!!\n");
     exit(0);

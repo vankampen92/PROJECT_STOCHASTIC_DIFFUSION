@@ -42,7 +42,13 @@
    MODEL: HOLLING II. Scanning 2D Parameter Space (Alpha_C_0, Nu_C_0): 
    . ~$ ./DIFFUSION_HII_1D -y0 12 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 1 -v0 0 -G0 -3 -G1 3 -sT 1.0E-06 -sN 300 -sP 2 -H9 2.5 -I1 16 -m1 0.5 -M1 5.0 -A1 0.01 -d1 200 -H10 1.0 -I0 17 -m0 0.1 -M0 3.0 -A0 0.01 -d0 200  -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 -tn 3 -t0 0.0 -t1 1.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -HN 20 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 0.5 -tE 0.1 -G30 R -Fn 0
 
-   . Use -Fn 0 to generate pseudo data. -tn collects an input parameter controling the number time data points up to statinarity. It is irrelevant is this application. The time that counts is -t1 [Last_Time], the last time the dynamics goes to. This should long enough for the system to reach stationarity. Therefore, -tn is used here to tell the program how many times you will repeat the same experiment (which consists in generating -tR [Realizations] up to time -t1 [Last_Time], where the system is supposed to have reached stationarity). 
+   . Use -Fn 0 to generate pseudo data. 
+   . -tn collects an input parameter controling the number time data points up to stationarity. 
+   . It is irrelevant is this application. The time that counts is -t1 [Last_Time], the last time 
+     the dynamics goes to. This should long enough for the system to reach stationarity. 
+     Therefore, we can overload -tn and use it here to tell the program how many times you will 
+     repeat the same experiment (which will consist in generating -tR [Realizations] 
+     up to time -t1 [Last_Time], where the system is supposed to have reached stationarity). 
 
    -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */

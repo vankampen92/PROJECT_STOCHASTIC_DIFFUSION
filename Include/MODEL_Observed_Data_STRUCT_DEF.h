@@ -7,5 +7,7 @@ typedef struct Observed_Datainfo
   int No_of_VARIABLES;
   int No_of_POINTS; 
   char * Name;
+
+  double * Time_Data_Vector;
   
 }Observed_Data;

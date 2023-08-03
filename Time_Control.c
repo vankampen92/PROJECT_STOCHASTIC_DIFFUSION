@@ -64,6 +64,10 @@ void T_I_M_E___C_O_N_T_R_O_L___A_L_L_O_C( Time_Control * Time, Parameter_Table *
       Time->Variable[i][j] = (double *)calloc( I_Time, sizeof(double ) );
     }
   }
+
+  Time->Time_Vector_Real = (double **)calloc(P->Realizations, sizeof(double *));
+  for(i = 0; i<P->Realizations; i++)
+    Time->Time_Vector_Real[i] = (double *)calloc(P->Realizations, sizeof(double)); 
 }
 
 void  T_I_M_E___C_O_N_T_R_O_L___U_P_L_O_A_D( Time_Control * Time, Parameter_Table * Table,
@@ -140,6 +144,11 @@ void T_I_M_E___C_O_N_T_R_O_L___F_R_E_E( Time_Control * Time, Parameter_Table * P
     free(Time->Variable[i]);
   }
   free(Time->Variable);
+
+  for(i = 0; i<P->Realizations; i++)
+    free(Time->Time_Vector_Real[i]); 
+
+  free(Time->Time_Vector_Real);
 }
 
 int Time_Control_AVE_VAR_SAVE_VARIABLES ( Parameter_Table * Table )

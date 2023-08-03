@@ -23,33 +23,33 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
       if (k>0 && k<=Table->N_E) { 
-	sprintf(n_Label, "%d", k-1);
-	i = 1;
+	      sprintf(n_Label, "%d", k-1);
+	      i = 1;
       }
       else if (k>Table->N_E &&   k<=2*Table->N_E) { 
-	sprintf(n_Label, "%d", k-1-Table->N_E);
-	i = 2;
+	      sprintf(n_Label, "%d", k-1-Table->N_E);
+	      i = 2;
       }
       else if (k>2*Table->N_E && k<=2*Table->N_E+Table->N_E*Table->N_E) { 
-	i = 3;
-	n = (k-1-2*Table->N_E)%Table->N_E;
-	m = (k-1-2*Table->N_E)/Table->N_E;
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", n);
-	p = strcat(Label, "]");
-	p = strcat(Label, "[");
-	sprintf(n_Label, "%d", m);
-	p = strcat(Label, "]");
+	      i = 3;
+	      n = (k-1-2*Table->N_E)%Table->N_E;
+	      m = (k-1-2*Table->N_E)/Table->N_E;
+	      p = strcat(Label, "[");
+        sprintf(n_Label, "%d", n);
+        p = strcat(Label, "]");
+        p = strcat(Label, "[");
+        sprintf(n_Label, "%d", m);
+        p = strcat(Label, "]");
       }
       else { 
-	n_Label[0] = '\0';
-	i = 0;
+        n_Label[0] = '\0';
+        i = 0;
       }
       p = strcat(Label, "n[");
       p = strcat(Label, L[i]);
       if (i>0) { 
-	p = strcat(Label, "_");
-	p = strcat(Label, n_Label);
+	      p = strcat(Label, "_");
+	      p = strcat(Label, n_Label);
       }
       p = strcat(Label, "]");
     }
@@ -77,7 +77,7 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
       p = strcat(Label , "n[R]");         /*  3: Resources */
       break;
     case  4:
-	p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
+	    p = strcat(Label , "n[A]");             /*  4: Total Free Consumers */
         break;
     case  5:
       p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */
