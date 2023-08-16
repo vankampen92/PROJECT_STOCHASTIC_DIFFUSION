@@ -1255,8 +1255,8 @@ void histogram(double Time[], int no, double Pn[], int B, double x_i, double x_s
     j = 0;
     while(logic == 0 && j < B){
       if(Time[i] > (x_i + step*j) && Time[i] <= (x_i + step*(j+1)) ){
-	logic = 1;
-	Pn[j]++;
+	      logic = 1;
+	      Pn[j]++;
       }
       j++;
     }

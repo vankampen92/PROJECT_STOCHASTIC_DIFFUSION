@@ -492,7 +492,7 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
     printf("Density_%d = %g\n", i, Density);
   }
 
-  Press_Key();
+  Print_Press_Key(1,0,".");
 } 
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */

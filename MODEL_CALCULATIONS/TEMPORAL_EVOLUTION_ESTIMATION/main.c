@@ -137,7 +137,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n");//Press_Key();
+  printf("\n");//Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -234,7 +234,7 @@ int main(int argc, char **argv)
 				SUB_OUTPUT_VARIABLES, I_Time,
 				1, Name_of_Rows,
 				0, Time.Time_Vector);
-  Press_Key(); 
+  Print_Press_Key(1,0,"."); 
   /* B E G I N :   Reserving memmory for Observed Data and Fitting Structure */
   Observed_Data * Data = (Observed_Data *)calloc(1, sizeof(Observed_Data));
   Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, I_Time);

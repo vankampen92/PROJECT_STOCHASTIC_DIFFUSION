@@ -49,7 +49,7 @@ void Execute_One_Step(Community ** SP,
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
     printf(" Something very wrong with your code\n");
     printf(" The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 
@@ -86,7 +86,7 @@ void Execute_One_Step(Community ** SP,
       printf("The number of event occurring should be 0 and %d*%d-1\n", 
         Table->No_of_RESOURCES, Table->No_of_EVENTS);
       printf("Event to Occur = %d\n", n_Event);
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
   }
@@ -123,7 +123,7 @@ void Execute_One_Step(Community ** SP,
     /* Something is very very wrong!!! */
       printf("At this point, the number of event occurring should be eitenr 0 or 1\n");
       printf("Event to Occur = %d\n", n_Event);
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
   }

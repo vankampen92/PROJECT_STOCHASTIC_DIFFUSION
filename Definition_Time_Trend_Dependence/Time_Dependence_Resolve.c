@@ -63,7 +63,7 @@ double Time_Dependence_Resolve(Parameter_Table * Table,
   default :
     printf(" Trend_Control.c: Type of Trend is not defined\n");
     printf(" Trend pattern can be only 0, 1, 2, 3, 4 or 5\n");
-    printf(" but here Trend Type is %d\n", pattern); Press_Key();
+    printf(" but here Trend Type is %d\n", pattern); Print_Press_Key(1,0,".");
     exit(0);
   }
 

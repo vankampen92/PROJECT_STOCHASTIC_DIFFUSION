@@ -43,7 +43,7 @@ void Fixed_Points_All( Parameter_Table * Table,
     printf(" or  the number of patches is larger than 1 (N = %d)\n", Table->No_of_CELLS);
 
     printf("The program will safely exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 }
@@ -96,7 +96,7 @@ void Fixed_Points_Linear_System_HII_nD(Parameter_Table * Table, gsl_vector * y)
  
   for(i=0; i<n; i++) free(a_Matrix[i]);   
   free(a_Matrix);
-  Press_Key();
+  Print_Press_Key(1,0,".");
 
   gsl_linalg_LU_decomp (a, p, &s);
   gsl_linalg_LU_solve (a, p, b, x);
@@ -114,7 +114,7 @@ void Fixed_Points_Linear_System_HII_nD(Parameter_Table * Table, gsl_vector * y)
   printf("Total Number of Consumers Handling Resources: %g\n", Consumers_Handling);
   printf("Total Number of Free Searching Consumers: %g\n", gsl_vector_get(x, 0));
   printf("Total Number of Consumers (maintained constant): %d\n", Table->TOTAL_No_of_CONSUMERS);
-  Press_Key();
+  Print_Press_Key(1,0,".");
 
   gsl_vector_free(x);
   gsl_vector_free(b);
@@ -208,15 +208,15 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
 				     Type_of_Stability);
   if (Type_of_Stability == 2) { printf("%d: Stability: Damped Oscillations\n",
 				       Type_of_Stability);
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
   }
   if (Type_of_Stability == 3) { printf("%d: Unstability: Limits Cycles\n",
 				       Type_of_Stability);
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
   }
 
   Write_Parameter_Table( Table, Table->TOTAL_No_of_MODEL_PARAMETERS );
-  // Press_Key();
+  // Print_Press_Key(1,0,".");
 
   free(Y0); free(Y1); free(Y2);
 

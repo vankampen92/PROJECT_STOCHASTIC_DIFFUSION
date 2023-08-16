@@ -56,6 +56,6 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
   printf("Patch system successfully initialized\n");
 
 #if defined VERBOSE
-    Press_Key();
+    Print_Press_Key(1,0,".");
 #endif
 }

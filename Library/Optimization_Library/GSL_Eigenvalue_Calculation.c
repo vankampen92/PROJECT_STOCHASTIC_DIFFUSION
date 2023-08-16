@@ -32,7 +32,7 @@ void GSL_Eigenvalue_Calculation ( double * y_Sol,  int N,
   JACOBIAN_Matrix(m, y_Sol, 0., K, P);
 
 #if defined EIGEN_VERBOSE  
-      printf(" Right after setting Jacobian Matrix()... "); // Press_Key(); 
+      printf(" Right after setting Jacobian Matrix()... "); // Print_Press_Key(1,0,"."); 
 #endif         
       /*  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
       /* BEGIN : Controling that the input matrix has no GSL_NAN *  */    
@@ -40,7 +40,7 @@ void GSL_Eigenvalue_Calculation ( double * y_Sol,  int N,
  
 #if defined EIGEN_VERBOSE  
       // printf("\nInitial Jacobian Matrix...\n");
-      // show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Press_Key();
+      // show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Print_Press_Key(1,0,".");
 #endif
       
       gsl_matrix_view M = gsl_matrix_view_array (m->data, n, n);
@@ -66,7 +66,7 @@ void GSL_Eigenvalue_Calculation ( double * y_Sol,  int N,
                      GSL_REAL(eval_i), GSL_IMAG(eval_i));
              
       }
-      // Press_Key();     
+      // Print_Press_Key(1,0,".");     
 #endif 
       
       /* BEGIN : Generating output float vectors of full dimension */
@@ -82,7 +82,7 @@ void GSL_Eigenvalue_Calculation ( double * y_Sol,  int N,
 
 #if defined EIGEN_VERBOSE  	  
       // printf("Eigen Vectors ...\n");
-      // int showing = showing_eigenValues(l_re, l_im, K+1); Press_Key();
+      // int showing = showing_eigenValues(l_re, l_im, K+1); Print_Press_Key(1,0,".");
 #endif
       
       /* fp = fopen("eigenValues.dat", "w"); */
@@ -157,7 +157,7 @@ void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
   k = * Index_Value_S; 
   printf("Valor Propi Sub-Dominant: V[%d] = %g + i %g\n", k, Y1[k], Y2[k]);
   
-  //Press_Key();  
+  //Print_Press_Key(1,0,".");  
   
   free(S_Y1); free(S_Y2); free(Index_S); 
 }  
@@ -188,7 +188,7 @@ void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
 /*   JACOBIAN_Matrix(m, y_Sol, 0., W, P); */
 
 /* #if defined EIGEN_VERBOSE   */
-/*       printf(" Right after setting Jacobian Matrix()... "); Press_Key();  */
+/*       printf(" Right after setting Jacobian Matrix()... "); Print_Press_Key(1,0,".");  */
 /* #endif          */
 /*       /\*  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\/ */
 /*       /\* BEGIN : Controling that the input matrix has no GSL_NAN *  *\/     */
@@ -196,7 +196,7 @@ void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
  
 /* #if defined EIGEN_VERBOSE   */
 /*       // printf("\nInitial Jacobian Matrix...\n"); */
-/*       // show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Press_Key(); */
+/*       // show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Print_Press_Key(1,0,"."); */
 /* #endif */
       
 /*       gsl_matrix_view M = gsl_matrix_view_array (m->data, n, n); */
@@ -222,7 +222,7 @@ void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
 /*                      GSL_REAL(eval_i), GSL_IMAG(eval_i)); */
              
 /*       } */
-/*       Press_Key();      */
+/*       Print_Press_Key(1,0,".");      */
 /* #endif  */
       
 /*       /\* BEGIN : Generating output float vectors of full dimension *\/ */
@@ -241,7 +241,7 @@ void Dominant_Eigenvalue_Calculation(double * Y1, double * Y2, int N,
 
 /* #if defined EIGEN_VERBOSE  	   */
 /*       // printf("Eigen Vectors ...\n"); */
-/*       // int showing = showing_eigenValues(l_re, l_im, K+1); Press_Key(); */
+/*       // int showing = showing_eigenValues(l_re, l_im, K+1); Print_Press_Key(1,0,"."); */
 /* #endif */
       
 /*       /\* fp = fopen("eigenValues.dat", "w"); *\/ */

@@ -185,7 +185,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n"); //Press_Key();
+  printf("\n"); //Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -361,14 +361,14 @@ int main(int argc, char **argv)
 				  1, Name_of_Rows,
 				  0, Realizations_Vector);
     printf("Row Empirical Data Representation:\n");
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     // Representation of Psedo Data:
     /* C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,             */
     /* 								       Realizations,          */
     /* 								       Realizations_Vector,   */
     /* 								       Empirical_Data_Matrix, */
     /* 								       0);                    */
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
 				  Realizations, Empirical_Data_Matrix,
@@ -494,7 +494,7 @@ int main(int argc, char **argv)
     
     free(xs);
     free(ys);
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
 
     double * x_Data  = (double *)calloc(No_of_POINTS_1, sizeof(double) ); 
     double * y_Data  = (double *)calloc(No_of_POINTS_2, sizeof(double) );
@@ -528,7 +528,7 @@ int main(int argc, char **argv)
 							"Negative Log Likelihood", 
 							"",
 							SCALE_X, SCALE_Y );
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T(Table.CPG,
 							SAME_PLOT,
 							No_of_POINTS_2, 
@@ -636,7 +636,7 @@ int main(int argc, char **argv)
     
     free (W_GRID);
     free (Realizations_Vector); 
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
   }
   
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 

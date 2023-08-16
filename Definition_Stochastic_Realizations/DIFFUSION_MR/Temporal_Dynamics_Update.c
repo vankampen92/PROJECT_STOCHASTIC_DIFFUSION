@@ -217,7 +217,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
       printf(" Type_of_Event = %d\t This value is not possible!!!\n", Type_of_Event);
       printf(" Type of Event ill-defined\n");
       printf(" The program will exit\n");
-      Press_Key(); 
+      Print_Press_Key(1,0,"."); 
       exit(0);
     }
 }

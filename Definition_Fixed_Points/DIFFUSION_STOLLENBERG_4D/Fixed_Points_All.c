@@ -105,7 +105,7 @@ void Fixed_Points_All( Parameter_Table * Table,
 	   Table->Lambda_C_0, Table->Lambda_R_0, Table->Lambda_R_1);
     printf("is larger than 1 (N = %d)\n", Table->No_of_CELLS);
     printf("The program will safely exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 }
@@ -143,7 +143,7 @@ int  Coexistence_Condition ( Parameter_Table * Table )
 		 Table->Lambda_C_0, Table->Lambda_R_0, Table->Lambda_R_1);
     printf("is larger than 1 (N = %d)\n", Table->No_of_CELLS);
     printf("The program will safely exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 
@@ -186,7 +186,7 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
 		 Table->Lambda_C_0, Table->Lambda_R_0, Table->Lambda_R_1);
     printf("is larger than 1 (N = %d)\n", Table->No_of_CELLS);
     printf("The program will safely exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 
@@ -258,7 +258,7 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
       printf("x_C = %g\t bR = %g\t bR_C0 = %g\t bR_C1 = %g\t b_C = %g\t d_C = %g\n",
 	     x_C, b_R, bR_C0, bR_C1, b_C, d_C);  
       printf("The program will safely exit\n");
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
   }

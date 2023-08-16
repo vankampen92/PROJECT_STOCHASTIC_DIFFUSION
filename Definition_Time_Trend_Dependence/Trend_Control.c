@@ -175,7 +175,7 @@ void Upload_Argument_Input_Trend_Values_into_Table ( Parameter_Table * Table,
     printf(" This function translates dummy parameters introduced\n");
     printf(" through command line into the member of Parameter_Table\n");
     printf(" that controls parametric time dependencies\n"); 
-    printf(" but here Trend Type is %d\n", pattern); Press_Key();
+    printf(" but here Trend Type is %d\n", pattern); Print_Press_Key(1,0,".");
     exit(0);
   
   }
@@ -244,7 +244,7 @@ void  Upload_Auxiliary_Parameter_Values_into_Table ( Parameter_Table * Table,
 	Table->TDC->TDC_Function_Params[Input_Parameter][9] = 5.0;
 
 	printf(" Changing value in Gamma_0 trend\n");
-	Press_Key();
+	Print_Press_Key(1,0,".");
 	
 	break;
       case  2: /* k_0  */

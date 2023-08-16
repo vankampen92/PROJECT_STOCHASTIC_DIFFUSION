@@ -237,7 +237,7 @@ void Time_Dependence_Control_Upload (Time_Control * Time,
       // printf("\n");
     }
 
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
 
     free(Name_Dummy[0]);
     free(Name_Dummy); 

@@ -45,9 +45,9 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 
   /* Master Equation Numerical Integration                 */
   /* BEGIN: Core part (integration of the master equation) */
-  printf("Entering Numerical Integration of the Master Equation...\n");   Press_Key();
+  printf("Entering Numerical Integration of the Master Equation...\n");   Print_Press_Key(1,0,".");
   int ME_SYSTEM = master_equation_time_dynamics( Table );
-  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Press_Key();
+  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Print_Press_Key(1,0,".");
   /*   END: ------------------------------------------ */
 
   /* BEGIN : Stationary Probability Distribution (only available for some of the models) -*/
@@ -61,7 +61,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   Stationary_Probability_Distribution( Table );
   printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
 #endif
-  Press_Key();
+  Print_Press_Key(1,0,".");
   /*  END : ------------------------------------------------------------------------------*/
   
 #if defined STOCHASTIC_REALIZATIONS  
@@ -81,12 +81,12 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   #elif defined DIFFUSION_HII_nD  
     C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Table, i,  SAME_PLOT );
   #endif
-    Press_Key();
+    Print_Press_Key(1,0,".");
     for(j=1; j<Table->T->I_Time; j++) {
       C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
   							                                            Table->T->Time_Vector[j],
   							                                            SAME_PLOT );
-      Press_Key();
+      Print_Press_Key(1,0,".");
     }
   }
 #endif
@@ -119,7 +119,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
 						       Table->CPG->x_Time,
 						       Table->Matrix_Output_Variables);
   SAME_PLOT = 1;
-  Press_Key();
+  Print_Press_Key(1,0,".");
   /* New colors and lines */
   Table->CPG->color_Index   = 3;
   Table->CPG->type_of_Width = 2;

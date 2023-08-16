@@ -754,7 +754,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
      Then ( * K) + 1 becomes de total number of dynamic variables.
   */
   printf("Total No of MODEL PARAMETERS : %d\n", Table->TOTAL_No_of_MODEL_PARAMETERS);
-  Press_Key(); 
+  Print_Press_Key(1,0,"."); 
 }
 
 void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)

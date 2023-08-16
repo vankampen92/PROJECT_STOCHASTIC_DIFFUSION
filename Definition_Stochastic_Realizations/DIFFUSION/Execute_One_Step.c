@@ -73,7 +73,7 @@ void Execute_One_Step(Community ** SP,
     /* Something is very very wrong!!! */
       printf("The number of event occurring should be between 0 and 0\n");
       printf("Event to Occur = %d\n", n_Event);
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
 

@@ -67,7 +67,7 @@ void D_Normalilzation_Probability_Distribution( Parameter_Table * Table )
     y[i] /= S; 
 
   printf("Checking Normalization (full distribution). The sum S [%g] should be around 1\n", S); 
-  Press_Key();
+  Print_Press_Key(1,0,".");
 }
 
 void Multinomial_Stationarity_Probability_Distribution(double * p, int N, Parameter_Table * Table)
@@ -140,7 +140,7 @@ void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table )
       ME->MPD_S[k][n] /= S;
       
     printf("Checking Normalization (marginals). The sum S [%g] should be around 1\n", S); 
-    Press_Key();
+    Print_Press_Key(1,0,".");
   }   
 
   if (ME->n_DIMENSION == 1) {

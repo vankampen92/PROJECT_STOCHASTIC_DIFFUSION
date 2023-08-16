@@ -165,7 +165,7 @@ void Community_Initialization (Community ** PATCH,
   }
   else{
     printf(" Stochastic optimization has not been implemented for this model\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
   }
 #endif
 }
@@ -364,7 +364,7 @@ void Writing_Adjacency_List(Community ** PATCH)
     printf("\n");
   }
 
-  // Press_Key();
+  // Print_Press_Key(1,0,".");
 }
 
 void Writing_Adjacency_List_VonNeumann(Community ** PATCH)
@@ -394,7 +394,7 @@ void Writing_Adjacency_List_VonNeumann(Community ** PATCH)
     printf("\n");
   }
 
-  // Press_Key();
+  // Print_Press_Key(1,0,".");
 }
 
 void Print_Meta_Community_Patch_System (Parameter_Table * Table)

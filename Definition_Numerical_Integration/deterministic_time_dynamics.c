@@ -65,7 +65,7 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     Table->Vector_Model_Variables_Time_0[k] = Table->Vector_Model_Variables[k];
   }
      // printf("\n");
-     // Press_Key();
+     // Print_Press_Key(1,0,".");
 
   Time_Current = Time->Time_Vector[0];
   if (Time->TYPE_of_TIME_DEPENDENCE > 0) Time_Dependence_Apply( Table, Time_Current );
@@ -177,7 +177,7 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
       printf("\ty[%d]=%g", k,Table->Vector_Output_Variables[k]);
     }
-    printf("\n\n"); // Press_Key();
+    printf("\n\n"); // Print_Press_Key(1,0,".");
 #endif
 
    // double No_of_XX, No_of_WW, No_of_TOTAL_Women;
@@ -185,7 +185,7 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
 	 // No_of_XX = total_Female_Non_Sexual_Workers (Table->Vector_Model_Variables, Table);
 	 // No_of_TOTAL_Women = total_Females (Table->Vector_Model_Variables, Table);
 	 // printf("t=%g\tXX = %g\tWW = %g\tTotal=%g\n",Time_Current, No_of_XX, No_of_WW, No_of_TOTAL_Women);
-   // Press_Key();
+   // Print_Press_Key(1,0,".");
 
    /* Break if some variables take negative values */
       NEGATIVE_VALUE = 0; 

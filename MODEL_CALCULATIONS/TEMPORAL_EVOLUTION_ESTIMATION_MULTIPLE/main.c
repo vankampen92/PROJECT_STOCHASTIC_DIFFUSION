@@ -155,7 +155,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n");//Press_Key();
+  printf("\n");//Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -278,7 +278,7 @@ int main(int argc, char **argv)
 				  SUB_OUTPUT_VARIABLES, I_Time,
 				  1, Name_of_Rows,
 				  0, Time.Time_Vector);
-    if (F->Verbose == 1)  Press_Key();
+    if (F->Verbose == 1)  Print_Press_Key(1,0,".");
     
     /* B E G I N :   Reserving memmory for Observed Data  */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
@@ -464,7 +464,7 @@ int main(int argc, char **argv)
   for(i=0; i<Successful_nFile; i++)
     printf("%g\t%g\n", Parameter_0[i], Parameter_1[i]);
   
-  Press_Key();
+  Print_Press_Key(1,0,".");
   
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */
   Parameter_Fitting_Free(F); free(F);							      

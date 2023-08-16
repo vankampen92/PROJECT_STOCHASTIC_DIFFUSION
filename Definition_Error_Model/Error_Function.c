@@ -18,7 +18,7 @@ my_error_handler (const char * reason, const char * file, int line, int gsl_errn
 
   fflush (stderr);
 
-  //Press_Key();
+  //Print_Press_Key(1,0,".");
   //abort ();
 }
 

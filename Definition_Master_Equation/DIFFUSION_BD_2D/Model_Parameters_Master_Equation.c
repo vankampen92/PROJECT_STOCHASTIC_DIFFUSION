@@ -16,7 +16,7 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
   * No_of_CONFIGURATIONAL_STATES = (* No_of_CONFIGURATIONAL_STATES) / 2;
 
   printf("No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
-  // Press_Key(); 
+  // Print_Press_Key(1,0,"."); 
 }
 
 void Labels_for_Marginal_Probabilities (Parameter_Table * Table)

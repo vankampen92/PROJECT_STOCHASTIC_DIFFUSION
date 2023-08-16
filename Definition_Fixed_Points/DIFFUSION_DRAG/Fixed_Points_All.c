@@ -60,7 +60,7 @@ void Fixed_Points_All( Parameter_Table * Table,
 	   Table->Lambda_C_0);
     printf("is larger than 1 (N = %d)\n", Table->No_of_CELLS);
     printf("All vectors at stationarity are set to zero\n");  
-    Press_Key(); 
+    Print_Press_Key(1,0,"."); 
   }
 } 
 

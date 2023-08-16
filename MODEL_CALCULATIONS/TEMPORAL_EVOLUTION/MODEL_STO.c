@@ -81,7 +81,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 #endif
   
   /* BEGIN: Main loop: a number of REALIZATIONS (stochastic temporal evolutions) is computed */
-  printf("Entering Generation of Stochastic Realizations...\n");   Press_Key();
+  printf("Entering Generation of Stochastic Realizations...\n");   Print_Press_Key(1,0,".");
   n = 0;
   while (n < Table->T->Realizations){
     // Notice that TDC has not been initialized when TYPE_of_TIME_DEPENDENCE = 0
@@ -126,7 +126,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
           Time->Realizations);
   printf( " Averages and Variances over the ensamble of realizations\n");
   printf( " will be calculated now...\n");
-  Press_Key();
+  Print_Press_Key(1,0,".");
   int DATA_POINTS = Time_Control_AVE_VAR_SAVE_VARIABLES( Table );
   printf(" Temporal series of %d (out of %d) data points\n", DATA_POINTS, I_Time);
 

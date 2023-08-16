@@ -57,7 +57,7 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
     else {
       printf(" Y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
       printf(" The program will exit\n");
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0); 
     }
     
@@ -73,7 +73,7 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
     else {
       printf(" Y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
       printf(" The program will exit\n");
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
 
@@ -90,7 +90,7 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
     else {
       printf(" X_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
       printf(" The program will exit\n");
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
     
@@ -108,7 +108,7 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
 	else {
 	  printf(" X_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
 	  printf(" The program will exit\n");
-	  Press_Key();
+	  Print_Press_Key(1,0,".");
 	  exit(0);
 	}
 
@@ -134,14 +134,14 @@ int generic_Function_Parameter_2Dim_Scan_Improved( Parameter_Table * P,
       /* 					  x_Data, z_SOL[k],    */
       /* 					  Input_Parameter_1,   */
       /* 					  Input_Parameter_2 ); */
-      //Press_Key();
+      //Print_Press_Key(1,0,".");
 #endif
 
 #if defined SAVING_SLICES_TO_FILE 
       Saving_to_File_double("Parameter_Scan_Slice_", x_Data, z_SOL[k], No_of_POINTS_1, k); 
 #endif
   }
-  printf("\n From generic_Function_Parameter_Scan.c:\n  End of 2D scan successfully"); //getchar();
+  printf("\n From generic_Function_Parameter_Scan_Improved.c:\n  End of 2D scan successfully\n"); //getchar();
 
   /* BEGIN : Saving to File  */
   FILE * fp_0 = fopen ( Scan_Output_File, "w" );  

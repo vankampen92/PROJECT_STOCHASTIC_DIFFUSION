@@ -168,7 +168,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       if( Table->No_of_CELLS > 4 ) 
         /* GRID REPRESENTATION */
 	      Community_Scatter_Plot_Representation(Table, i, j);   
-        // Press_Key(); 
+        // Print_Press_Key(1,0,"."); 
       /*   END: Grafical Representation per time step */
 #endif
       /* BEGIN : Writing a costumized file ... */
@@ -183,7 +183,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 #if defined VERBOSE
     printf(" Total population across the system at current time (t = %g)\n", Time_Current );
     Print_Meta_Community_Patch_System (Table);
-    Press_Key();
+    Print_Press_Key(1,0,".");
 #endif
   }/* go further to the next time           */
 
@@ -329,7 +329,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 #if defined VERBOSE
     printf(" Total population across the system at current time (t = %g)\n",  Time_Current );
     Print_Meta_Community_Patch_System (Table);
-    Press_Key();
+    Print_Press_Key(1,0,".");
 #endif
   }/* go further to the next time           */
 

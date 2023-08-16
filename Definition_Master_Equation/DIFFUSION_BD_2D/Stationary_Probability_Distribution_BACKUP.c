@@ -77,7 +77,7 @@ void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * T
   else {
     printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
     printf("The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
 
@@ -102,7 +102,7 @@ void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * T
     cpgpanl(Horizontal_Plot_Position, Vertical_Plot_Position);
     printf("n = %d\t Horizontal Position = %d\t Vertical Position = %d\n",
     	       n, Horizontal_Plot_Position, Vertical_Plot_Position);
-    Press_Key();
+    Print_Press_Key(1,0,".");
   }
   
   CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
@@ -196,7 +196,7 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
   else {
     printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
     printf("The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
 
@@ -253,7 +253,7 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
     cpgpanl(Horizontal_Plot_Position, Vertical_Plot_Position);
     // printf("n = %d\t Horizontal Position = %d\t Vertical Position = %d\n",
     //	       n, Horizontal_Plot_Position, Vertical_Plot_Position);
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
   }
   
   CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
@@ -409,7 +409,7 @@ void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ( Parameter_Table
   else {
     printf("Marginal probabilities for higher dimensions (n > %d) are not coded\n", n);
     printf("The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
   

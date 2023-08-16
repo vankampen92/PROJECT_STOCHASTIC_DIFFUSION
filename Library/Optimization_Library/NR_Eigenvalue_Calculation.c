@@ -61,8 +61,8 @@ void NR_Eigenvalue_Calculation_float ( double * y_Sol,  int K, int W,
       
       printf(" the Jacobian evaluation by using :\n");
       printf(" evaluating_JACOBIAN_Matrix(m, y_Sol->data, 0., W, P)\n");
-      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Press_Key();
-      Press_Key();
+      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Print_Press_Key(1,0,".");
+      Print_Press_Key(1,0,".");
 #endif
       
       balanc(mm, K+1); 
@@ -78,8 +78,8 @@ void NR_Eigenvalue_Calculation_float ( double * y_Sol,  int K, int W,
       }
       printf(" balancing the Jacobian by using :\n");
       printf(" balanc(mm, K+1) \n");
-      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Press_Key();
-      Press_Key();
+      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Print_Press_Key(1,0,".");
+      Print_Press_Key(1,0,".");
 #endif
       
       elmhes(mm, K+1);
@@ -95,15 +95,15 @@ void NR_Eigenvalue_Calculation_float ( double * y_Sol,  int K, int W,
       }
       printf(" calculating the Hessenberg matrix from the balanced Jacobian by using :\n");
       printf(" elmhes(mm, K+1) \n");
-      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Press_Key();
-      Press_Key();
+      show_a_view_FloatMatrix(mm, 1, K+1, 1, K+1); Print_Press_Key(1,0,".");
+      Print_Press_Key(1,0,".");
 #endif
 
       hqr(mm, K+1, l_re, l_im);
       
 #if defined EIGEN_VERBOSE  	  
       printf("Eigen Vectors ...\n");
-      int showing = showing_eigenValues(l_re, l_im, K+1); Press_Key();
+      int showing = showing_eigenValues(l_re, l_im, K+1); Print_Press_Key(1,0,".");
 #endif
       
       /* fp = fopen("eigenValues.dat", "w"); */

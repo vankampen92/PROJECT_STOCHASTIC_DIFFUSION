@@ -44,7 +44,7 @@ void Execute_One_Step(Community ** SP,
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
     printf(" Something very wrong with your code\n");
     printf(" The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0);
   }
 
@@ -120,7 +120,7 @@ void Execute_One_Step(Community ** SP,
       printf(" The label of the event to occur should be between 0 and 5\n");
       printf(" but your Event to Occur = %d\n", n_Event);
       printf(" Something is very wrong. The program will stop\n"); 
-      Press_Key();
+      Print_Press_Key(1,0,".");
       exit(0);
     }
 

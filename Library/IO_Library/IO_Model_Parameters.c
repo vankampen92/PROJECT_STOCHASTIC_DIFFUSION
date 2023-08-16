@@ -104,7 +104,7 @@ void Writing_Model_Parameters_Matrix(Parameter_Table * Table, const char * Label
 
     n++;
     
-    Press_Key(); 
+    Print_Press_Key(1,0,"."); 
   }
 
   for(i=0; i < TOTAL_No_of_Fitting_Parameters+1; i++) free(Title_Parameters[i]);

@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n"); //Press_Key();
+  printf("\n"); //Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -298,13 +298,13 @@ int main(int argc, char **argv)
 				  1, Name_of_Rows,
 				  0, Time.Time_Vector);
     printf("Row Empirical Data Representation:\n");
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,
 								       I_Time,
 								       Time.Time_Vector,
 								       Empirical_Data_Matrix,
 								       0);
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
 				  I_Time, Empirical_Data_Matrix,
@@ -443,7 +443,7 @@ int main(int argc, char **argv)
       printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val);
       
       free (W_GRID);
-      Press_Key(); 
+      Print_Press_Key(1,0,"."); 
   }
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 
   Observed_Data_Free(Data); free(Data);

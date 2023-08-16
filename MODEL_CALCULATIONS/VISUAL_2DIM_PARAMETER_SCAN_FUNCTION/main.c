@@ -168,7 +168,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n"); //Press_Key();
+  printf("\n"); //Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -223,7 +223,7 @@ int main(int argc, char **argv)
   else {
     printf(" X_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
     printf(" The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
   
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
   else {
     printf(" y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
     printf(" The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
   
@@ -266,7 +266,7 @@ int main(int argc, char **argv)
   else {
     printf(" y_LINEAR = %d, but it can only take 0/1 values\n", Y_LINEAR);
     printf(" The program will exit\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     exit(0); 
   }
   

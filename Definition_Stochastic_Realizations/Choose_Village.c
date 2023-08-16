@@ -23,7 +23,7 @@ int Choose_Village(double max_Probability, Community ** Pop, Parameter_Model * P
   //p = Discrete_Sampling_Rejection_Method(max_Probability, a, No_of_Villages);
 
   //for(i=0; i < No_of_Villages; i++) printf("a[%d] = %g----", i, a[i]);
-  //Press_Key();
+  //Print_Press_Key(1,0,".");
   
   free(a);
   return(p-1);

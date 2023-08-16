@@ -21,7 +21,7 @@ void Model_Parameters_Master_Equation(Parameter_Table * Table,
 
   printf(" No of CONFIGURATIONAL STATES = %d\n", * No_of_CONFIGURATIONAL_STATES);
   printf(" TOTAL No of CONSUMERS        = %d\n", * n_DIMENSION);
-  // Press_Key(); 
+  // Print_Press_Key(1,0,"."); 
 }
 
 void Labels_for_Marginal_Probabilities (Parameter_Table * Table)
@@ -199,7 +199,7 @@ void Print_Marginal_Averages( double Time_Current, Parameter_Table * Table)
     printf("\n");
   } 
 
-  Press_Key(); 
+  Print_Press_Key(1,0,"."); 
 }
 
 void Print_Probability_Distribution ( Parameter_Table * Table )

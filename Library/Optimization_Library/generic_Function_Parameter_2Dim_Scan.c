@@ -91,7 +91,7 @@ int generic_Function_Parameter_2Dim_Scan( Parameter_Table * P,
       /* 					  x_Data, z_SOL[k],    */
       /* 					  Input_Parameter_1,   */
       /* 					  Input_Parameter_2 ); */
-      //Press_Key();
+      //Print_Press_Key(1,0,".");
 #endif
 #if defined SAVING_SLICES_TO_FILE 
       Saving_to_File_double("Parameter_Scan_Slice_", x_Data, z_SOL[k], No_of_POINTS_1, k); 

@@ -90,7 +90,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
   Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
 #endif 
   #if defined VERBOSE
-    Press_Key();
+    Print_Press_Key(1,0,".");
   #endif
 #endif
 
@@ -146,7 +146,7 @@ int master_equation_time_dynamics( Parameter_Table * Table )
     #if defined DIFFUSION_BD_2D    
       Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
     #endif 
-    Press_Key();
+    Print_Press_Key(1,0,".");
   #endif 
   }/* ------> go further to the next time step */
 

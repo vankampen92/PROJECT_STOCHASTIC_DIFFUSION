@@ -85,7 +85,7 @@ int M_O_D_E_L( Parameter_Table * Table )
      only available for MODEL = DIFFUSION_1R1C 
   */
   x = Function_to_Type_of_Stability( Table );
-  Press_Key(); 
+  Print_Press_Key(1,0,"."); 
   
   printf("Lower Fixed Point (model variables):\t");
   for (k=0; k < Table->MODEL_STATE_VARIABLES; k++)

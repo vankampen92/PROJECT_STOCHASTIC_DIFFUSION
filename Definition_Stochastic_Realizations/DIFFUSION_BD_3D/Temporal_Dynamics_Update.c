@@ -201,7 +201,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
       printf(" There are only six events possible labelled as (0, 1, 2, 3, 4, 5)\n");
       printf(" Type of Event ill-defined\n");
       printf(" The program will exit\n");
-      Press_Key(); 
+      Print_Press_Key(1,0,"."); 
       exit(0);
     }
 }

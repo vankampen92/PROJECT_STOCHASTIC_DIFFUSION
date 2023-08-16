@@ -92,7 +92,7 @@ void P_L_O_T_T_I_N_G___P_A_R_A_M_E_T_R_I_C___C_O_N_F_I_G_U_R_A_T_I_O_N_S (Parame
 							      CPG->CPG_SCALE_X, 
 							      CPG->CPG_SCALE_Y );
 
-      if ( (++n)%(CPG->CPG__PANEL__X * CPG->CPG__PANEL__Y) == 0 ) Press_Key();    
+      if ( (++n)%(CPG->CPG__PANEL__X * CPG->CPG__PANEL__Y) == 0 ) Print_Press_Key(1,0,".");    
     }
   }
   

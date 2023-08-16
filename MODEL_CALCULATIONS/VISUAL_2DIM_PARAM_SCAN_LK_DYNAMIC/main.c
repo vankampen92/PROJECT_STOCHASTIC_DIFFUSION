@@ -68,10 +68,11 @@
      up to time -t1 [Last Time].  
    . -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */
-#define REPETITIONS 100
-
+#define REPETITIONS 2000
+// #define CONFIDENCE_INTERVALS 
 gsl_rng * r; /* Global generator defined in main.c */
 
+void Writing_Empirical_Time_Vector(Parameter_Fitting * F, int n);
 void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * , double **  );
 void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * , double ** );
 void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Table * Table);
@@ -206,7 +207,7 @@ int main(int argc, char **argv)
     printf( "f(%d)=%g, ", i, gsl_rng_uniform(r) );
     printf( "f_GAUS(%d)=%g\n", i, gsl_ran_gaussian(r, 1.0) );
   }
-  printf("\n"); //Press_Key();
+  printf("\n"); //Print_Press_Key(1,0,".");
   /*   END: Checking Random Number Generator Setup */
 #endif
 
@@ -361,6 +362,12 @@ int main(int argc, char **argv)
   FILE * FP_x = fopen("Confidence_Intervals_0_HII.dat", "w"); 
   FILE * FP_y = fopen("Confidence_Intervals_1_HII.dat", "w"); 
 
+  FILE * FP_mle_x = fopen("MLE_0_HII.dat", "w"); 
+  FILE * FP_mle_y = fopen("MLE_1_HII.dat", "w");
+
+  double * x_Val_mle = (double *)calloc(REPETITIONS, sizeof(double)); 
+  double * y_Val_mle = (double *)calloc(REPETITIONS, sizeof(double));
+
   int No_of_REPETITIONS = REPETITIONS;  
   for(k=0; k<No_of_REPETITIONS; k++) {
     printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
@@ -397,19 +404,20 @@ int main(int argc, char **argv)
     for (i=0; i<Realizations; i++)
       Realizations_Vector[i] = (double)i + 1.0;
     
+    Writing_Empirical_Time_Vector(F, Realizations);
     Writing_Standard_Data_Matrix( Empirical_Data_Matrix,
 				                          SUB_OUTPUT_VARIABLES, Realizations,
 				                          1, Name_of_Rows,
 				                          0, Realizations_Vector);
     // printf("Row Empirical Data Representation:\n");
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
     // Representation of Psedo Data (check -G0 [] -G1 [] input arguments!!!)
     /* C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,
      								       Realizations,          
      							 	       Realizations_Vector,   
      								       Empirical_Data_Matrix, 
      								       0);                 
-    Press_Key(); */
+    Print_Press_Key(1,0,"."); */
 
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
@@ -417,7 +425,7 @@ int main(int argc, char **argv)
 				                          "" );
     printf(" Observed_Data structure has been correctly initiated with an instance\n");
     printf(" of (real or pseudo) emprical data \n");
-    Press_Key();
+    Print_Press_Key(0,0,".");
     /*     E N D : -------------------------------------------------------------- */
 
     /* Back to input argument values in Table */
@@ -489,14 +497,20 @@ int main(int argc, char **argv)
     
     double Likelihood_Minimum, x_Val, y_Val;
     Minimum_Parameter_2D_Scan(&Table,
-			      No_of_POINTS_1, Input_Parameter_1,
-			      No_of_POINTS_2, Input_Parameter_2,
-			      W_GRID,
-			      &Likelihood_Minimum, &x_Val, &y_Val);
+			                        No_of_POINTS_1, Input_Parameter_1,
+			                        No_of_POINTS_2, Input_Parameter_2,
+			                        W_GRID,
+			                        &Likelihood_Minimum, &x_Val, &y_Val);
+
+    fprintf(FP_mle_x, "%g\t%g\n", Initial_Value_0, x_Val); 
+    fprintf(FP_mle_y, "%g\t%g\n", Initial_Value_1, y_Val); 
+
+    x_Val_mle[k] = x_Val; 
+    y_Val_mle[k] = y_Val; 
     
     //Table.CPG->contour_level = customized_contour_levels_0 ( Table.CPG );
     Table.CPG->contour_level = customized_contour_levels_1 ( Table.CPG,
-							     Likelihood_Minimum );
+							                                               Likelihood_Minimum );
     C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___C_O_N_T_O_U_R( Table.CPG,
 							                                              W_GRID, 
 							                                              FIRST_PLOT,
@@ -504,7 +518,7 @@ int main(int argc, char **argv)
 							                                              Table.CPG->CPG_RANGE_W_0,
 							                                              Table.CPG->CPG_RANGE_W_1,
 							                                              i_PLOT );
-    /* Annotating the countours by hand */
+    /* B E G I N : Annotating the countours by hand and drawing true value */
     // cpgptxt(float x, float y, float angle, float fjust,  const char *text);
 
     cpgslw(2); 
@@ -512,34 +526,54 @@ int main(int argc, char **argv)
     /* cpgptxt(0.0001, 78.0, 0.0, 0.0,   "2.5"); */
     /* cpgptxt(0.0003, 92.0, 0.0, 0.0,  "5.0");  */
     
-    float x_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_1, City_Par_Values);
-    float y_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_2, City_Par_Values);
-    
-    printf("%s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Value);
-    printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Value);
+    float x_Value, y_Value; 
+    float * xs; 
+    float * ys; 
+
+    x_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_1, City_Par_Values);
+    y_Value = Parameter_Model_into_Vector_Entry(Input_Parameter_2, City_Par_Values);
     
     cpgslw(3);  /* Line width changing to 3     */
-    cpgsci(2); /* Color Index changing to 12   */
+    cpgsci(2);  /* Color Index changing to 12   */
     cpgpt1(x_Value, y_Value, 23);  /* Symbol 23 */
   
-    float * xs = (float *)calloc(2, sizeof(float) );
-    float * ys = (float *)calloc(2, sizeof(float) );
+    xs = (float *)calloc(2, sizeof(float) );
+    ys = (float *)calloc(2, sizeof(float) );
     xs[0] = 0.5* x_Value;  xs[1] = x_Value; /* A 40 % reduction */ 
     ys[0] = y_Value;       ys[1] = y_Value;
+    
+    cpg_XY_same_arrow( 2, xs, ys, 5, 1, 4);
+
+    printf("%s = %g[ %f ]\t", Table.Symbol_Parameters[Input_Parameter_1], x_Val, x_Value);
+    printf("%s = %g[ %f ]\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val, y_Value);
+    
+    x_Value = (float)x_Val;
+    y_Value = (float)y_Val; 
+    
+    cpgslw(3);  /* Line width changing to 3     */
+    cpgsci(2);  /* Color Index changing to 12   */
+    cpgpt1(x_Value, y_Value, 23);  /* Symbol 23 */
+  
+    xs = (float *)calloc(2, sizeof(float) );
+    ys = (float *)calloc(2, sizeof(float) );
+    xs[0] = 1.40 * x_Value;  xs[1] = x_Value; /* A 40 % reduction */ 
+    ys[0] = y_Value;         ys[1] = y_Value;
     
     cpg_XY_same_arrow( 2, xs, ys, 5, 1, 4);
     // cpg_XY_same_arrow( N, xs, ys, CPG->color_Index, CPG->type_of_Line, CPG->type_of_Width );
     
     free(xs);
     free(ys);
-    Press_Key();
+    Print_Press_Key(1,0,".");
+    /* E N D : Annotating the countours by hand and drawing true value */
 
+  /* B E G I N :   Drawing likelihood profiles -------------------------------------------*/  
+  #if defined CONFIDENCE_INTERVALS
     double * x_Data  = (double *)calloc(No_of_POINTS_1, sizeof(double) ); 
     double * y_Data  = (double *)calloc(No_of_POINTS_2, sizeof(double) );
     double * Profile_x_Data  = (double *)calloc(No_of_POINTS_1, sizeof(double) ); 
     double * Profile_y_Data  = (double *)calloc(No_of_POINTS_2, sizeof(double) );
-
-    /* B E G I N :   Drawing likelihood profiles -------------------------------------------*/
+   
     Profiling_2D_Scanned_Function(&Table,
     				                      No_of_POINTS_1, Input_Parameter_1,
     				                      No_of_POINTS_2, Input_Parameter_2,
@@ -566,7 +600,7 @@ int main(int argc, char **argv)
     							                                      "Negative Log Likelihood",
     							                                      "",
     							                                      SCALE_X, SCALE_Y );
-    Press_Key();
+    Print_Press_Key(1,0,".");
     CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T(Table.CPG,
     							                                      SAME_PLOT,
     							                                      No_of_POINTS_2,
@@ -575,7 +609,7 @@ int main(int argc, char **argv)
     							                                      "Negative Log Likelihood",
     							                                      "",
     							                                      SCALE_X, SCALE_Y );
-    Press_Key();
+    Print_Press_Key(1,0,".");
     /*    E N D :   Drawing likelihood profiles -------------------------------------------*/
     
     printf("Output values of Minimum_Parameter_2D_Scan(...) function:\n");
@@ -586,7 +620,7 @@ int main(int argc, char **argv)
     printf("(within the subparameter space analyzed)\n");
 
     printf("Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2)...\n");
-    Press_Key();
+    Print_Press_Key(1,0,".");
     /* B E G I N :  Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2) */
     printf("Confidence Intervals from Likelihood Profile:\n");
     double x_MLE = 0.0;
@@ -610,83 +644,44 @@ int main(int argc, char **argv)
     printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
 	   Table.Symbol_Parameters[Input_Parameter_2], Initial_Value_1,
 	   Table.Symbol_Parameters[Input_Parameter_2], y_MLE, y_CI[0], y_CI[1]);
-    free(x_CI); free(y_CI); 
-    /*     E N D :  Calculating Confidence Intervals ------------------------------------------*/
-
-    double * Profile_x_Data_B = (double *)calloc(No_of_POINTS_1, sizeof(double) );
-    double * Profile_x_Data_T = (double *)calloc(No_of_POINTS_1, sizeof(double) );
-    double * Profile_y_Data_L = (double *)calloc(No_of_POINTS_2, sizeof(double) );
-    double * Profile_y_Data_R = (double *)calloc(No_of_POINTS_2, sizeof(double) ); 
-    Profiling_2D_Scanned_Function_Maximum_Minimum(&Table,
-						                                      No_of_POINTS_1, Input_Parameter_1,
-						                                      No_of_POINTS_2, Input_Parameter_2,
-						                                      W_GRID,
-						                                      Profile_x_Data_B, x_Data, 
-						                                      Profile_y_Data_L, y_Data,
-						                                      Profile_x_Data_T, 
-						                                      Profile_y_Data_R);
-    /* B E G I N :  Calculating Confidence Interval (Ratio=Input_Parameter_1/Input_Parameter_2) */
-    printf("Confidence Intervals from Likelihood Profile:\n");
-    double x_B = 0.0;
-    double * x_CI_B = (double *)calloc(2, sizeof(double) ); 
-    Confidence_Intervals_from_Likelihood_Profile( Profile_x_Data_B, x_Data, No_of_POINTS_1,
-						                                      LIKELIHOOD_JUMP, 
-						                                      &x_B, x_CI_B);
-    double x_T = 0.0;
-    double * x_CI_T = (double *)calloc(2, sizeof(double) ); 
-    Confidence_Intervals_from_Likelihood_Profile( Profile_x_Data_T, x_Data, No_of_POINTS_1,
-						                                      LIKELIHOOD_JUMP, 
-						                                      &x_T, x_CI_T );
-    double y_L = 0.0;
-    double * y_CI_L = (double *)calloc(2, sizeof(double) ); 
-    Confidence_Intervals_from_Likelihood_Profile( Profile_y_Data_L, x_Data, No_of_POINTS_1,
-						                                      LIKELIHOOD_JUMP, 
-						                                      &y_L, y_CI_L);
-    double y_R = 0.0;
-    double * y_CI_R = (double *)calloc(2, sizeof(double) ); 
-    Confidence_Intervals_from_Likelihood_Profile( Profile_y_Data_R, x_Data, No_of_POINTS_1,
-						                                      LIKELIHOOD_JUMP, 
-						                                      &y_R, y_CI_R );
-
-    double Parameter_Ratio = 0.0; 
-    double * Parameter_Ratio_CI = (double *)calloc(2, sizeof(double) ); 
-    Confidence_Interval_Parameter_Ratio( &Table, Input_Parameter_1, Input_Parameter_2, 
-    					                           x_B, x_CI_B, x_T, x_CI_T,
-    					                           y_L, y_CI_L, y_R, y_CI_R,
-					                               &Parameter_Ratio, Parameter_Ratio_CI);
-    printf("%s=%f\t[%f, %f]\n",
-           Table.Symbol_Parameters[Input_Parameter_1],x_B,x_CI_B[0],x_CI_B[1]);
-    printf("%s=%f\t[%f, %f]\n",
-           Table.Symbol_Parameters[Input_Parameter_1],x_T,x_CI_T[0],x_CI_T[1]);
-    printf("%s=%f\t\t[%f, %f]\n",
-	         Table.Symbol_Parameters[Input_Parameter_2], y_L, y_CI_L[0], y_CI_L[1]);
-    printf("%s=%f\t\t[%f, %f]\n",
-	         Table.Symbol_Parameters[Input_Parameter_2], y_R, y_CI_R[0], y_CI_R[1]);
     
-    printf("%s/%s = %f\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_2],
-	   Table.Symbol_Parameters[Input_Parameter_1], 
-	   Parameter_Ratio, Parameter_Ratio_CI[0], Parameter_Ratio_CI[1]);
-    
-    free(Profile_x_Data_B); free(Profile_y_Data_L);
-    free(Profile_x_Data_T); free(Profile_y_Data_R);
-
-    free(x_CI_B); free(y_CI_L);
-    free(x_CI_T); free(y_CI_R);
-    free(Parameter_Ratio_CI);
-   
+    free(x_CI); free(y_CI);    
     free(x_Data);         free(y_Data);
     free(Profile_x_Data); free(Profile_y_Data);
     /*     E N D :  Calculating Confidence Intervals ------------------------------------------*/
- #endif
+  #endif
+#endif
     
     free (W_GRID);
     free (Realizations_Vector); 
-    // Press_Key();
+    // Print_Press_Key(1,0,".");
   }
 
-  fclose(FP_x); fclose(FP_y);
-  
+  Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
+  Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
+  int SAME = 0;
+  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( Table.CPG, 
+                                                           REPETITIONS, x_Val_mle, 50, 
+                                                           Table.Symbol_Parameters[Input_Parameter_1], 
+                                                           "Frequency", "", 
+                                                           1, 0, 
+                                                           SAME ); 
+  Press_Key(); 
+
+  Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_min );
+  Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX );
+  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( Table.CPG, 
+                                                           REPETITIONS, y_Val_mle, 50, 
+                                                           Table.Symbol_Parameters[Input_Parameter_2], 
+                                                           "Frequency", "", 
+                                                           1, 0, 
+                                                           SAME ); 
+  Press_Key();                                       
+
+  free(x_Val_mle);  free(y_Val_mle);
+  fclose(FP_x);     fclose(FP_y);
+  fclose(FP_mle_x); fclose(FP_mle_y);
+
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */ 
   Observed_Data_Free(Data); free(Data);
   
@@ -728,6 +723,16 @@ int main(int argc, char **argv)
   return (0);
 }
 
+void Writing_Empirical_Time_Vector(Parameter_Fitting * F, int n)
+{
+  int i;
+
+    for(i=0; i<n; i++)
+      printf("%g  ", F->Data->Time_Data_Vector[i]);
+    
+    printf("\n");
+} 
+
 void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 			       int No_of_POINTS_1, int Input_Parameter_1,
 			       int No_of_POINTS_2, int Input_Parameter_2,
@@ -737,22 +742,21 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 			       double * y_Value_MLE)
 {
   /* This function looks for a minimum of the function over the 2D subparameter space that 
-     has been scanned (as defined in Table->S Parameter_Space structure 
+     has been scanned (as defined in Table->S Parameter_Space structure
   */ 
   int n, k, j, i;
   int k_MIN, j_MIN; 
   double Minimum_Value, Value, Value_0, Value_1;
 	
   Parameter_Space * S = Table->S;
-	/* BEGIN : Allocating memory for saving data to plot a bifurcation  * * * * * * */
-	/*         diagram for each variable  * * * * * * * * * * * * * * * * * * * * * */  
+	/* BEGIN : Allocating memory for a 2D array to save negative loglikelioods */  
 	double      ** z_SOL  = (double **)malloc( No_of_POINTS_2 * sizeof(double *) );
 	for( i = 0; i < No_of_POINTS_2; i++){
 	  z_SOL[i] = (double *)malloc( No_of_POINTS_1 * sizeof(double) );
 	}
 	double * x_Data  = (double *)malloc(No_of_POINTS_1 * sizeof(double) ); 
 	double * y_Data  = (double *)malloc(No_of_POINTS_2 * sizeof(double) ); 
-	/*   END : Allocating memory for saving dynamical data * * * * * * * * * * * *  */
+	/*   END : --------------------------------------------------------------- */
 
 	Minimum_Value = W_GRID[0]; 
 	n = 0; 
@@ -770,7 +774,6 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 	  for( j = 0; j < No_of_POINTS_1; j++ ){
 	    
 	    Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
-	    
 	    x_Data[j] = Value;
 	    
 	    z_SOL[k][j]    = W_GRID[n++]; 
@@ -795,9 +798,11 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 	* y_Value_MLE = y_Data[k_MIN];
 	
 	/* BEGIN : Free memory!!!                                     * * * * * * */
-	for( i = 0; i < No_of_POINTS_2; i++) free(z_SOL[i]); 
+	for( i = 0; i < No_of_POINTS_2; i++) 
+    free(z_SOL[i]); 
 	free(z_SOL);
-	free(x_Data); free(y_Data); 
+	
+  free(x_Data); free(y_Data); 
 	/*   END : Free memmory!!!                                    * * * * * * */
 }
 
@@ -859,7 +864,7 @@ void Profiling_2D_Scanned_Function(Parameter_Table * Table,
 	  }
 	}
 
-	if (j_BOOL == 1 & k_BOOL == 1 ) {
+	if (j_BOOL == 1 && k_BOOL == 1 ) {
 	  for( k = 0; k < No_of_POINTS_2; k++ ) Profile_y_Data[k] = z_SOL[k][j_VAL]; 
 	  
 	  for( j = 0; j < No_of_POINTS_1; j++ ) Profile_x_Data[j] = z_SOL[k_VAL][j];
@@ -924,10 +929,10 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
 						                                  double **  Empirical_Data_Matrix )
 {
   /* 
-     This to save the output variables corresponding to the realizations 
+     This function saves the output variables corresponding to the realizations 
      generated by the function  M_O_D_EL___S_T_O( &Table ) into a straightforward 
-     Empirical Data Matrix containing just the 'Pseudo Data' required for the likelihood 
-     of the MODEL DIFFUSION_HII_nD to be calculated.
+     Empirical Data Matrix containing just the 'Pseudo Data' required for the 
+     particular likelihood of the MODEL DIFFUSION_HII_nD to be calculated.
   */
   int k,i;
   int No_of_POINTS; 
@@ -960,9 +965,10 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
 void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Table * Table)
 {
   /* This function assigns the correct pointer to the Fitting Structure
-     function member depending on the model at work. 
-     Only couple of models have these functions defined. These are 
-     analytical expression for the distributions at stationarity.
+     function member in agreement with the model at work. 
+     Only a couple of models have these functions defined. These are 
+     analytical expression for the distributions at stationarity and/or
+     at the system evolves in time.
   */
   switch( Table->TYPE_of_MODEL ) {
 
@@ -995,120 +1001,4 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     printf(" Check input argument list!!!\n");
     exit(0);
   } 
-}
-  
-void Profiling_2D_Scanned_Function_Maximum_Minimum(Parameter_Table * Table,
-						   int No_of_POINTS_1, int Input_Parameter_1,
-						   int No_of_POINTS_2, int Input_Parameter_2,
-						   double * W_GRID,
-						   double * Profile_x_Data_B, double * x_Data, 
-						   double * Profile_y_Data_L, double * y_Data,
-						   double * Profile_x_Data_T, 
-						   double * Profile_y_Data_R)
-{
-	int n, k, j, i;
-	int k_VAL, j_VAL; 
-	double Value, Value_0, Value_1;
-	
-	Parameter_Space * S = Table->S;
-	/* BEGIN : Allocating memory for saving data to plot a bifurcation  * * * * * * */
-	/*         diagram for each variable  * * * * * * * * * * * * * * * * * * * * * */  
-	double      ** z_SOL  = (double **)malloc( No_of_POINTS_2 * sizeof(double *) );
-	for( i = 0; i < No_of_POINTS_2; i++)
-	  z_SOL[i] = (double *)malloc( No_of_POINTS_1 * sizeof(double) );
-	/*   END : Allocating memory for saving dynamical data * * * * * * * * * * * *  */
-
-	
-	n = 0; 
-	for( k = 0; k < No_of_POINTS_2; k++ ) {
-
-	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
-	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
-     
-	  Value = Value_0 + k * (Value_1 - Value_0)/(double)(No_of_POINTS_2 - 1);
-	  y_Data[k]= Value;
-
-	    
-	  Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
-	  Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
-	  
-	  for( j = 0; j < No_of_POINTS_1; j++ ){
-	    
-	    Value = Value_0 + j * (Value_1 - Value_0)/(double)(No_of_POINTS_1 - 1);
-	    
-	    x_Data[j] = Value;
-
-	    z_SOL[k][j]    = W_GRID[n++]; 
-	    
-	  }
-	}
-
-	j_VAL = 0; 
-	for( k = 0; k < No_of_POINTS_2; k++ ) Profile_y_Data_L[k] = z_SOL[k][j_VAL]; 
-
-	j_VAL = No_of_POINTS_1-1;  
-	for( k = 0; k < No_of_POINTS_2; k++ ) Profile_y_Data_R[k] = z_SOL[k][j_VAL];
-
-	k_VAL = 0; 
-	for( j = 0; j < No_of_POINTS_1; j++ ) Profile_x_Data_B[j] = z_SOL[k_VAL][j];
-
-	k_VAL = No_of_POINTS_2-1; 
-	for( j = 0; j < No_of_POINTS_1; j++ ) Profile_x_Data_T[j] = z_SOL[k_VAL][j];
-	  
-	/* BEGIN : Free memory!!!                                     * * * * * * */
-	for( i = 0; i < No_of_POINTS_2; i++) free(z_SOL[i]); 
-	free(z_SOL);
-	/*   END : Free memmory!!!                                     * * * * * */
-}
-
-void Confidence_Interval_Parameter_Ratio( Parameter_Table * Table,
-					  int Input_Parameter_1,
-					  int Input_Parameter_2, 
-					  double x_B, double * x_CI_B,
-					  double x_T, double * x_CI_T,
-					  double y_L, double * y_CI_L,
-					  double y_R, double * y_CI_R,
-					  double * Parameter_Ratio, 
-					  double * Parameter_Ratio_CI )
-{
-  double Value_0, Value_1;
-  Parameter_Space * S = Table->S;
-
-  if(x_B > 0.0 && x_T > 0.0) {
-  /* Top - Bottom */
-    Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
-    Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
-    
-    * Parameter_Ratio     = (Value_1 - Value_0)/(x_T -x_B);
-    Parameter_Ratio_CI[1] = (Value_1 - Value_0)/(x_CI_T[0] -x_CI_B[0]);
-    Parameter_Ratio_CI[0] = (Value_1 - Value_0)/(x_CI_T[1] -x_CI_B[1]);
-  }
-  else if (y_L > 0.0 && y_R > 0.0) {
-    /* Right - Left */
-    Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
-    Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
-    
-    * Parameter_Ratio     = (y_R -y_L)/(Value_1 - Value_0);
-    Parameter_Ratio_CI[0] = (y_CI_R[0] -y_CI_L[0])/(Value_1 - Value_0);
-    Parameter_Ratio_CI[1] = (y_CI_R[1] -y_CI_L[1])/(Value_1 - Value_0);
-  }
-  else if (x_B > 0.0 && x_T == 0.0) {
-    /* Bottom - Right */
-    Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_min );
-    Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_MAX );
-    
-    * Parameter_Ratio     = (y_R - Value_0)/(Value_1 - x_B);
-    Parameter_Ratio_CI[0] = (y_CI_R[0] - Value_0)/(Value_1 - x_CI_B[1]);
-    Parameter_Ratio_CI[1] = (y_CI_R[1] - Value_0)/(Value_1 - x_CI_B[0]); 
-  }
-  else if (y_L > 0.0 && y_R == 0.0) {
-    /* Left - Top */
-    Value_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, S->Parameter_min );
-    Value_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, S->Parameter_MAX );
-
-    * Parameter_Ratio     = (Value_1 - y_L)/(x_T - Value_0);
-    Parameter_Ratio_CI[1] = (Value_1 - y_CI_R[1])/(x_CI_T[0] -Value_0);
-    Parameter_Ratio_CI[0] = (Value_1 - y_CI_R[0])/(x_CI_T[1] -Value_0);
-  }
-}
-
+}  
