@@ -70,7 +70,8 @@ void D_Normalilzation_Probability_Distribution( Parameter_Table * Table )
   Print_Press_Key(1,0,".");
 }
 
-void Multinomial_Stationarity_Probability_Distribution(double * p, int N, Parameter_Table * Table)
+void Multinomial_Stationarity_Probability_Distribution( double * p, int N, 
+                                                        Parameter_Table * Table)
 {
   /* Input arguments: 
      . p is the vector of probabilities: (p_1, ..., p_S, p_{S+1})
@@ -101,7 +102,7 @@ void Multinomial_Stationarity_Probability_Distribution(double * p, int N, Parame
      
     for(k = 0; k<D; k++) n[k] = C[i][k]; 
     n[S] = N - n_H; 
-      X  = gsl_ran_multinomial_lnpdf(D+1, p, n);
+    X  = gsl_ran_multinomial_lnpdf(D+1, p, n);
     y[i] =  exp(X);     
   }
 

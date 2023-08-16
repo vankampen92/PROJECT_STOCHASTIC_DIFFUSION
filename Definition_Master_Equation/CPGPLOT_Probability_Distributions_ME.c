@@ -236,12 +236,12 @@ void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * T
   }
   
   CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
-							No_of_POINTS, 
-							x, p,
-							ME->Marginal_Probability_Label[n], 
-							"Probability", 
-							Plot_Title,
-							1, 1 );
+							                                          No_of_POINTS, 
+							                                          x, p,
+							                                          ME->Marginal_Probability_Label[n], 
+							                                          "Probability", 
+							                                          Plot_Title,
+							                                          1, 1 );
 
   free(Plot_Title); 
   free(x); 
@@ -391,12 +391,12 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
   }
   
   CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
-							No_of_POINTS, 
-							x, p,
-							ME->Marginal_Probability_Label[n], 
-							"Probability", 
-							Plot_Title,
-							1, 1 );
+							                                          No_of_POINTS, 
+							                                          x, p,
+							                                          ME->Marginal_Probability_Label[n], 
+							                                          "Probability", 
+							                                          Plot_Title,
+							                                          1, 1 );
 
   CPG->CPG_RANGE_X_0 = -0.5;  CPG->CPG_RANGE_X_1 = No_of_POINTS - 0.5;
   CPG->CPG_RANGE_Y_0 =  0.0;  CPG->CPG_RANGE_Y_1 = 1.0;  

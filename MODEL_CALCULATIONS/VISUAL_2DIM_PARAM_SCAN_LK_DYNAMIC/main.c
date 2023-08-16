@@ -20,8 +20,7 @@
    rely on the numerical integration of the master equation.    
 
    Parameter ranges (in 2D) are defined in Parameter_Space structure. Parameters 
-   to scan 
-   are defined as input arguments. 
+   to scan are defined as input arguments. 
 
    Compilation:
    
@@ -68,7 +67,7 @@
      up to time -t1 [Last Time].  
    . -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */
-#define REPETITIONS 2000
+#define REPETITIONS 20000
 // #define CONFIDENCE_INTERVALS 
 gsl_rng * r; /* Global generator defined in main.c */
 
@@ -299,7 +298,7 @@ int main(int argc, char **argv)
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
 
   if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
-    /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT and consumers    */
+    /* A model where the TOTAL_No_of_CONSUMERS is a CONSTANT and consumers       */
     /* feed on multiple resources: extra parameters per resource type are needed */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
     Resetting_Alpha_Nu_Vectors_Constant (&Table);
@@ -392,8 +391,8 @@ int main(int argc, char **argv)
 					                                    0, Name_of_Rows,
 					                                    1, Time.Time_Vector );
     else
-      /* Storing Pseudo-data in Empirical Data Matrix */
-      /* (this process might be model specific)       */
+      /* Storing Pseudo-data in Empirical Data Matrix             */
+      /* (this process might is model specific, in general)       */
       Creating_HII_nD_Data_Matrix_from_Model ( &Table, Empirical_Data_Matrix );
       // Creating_Standard_Data_Matrix_from_Model ( &Table, Empirical_Data_Matrix );
 
@@ -639,11 +638,12 @@ int main(int argc, char **argv)
     fprintf(FP_y, "%g\t%g\t[%g, %g]\n", Initial_Value_1, y_MLE, y_CI[0], y_CI[1]); 
     
     printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_1], Initial_Value_0,
-	   Table.Symbol_Parameters[Input_Parameter_1], x_MLE, x_CI[0], x_CI[1]);
+	  Table.Symbol_Parameters[Input_Parameter_1], Initial_Value_0,
+	  Table.Symbol_Parameters[Input_Parameter_1], x_MLE, x_CI[0], x_CI[1]);
+    
     printf("[True Value: %s = %g]\t%s=%f\t[%f, %f]\n",
-	   Table.Symbol_Parameters[Input_Parameter_2], Initial_Value_1,
-	   Table.Symbol_Parameters[Input_Parameter_2], y_MLE, y_CI[0], y_CI[1]);
+	  Table.Symbol_Parameters[Input_Parameter_2], Initial_Value_1,
+	  Table.Symbol_Parameters[Input_Parameter_2], y_MLE, y_CI[0], y_CI[1]);
     
     free(x_CI); free(y_CI);    
     free(x_Data);         free(y_Data);
@@ -664,7 +664,7 @@ int main(int argc, char **argv)
                                                            REPETITIONS, x_Val_mle, 50, 
                                                            Table.Symbol_Parameters[Input_Parameter_1], 
                                                            "Frequency", "", 
-                                                           1, 0, 
+                                                           0, 0, 
                                                            SAME ); 
   Press_Key(); 
 
@@ -674,7 +674,7 @@ int main(int argc, char **argv)
                                                            REPETITIONS, y_Val_mle, 50, 
                                                            Table.Symbol_Parameters[Input_Parameter_2], 
                                                            "Frequency", "", 
-                                                           1, 0, 
+                                                           0, 0, 
                                                            SAME ); 
   Press_Key();                                       
 
@@ -980,10 +980,6 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
     F->Function = GSL_Function_to_Minimize_Binomial_Free_Consumers;
     break;
 
-  case 16: /* DIFFUSION_HII_nD * * * * * * * * * * * * * * * * * * * * * * */
-    F->Function = GSL_Function_to_Minimize_Multinomial_Free_Consumers;
-    break;
-    
   case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */
     if(Table->SUB_OUTPUT_VARIABLES == 1)
       F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0;
@@ -991,6 +987,10 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
       assert(Table->SUB_OUTPUT_VARIABLES == 2); 
       F->Function = GSL_Function_to_Minimize_Beddington_DeAngelis;
     }
+    break;
+  
+  case 16: /* DIFFUSION_HII_nD * * * * * * * * * * * * * * * * * * * * * * */
+    F->Function = GSL_Function_to_Minimize_Multinomial_Free_Consumers;
     break;
       
   default:

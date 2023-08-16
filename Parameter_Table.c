@@ -478,9 +478,12 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table)
 void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
 {
   int i; 
-  double Density; 
+  double Density, Theta, T_C; 
 
-  printf("Resource Type \t Nu\t Alpha\t Theta\t Density (y/K)\n");
+  printf("Resource Type \t|\t Nu\t|\t Alpha\t|\t Theta\t|\t Density (y/K)\n");
+  double Nu = Table->Nu_C_0; 
+  
+  Theta = 0.0; 
   for(i=0; i<Table->No_of_RESOURCES; i++) {
     
     Density = Table->y_R_i[i]/(double)Table->K_R;
@@ -489,10 +492,17 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
     printf("Nu_%d = %g\t", i, Table->Nu_Consumers[i]);
     printf("Alpha_%d = %g\t", i, Table->Alpha_C[i]);
     printf("Theta_%d = %g\t", i, Table->Theta_Consumers[i]);
+
+    Theta += Table->Theta_Consumers[i];
+
     printf("Density_%d = %g\n", i, Density);
   }
 
-  Print_Press_Key(1,0,".");
+  T_C = 1.0 / (Nu + Theta);
+  printf(" Exact Characteristic Time (only is the handling time is the same across all resources):\n"); 
+  printf(" T = %g\n", T_C);
+
+  Print_Press_Key(0,1,".");
 } 
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */
