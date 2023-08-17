@@ -4,11 +4,126 @@
     . void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ()
     . void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ()
     . void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ()
-   
+    . void C_P_G___T_H_E_O_R_E_T_I_C_A_L___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ()   
    SAVEing Aux Functions: 
     . void Saving_Empirical_Distribution_vs_ME_Numerical_Integration ()
     . void Saving_Marginal_Distribution()
 */
+
+void C_P_G___T_H_E_O_R_E_T_I_C_A_L___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
+							                                                                   int j,
+							                                                                   int n, 
+							                                                                   double Time_Current,
+							                                                                   int SAME )
+{
+  /* This function plots time evolving theoretical marginal probability distributions. 
+     As input, it takes Table. A member of Table is MEq, which stores all the necessary information 
+     to plot the whole distribution and, of course, its theoretical marginals.
+
+     Mathematical expressions for the theoretical marginals are not available for every model.
+     So far, only available for DIFFUSION_HII_nD and only if all Nu's are the same. 
+
+     Even if the dimension of the multivariate probibaility is low (n_DIMENSION is 1 or 2), 
+     theoretical time evolving marginals are only correctly stored (if previously calculated) 
+     in ME->MPD_T[k][n], where 'k' is the index of k-th time in Time_Vector[] and 'n' is 
+     each of the dimension for every marginal. 
+
+     Input Args: 
+     . Table, 
+     . j, index of the j-th time in Time_Vector[]
+     . n, index of the marginal to plot
+     . Time_Current
+     . SAME, boolean argument telling whether reuse the same plot or not.   
+     
+     This function will plot the marginals, depending on an input parameter, an integer,
+     n, defining the marginal to plot: 
+     . n=0, first dimension
+     . n=1, second dimension
+     . n=2, third dimension, and so on.
+  */
+  
+  /* Notice that the probability distribution and marginals in the two dimensions are 
+     associated to a Time_Current around the j-th time in Time_Vector[j] 
+  */
+  int Horizontal_Plot_Position, Vertical_Plot_Position;
+  int i;
+  int No_of_POINTS;
+  static double Current_Time = 0.0;
+  double Last_Time;
+
+  /* Checking if all Nu's are the same */
+  assert_HLL_nD_Equal_Nus( Table );
+
+  Parameter_CPGPLOT * CPG = Table->CPG_STO; 
+  Master_Equation * ME = Table->MEq;
+
+  cpgslct(CPG->DEVICE_NUMBER);      /* Selecting Device */
+  
+  double * y;
+  double * x; 
+
+  y = ME->MPD_T[j][n];
+  x = (double *)calloc(ME->n_D[n], sizeof(double));   
+  for(i=0; i<ME->n_D[n]; i++) 
+    x[i] = (double)i;
+    
+  No_of_POINTS = ME->n_D[n]; 
+  
+  CPG->CPG_RANGE_X_0 = -0.5;  CPG->CPG_RANGE_X_1 = No_of_POINTS - 0.5;
+  CPG->CPG_RANGE_Y_0 =  0.0;  CPG->CPG_RANGE_Y_1 = 1.0;  
+  
+  double x_Time_Position = 0.90 * (float)CPG->CPG_RANGE_X_1;
+  double y_Time_Position = 0.90 * (float)CPG->CPG_RANGE_Y_1;
+
+  char * Plot_Title = (char *)calloc( 100, sizeof(char));
+  char * Plot_Time  = (char *)calloc( 50, sizeof(char));
+  char * Time_Eraser = (char *)calloc(50, sizeof(char));
+  
+  Last_Time     = Current_Time;
+  Current_Time  = Time_Current; 
+  sprintf(Plot_Time, "Time = %5.2f", Current_Time);
+  sprintf(Time_Eraser, "Time = %5.2f", Last_Time);
+
+  Plot_Title[0] ='\0';
+  sprintf(Plot_Title, "Time = %5.2f", Current_Time);
+
+  CPG->type_of_Line   = 4;
+  CPG->type_of_Symbol = 25;
+  CPG->type_of_Width  = 8;
+  CPG->color_Index    = 7; /* */
+
+  if (SAME > 0) {
+    if (CPG->CPG__PANEL__X > 0 && CPG->CPG__PANEL__Y > 0 ){
+      Horizontal_Plot_Position  = n%CPG->CPG__PANEL__X + 1;
+      Vertical_Plot_Position    = n/CPG->CPG__PANEL__X + 1;
+    }
+    else {
+      Vertical_Plot_Position    = n%abs(CPG->CPG__PANEL__Y) + 1;
+      Horizontal_Plot_Position  = n/abs(CPG->CPG__PANEL__Y) + 1;;
+    } 
+    cpgpanl(Horizontal_Plot_Position, Vertical_Plot_Position);
+    // printf("k = %d\t Horizontal Position = %d\t Vertical Position = %d\n",
+    //	       k, Horizontal_Plot_Position, Vertical_Plot_Position);
+    // Print_Press_Key(1,0,".");
+  }
+  
+  CPGPLOT___X_Y___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( CPG, SAME,
+							                                          No_of_POINTS, 
+							                                          x, y,
+							                                          ME->Marginal_Probability_Label[n], 
+							                                          "Probability", 
+							                                          Plot_Title,
+							                                          1, 1 );
+  cpgsch(2.0);
+  cpgsci(0);
+  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 1.0, Time_Eraser);
+  cpgsci(1);
+  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 1.0, Plot_Time);
+  // cpgsch(char_Size);
+
+  free(Plot_Title); free(Plot_Time); free(Time_Eraser);
+  free(x); 
+}
 
 void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
 							                                           int j,
@@ -19,6 +134,13 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
   /* This function plots marginal probability distributions. As input, it takes Table. 
      A member of Table is MEq, which stores all the necessary information to plot the 
      whole distribution and, of course, its marginals.
+
+     Input Args: 
+     . Table, 
+     . j, index of the j-th time in Time_Vector[]
+     . n, index of the marginal to plot
+     . Time_Current
+     . SAME, boolean argument telling whether reuse the same plot or not.   
      
      This function will plot the marginals, depending on an input parameter, an integer,
      n, defining the marginal to plot: 
@@ -68,7 +190,7 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
     else {
       printf(" Error in file: CPGPLOT_Probability_Distributions_ME.c.\n");
       printf(" You are in two dimenison, but asking for the marginal probability\n");
-      printf(" distributjion the higher dimension: %d\n", n);
+      printf(" distribution for the higher dimension: %d\n", n);
       printf(" The program will exit\n");
       exit(0);
     }
@@ -101,6 +223,7 @@ void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table
   CPG->type_of_Line   = 4;
   CPG->type_of_Symbol = 25;
   CPG->type_of_Width  = 3;
+  CPG->color_Index    = 6;
 
   if (SAME > 0) {
     if (CPG->CPG__PANEL__X > 0 && CPG->CPG__PANEL__Y > 0 ){
@@ -356,7 +479,7 @@ void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Tab
   valid_realizations = i_valid;
 
   probability_distribution_from_stochastic_realizations( y, valid_realizations, 
-							 p, No_of_POINTS );
+							                                           p, No_of_POINTS );
 
   char * Plot_Title = (char *)calloc( 100, sizeof(char));
   char * Plot_Time  = (char *)calloc( 50, sizeof(char));

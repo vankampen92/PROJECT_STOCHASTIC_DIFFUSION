@@ -64,7 +64,7 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
                           -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4\
                           -G0 1 -G1 5 -G2 1 -G3 0.0 -G4 3.5 -G5 1 -G6 0.0 -G7 8 \
-                          -tn 10 -t0 0.0 -t1 3.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
+                          -tn 5 -t0 0.0 -t1 3.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
                           -HuR 0.0 -HuC 0.0 -H5 0.0 \
                           -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 0.1 \
                           -Hp1 0.3725 -Hp2 1.0 -HN 20 
@@ -75,6 +75,14 @@ gsl_rng * r; /* Global generator defined in main.c */
                           -tn 10 -t0 0.0 -t1 3.5 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
                           -HuR 0.0 -HuC 0.0 -H5 0.0 \
                           -HK 10000 -H0 5.0 -H2 1.0 -H9 10.5 -H10 0.1 \
+                          -Hp1 0.3725 -Hp2 1.0 -HN 20
+
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
+                          -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 \
+                          -G0 1 -G1 5 -G2 1 -G3 0.0 -G4 6.0 -G5 1 -G6 0.0 -G7 8 \
+                          -tn 5 -t0 0.0 -t1 6.0 -t4 0 -tR 10000 -xn 0 -xN 20.0 -tE 0.2 \
+                          -HuR 0.0 -HuC 0.0 -H5 0.0 \
+                          -HK 10000 -H0 5.0 -H2 1.0 -H9 0.5 -H10 0.1 \
                           -Hp1 0.3725 -Hp2 1.0 -HN 20
 
    Relevant input arguments for model DIFFUSION_HII_nD:
@@ -152,18 +160,18 @@ int main(int argc, char **argv)
     printf(" Time_Dependence_Control and Time_Control structures will be allocated: \n");
     printf(" %d output variables of length %d points will be allocated\n",
     SUB_OUTPUT_VARIABLES, I_Time);
-    Time_Dependence_Control_Alloc(&Time, &Time_Dependence, &Table,
-				  I_Time, TIME_DEPENDENT_PARAMETERS, No_of_COVARIATES);
+    Time_Dependence_Control_Alloc(&Time, &Time_Dependence, &Table, I_Time, 
+                                  TIME_DEPENDENT_PARAMETERS, No_of_COVARIATES);
 
     int No_of_EMPIRICAL_TIMES = I_Time;
     // Number of columns in the data files of time-dependent parameters
-    Time_Dependence_Control_Upload(&Time, &Time_Dependence, &Table,
-				   I_Time, No_of_EMPIRICAL_TIMES,
-				   TIME_DEPENDENT_PARAMETERS, TYPE_of_TIME_DEPENDENCE,
-				   TYPE_0_PARAMETERS, TYPE_1_PARAMETERS, TYPE_2_PARAMETERS,
-				   No_of_COVARIATES,
-				   dependent_parameter, forcing_pattern,
-				   "File_of_Covariates.dat", Name_of_FILE[0] );
+    Time_Dependence_Control_Upload( &Time, &Time_Dependence, &Table,
+				                            I_Time, No_of_EMPIRICAL_TIMES,
+				                            TIME_DEPENDENT_PARAMETERS, TYPE_of_TIME_DEPENDENCE,
+				                            TYPE_0_PARAMETERS, TYPE_1_PARAMETERS, TYPE_2_PARAMETERS,
+				                            No_of_COVARIATES,
+				                            dependent_parameter, forcing_pattern,
+				                            "File_of_Covariates.dat", Name_of_FILE[0] );
     printf(" Both Time_Control and Time_Dependence_Control structures have been\n");
     printf(" correctly allocated and set up\n");
   }
@@ -185,12 +193,16 @@ int main(int argc, char **argv)
   if(Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14) 
     /* Models where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
-  
+
   if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
     /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     /* and they feed on multiple resources                      */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
-    Resetting_Alpha_Nu_Vectors (&Table);
+    // Resetting_Alpha_Nu_Vectors (&Table);
+    Resetting_Alpha_Nu_Vectors_Constant (&Table); /* Alpha and Nu parameter all the same */
+    Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas */
+    Writing_Alpha_Nu_Theta_Vectors(&Table);  
+
     Resetting_Multiresource_Levels (&Table);  
     Writing_Alpha_Nu_Theta_Vectors(&Table);  
   }

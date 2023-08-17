@@ -29,9 +29,15 @@ void Labels_for_Marginal_Probabilities (Parameter_Table * Table);
 
 void Stationary_Probability_Distribution(Parameter_Table * Table);
 
+void Evolving_Probability_Distribution(Parameter_Table * Table);
+
 void Marginal_Stationary_Probabilities_Calculation ( Parameter_Table * Table );
 
-void D_Normalilzation_Probability_Distribution( Parameter_Table * Table ); 
+void D_Normalilzation_Probability_Distribution( Parameter_Table * Table );
+
+void D_Normalilzation_Evolving_Distribution( Parameter_Table * Table, int k );
+
+void Marginal_Evolving_Probabilities_Calculation ( Parameter_Table * Table, int t );
 
 void Marginal_Probability_Calculation ( Parameter_Table * Table );
 
@@ -49,21 +55,29 @@ int master_equation_time_dynamics( Parameter_Table * Table );
 
 void Initial_Condition_Master_Equation( Parameter_Table * Table, double * y_INI );
 
+void assert_HLL_nD_Equal_Nus( Parameter_Table * Table );
+
+void C_P_G___T_H_E_O_R_E_T_I_C_A_L___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
+							int j,
+							int n, 
+							double Time_Current,
+							int SAME );
+
 void C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
-							 int j,
-							 int n, 
-							 double Time_Current,
-							 int SAME );
+							int j,
+							int n, 
+							double Time_Current,
+							int SAME );
 
 void C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table,
-							   int j,
-							   int n, 
-							   double Time_Current,
-							   int SAME );
+							int j,
+							int n, 
+							double Time_Current,
+							int SAME );
 
 void C_P_G___S_T_A_T_I_O_N_A_R_Y___D_I_S_T_R_I_B_U_T_I_O_N ( Parameter_Table * Table, 
-							     int n, 
-							     int SAME );
+							int n, 
+							int SAME );
 
 void Saving_Marginal_Distribution(Parameter_Table * Table, int j, int n, double Time_Current); 
 

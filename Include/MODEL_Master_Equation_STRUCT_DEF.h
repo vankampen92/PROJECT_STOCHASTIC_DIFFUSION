@@ -21,6 +21,7 @@ typedef struct Master_Equationinfo
   int * n_D; 
   int n_DIMENSION;
 
+  double ** Evolving_Distribution; 
   double * Probability_Distribution;
   double * Probability_Distribution_Time_0; 
   double * P_n;
@@ -52,6 +53,9 @@ typedef struct Master_Equationinfo
   double * PS_m_Marginal;
   double * PS_l_Marginal; 
 
+  /* Theoretical Marginal Probability Distributions */
+  double *** MPD_T ;   /* MPD: First index represents the distribution for each dimension */
+  
   /* Marginal Probability Distributions */
   double ** MPD ;   /* MPD: First index represents the distribution for each dimension */
   /* Marginal Probability Distributions at stationarity */

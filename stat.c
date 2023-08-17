@@ -28,9 +28,9 @@ void Press_Key()
   getchar();
 }
 
-void Print_Press_Key(int Stat_Bool, int Key, char * Message)
+void Print_Press_Key(int Stat_Bool, int Key, char * Extra_Message)
 {
-  if(Stat_Bool == 1) printf("%s\n", Message);
+  if(Stat_Bool == 1) printf("%s\n", Extra_Message);
   if(Key       == 1) {
     printf("Press any key to continue... or Ctr-C to kill it\n");
     getchar();

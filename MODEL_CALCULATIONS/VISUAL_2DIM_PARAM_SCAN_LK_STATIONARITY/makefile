@@ -121,7 +121,7 @@ OBJECTS = main.o report.o argumentControl.o argumentControl_fprintf.o MODEL.o MO
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o                      \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o Random_Initial_Guess_within_Boundaries.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                                \
 	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o                                                      \
-	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o Stationary_Probability_Distribution.o                                                                                                                           \
+	Master_Equation.o master_equation_time_dynamics.o master_equation_driver.o Initial_Condition_Master_Equation.o Model_Parameters_Master_Equation.o ODE_sys_Master_Equation.o Probability_Distributions.o                                                                                                                           \
 	Model_Variables_Code.o  definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o                    \
 	stat.o                             \
 	CPGPLOT___X_Y___Parameter_Table.o  \
@@ -344,8 +344,8 @@ Model_Parameters_Master_Equation.o: ${ME_DIR_MODEL}Model_Parameters_Master_Equat
 ODE_sys_Master_Equation.o: ${ME_DIR_MODEL}ODE_sys_Master_Equation.c ${HEAD.H}
 	${CC} -c ${ME_DIR_MODEL}ODE_sys_Master_Equation.c $(CXXFLAGS)
 
-Stationary_Probability_Distribution.o: ${ME_DIR_MODEL}Stationary_Probability_Distribution.c ${HEAD.H}
-	${CC} -c ${ME_DIR_MODEL}Stationary_Probability_Distribution.c $(CXXFLAGS)
+Probability_Distributions.o: ${ME_DIR_MODEL}Probability_Distributions.c ${HEAD.H}
+	${CC} -c ${ME_DIR_MODEL}Probability_Distributions.c $(CXXFLAGS)
 
 # Auxiliary functions to specify model ODE definition
 Model_Variables_Code.o: ${PROJECT_DIR}Model_Variables_Code.c ${HEAD.H}

@@ -79,26 +79,32 @@ int master_equation_time_dynamics( Parameter_Table * Table )
   int SAME = 0;
   j = 0;
   for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {  
-    C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j,
-							                                          i, Time_Current,
+    SAME = 0; 
+    C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i, 
+                                                        Time_Current,
 							                                          SAME);
+    SAME = 1; 
+    C_P_G___T_H_E_O_R_E_T_I_C_A_L___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i, 
+                                                                                Time_Current,
+	  						                                                                SAME );
     /* BEGIN: Saving Marginal for current time */
     Saving_Marginal_Distribution(Table, j, i, Time_Current);
     /*   END: -------------------------------- */ 
   }
-#if defined DIFFUSION_BD_2D    
-  Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
-#endif 
+  #if defined DIFFUSION_BD_2D    
+    Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
+  #endif 
   #if defined VERBOSE
-    Print_Press_Key(1,0,".");
+    Print_Press_Key(0, 1,".");
   #endif
 #endif
 
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
     kk = Table->OUTPUT_VARIABLE_INDEX[k];
-    value = definition_OutPut_Variables(kk,
-					Table->MEq->Vector_Model_Variables, Time->Time_Vector[0],
-					Table);
+    value = definition_OutPut_Variables( kk,
+					                               Table->MEq->Vector_Model_Variables, 
+                                         Time->Time_Vector[0],
+					                               Table );
     Table->Matrix_Output_Variables[k][0] = value;
   }
   
@@ -131,27 +137,36 @@ int master_equation_time_dynamics( Parameter_Table * Table )
     Marginal_Probability_Averages_Calculation ( Table );  /* At time zero */
     for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
       kk = Table->OUTPUT_VARIABLE_INDEX[k];
-      value = definition_OutPut_Variables(kk,
-					  Table->MEq->Vector_Model_Variables, Time_Current, 
-					  Table);
+      value = definition_OutPut_Variables( kk,
+					                                 Table->MEq->Vector_Model_Variables, 
+                                           Time_Current, 
+					                                 Table );
       Table->Matrix_Output_Variables[k][j] = value;
     }
 
     for ( i=0; i< Table->MEq->n_DIMENSION; i++ ) {
-      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i, Time_Current, SAME );
+      SAME = 0; 
+      C_P_G___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i, 
+                                                          Time_Current, 
+                                                          SAME );
+      SAME = 1; 
+      C_P_G___T_H_E_O_R_E_T_I_C_A_L___M_A_R_G_I_N_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,  
+			 				                                                                    Time_Current,
+			 				                                                                    SAME );
       /* BEGIN: Saving Marginal for current time */
       Saving_Marginal_Distribution(Table, j, i, Time_Current);
       /*   END: -------------------------------- */
     }
     #if defined DIFFUSION_BD_2D    
       Saving_Marginal_Distribution_Triplets(Table, j, Time_Current);
-    #endif 
-    Print_Press_Key(1,0,".");
+    #endif   
   #endif 
+
+    Print_Press_Key(0, 1,".");
   }/* ------> go further to the next time step */
 
 #if defined VERBOSE
-  printf(" Numerical Integration of the Master Equaiton ended!!!\n");
+  printf(" Numerical Integration of the Master Equation ended!!!\n");
 #endif
 
   // fclose(FP);

@@ -109,7 +109,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 
     // GSL_Init_Random_Seed(r); /* According to Computer time */
     /* Input variables: 
-       . i, lable of current realization 
+       . n, lable of current realization 
        . P, a comprehensive model parameter table (see definition in MODEL.h)
        . Bad_Times is a measure of the performance of the sampling frequency. 
          If Bad_Times is high, interval times should be choosen smaller 
@@ -124,7 +124,6 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 
     /* Only selection those stochastic realizations according to certain criterion */
     if(FROZEN_SYSTEM == 0) n++;  
-
   }
   /* END: End of STOCHASTIC REALIZATIONS */
 
@@ -141,8 +140,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 #if defined CPGPLOT_REPRESENTATION
   SAME_PLOT = 1; 
   C_P_G___S_U_B___P_L_O_T_T_I_N_G___E_R_R_O_R___B_A_R ( Table, SAME_PLOT, 
-							DATA_POINTS, Table->T->time_DEF, 
-							Table->T->AVE, Table->T->VAR ); 
+							                                          DATA_POINTS, Table->T->time_DEF, 
+							                                          Table->T->AVE, Table->T->VAR ); 
 #endif
   /*   END : Averaging stochastic realizations -------------------------*/  
   

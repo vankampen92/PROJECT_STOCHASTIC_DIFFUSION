@@ -4,6 +4,31 @@ extern gsl_rng * r;
 
 extern int TYPE_of_TIME_DEPENDENCE;
 
+void assert_HLL_nD_Equal_Nus( Parameter_Table * Table )
+{
+  int k; 
+  int i; 
+  int n_DIMENSION = Table->MEq->n_DIMENSION; 
+
+  #if defined DIFFUSION_HII_nD
+    printf(" The mathematical expression for the evolving probability for each configurational state\n");
+    printf(" is only valid is handling times are the same for all resources\n");
+    
+    k = 0; 
+    for(i=0; i<n_DIMENSION; i++)
+      if (Table->Nu_Consumers[i] != Table->Nu_C_0) 
+        k = 1; 
+
+    if ( k == 1) {
+      printf(" Some Handing Times differ.\n");
+      printf(" Theoretical Evolving probabilities are not exact. Therefore, at most, they represent an approximation\n");
+      printf("\n");
+    }
+
+    assert(k == 0);
+  #endif
+}
+
 int M_O_D_E_L___M_E( Parameter_Table * Table )
 {
   int i,j,k, n;
@@ -43,26 +68,32 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   
   Labels_for_Marginal_Probabilities( Table ); 
 
+  /* BEGIN : Stationary Probability Distribution (only available for some of the models) -*/
+  #ifdef DIFFUSION_BD_2D
+    Stationary_Probability_Distribution( Table );
+    printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
+  #elif defined DIFFUSION_HII_1D  
+    Stationary_Probability_Distribution( Table );
+    printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
+  #elif defined DIFFUSION_HII_nD
+    Stationary_Probability_Distribution( Table );
+    printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
+    /* Only exact when all Nu's are the same!!! */
+    assert_HLL_nD_Equal_Nus( Table );
+    Evolving_Probability_Distribution( Table );
+    printf(" Theoretical Time Evolving Probability Distribution has been calculated.\n");
+  #endif
+  Print_Press_Key(0, 1, ".");
+  /*  END : ------------------------------------------------------------------------------*/
+
+  /***********************************************************************************************/
   /* Master Equation Numerical Integration                 */
   /* BEGIN: Core part (integration of the master equation) */
-  printf("Entering Numerical Integration of the Master Equation...\n");   Print_Press_Key(1,0,".");
+  printf("Entering Numerical Integration of the Master Equation...\n");   Print_Press_Key(0, 1, ".");
   int ME_SYSTEM = master_equation_time_dynamics( Table );
-  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Print_Press_Key(1,0,".");
+  printf("Numerical Integration of the Master Equation succeeded!!!\n");  Print_Press_Key(0, 1, ".");
   /*   END: ------------------------------------------ */
-
-  /* BEGIN : Stationary Probability Distribution (only available for some of the models) -*/
-#ifdef DIFFUSION_BD_2D
-  Stationary_Probability_Distribution( Table );
-  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
-#elif defined DIFFUSION_HII_1D  
-  Stationary_Probability_Distribution( Table );
-  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
-#elif defined DIFFUSION_HII_nD
-  Stationary_Probability_Distribution( Table );
-  printf(" Theoretical Stationary Probability Distribution has been calculated.\n");
-#endif
-  Print_Press_Key(1,0,".");
-  /*  END : ------------------------------------------------------------------------------*/
+  /***********************************************************************************************/
   
 #if defined STOCHASTIC_REALIZATIONS  
  /* BEGIN : Representing distributions associated to output variables across 
@@ -86,7 +117,7 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
       C_P_G___E_M_P_I_R_I_C_A_L___D_I_S_T_R_I_B_U_T_I_O_N ( Table, j, i,
   							                                            Table->T->Time_Vector[j],
   							                                            SAME_PLOT );
-      Print_Press_Key(1,0,".");
+      Print_Press_Key(1, 1,".");
     }
   }
 #endif
@@ -126,9 +157,9 @@ int M_O_D_E_L___M_E( Parameter_Table * Table )
   Table->CPG->type_of_Line  = 2;
   Table->CPG->type_of_Symbol = 5; 
   C_P_G___S_U_B___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T( SAME_PLOT,
-						       Table, TIMES,
-						       Table->CPG->x_Time,
-						       Table->CPG->y_Time);
+						                                           Table, TIMES,
+						                                           Table->CPG->x_Time,
+						                                           Table->CPG->y_Time );
 #endif
 
   FILE * fp = fopen("Data_ODE_vs_ME_Marginals_0.dat", "w");

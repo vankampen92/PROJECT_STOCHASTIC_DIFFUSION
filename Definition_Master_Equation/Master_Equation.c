@@ -26,10 +26,16 @@ void Master_Equation_Allocation ( Master_Equation * ME,
      n_DIMENSION is bigger than 3, the probability distribution are no longer stored as 
      tensor objects.    
   */ 
-  int i, j;
+  int i, j, k;
   Parameter_Table * Table = (Parameter_Table *)ME->Table; 
+
+  int n_Time = Table->T->I_Time; 
   
   assert(No_of_CONFIGURATIONAL_STATES < MAX_No_of_CONFIGURATIONAL_STATES);
+  
+  ME->Evolving_Distribution = (double **)calloc(n_Time, sizeof(double *));
+  for(k=0; k<n_Time; k++)
+    ME->Evolving_Distribution[k]=(double *)calloc(No_of_CONFIGURATIONAL_STATES, sizeof(double));
   
   ME->Probability_Distribution=(double *)calloc(No_of_CONFIGURATIONAL_STATES, sizeof(double));
 
@@ -38,6 +44,13 @@ void Master_Equation_Allocation ( Master_Equation * ME,
   ME->MPD = (double **)calloc(n_DIMENSION, sizeof(double *));
     for(i=0; i<n_DIMENSION; i++)
       ME->MPD[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(double));
+
+  ME->MPD_T = (double ***)calloc(n_Time, sizeof(double **));
+  for(k=0; k<n_Time; k++) {
+    ME->MPD_T[k] = (double **)calloc(n_DIMENSION, sizeof(double *));
+    for(i=0; i<n_DIMENSION; i++)
+      ME->MPD_T[k][i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(double));
+  }
 
   ME->MPD_S = (double **)calloc(n_DIMENSION, sizeof(double *));
     for(i=0; i<n_DIMENSION; i++)
@@ -138,8 +151,24 @@ void Master_Equation_Configurational_State_Setup (Master_Equation * ME )
 
 void Master_Equation_Free ( Master_Equation * ME )
 {
-  int i, j;
+  int i, j, k;
 
+  Parameter_Table * Table = (Parameter_Table *)ME->Table; 
+  
+  int n_Time = Table->T->I_Time; 
+  
+  for(k=0; k<n_Time; k++) {  
+    for(i=0; i < ME->n_DIMENSION; i++)
+      free(ME->MPD_T[k][i]);
+    
+    free(ME->MPD_T[k]);
+  }
+  free(ME->MPD_T);  
+
+  for(k=0; k<n_Time; k++) 
+    free( ME->Evolving_Distribution[k] );
+  free( ME->Evolving_Distribution );
+ 
   free( ME->Probability_Distribution );
   free( ME->Probability_Distribution_Time_0 );
 
@@ -248,12 +277,19 @@ void Master_Equation_Initialization (Master_Equation * ME,
    }
 }
 
+/// @brief 
+/// @param ME 
+/// @param No_of_CONFIGURATIONAL_STATES 
+/// @param n_DIMENSION 
+/// @param n_x 
+/// @param n_y 
+/// @param n_z 
 void Master_Equation_Stationary_Distribution_Allocation ( Master_Equation * ME,
-							 int No_of_CONFIGURATIONAL_STATES,
-							 int n_DIMENSION,
-							 int n_x,
-							 int n_y,
-							 int n_z )
+							                                            int No_of_CONFIGURATIONAL_STATES,
+							                                            int n_DIMENSION,
+							                                            int n_x,
+							                                            int n_y,
+							                                            int n_z )
 {
   /* This function should only be used where there is an interest in having a separete
      structure of Master_Equation type with the stationary probability distribution. 
@@ -271,7 +307,6 @@ void Master_Equation_Stationary_Distribution_Allocation ( Master_Equation * ME,
      If the natural support of P(n, m, l) does not go from n=0 to n_x, m=0 to n_y, and 
      l=0 to n_z, then P(n, m, l) will take zero values out of its actual support (see 
      calloc() calls for zero allocations below).    
-
   */ 
   int i, j;
   Parameter_Table * Table = (Parameter_Table *)ME->Table; 
@@ -281,8 +316,8 @@ void Master_Equation_Stationary_Distribution_Allocation ( Master_Equation * ME,
   ME->Probability_Distribution=(double *)calloc(No_of_CONFIGURATIONAL_STATES, sizeof(double));
 
   ME->MPD_S = (double **)calloc(n_DIMENSION, sizeof(int *));
-    for(i=0; i<n_DIMENSION; i++)
-      ME->MPD_S[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(int));
+  for(i=0; i<n_DIMENSION; i++)
+    ME->MPD_S[i] = (double *)calloc(Table->TOTAL_No_of_CONSUMERS+1, sizeof(int));
 
   if (n_DIMENSION == 1) {
 

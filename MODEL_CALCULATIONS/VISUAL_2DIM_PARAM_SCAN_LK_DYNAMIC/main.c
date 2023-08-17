@@ -302,7 +302,7 @@ int main(int argc, char **argv)
     /* feed on multiple resources: extra parameters per resource type are needed */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
     Resetting_Alpha_Nu_Vectors_Constant (&Table);
-    Resetting_Multiresource_Levels (&Table);  /* Creating Vector of Thetas */
+    Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas */
     Writing_Alpha_Nu_Theta_Vectors(&Table);  
   }
   
