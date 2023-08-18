@@ -141,6 +141,10 @@ typedef struct totalRateinfo
 
 #include <Definition_Master_Equation/Master_Equation_Functions.h>
 
+#if defined DIFFUSION_HII_nD
+  #include <Definition_Master_Equation/DIFFUSION_HII_nD/Model_Parameters_Master_Equation.h>
+#endif 
+
 /* Auxiliary Functions */
 #include "main.H"
 #include <assign.h>

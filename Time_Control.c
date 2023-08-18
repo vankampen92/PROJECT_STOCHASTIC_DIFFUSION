@@ -66,12 +66,12 @@ void T_I_M_E___C_O_N_T_R_O_L___A_L_L_O_C( Time_Control * Time, Parameter_Table *
   }
 
   Time->Time_Vector_Real = (double **)calloc(P->Realizations, sizeof(double *));
-  for(i = 0; i<P->Realizations; i++)
-    Time->Time_Vector_Real[i] = (double *)calloc(P->Realizations, sizeof(double)); 
+  for(i = 0; i < P->Realizations; i++)
+    Time->Time_Vector_Real[i] = (double *)calloc(I_Time, sizeof(double)); 
 }
 
-void  T_I_M_E___C_O_N_T_R_O_L___U_P_L_O_A_D( Time_Control * Time, Parameter_Table * Table,
-					     int I_Time)
+void  T_I_M_E___C_O_N_T_R_O_L___U_P_L_O_A_D ( Time_Control * Time, Parameter_Table * Table,
+					                                    int I_Time )
 {
   /* Setup for the vector of sampling times */
   int i;
@@ -97,6 +97,10 @@ void  T_I_M_E___C_O_N_T_R_O_L___U_P_L_O_A_D( Time_Control * Time, Parameter_Tabl
   /* so that Time_Vector[0] = Time_0 and  Time_Vector[I_Time-1] = Time_1. In this way, time series
      have I_Time points, where the first point always corresponds to Time_0 and the last to Time_1;
   */
+  for(i = 0; i<Time->Realizations; i++) {
+    Time->Time_Vector_Real[i][0] = Time->Time_0;
+    Time->Time_Vector_Real[i][1] = Time->Time_0 + (double)(i+1) * (Time->Time_1 - Time->Time_0)/(double)(Time->Realizations);
+  }
 
   Table->T = Time;
 }

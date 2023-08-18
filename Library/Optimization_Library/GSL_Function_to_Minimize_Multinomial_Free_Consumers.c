@@ -98,7 +98,7 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
       assert(n[No_of_VARIABLES] <= Table->TOTAL_No_of_CONSUMERS);
       assert(n[No_of_VARIABLES] >= 0);
 
-	    Theory[i] =  - gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);
+	    Theory[j] =  - gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);
     }
 
     free(n); free(p);

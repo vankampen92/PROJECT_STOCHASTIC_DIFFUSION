@@ -4,31 +4,6 @@ extern gsl_rng * r;
 
 extern int TYPE_of_TIME_DEPENDENCE;
 
-void assert_HLL_nD_Equal_Nus( Parameter_Table * Table )
-{
-  int k; 
-  int i; 
-  int n_DIMENSION = Table->MEq->n_DIMENSION; 
-
-  #if defined DIFFUSION_HII_nD
-    printf(" The mathematical expression for the evolving probability for each configurational state\n");
-    printf(" is only valid is handling times are the same for all resources\n");
-    
-    k = 0; 
-    for(i=0; i<n_DIMENSION; i++)
-      if (Table->Nu_Consumers[i] != Table->Nu_C_0) 
-        k = 1; 
-
-    if ( k == 1) {
-      printf(" Some Handing Times differ.\n");
-      printf(" Theoretical Evolving probabilities are not exact. Therefore, at most, they represent an approximation\n");
-      printf("\n");
-    }
-
-    assert(k == 0);
-  #endif
-}
-
 int M_O_D_E_L___M_E( Parameter_Table * Table )
 {
   int i,j,k, n;

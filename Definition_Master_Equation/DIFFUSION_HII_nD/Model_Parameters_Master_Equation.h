@@ -1,3 +1,4 @@
+void assert_HLL_nD_Equal_Nus( Parameter_Table * Table );
 unsigned long long int Func_Hyper(unsigned int D, unsigned int k);
 void Groups(unsigned int D, int D_Max, int * V, int * s);
 unsigned long long int General_Configuration_Table(unsigned int D, unsigned int n_0, 

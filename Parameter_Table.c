@@ -492,17 +492,16 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
     printf("Nu_%d = %g\t", i, Table->Nu_Consumers[i]);
     printf("Alpha_%d = %g\t", i, Table->Alpha_C[i]);
     printf("Theta_%d = %g\t", i, Table->Theta_Consumers[i]);
+    printf("Resource Density (fraction) y_R[%d]/K = %g\n", i, Density);
 
     Theta += Table->Theta_Consumers[i];
-
-    printf("Density_%d = %g\n", i, Density);
   }
 
   T_C = 1.0 / (Nu + Theta);
   printf(" Exact Characteristic Time (only is the handling time is the same across all resources):\n"); 
   printf(" T = %g\n", T_C);
 
-  Print_Press_Key(0,1,".");
+  Print_Press_Key(0,0,".");
 } 
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */

@@ -40,8 +40,8 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
   int TOTAL_No_of_HANDLING_CONSUMERS = 0;
   assert(Table->No_of_CELLS == 1);
   for(i=0; i < S; i++) {
-    printf("Initial Number of Handling Consumers (in the %d-Patch) on the %d-Resource Type: %d\n",
-           0, i, PATCH[0]->n[i]);
+    // printf("Initial Number of Handling Consumers (in the %d-Patch) on the %d-Resource Type: %d\n",
+    //         0, i, PATCH[0]->n[i]);
     TOTAL_No_of_HANDLING_CONSUMERS += PATCH[0]->n[i];
   }
   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0 = TOTAL_No_of_HANDLING_CONSUMERS;
@@ -53,9 +53,9 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
   printf("Total Community Size  (across Species): %g\n", x);
 #endif
 
-  printf("Patch system successfully initialized\n");
+// printf("Patch system successfully initialized\n");
 
 #if defined VERBOSE
-    Print_Press_Key(1,0,".");
+    Print_Press_Key(1,1,"Patch system successfully initialized");
 #endif
 }

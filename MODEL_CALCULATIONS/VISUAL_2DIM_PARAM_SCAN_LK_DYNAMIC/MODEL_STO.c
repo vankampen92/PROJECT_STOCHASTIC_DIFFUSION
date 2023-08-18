@@ -103,14 +103,22 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
        . Bad_Times is a measure of the performance of the sampling frequency. 
          If Bad_Times is high, interval times should be choosen smaller 
     */
-    int FROZEN_SYSTEM = Stochastic_Time_Dynamics_Numerical ( n,
-							     Table, &Bad_Times );
+   /* Redefining the Time_Vector: 
+      Each realization is controled by a different time vector and finishing at a different time. 
+   */
+    Time->Time_1 = Time->Time_Vector_Real[n][1];
+    for(i=0; i < Time->I_Time; i++)
+      Time->Time_Vector[i] = Time->Time_Vector_Real[n][i];
+          
+    int FROZEN_SYSTEM = Stochastic_Time_Dynamics_Numerical ( n, Table, &Bad_Times );
     
+  #if defined VERBOSE
     /* End of the i-th STOCHASTIC REALIZATIONS */
     printf("Realization: %d of a total of %d\n", n+1, Table->T->Realizations);
     printf("Time failed in %d occasions out of %d time steps\n", Bad_Times, I_Time);
     printf("If the number of failed times is too big, EPSILON might be too small!\n");
     printf("Try to choose a larger EPSILON [Current value: -tE %g]\n", Table->T->EPSILON);
+  #endif
 
     /* Only selection those stochastic realizations according to certain criterion */
     if(FROZEN_SYSTEM == 0) n++;  

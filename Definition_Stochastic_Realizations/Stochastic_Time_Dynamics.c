@@ -147,6 +147,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 	      Time->Variable[i][k][j]   = value;
 	      Table->Vector_Output_Variables[k] = value;
       }
+
       Time->Time_Vector_Real[i][j] = Time_Current; 
       
       #if defined CPGPLOT_REPRESENTATION
@@ -198,12 +199,22 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 }
 
 int Stochastic_Time_Dynamics_Numerical( int i,
-					Parameter_Table * Table,
-					int * Bad_Times )
+					                              Parameter_Table * Table,
+					                              int * Bad_Times )
 {
   /* This version of the same function does the same as before, this is, 
      it performs one single stochastic realization (the i-th one). 
-     No saving into files nor visually representing anything.  
+     No saving into files nor visually representing anything.
+
+     Input Args:
+
+     . i, i-th realization
+     . Table 
+
+     Output Args: 
+    
+     . Bad_Times, No of Times that the current simulation time is too far 
+       from the true sampling time.   
   */
   int j, k, kk, j_Good, Sp;
   int new; /* Ever-increasing Accumulated Variable within a time interval */
@@ -306,7 +317,16 @@ int Stochastic_Time_Dynamics_Numerical( int i,
       printf("%d\t%g\t%g\n",j, Time_Current, Time->Time_Vector[j]);
 #endif
     }
-    else{ 
+    // else{ 
+    if(Time->I_Time > 2) {
+      printf(" Stochastic_Time_Dynamics_Numerical() only working for I_Time = 2\n");
+      printf(" Here, I_Time = %d\n", Time->I_Time);
+      assert(Time->I_Time == 2);  /* Only two times:
+                                     Time_0: an initial time and
+                                     Time_1: a final time 
+                                  */
+    }
+    // All final times are considered 'good times'!!!  
       j_Good++; /* Counting good times */
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
 	      kk = Table->OUTPUT_VARIABLE_INDEX[k];
@@ -316,8 +336,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 
 	      Time->Variable[i][k][j]   = value;
 	      Table->Vector_Output_Variables[k] = value;
-      }
-      Time->Time_Vector_Real[i][j] = Time_Current; 
+      } 
 
       Time->time_DEF[j_Good] = Time_Current;
       Time->count[j]++;
@@ -325,7 +344,9 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 
       Time_Initial = Time->Time_Vector[j-1];
       Time_Final   = Time->Time_Vector[j];
-    }
+
+      Time->Time_Vector_Real[i][j] = Time_Current;
+    // }  
 #if defined VERBOSE
     printf(" Total population across the system at current time (t = %g)\n",  Time_Current );
     Print_Meta_Community_Patch_System (Table);

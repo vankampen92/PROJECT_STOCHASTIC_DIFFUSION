@@ -429,9 +429,11 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
 
 void Community_Binary_Tree_Initialization (Parameter_Table * Table)
 {
-  /* This function sets up the partial sums of a previously allocated
+  /* 
+     This function sets up the partial sums of a previously allocated
      binary tree that will maintain the discrete probability distribution 
      always ready to be sampled. 
+  
   */
 
   treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */

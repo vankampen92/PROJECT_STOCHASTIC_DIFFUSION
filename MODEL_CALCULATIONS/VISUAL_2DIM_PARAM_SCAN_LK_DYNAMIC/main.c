@@ -52,13 +52,13 @@
                            -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 \
                            -G0 -3 -G1 3 \
                            -sT 1.0E-06 -sN 300 -sP 2 \
-                           -H9 2.5 -I1 16 -m1 0.5 -M1 5.0 -A1 0.01 -d1 200 \
-                           -H10 1.0 -I0 17 -m0 0.1 -M0 3.0 -A0 0.01 -d0 200 \
+                           -H9 0.5 -I1 16 -m1 0.001 -M1 1.0 -A1 0.01 -d1 200 \
+                           -H10 0.1 -I0 17 -m0 0.001 -M0 0.3 -A0 0.01 -d0 200 \
                            -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 \
-                           -tn 20 -t0 0.0 -t1 1.5 -t4 0 -tR 20 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
+                           -tn 2 -t0 0.0 -t1 6.0 -t4 0 -tR 20 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
                            -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 \
                            -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 1.0 \
-                           -G30 L -Fn 0
+                           -G30 R -Fn 0
    
    . Use -Fn 0 to generate pseudo data. 
    . -tn collects an input parameter controling the number time data points. 
@@ -68,7 +68,9 @@
    . -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
 */
 #define REPETITIONS 20000
-// #define CONFIDENCE_INTERVALS 
+// #define CONFIDENCE_INTERVALS
+// #define CPGPLOT_REPRESENTATION_HEAT_MAPS
+
 gsl_rng * r; /* Global generator defined in main.c */
 
 void Writing_Empirical_Time_Vector(Parameter_Fitting * F, int n);
@@ -262,7 +264,7 @@ int main(int argc, char **argv)
     printf(" %d output variables of length %d points will be allocated\n",
 	   SUB_OUTPUT_VARIABLES, I_Time);
     Time_Dependence_Control_Alloc(&Time, &Time_Dependence, &Table,
-				  I_Time, TIME_DEPENDENT_PARAMETERS, No_of_COVARIATES);
+				                          I_Time, TIME_DEPENDENT_PARAMETERS, No_of_COVARIATES);
     printf(" Both Time_Control and Time_Dependence_Control structures have been\n");
     printf(" correctly allocated\n");
 
@@ -272,10 +274,10 @@ int main(int argc, char **argv)
       Type_1_Parameter_Values[i] = (double *)calloc( No_of_EMPIRICAL_TIMES, sizeof(double));
 
     Reading_Standard_Data_Matrix_from_File( TIME_PARAMETERS_FILE,
-    					    Type_1_Parameter_Values, &No_of_Rows,
-					    No_of_EMPIRICAL_TIMES,
-    					    0, Name_Rows_Dummy,
-    					    1, Time_Empirical_Vector );
+    					                              Type_1_Parameter_Values, &No_of_Rows,
+					                                  No_of_EMPIRICAL_TIMES,
+    					                              0, Name_Rows_Dummy,
+    					                              1, Time_Empirical_Vector );
     assert( No_of_Rows == TYPE_1_PARAMETERS);
 
     Time_Dependence_Control_Upload_Optimized (&Time, &Time_Dependence, &Table,
@@ -301,14 +303,14 @@ int main(int argc, char **argv)
     /* A model where the TOTAL_No_of_CONSUMERS is a CONSTANT and consumers       */
     /* feed on multiple resources: extra parameters per resource type are needed */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
-    Resetting_Alpha_Nu_Vectors_Constant (&Table);
-    Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas */
+    Resetting_Alpha_Nu_Vectors_Constant (&Table); /* Nu's and Alpha's are all equal */
+    Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas      */
     Writing_Alpha_Nu_Theta_Vectors(&Table);  
   }
   
   /* B E G I N : Observed Data Control Initization (Reserving Memmory)          */
   Observed_Data * Data = (Observed_Data *)calloc(1, sizeof(Observed_Data));
-  Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, Time.I_Time);
+  Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, Time.Realizations);
   printf(" Observed_Data structure has been correctly allocated\n");
   /*     E N D : -------------------------------------------------------------- */
   /* B E G I N : Reserving memmory for Parameter Fitting Structure */
@@ -369,19 +371,42 @@ int main(int argc, char **argv)
 
   int No_of_REPETITIONS = REPETITIONS;  
   for(k=0; k<No_of_REPETITIONS; k++) {
-    printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
-	   No_of_REPETITIONS, k);
-    printf("\t Each experiment consits of %d stochastic realizations sampled from t=%.1g\n",
-	   Realizations, Time_0);
-    printf("\t to t=%.1g\n", Time_1);
-    printf("\t For each realization, a different increasing time will be stored!!!\n"); 
+
+    /* Every new repetition requires setting up Time_Vector_Real back to its initial values
+       because, after each repetition, this vector has taken the values of real final times
+       (Time_Current values of the last step) for every realization. 
+    */
+    for(i = 0; i<Time.Realizations; i++) {
+      Time.Time_Vector_Real[i][0] = Time_0;
+      Time.Time_Vector_Real[i][1] = Time_0 + (double)(i+1) * (Time_1 - Time_0)/(double)(Time.Realizations);
+    }
     
+    printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
+	          No_of_REPETITIONS, k);
+    printf("\t %d stochastic realizations are sampled from t=%.2g\n",
+	          Realizations, Time_0);
+    for(i = 0; i<Time.Realizations; i++) 
+      printf(" to t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
+    printf("\n For each realization, a different final time (t_1) is used!!!\n"); 
+    
+    /* In order to produce pseudata always with the same true parameters, they need to be set up again. 
+       because the 2D scan changes its values in the Parameter_Table structure  
+    */
     AssignVectorEntry_to_Structure(&Table, Input_Parameter_1, Initial_Value_0);
     AssignVectorEntry_to_Structure(&Table, Input_Parameter_2, Initial_Value_1);
 
-    /* B E G I N : Generation of a matrix of pseudo-data */
+    /* As well as anything that depends on them (such as the Nu and Alpha vectors )   */
+    if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
+      /* A model where the TOTAL_No_of_CONSUMERS is a CONSTANT and consumers          */
+      /* feed on multiple resources: extra parameters per resource type are needed    */
+      Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
+      Resetting_Alpha_Nu_Vectors_Constant (&Table); /* Nu's and Alpha's are all equal */
+      Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas      */
+      Writing_Alpha_Nu_Theta_Vectors(&Table);  
+    }
+    /* B E G I N : Generation of a matrix of pseudo-data (with the same true values)  */
     if( No_of_FILES == 0) M_O_D_E_L___S_T_O( &Table ); 
-    /* E N D     : ------------------------------------- */
+    /* E N D     : ------------------------------------------------------------------ */
 
     if ( No_of_FILES > 0 )
       Reading_Standard_Data_Matrix_from_File( OBSERVED_DATA_FILE,
@@ -397,7 +422,8 @@ int main(int argc, char **argv)
       // Creating_Standard_Data_Matrix_from_Model ( &Table, Empirical_Data_Matrix );
 
     Realizations = Table.T->Realizations; /* In MODEL DIFFUSION_HII_nD, we have 
-                                             as many realizations as different times 
+                                             as many realizations as different 
+                                             final times 
                                           */
     double * Realizations_Vector = (double *)calloc(Realizations, sizeof(double));
     for (i=0; i<Realizations; i++)
@@ -408,15 +434,6 @@ int main(int argc, char **argv)
 				                          SUB_OUTPUT_VARIABLES, Realizations,
 				                          1, Name_of_Rows,
 				                          0, Realizations_Vector);
-    // printf("Row Empirical Data Representation:\n");
-    // Print_Press_Key(1,0,".");
-    // Representation of Psedo Data (check -G0 [] -G1 [] input arguments!!!)
-    /* C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E (&Table,
-     								       Realizations,          
-     							 	       Realizations_Vector,   
-     								       Empirical_Data_Matrix, 
-     								       0);                 
-    Print_Press_Key(1,0,"."); */
 
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
@@ -424,7 +441,7 @@ int main(int argc, char **argv)
 				                          "" );
     printf(" Observed_Data structure has been correctly initiated with an instance\n");
     printf(" of (real or pseudo) emprical data \n");
-    Print_Press_Key(0,0,".");
+    Print_Press_Key(0, 0, ".");
     /*     E N D : -------------------------------------------------------------- */
 
     /* Back to input argument values in Table */
@@ -444,10 +461,23 @@ int main(int argc, char **argv)
 								                                                No_of_POINTS_2, Input_Parameter_2,
 								                                                Function_to_Minimize, 
 								                                                W_GRID, "Negative LogLikelihood",
-								                                                X_LINEAR, Y_LINEAR); 
-    /*   E N D : ----------------------------------------------------------------------*/
-    
-#if defined CPGPLOT_REPRESENTATION
+								                                                X_LINEAR, Y_LINEAR);
+    double Likelihood_Minimum, x_Val, y_Val;
+    Minimum_Parameter_2D_Scan(&Table,
+			                        No_of_POINTS_1, Input_Parameter_1,
+			                        No_of_POINTS_2, Input_Parameter_2,
+			                        W_GRID,
+			                        &Likelihood_Minimum, &x_Val, &y_Val);
+
+    fprintf(FP_mle_x, "%g\t%g\n", Initial_Value_0, x_Val); 
+    fprintf(FP_mle_y, "%g\t%g\n", Initial_Value_1, y_Val); 
+
+    x_Val_mle[k] = x_Val; 
+    y_Val_mle[k] = y_Val;  
+    /*   E N D : Main Function Call -------------------------------------------------*/
+
+  /* B E G I N :   Drawing heat maps ------------------------------------------------*/    
+#if defined CPGPLOT_REPRESENTATION_HEAT_MAPS
     /* BEGIN : 2D GRID cpgplot representation */
     /*********************************************************************/
     Table.CPG->X_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_1]; 
@@ -493,19 +523,6 @@ int main(int argc, char **argv)
     /* If AUTOMATIC_CONTOUR is 0, the user should customized contours through
      the function customized_contour_levels_[VALUE](...);
     */
-    
-    double Likelihood_Minimum, x_Val, y_Val;
-    Minimum_Parameter_2D_Scan(&Table,
-			                        No_of_POINTS_1, Input_Parameter_1,
-			                        No_of_POINTS_2, Input_Parameter_2,
-			                        W_GRID,
-			                        &Likelihood_Minimum, &x_Val, &y_Val);
-
-    fprintf(FP_mle_x, "%g\t%g\n", Initial_Value_0, x_Val); 
-    fprintf(FP_mle_y, "%g\t%g\n", Initial_Value_1, y_Val); 
-
-    x_Val_mle[k] = x_Val; 
-    y_Val_mle[k] = y_Val; 
     
     //Table.CPG->contour_level = customized_contour_levels_0 ( Table.CPG );
     Table.CPG->contour_level = customized_contour_levels_1 ( Table.CPG,
@@ -565,7 +582,7 @@ int main(int argc, char **argv)
     free(ys);
     Print_Press_Key(1,0,".");
     /* E N D : Annotating the countours by hand and drawing true value */
-
+  /* E N D :  Drawing heat maps ----------------------------------------------------------*/
   /* B E G I N :   Drawing likelihood profiles -------------------------------------------*/  
   #if defined CONFIDENCE_INTERVALS
     double * x_Data  = (double *)calloc(No_of_POINTS_1, sizeof(double) ); 
@@ -659,23 +676,25 @@ int main(int argc, char **argv)
 
   Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
   Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
-  int SAME = 0;
-  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( Table.CPG, 
+  int SAME = 0; int BAR = 1; 
+  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( SAME,
+                                                           Table.CPG, 
                                                            REPETITIONS, x_Val_mle, 50, 
                                                            Table.Symbol_Parameters[Input_Parameter_1], 
                                                            "Frequency", "", 
                                                            0, 0, 
-                                                           SAME ); 
+                                                           BAR ); 
   Press_Key(); 
 
   Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_min );
-  Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX );
-  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( Table.CPG, 
+  Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX ); 
+  CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( SAME,
+                                                           Table.CPG, 
                                                            REPETITIONS, y_Val_mle, 50, 
                                                            Table.Symbol_Parameters[Input_Parameter_2], 
                                                            "Frequency", "", 
-                                                           0, 0, 
-                                                           SAME ); 
+                                                           0, 0,
+                                                           BAR ); 
   Press_Key();                                       
 
   free(x_Val_mle);  free(y_Val_mle);
@@ -727,19 +746,22 @@ void Writing_Empirical_Time_Vector(Parameter_Fitting * F, int n)
 {
   int i;
 
-    for(i=0; i<n; i++)
-      printf("%g  ", F->Data->Time_Data_Vector[i]);
-    
-    printf("\n");
+  for(i=0; i<n; i++)
+    printf("T[%d]  ", i);
+  printf("\n");
+
+  for(i=0; i<n; i++)
+    printf("%g  ", F->Data->Time_Data_Vector[i]);  
+  printf("\n");
 } 
 
-void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
-			       int No_of_POINTS_1, int Input_Parameter_1,
-			       int No_of_POINTS_2, int Input_Parameter_2,
-			       double * W_GRID,
-			       double * Likelihood_Minimum,
-			       double * x_Value_MLE, 
-			       double * y_Value_MLE)
+void Minimum_Parameter_2D_Scan (Parameter_Table * Table,
+			                          int No_of_POINTS_1, int Input_Parameter_1,
+			                          int No_of_POINTS_2, int Input_Parameter_2,
+			                          double * W_GRID,
+			                          double * Likelihood_Minimum,
+			                          double * x_Value_MLE, 
+			                          double * y_Value_MLE)
 {
   /* This function looks for a minimum of the function over the 2D subparameter space that 
      has been scanned (as defined in Table->S Parameter_Space structure
@@ -806,14 +828,14 @@ void Minimum_Parameter_2D_Scan(Parameter_Table * Table,
 	/*   END : Free memmory!!!                                    * * * * * * */
 }
 
-void Profiling_2D_Scanned_Function(Parameter_Table * Table,
-				   int No_of_POINTS_1, int Input_Parameter_1,
-				   int No_of_POINTS_2, int Input_Parameter_2,
-				   double * W_GRID,
-				   double Initial_Parameter_Val_1, 
-				   double Initial_Parameter_Val_2, 
-				   double * Profile_x_Data, double * x_Data, 
-				   double * Profile_y_Data, double * y_Data)
+void Profiling_2D_Scanned_Function( Parameter_Table * Table,
+				                            int No_of_POINTS_1, int Input_Parameter_1,
+				                            int No_of_POINTS_2, int Input_Parameter_2,
+				                            double * W_GRID,
+				                            double Initial_Parameter_Val_1, 
+				                            double Initial_Parameter_Val_2, 
+				                            double * Profile_x_Data, double * x_Data, 
+				                            double * Profile_y_Data, double * y_Data)
 {
 	int n, k, j, i;
 	int k_VAL, j_VAL, k_BOOL, j_BOOL; 
@@ -893,7 +915,7 @@ void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
 {
   /* This is just to save the output variables corresponding to the i-th realization 
      generated by the function  M_O_D_EL___S_T_O( &Table ) into a straightforward 
-     Empirical Data Matrix containing the 'Psedo Data' that has been generated in the 
+     Empirical Data Matrix containing the 'Psedo Data' as have been generated in the 
      i-th realization. 
   */
   int k,i;
@@ -932,34 +954,28 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
      This function saves the output variables corresponding to the realizations 
      generated by the function  M_O_D_EL___S_T_O( &Table ) into a straightforward 
      Empirical Data Matrix containing just the 'Pseudo Data' required for the 
-     particular likelihood of the MODEL DIFFUSION_HII_nD to be calculated.
+     particular likelihood of the MODEL DIFFUSION_HII_nD to be calculated. 
+     This likelihood procedure uses only two times, I_Time = 2 (-tn 2 in argument list)
   */
   int k,i;
   int No_of_POINTS; 
 
   Parameter_Fitting * F = (Parameter_Fitting *)Table->Fitting_Data; 
 
-  assert(Table->T->Realizations >= Table->T->I_Time);
+  assert(Table->T->I_Time == 2);
 
   for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) {
 
-    for(i=0; i<Table->T->I_Time; i++) {
+    for(i=0; i<Table->T->Realizations; i++) {
       /* For each time, the i-th realization corresponding to the i-th time 
          is stored in Empirical Data Matrix 
       */ 
-	    Empirical_Data_Matrix[k][i] = Table->T->Variable[i][k][i];
+	    Empirical_Data_Matrix[k][i] = Table->T->Variable[i][k][1];
 
       /* Associated times */
-      F->Data->Time_Data_Vector[i] = Table->T->Time_Vector_Real[i][i];          
+      F->Data->Time_Data_Vector[i] = Table->T->Time_Vector_Real[i][1];          
     }
   }
-  Table->T->Realizations = Table->T->I_Time;  /* Each realization retains a different time. 
-                                                 For each realization, the data stored is the 
-                                                 configuration state at a final time, which will  
-                                                 increase from realization to realization. 
-                                                 There should be as many realizations as different  
-                                                 times in Time_Vector. 
-                                              */ 
 }
 
 void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Table * Table)
