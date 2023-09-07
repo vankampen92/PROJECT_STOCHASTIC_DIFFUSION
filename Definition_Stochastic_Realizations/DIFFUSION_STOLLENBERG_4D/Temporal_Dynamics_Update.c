@@ -18,21 +18,21 @@ void Temporal_Dynamics_Update( Community ** My_Community,
      systems. 
   */
   /* Input arguments:
-     
      . My_Community is a pointer to the whole patch system
      . Table        is a pointer to a Parameter_Table type of structure from which other 
                     structures hang. 
-     . Rate         is a pointer to the structure Stocastic Rate 
-     . Type_of_Event is a label to the event occurring in a Patch 
+     . Rate         is a pointer to the structure 'Stocastic Rate' 
+     . Type_of_Event is an index to the local event occurring in a Patch 
      . Patch        is an array containing the two patches involved in a movement event. 
                     Patch[0] is the patch sending the individual
 		                Patch[1] is the patch receiving the individual. 
-
      Output arguments: 
      . Rate         Stochastic Rate is updated from previous value (without recalculating)
   */
   int i, n, m, k; 
   int x, y; 
+  int Index_Leaf_x;
+  int Index_Leaf_y; 
   double Delta_Rate;
   treenode * Leaf; 
   
@@ -42,7 +42,14 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   n = Table->TOTAL_No_of_EVENTS;
   
   x = Patch[0]; y = Patch[1];
-  
+
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    /* The index of the tip the tree corresponding to a particular 
+       event in a given cell 
+    */
+    Index_Leaf_x = Table->TOTAL_No_of_EVENTS * x + Type_of_Event;  
+  #endif 
+
   if ( x == y ) {  /* LOCAL PROCESS on a single Patch x */
     if (Type_of_Event < n ) {
       
@@ -65,6 +72,14 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 							                                               to event 'Type_of_Event'???
 							                                            */
 	        Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+
+          #if defined BINARY_TREE_SUPER_OPTIMIZATION
+            Index_Leaf_x = Table->TOTAL_No_of_EVENTS * x + k;
+            Leaf = Table->Leaves[Index_Leaf_x];
+            sum_Delta_upto_Root(Table->Treeroot, Leaf, 
+                                Pa->Event_Delta_Matrix[Type_of_Event][k]);
+          #endif
+
 	        Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
       }
       Pa->ratePatch    += Delta_Rate; 				
@@ -100,7 +115,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     
     m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
 						                                           to event 'Type_of_Event'???
-						                                           Lenght of the adjacence list 
+						                                           m is the lenght of the adjacence list 
 						                                           of 'Type_of_Event'
 						                                        */
     Delta_Rate = 0.0;
@@ -109,6 +124,14 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 							                                           to event 'Type_of_Event'???
 						                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+      
+      #if defined BINARY_TREE_SUPER_OPTIMIZATION
+        Index_Leaf_x = Table->TOTAL_No_of_EVENTS * x + k;
+        Leaf = Table->Leaves[Index_Leaf_x];
+        sum_Delta_upto_Root(Table->Treeroot, Leaf, 
+                            Pa->Event_Delta_Matrix[Type_of_Event][k]);
+      #endif
+
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
     }
     Pa->ratePatch    += Delta_Rate; 				
@@ -128,12 +151,12 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     
     m = Pa->Event_Adjacence_List[Type_of_Event+1][n]; /* How many events are connected 
 							                                           to event 'Type_of_Event+1'???
-							                                           Lenght of the adjacence list 
+							                                           m is the lenght of the adjacence list 
 							                                           of 'Type_of_Event+1', 
 							                                           because 1 or 7 are events  
 							                                           involving the increase of 
-							                                           the propagule or the consumer
-							                                           population, respectively
+							                                           the propagule or the propagule, and consumer
+							                                           populations, respectively
 						                                          */
     Delta_Rate = 0.0;
     for(i=0; i<m; i++) {
@@ -141,6 +164,14 @@ void Temporal_Dynamics_Update( Community ** My_Community,
 							                                             to event 'Type_of_Event'???
 							                                          */
       Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
+
+      #if defined BINARY_TREE_SUPER_OPTIMIZATION
+        Index_Leaf_y = Table->TOTAL_No_of_EVENTS * y + k;  
+        Leaf = Table->Leaves[Index_Leaf_y];
+        sum_Delta_upto_Root(Table->Treeroot, Leaf, 
+                            Pa->Event_Delta_Matrix[Type_of_Event+1][k]);
+      #endif
+
       Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event+1][k];
     }
     Pa->ratePatch    += Delta_Rate; 				
@@ -258,7 +289,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     default:
       /* Something is very very wrong!!! */
       printf(" Type_of_Event = %d\t This value is not possible!!!\n", Type_of_Event);
-      printf(" Type of Event ill-defined\n");
+      printf(" Only 0 to 12 are possible. Type of Event is ill-defined\n");
       printf(" The program will exit\n");
       Print_Press_Key(1,0,"."); 
       exit(0);

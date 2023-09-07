@@ -10,3 +10,4 @@ void Set_Von_Neumann_1st_Neighbors(Community ** PATCH, int no, int N_X, int N_Y,
 void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 					    int i_Replicate, int j_Time);
 void Community_Binary_Tree_Initialization (Parameter_Table * Table);
+void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS);

@@ -13,6 +13,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   int MODEL_STATE_VARIABLES;
   int No_of_CELLS;
   int No_of_EVENTS;
+  int GRAND_No_of_EVENTS;
   double OutMigration;
   
   Parameter_Model * pa  = Table->P;
@@ -39,6 +40,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
 
   double K_R = (double)Table->K_R; 
   
+  GRAND_No_of_EVENTS = 0;
   for(i=0; i<No_of_CELLS; i++){
 
     P = My_Community[i];
@@ -52,31 +54,49 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
         
     P->rate[n] = OutMigration;       P->rToI[n]  = OutMigration * (double)P->n[RP]; 
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-      
+
     /* 1: Propagule External Immigration event */
     P->rate[n] = Table->Lambda_R_0;  P->rToI[n]  = Table->Lambda_R_0; 
-    P->ratePatch += P->rToI[n];
+    P->ratePatch += P->rToI[n]; 
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-    
+
     /* 2: Propagule Death  */
     P->rate[n] = Table->Delta_R_1;   P->rToI[n]  = Table->Delta_R_1 * (double)P->n[RP];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 3: Propagule Production */
     P->rate[n] = Table->Beta_R;                            P->rToI[n]  = Table->Beta_R * (double)P->n[R];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 4: Propagule Establishment  */
     P->rate[n] = Table->Eta_R *(K_R-(double)P->n[R])/K_R;  P->rToI[n]  = P->rate[n] * (double)P->n[RP];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 5: Resource Death  */
     P->rate[n] = Table->Delta_R_0;                         P->rToI[n]  = Table->Delta_R_0 * (double)P->n[R];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
     
     /* 6: Consumer Out-Migration (A ---> A-1) and some other patch gains one */ 
@@ -85,38 +105,59 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
         
     P->rate[n] = OutMigration;                             P->rToI[n]  = OutMigration * (double)P->n[A];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-      
+    
     /* 7: Consumer External Immigration (A ---> A + 1) */  
     P->rate[n] = Table->Lambda_C_0;                        P->rToI[n]  = Table->Lambda_C_0; 
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 8: Searching Consumer Death  */
     P->rate[n] = Table->Delta_C_0;                         P->rToI[n]  = Table->Delta_C_0 * (double)P->n[A];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
     
     /* 9: Attack: Consumer Consumption of a Resource Item and Dimmer Formation */
     P->rate[n]= Table->Alpha_C_0*(double)P->n[R]/K_R;      P->rToI[n]= P->rate[n]*(double)P->n[A];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 10: Handling Consumers relax back into Free Consumers */ 
     P->rate[n] = Table->Nu_C_0;                            P->rToI[n] = P->rate[n]*(double)P->n[RA];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 11: Production of new Consumer Individuals */
     P->rate[n] = Table->Beta_C;                            P->rToI[n] = P->rate[n]*(double)P->n[RA]; 
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+    
     /* 12: Handling Consumer Death */
     P->rate[n] = Table->Delta_C_0;                         P->rToI[n]  = Table->Delta_C_0 * (double)P->n[RA];
     P->ratePatch += P->rToI[n];
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
     n++;
-
+      
     #if defined BINARY_TREE_OPTIMIZATION
       Table->Leaves[i]->value = P->ratePatch;
     #endif
@@ -126,6 +167,10 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     Rate->Total_Rate += P->ratePatch;
     Rate->max_Probability = MAX( Rate->max_Probability, P->ratePatch );
   }
+
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+  assert(GRAND_No_of_EVENTS == Table->TOTAL_GRAND_No_of_EVENTS);
+  #endif 
 
   if(Rate->Total_Rate <= 0.0){
       printf("\n");

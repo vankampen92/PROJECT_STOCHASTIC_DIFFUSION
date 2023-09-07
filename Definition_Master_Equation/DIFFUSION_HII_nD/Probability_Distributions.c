@@ -173,6 +173,7 @@ void Marginal_Evolving_Probabilities_Calculation ( Parameter_Table * Table, int 
     printf(" through the objects ME->PT_n[t][] and ME->PT_nm[t][][] as it is done for the corresponding\n");
     printf(" stationary probability distributions with ME->PS_n[] and ME->PS_nm[][].\n");
     printf(" The reason is that PT_nm[][][] and PT_n[][] have not been previously allocated\n");
+    printf(" nor previously defined either as true members of the Master Equation, ME, structure.\n");
   }
 
   assert( ME->n_DIMENSION > 2 ); /* No Evolving Probabilities when the dimension is 1 or 2 !!! */

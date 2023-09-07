@@ -9,7 +9,7 @@ gsl_rng * r; /* Global generator defined in main.c */
 
 /* This code calculates the stochastic and determinisitic temporal evolution of several resource-consumer models 
 
-   Compilation (see makefile variable MODEL). Some compilation commands as example:
+   Compilation (see makefile environment variable 'MODEL'). Some compilation commands as example:
 
    . ~$ make
    . ~$ make STATIONARITY=STATIONARY_POINT_REPRESENTATION MODEL=DIFFUSION_STOLLENBERG_4D
@@ -18,7 +18,7 @@ gsl_rng * r; /* Global generator defined in main.c */
    Exectution:
    
    1 species examples:                                       (OUTPUT_VARIABLES_GENUINE will be 4) 
-   . ~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 60 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 60 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
 
    .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
 
@@ -51,23 +51,23 @@ gsl_rng * r; /* Global generator defined in main.c */
 
    MODEL = DIFFUSION_1R1C
    Single patch (-HM 1 -HX 1 -HY 1), and 3 species ---R, A, RA. Notice -H11 [Chi_C_0] -H12 [Eta_C_0]. If these two parameters are zero, no triplet formation, and the dynamics is equivalent to a 3D system, with only three local model variables.
-   . ~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
+   .~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -H6 0.5 -H9 10.0 -HK 2000  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 2.5 -H1 1.0 -H6 1.0 -H9 8.0 -H10 2.0 -H11 0.0 -H12 0.0
 
    MODEL = DIFFUSION_STOLLENBERG_3D
    Single patch (-HM 1 -HX 1 -HY 1), and 3 species ---R, A, RA. The dynamics do not include triplet formation. It is a 3D system, with only three local model variables (R, A, RA).
-   . ~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
+   .~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
 
-   . ~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 1.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 10.0
+   .~$ ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 80.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 80.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 1.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 10.0
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
    and plain model variables.
 
    MODEL = DIFFUSION_STOLLENBERG_4D
    Single patch (-HM 1 -HX 1 -HY 1), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation. It is a 4D system, with only four local model variables (RP, R, A, RA). 
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
+   .~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
    This example produces a limit cycle. 
   
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+   .~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
    This example produces damped oscillations
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
@@ -114,11 +114,12 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 8 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 10.5 -H10 10.0 -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
 
    .~S -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 10.5 -H10 0.1  -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
+   
    Relevant input arguments for model DIFFUSION_HII_nD:
 
    -HK  [N or Total Carrying Capacity (for resources)]
    -Hp1 [approx y_R = f_i * p1 * N: Different resource levels at time 0.0, with f_i = 0.5, 0.3, 0.2, but this can be changed] 
-   -Hp2 [Total No of Free Consumers at time 0.0 = p2 * No_of_CONSUMERS]
+   -Hp2 [Total No of Free Consumers at time 0.0: p2 * No_of_CONSUMERS]
    -HN 20 [Total No of CONSUMERS]
    -H9 and -H10 [Alpha_C_0 and Nu_C_0 for 1st Resource Type. Alpha_C_0 is the same for all resource types, but this can be changed.  
    -H0 and -H2 are Lambda_R_0 and Lambda_R1, which are overloaded to create extra handling rates (Nu), for the 2nd and 3rd resource type. 
@@ -127,15 +128,14 @@ gsl_rng * r; /* Global generator defined in main.c */
    
 In general:
    -HuR -HuC are the jumping rates (only relevant if there are more than one cell or patch in the system)
-   -H0 -H2 -H5  are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
+   -H0 -H2 -H5 are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
    -H20 is the establishment rate 
-   -H1 -H3  -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules/resources, and Delta_C_0 for both searching and handling consumers)
+   -H1 -H3 are the death rates, Delta_R_0, Delta_R_1, for propagules/resources. 
+   -H6  is Delta_C_0, the death rate for both searching and handling consumers.
    -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
    -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
    More examples in ./command_line_examples.txt.
 */
-
-void Common_Initial_Condition_Command_Line_Arguments_into_Table(Parameter_Table *Table);
 
 int main(int argc, char **argv)
 {
@@ -213,9 +213,7 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0,
-							 SUB_OUTPUT_VARIABLES, I_Time,
-							 0, CPG_DRIVER_NAME);
+  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
   printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
   printf(" These will open two windows (or two ploting devices of the same kind)\n");
   printf(" Table.CPG will store deterministic dynamic variables to plot\n");
@@ -249,11 +247,9 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
-
   /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L___S_T_O( &Table );
-
 #endif
 #endif
 #endif
@@ -272,6 +268,7 @@ int main(int argc, char **argv)
 
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */
 #if defined CPGPLOT_REPRESENTATION
+  #include <include.CPG.default.free.c>
   P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
   P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG_STO, SUB_OUTPUT_VARIABLES );
   cpgclos();

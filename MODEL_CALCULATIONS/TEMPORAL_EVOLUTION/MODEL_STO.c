@@ -67,17 +67,22 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    * the Patch System, the Time Control structure, and the CPG structure to plot   
    */
   Table->Patch_System = PATCH;
+
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    Community_Binary_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS);
+  #endif
   #if defined BINARY_TREE_OPTIMIZATION
-   Community_Binary_Tree_Initialization (Table);   /* See Community.c !!! */ 
-   P->Leaves   = Table->Leaves;
-  #endif  
+    Community_Binary_Tree_Allocation (Table, Table->No_of_CELLS); /* See Community.c !!! */ 
+  #endif
+  
+  P->Leaves   = Table->Leaves;  
   /* END ----------------------------------------------------------------------------
    */
   
 #if defined CPGPLOT_REPRESENTATION  /* Initial Plotting Time evolution: just frames!!! */
   int SAME_PLOT = 0;
   // C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S( CPG->DEVICE_NUMBER,
-  //                                                  SAME_PLOT, 0, Table );
+  ////                                                SAME_PLOT, 0, Table );
 #endif
   
   /* BEGIN: Main loop: a number of REALIZATIONS (stochastic temporal evolutions) is computed */
@@ -145,9 +150,14 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   
   Community_Free(PATCH, P);
   free ( P ); 
-  
+
   #if defined BINARY_TREE_OPTIMIZATION
-    Community_Binary_Tree_Free (Table);   /* See Community.c !!!  */
+    Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
+                       Table->No_of_CELLS ); 
+  #endif
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
+                       Table->TOTAL_GRAND_No_of_EVENTS ); 
   #endif
   
   return(0);

@@ -49,7 +49,7 @@ int Advance_Current_Time( Parameter_Table * Table,
     /* BEGIN : Stochastic Dynamic is actually performed : 
                The Community "Village" is updated accordingly 
     */
-    Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
+      Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
     if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
@@ -70,9 +70,9 @@ int Advance_Current_Time( Parameter_Table * Table,
   }
 
 #if defined STOCHASTIC_OPTIMIZATION 
-  Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
+    Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
 #else
-  Temporal_Dynamics(Village, Table, Rate);
+    Temporal_Dynamics(Village, Table, Rate);
 #endif
   
   free(Patch); 

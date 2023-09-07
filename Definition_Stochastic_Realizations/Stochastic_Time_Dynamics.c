@@ -67,18 +67,39 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     Table->Vector_Output_Variables[k] = value;
   }
   /* Initial calculation of the system total rate of a configurational change and rates of
-     the different configurational changes or events to occur
+     the different configurational changes or events to occur.
+     If any binary tree optimization is activated, Temporal_Dynamics() also initializes 
+     the tips of leaves of the tree 
   */
   Temporal_Dynamics(PATCH, Table, Rate);
 
+  /* The binary tree has been previously allocated. The binary tree is allocated before 
+     starting generating stochastic replicates. This action should have been done 
+     before calling the current function, which generates a single stochastic replicate. 
+     The settting up of the community and the associated binary tree is done in 
+     MODEL_STO.c (from which this current function is called). Two optimization levels 
+     are possible.  
+  */
+  /* Community_Binary_Tree_Initialization() sets up the partial sums of a previously 
+     allocated binary tree to maintain the discrete probability distribution 
+     always ready to be sampled. 
+  */
   #if defined BINARY_TREE_OPTIMIZATION
-    /* Initiate values of the binary tree with total rates of every patch at the leaves 
-     */
+    /* Initiate values of the binary tree with total rates of every patch at the leaves */
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
-    printf(" Binary Tree (from Leaves) to Sample Discrte Distribution has been successcully\n");
-    printf(" initiated [Realization: %d]\n", i ); 
-  #endif         
+    printf(" Binary Tree (from Leaves) to Sample Discrete Distribution has been successcully\n");
+    printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations);
+    Print_Press_Key(0, 0, "No Message");
+  #endif
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    /* Initiate values of the binary tree with the rates of every event at the leaves */
+    Community_Binary_Tree_Initialization (Table);
+    P->Treeroot = Table->Treeroot;
+    printf(" Binary Tree (from Leaves) to Sample Discrete Distribution has been successcully\n");
+    printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
+    Print_Press_Key(0, 0, "No Message");
+  #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;  */
@@ -188,11 +209,6 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 #endif
   }/* go further to the next time           */
 
-#if defined BINARY_TREE_OPTIMIZATION
-  // deleteBinaryTree_DiscreteDistribution(Table->Treeroot); 
-  // Delete the Tree from root but not Leaves!!! 
-#endif
-
   fclose(FP);
 
   return(FROZEN_SYSTEM); 
@@ -259,10 +275,19 @@ int Stochastic_Time_Dynamics_Numerical( int i,
      the different configurational changes or events to occur
   */
   Temporal_Dynamics(PATCH, Table, Rate);
-  /* Set upf of the intial values of the binary tree with the total rates for every patch at 
-     the leaves 
+  
+  /* The binary tree has been previously allocated. This action is only done before calling 
+     this function, which generates the i-th stochastic replicate. This function is called
+     from MODEL_STO(). The binary tree is allocated before starting generating stochastic
+     replicates. Two optimization levels are possible.  
   */
   #if defined BINARY_TREE_OPTIMIZATION
+    /* Initiate values of the binary tree with total rates of every patch at the leaves */
+    Community_Binary_Tree_Initialization (Table);
+    P->Treeroot = Table->Treeroot;
+  #endif
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    /* Initiate values of the binary tree with the rates of every event at the leaves */
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
   #endif

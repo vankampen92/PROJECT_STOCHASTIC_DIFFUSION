@@ -1,15 +1,18 @@
-typedef struct treenode
-{
+#ifndef BINARY_TREE_STRUCTURE 
+  #define BINARY_TREE_STRUCTURE
+  typedef struct treenode
+  {
     /* In this implementation, only true tree leaves are ordered      */
     /* The order of internal nodes is not initialized                 */
     int    level; /* Tree Level (0: root; n: leaves)                  */
     int    order; /* Order within the leaf level, from 0 to 2^n - 1   */
     double value;
-     
+
     struct treenode * left;
     struct treenode * right;
-    struct treenode * parent; 
-}treenode;
+    struct treenode * parent;
+  }treenode;
+#endif
 
 treenode * createtreenode (double value, treenode * parent, int level);
 void printtreenode(treenode * Node);
@@ -24,3 +27,11 @@ int power_int(int a, int n);
 treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n);
 void sum_Delta_upto_Root(treenode * root, treenode * Leaf, double Delta);
 int choose_Individual_Event(treenode * root, double x);
+treenode * Binary_Tree_Allocation (int No_of_CELLS, 
+                                   treenode *** Leaves, treenode **** Parent);
+treenode * Binary_Tree_Setting_Structure(treenode **** Parent, 
+                                         treenode *** Leaves, int n);
+treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent, 
+                                              treenode ** Leaves, int n);
+void Binary_Tree_Free ( treenode * root, treenode ** Leaves, treenode *** Parent, 
+                        int No_of_CELLS ); 

@@ -46,3 +46,24 @@ int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Paramet
   
   return(p);
 }
+
+void Choose_Village_and_Event_Binary_Tree( double max_Probability, Community ** Pop,
+                                           Parameter_Model * Par, 
+                                           int * patch, int * event )
+{
+  /* This function depends on a function from treenode library called choose_Indvidual_Event() */
+  int i, p;
+  Community * P;
+  int No_of_EVENTS;
+
+  No_of_EVENTS  = Par->TOTAL_No_of_EVENTS;
+ 
+  double x = Par->Treeroot->value * RANDOM; 
+  p = choose_Individual_Event(Par->Treeroot, x);  /* From treenode.c library */
+  
+  /* p should go from (0) to (No of Villages-1) */
+  assert(p >= 0 && p < Par->TOTAL_GRAND_No_of_EVENTS);
+
+  * event = p%No_of_EVENTS; 
+  * patch = p/No_of_EVENTS; 
+}

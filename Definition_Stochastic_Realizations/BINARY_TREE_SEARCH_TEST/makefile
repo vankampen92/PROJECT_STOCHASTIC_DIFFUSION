@@ -1,7 +1,7 @@
-OBJ = main_Tree_Discrete_Distribution.o treenode.o 
+OBJ = main_Tree_Discrete_Distribution_Bis.o treenode.o 
 LIB = -lm
-CC  = gcc
-CXXFLAGS+= -g
+CC  = gcc -g
+CXXFLAGS+=
 
 program:	${OBJ} ${LIB}
 		${CC} -o $@ ${OBJ} ${LIB} ${CXXFLAGS}

@@ -65,6 +65,8 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
     Resetting_Alpha_Nu_Vectors_Constant (Table); /* Resseing Alpha's and Nu's        */
     Resetting_Multiresource_Levels (Table);      /* Rebuilding Theta_Consumers[] !!! */
 
+    // Writing_Alpha_Nu_Theta_Vectors(Table);
+     
     int * n = (int *)calloc(No_of_VARIABLES+1, sizeof(int));
     double * p = (double *)calloc(No_of_VARIABLES+1, sizeof(double)); 
     
@@ -88,17 +90,19 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
       for(i=0; i<Table->SUB_OUTPUT_VARIABLES; i++) {
         n[i] = (int)Data[i][j];
         n_H += n[i]; 
+	
+	p[i] = (Table->Theta_Consumers[i]/Table->Nu_Consumers[i])/(1.0 + Nu_Sum) * (1.0-exp(-(Table->Nu_Consumers[i] + Theta_Sum)*t));
 
-        p[i]=(1.0 - exp(-(Theta_Sum+Table->Nu_C_0)*t))/(1.0 + Nu_Sum)*Table->Theta_Consumers[i]/Table->Nu_Consumers[i];
-        p_Sum += p[i];
+	p_Sum += p[i];
       }
+      
       n[No_of_VARIABLES] = Table->TOTAL_No_of_CONSUMERS - n_H; /*-HN 20 [TOTAL_No_of_CONSUMERS]*/ 
       p[No_of_VARIABLES] = 1.0 -p_Sum; 
 
       assert(n[No_of_VARIABLES] <= Table->TOTAL_No_of_CONSUMERS);
       assert(n[No_of_VARIABLES] >= 0);
 
-	    Theory[j] =  - gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);
+      Theory[j] =  - gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);
     }
 
     free(n); free(p);

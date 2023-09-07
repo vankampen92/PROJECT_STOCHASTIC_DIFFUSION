@@ -20,6 +20,9 @@ int Choose_Village(double max_Probability, Community ** Pop, Parameter_Model * P
 
 int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Parameter_Model * Par);
 
+void Choose_Village_and_Event_Binary_Tree( double max_Probability, Community ** Pop,
+                                           Parameter_Model * Par, 
+                                           int * patch, int * event );
 void Execute_One_Step(Community ** SP,
 		      Parameter_Table * Table,
 		      double max_Probability, 

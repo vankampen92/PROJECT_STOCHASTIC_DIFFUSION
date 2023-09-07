@@ -654,13 +654,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
     case 15: /* DIFFUSION_STOLLENBERG_4D * * * * * * * * * */
 
       /* No_of_EVENTS, i.e, common events that can occur to every Species: */
-      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) 
-				          P and A can undergo these three same processes 
-				      */
+      Table->No_of_EVENTS = 3;  /* (Only Diffusion + External Immigration + Death) 
+				                            P and A can undergo these three same processes 
+				                        */
       Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 7;
-      Table->LOCAL_STATE_VARIABLES = 4; /* 1 RP + 1 R + 1 C + 1 D                 */
+      Table->LOCAL_STATE_VARIABLES = 4; /* 1 RP + 1 R + 1 C + 1 D          */
                                         /* D \equiv RA (handling consumer) */
-      
       assert(Table->No_of_RESOURCES == 1);
       
       n = 0;
@@ -746,7 +745,10 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       printf(" Models (0 to 10): Check input argument list!!!\n");
       exit(0);
    }
-  /* Conventionally, the last label in the argument list of
+   
+   Table->TOTAL_GRAND_No_of_EVENTS = Table->TOTAL_No_of_EVENTS * Table->No_of_CELLS;
+  
+  /* Conventionally, the last label in the argument list of 
 
      Model_Variables_Code_into_Parameter_Table (...),
 

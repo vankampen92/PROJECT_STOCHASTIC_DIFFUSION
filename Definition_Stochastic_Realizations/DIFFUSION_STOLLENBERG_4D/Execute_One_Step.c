@@ -18,7 +18,7 @@ void Execute_One_Step(Community ** SP,
 		                  double max_Probability,
 		                  int * Event, int * x_Patch)
 {
-  int x, y, n_Event, n, n_Event_Sp, Sp, j;
+  int x, y, n_Event, Index_Patch, Index_Event, n, n_Event_Sp, Sp, j;
   Community * Patch;
   Parameter_Model * P = Table->P;
 
@@ -30,27 +30,42 @@ void Execute_One_Step(Community ** SP,
 
   /* Hierarchic procedure to find the even to occur... */
   /* The event occurs in one of the local populations  */
-  if(P->No_of_CELLS == 1) x = y = 0;
+  if(P->No_of_CELLS == 1) {
+    x = y = 0;
+    #if defined BINARY_TREE_SUPER_OPTIMIZATION
+      Choose_Village_and_Event_Binary_Tree(max_Probability, SP, P, 
+                                           &Index_Patch, &Index_Event);
+      x = y   = Index_Patch; 
+      n_Event = Index_Event;
+    #endif
+  }
   else {
     #if defined BINARY_TREE_OPTIMIZATION
-      x = y = Choose_Village_Binary_Tree(max_Probability, SP, P);
+        x = y = Choose_Village_Binary_Tree(max_Probability, SP, P);
+    #elif defined BINARY_TREE_SUPER_OPTIMIZATION
+        Choose_Village_and_Event_Binary_Tree(max_Probability, SP, P, 
+                                             &Index_Patch, &Index_Event);
+        x = y   = Index_Patch; 
+        n_Event = Index_Event;
     #else
-      x = y = Choose_Village(max_Probability, SP, P);
+        x = y = Choose_Village(max_Probability, SP, P);
     #endif
   }
   /* x and y will end up differing only in case there is movemnt event!!! */
 
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
+  #ifndef BINARY_TREE_SUPER_OPTIMIZATION
+    if(Table->TOTAL_No_of_EVENTS > 1) 
+      n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; 
+      /* 0, ..., Tablel->TOTAL_No_of_EVENTS-1 */
+  #endif
 
-  if(Table->TOTAL_No_of_EVENTS > 1) {
-    n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; /* 0, ..., 10 */
-  }
-  else {
-    printf(" The total number of events that potentially could happen in patch %d\n", x);
+  if (Table->TOTAL_No_of_EVENTS == 0) {
+    printf(" The potential number of events that potentially could happen in patch %d\n", x);
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
     printf(" If it is, there is something very wrong with your code\n");
     printf(" The program will exit!!!\n");
-    Print_Press_Key(1,0,".");
+    Print_Press_Key(1,1,"Error in Execute_One_Step() funciton");
     exit(0);
   }
 
@@ -62,6 +77,7 @@ void Execute_One_Step(Community ** SP,
   RA   = x*Table->LOCAL_STATE_VARIABLES + Table->RA;
 
   assert( n_Event < Table->TOTAL_No_of_EVENTS );
+  assert( x       < Table->No_of_CELLS );
 
   // Print_Meta_Community_Patch_System (Table);
 
@@ -204,7 +220,7 @@ int Some_Other_Patch_Population_Increase(int x, int Sp,
 }
 
 void Positivity_Control( int Event, Parameter_Table * Table,
-			 int x, int jS, double Y, int J)
+			                   int x, int jS, double Y, int J)
 {
   int i, Q, nS, Non_Positive;
   Community ** Patch = Table->Patch_System;
@@ -222,7 +238,9 @@ void Positivity_Control( int Event, Parameter_Table * Table,
   if ( Patch[x]->n[nS] <= 0) Non_Positive = 1;
 
   if( Non_Positive == 1 ) {
-    printf (" Event No %d:", Event);
+    printf (" Positivity control is not passed...\n");
+    printf (" Warning: some population is negative or zero, but it should not!!!\n");
+    printf (" Event No %d:", Event); printf("... in patch No %d\n", x);
     printf (" Y[%s] = %g\t", Table->Model_Variable_Name[jS], Y);
     printf ("J[%s] = %d\t",  Table->Model_Variable_Name[jS], J);
     printf ("n[%s] = %d\n",  Table->Model_Variable_Name[jS], Patch[x]->n[nS]);
@@ -232,6 +250,9 @@ void Positivity_Control( int Event, Parameter_Table * Table,
       printf ("Varible: %d\t Population: %d\n", i, Patch[x]->n[i]);
 
     Print_Meta_Community_Patch_System (Table);
+
+    treenode * nodeDum = leafPrint(Table->Treeroot);
+
     exit(0);
   }
 

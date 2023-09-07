@@ -27,3 +27,11 @@ int power_int(int a, int n);
 treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n);
 void sum_Delta_upto_Root(treenode * root, treenode * Leaf, double Delta);
 int choose_Individual_Event(treenode * root, double x);
+treenode * Binary_Tree_Allocation (int No_of_CELLS, 
+                                   treenode *** Leaves, treenode **** Parent);
+treenode * Binary_Tree_Setting_Structure(treenode **** Parent, 
+                                         treenode *** Leaves, int n);
+treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent, 
+                                              treenode ** Leaves, int n);
+void Binary_Tree_Free ( treenode * root, treenode ** Leaves, treenode *** Parent, 
+                        int No_of_CELLS ); 

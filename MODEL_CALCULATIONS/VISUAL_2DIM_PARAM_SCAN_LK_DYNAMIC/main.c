@@ -52,14 +52,13 @@
                            -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 \
                            -G0 -3 -G1 3 \
                            -sT 1.0E-06 -sN 300 -sP 2 \
-                           -H9 0.5 -I1 16 -m1 0.001 -M1 1.0 -A1 0.01 -d1 200 \
-                           -H10 0.1 -I0 17 -m0 0.001 -M0 0.3 -A0 0.01 -d0 200 \
+                           -H9 1.0 -I1 16 -m1 0.001 -M1 4.0 -A1 0.01 -d1 200 \
+                           -H10 1.0 -I0 17 -m0 0.001 -M0 10.0 -A0 0.01 -d0 200 \
                            -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 \
-                           -tn 2 -t0 0.0 -t1 6.0 -t4 0 -tR 20 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
-                           -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 15.0 \
+                           -tn 2 -t0 0.0 -t1 0.8 -t4 0 -tR 100 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
+                           -G2 1 -G3 0.0 -G4 4.0 -G5 1 -G6 0.0 -G7 10.0 \
                            -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 1.0 \
                            -G30 R -Fn 0
-   
    . Use -Fn 0 to generate pseudo data. 
    . -tn collects an input parameter controling the number time data points. 
    . '#define' REPETITIONS (see below) tells the program how many times you will repeat the 
@@ -69,7 +68,6 @@
 */
 #define REPETITIONS 20000
 // #define CONFIDENCE_INTERVALS
-// #define CPGPLOT_REPRESENTATION_HEAT_MAPS
 
 gsl_rng * r; /* Global generator defined in main.c */
 
@@ -370,8 +368,12 @@ int main(int argc, char **argv)
   double * y_Val_mle = (double *)calloc(REPETITIONS, sizeof(double));
 
   int No_of_REPETITIONS = REPETITIONS;  
-  for(k=0; k<No_of_REPETITIONS; k++) {
 
+  printf("Enter and integer-valued number, REPETITIONS, please... ");
+  printf("It will be the number of repeated MLE estimation procedures conducted.\n");
+  scanf("%d", &No_of_REPETITIONS); 
+
+  for(k=0; k<No_of_REPETITIONS; k++) {
     /* Every new repetition requires setting up Time_Vector_Real back to its initial values
        because, after each repetition, this vector has taken the values of real final times
        (Time_Current values of the last step) for every realization. 
@@ -386,8 +388,8 @@ int main(int argc, char **argv)
     printf("\t %d stochastic realizations are sampled from t=%.2g\n",
 	          Realizations, Time_0);
     for(i = 0; i<Time.Realizations; i++) 
-      printf(" to t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
-    printf("\n For each realization, a different final time (t_1) is used!!!\n"); 
+      printf("\t to t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
+    printf("\t For each realization, a different final time (t_1) is used!!!\n"); 
     
     /* In order to produce pseudata always with the same true parameters, they need to be set up again. 
        because the 2D scan changes its values in the Parameter_Table structure  
@@ -404,9 +406,9 @@ int main(int argc, char **argv)
       Resetting_Multiresource_Levels (&Table);      /* Creating Vector of Thetas      */
       Writing_Alpha_Nu_Theta_Vectors(&Table);  
     }
-    /* B E G I N : Generation of a matrix of pseudo-data (with the same true values)  */
+    /* B E G I N : Generation of the matrix of pseudo-data (always with the same true values)  */
     if( No_of_FILES == 0) M_O_D_E_L___S_T_O( &Table ); 
-    /* E N D     : ------------------------------------------------------------------ */
+    /* E N D     : --------------------------------------------------------------------------- */
 
     if ( No_of_FILES > 0 )
       Reading_Standard_Data_Matrix_from_File( OBSERVED_DATA_FILE,
@@ -416,8 +418,8 @@ int main(int argc, char **argv)
 					                                    0, Name_of_Rows,
 					                                    1, Time.Time_Vector );
     else
-      /* Storing Pseudo-data in Empirical Data Matrix             */
-      /* (this process might is model specific, in general)       */
+      /* Storing Pseudo-data in Empirical Data Matrix   */
+      /* (this process is model specific, in general)   */
       Creating_HII_nD_Data_Matrix_from_Model ( &Table, Empirical_Data_Matrix );
       // Creating_Standard_Data_Matrix_from_Model ( &Table, Empirical_Data_Matrix );
 
@@ -475,9 +477,10 @@ int main(int argc, char **argv)
     x_Val_mle[k] = x_Val; 
     y_Val_mle[k] = y_Val;  
     /*   E N D : Main Function Call -------------------------------------------------*/
-
-  /* B E G I N :   Drawing heat maps ------------------------------------------------*/    
-#if defined CPGPLOT_REPRESENTATION_HEAT_MAPS
+    
+  if(No_of_REPETITIONS < 10) {
+   /* B E G I N :   Drawing heat maps ------------------------------------------------*/    
+  #if defined CPGPLOT_REPRESENTATION
     /* BEGIN : 2D GRID cpgplot representation */
     /*********************************************************************/
     Table.CPG->X_label   = Table.Symbol_Parameters_Greek_CPGPLOT[Input_Parameter_1]; 
@@ -667,13 +670,15 @@ int main(int argc, char **argv)
     free(Profile_x_Data); free(Profile_y_Data);
     /*     E N D :  Calculating Confidence Intervals ------------------------------------------*/
   #endif
+  Print_Press_Key (1, 1, "Next Experiment Repetition");
+  }
 #endif
     
     free (W_GRID);
     free (Realizations_Vector); 
-    // Print_Press_Key(1,0,".");
-  }
+}
 
+if(No_of_REPETITIONS > 10000) {  
   Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
   Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
   int SAME = 0; int BAR = 1; 
@@ -684,7 +689,7 @@ int main(int argc, char **argv)
                                                            "Frequency", "", 
                                                            0, 0, 
                                                            BAR ); 
-  Press_Key(); 
+  Print_Press_Key(1, 1, "Next Normalized Histrogram"); 
 
   Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_min );
   Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX ); 
@@ -695,7 +700,8 @@ int main(int argc, char **argv)
                                                            "Frequency", "", 
                                                            0, 0,
                                                            BAR ); 
-  Press_Key();                                       
+  Print_Press_Key(1, 1, "Freeing All Memmory...");                                       
+}
 
   free(x_Val_mle);  free(y_Val_mle);
   fclose(FP_x);     fclose(FP_y);
@@ -707,10 +713,10 @@ int main(int argc, char **argv)
   if (TYPE_of_TIME_DEPENDENCE == 1)       // -t4 1
     Time_Dependence_Control_Free( &Time_Dependence, &Table );
   
-#if defined CPGPLOT_REPRESENTATION
-  P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
-  cpgclos();
-#endif  
+  #if defined CPGPLOT_REPRESENTATION
+    P_A_R_A_M_E_T_E_R___C_P_G_P_L_O_T___F_R_E_E( Table.CPG, SUB_OUTPUT_VARIABLES );
+    cpgclos();
+  #endif  
 
   #include <include.Parameter_Space.default.free.c>
   Parameter_Space_Free(Space, No_of_PARAMETERS); free( Space );
@@ -728,7 +734,8 @@ int main(int argc, char **argv)
   }
   
   free(Name_of_Rows);
-  for (i=0; i<SUB_OUTPUT_VARIABLES; i++)  free(Empirical_Data_Matrix[i]);
+  for (i=0; i<SUB_OUTPUT_VARIABLES; i++)  
+    free(Empirical_Data_Matrix[i]);
   free(Empirical_Data_Matrix);
 
   free(TIME_PARAMETERS_FILE);
@@ -1012,8 +1019,8 @@ void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Tab
   default:
     printf(" This TYPE_of_MODEL (%d) code does not have\n", Table->TYPE_of_MODEL);
     printf(" a defined likelihood to fit data\n"); 
-    printf(" Ony Models (9, 12, 13, 16) are correctly defined\n");
-    printf(" DIFFUSION HII 2D, DIFFUSION HII 1D and DIFFUSION BD 2D\n");
+    printf(" Ony likelihoods for models (9, 12, 13, 16) are correctly defined\n");
+    printf(" (DIFFUSION HII 2D, DIFFUSION HII 1D, DIFFUSION BD 2D, and DIFFUSION_HII_nD)\n");
     printf(" Check input argument list!!!\n");
     exit(0);
   } 

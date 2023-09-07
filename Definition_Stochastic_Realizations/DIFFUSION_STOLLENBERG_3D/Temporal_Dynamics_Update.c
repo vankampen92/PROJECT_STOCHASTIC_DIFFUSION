@@ -8,9 +8,9 @@
 void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table);
 
 void Temporal_Dynamics_Update( Community ** My_Community,
-			       Parameter_Table * Table,
-			       Stochastic_Rate * Rate,
-			       int Type_of_Event, int * Patch)
+			                         Parameter_Table * Table,
+			                         Stochastic_Rate * Rate,
+			                         int Type_of_Event, int * Patch)
 {
   /* This function calculates the stochastic rates after the execution of a stochastic event
      in terms of the old ones, with no recalculation. This is a way to optimize the algorithm.
@@ -47,26 +47,25 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     if (Type_of_Event < n ) {
       
       assert( Type_of_Event != 0 && Type_of_Event != 3 ) ; /* Because these are out
-							      migration events. Only
-							      possible when x patch 
-							      is different from y patch
-							   */
-      
+							                                                migration events. Only
+							                                                possible when x patch 
+							                                                is different from y patch
+							                                              */
       Pa    = My_Community[x];
       Updating_Event_Delta_Matrix(Pa, Type_of_Event, Table); 
       
-      m = Pa->Event_Adjacence_List[Type_of_Event][n]; /* How many events are connected 
-							 to event 'Type_of_Event'???
-							 i.e., the lenght of the adjacence  
-							 list of 'Type_of_Event'
-						      */
+      m = Pa->Event_Adjacence_List[Type_of_Event][n];  /* How many events are connected 
+							                                            to event 'Type_of_Event'???
+							                                            i.e., the lenght of the adjacence  
+							                                            list of 'Type_of_Event'
+						                                           */
       Delta_Rate = 0.0; 
       for(i=0; i<m; i++) {
-	k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
-							   to event 'Type_of_Event'???
-							*/
-	Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
-	Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      k = Pa->Event_Adjacence_List[Type_of_Event][i]; /* Which events are connected 
+							                                             to event 'Type_of_Event'???
+							                                          */
+	      Delta_Rate  += Pa->Event_Delta_Matrix[Type_of_Event][k];
+	      Pa->rToI[k] += Pa->Event_Delta_Matrix[Type_of_Event][k];
       }
 
       Pa->ratePatch    += Delta_Rate; 				
@@ -83,9 +82,9 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     }   
   }
   else {         /* MOVEMENT EVENT involving two Patches */
-		 /* Out migration sending one individual (R or C, 
-		    RA individuals do not move) out 
-		    from patch 'x' into patch 'y'      */
+		             /* Out migration sending one individual (R or C, 
+		                RA individuals do not move) out 
+		                from patch 'x' into patch 'y'      */
     
     assert( Type_of_Event == 0 || Type_of_Event == 3 ) ; 
     

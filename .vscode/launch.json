@@ -5,6 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "(gdb) Launch Binary Tree Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Definition_Stochastic_Realizations/BINARY_TREE_SEARCH_TEST/program",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "(gdb) Launch LK-HII-nD",
             "type": "cppdbg",
             "request": "launch",
@@ -57,7 +81,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/DIFFUSION_STOLLENBERG_4D",
-            "args": ["-y0", "15", "-y2", "1", "-HS", "1", "-HM", "10000", "-HX", "100", "-HY", "100", "-n", "4", "-v0", "0", "-v1", "1", "-v2", "2", "-v3", "3", "-G0", "2", "-G1", "2", "-tn", "200", "-t0", "0.0", "-t1", "200.0", "-t4", "0", "-tR", "10", "-xn", "0", "-xN", "5.0", "-HN", "5.0", "-G2", "1", "-G3", "0.0", "-G4", "200.1", "-G5", "1", "-G6", "0.0", "-G7", "200000", "-HuR", "5.0", "-HuC", "1.0", "-H0", "0.0", "-H2", "0.0", "-H5", "0.0", "-HK", "20", "-H20", "20.0", "-H1", "1.0", "-H3", "5.0", "-H6", "0.5", "-H9", "5.0", "-H10", "2.0", "-H4", "5.0", "-H17", "1.0"],
+            "args": ["-y0", "15", "-y2", "1", "-HS", "1", "-HM", "100", "-HX", "10", "-HY", "10", "-n", "4", "-v0", "0", "-v1", "1", "-v2", "2", "-v3", "3", "-G0", "2", "-G1", "2", "-tn", "200", "-t0", "0.0", "-t1", "200.0", "-t4", "0", "-tR", "10", "-xn", "0", "-xN", "5.0", "-HN", "5.0", "-G2", "1", "-G3", "0.0", "-G4", "200.1", "-G5", "1", "-G6", "0.0", "-G7", "200000", "-HuR", "5.0", "-HuC", "1.0", "-H0", "0.0", "-H2", "0.0", "-H5", "0.0", "-HK", "20", "-H20", "20.0", "-H1", "1.0", "-H3", "5.0", "-H6", "0.5", "-H9", "5.0", "-H10", "2.0", "-H4", "5.0", "-H17", "1.0"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

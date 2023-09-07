@@ -246,7 +246,7 @@ treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent,
     if( n >= 1) {
         M = power_int(2, n-1);
 
-        Parents = Parent[n];
+        Parents = Parent[n-1];
         
         for(i=0; i<M; i++) {
             // printf(" Parent: %d\n", i);
@@ -274,8 +274,8 @@ treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent,
     } 
 }
 
-treenode * Binary_Tree_Setting_Structure(treenode *** Parent, 
-                                         treenode ** Leaves, int n)
+treenode * Binary_Tree_Setting_Structure(treenode **** Parent, 
+                                         treenode *** Leaves, int n)
 {
     /*  Set up, recursively, the next parent level (n-1) from leaves 
         (at level n) without setting up the partial sums that will 
@@ -288,15 +288,15 @@ treenode * Binary_Tree_Setting_Structure(treenode *** Parent,
     if( n >= 1) {
         M = power_int(2, n-1);
 
-        Parents = Parent[n];
+        Parents = (*Parent)[n-1];
         
         for(i=0; i<M; i++) {
             // printf(" Parent: %d\n", i);
 
-            Parents[i]->left   = Leaves[2*i];
-            Parents[i]->right  = Leaves[2*i+1];
-            Leaves[2*i]->parent   = Parents[i]; 
-            Leaves[2*i+1]->parent = Parents[i];
+            Parents[i]->left   = (*Leaves)[2*i];
+            Parents[i]->right  = (*Leaves)[2*i+1];
+            (*Leaves)[2*i]->parent   = Parents[i]; 
+            (*Leaves)[2*i+1]->parent = Parents[i];
         
             // printtreenode(Parents[i]);
         } 
@@ -304,22 +304,21 @@ treenode * Binary_Tree_Setting_Structure(treenode *** Parent,
         root = Parents[0]; 
 
         if( n > 1 ) {
-            root = Binary_Tree_Setting_Structure(Parent, Parents, n-1);
+            root = Binary_Tree_Setting_Structure(Parent, &Parents, n-1);
         }
         else {
             return root;
         }
     }
     else {
-        root = Leaves[0];
+        root = (*Leaves)[0];
         return root; 
     } 
 }
 
 treenode * Binary_Tree_Allocation (int No_of_CELLS, 
-                                   treenode ** Leaves, treenode *** Parent)
+                                   treenode *** Leaves, treenode **** Parent)
 {
-  treenode * root;
   int i, k, No_of_LEAVES, No_of_TREE_LEVELS, No;
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
@@ -335,23 +334,23 @@ treenode * Binary_Tree_Allocation (int No_of_CELLS,
     No_of_TREE_LEVELS = i+1;
   }
 
-  Leaves = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
+  (*Leaves) = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
   for(i=0; i<No_of_LEAVES; i++){ 
-      Leaves[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
-      Leaves[i]->order = i;
+      (*Leaves)[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
+      (*Leaves)[i]->order = i;
   } 
 
-  Parent = (treenode ***)malloc(No_of_TREE_LEVELS * sizeof(treenode **));
+  (*Parent) = (treenode ***)malloc(No_of_TREE_LEVELS * sizeof(treenode **));
   for(k=0; k<No_of_TREE_LEVELS; k++){ 
     No      = power_int(2, k);  /* Number of Leaves at level k */
-    Parent[k] = (treenode **)malloc(No * sizeof(treenode *));
+    (*Parent)[k] = (treenode **)malloc(No * sizeof(treenode *));
     for(i=0; i<No; i++){ 
-      Parent[k][i] = createtreenode(0.0, NULL, k);
-      Parent[k][i]->order = i;
+      (*Parent)[k][i] = createtreenode(0.0, NULL, k);
+      (* Parent)[k][i]->order = i;
     }
   }
 
-  root = Binary_Tree_Setting_Structure(Parent, Leaves, No_of_TREE_LEVELS);
+  treenode * root = Binary_Tree_Setting_Structure(Parent, Leaves, No_of_TREE_LEVELS);
 
   return(root);
 }

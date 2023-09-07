@@ -80,6 +80,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
   P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
   P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
+  P_Destination->TOTAL_GRAND_No_of_EVENTS = P_Source->TOTAL_GRAND_No_of_EVENTS;
 
   /* Ex: 8 (without acummulating variables) */
   P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
@@ -193,11 +194,12 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 
   //P->Time_Scale_Unit      = Table->T->Time_Scale_Unit;
 
-  P->No_of_CELLS = Table->No_of_CELLS;
+  P->No_of_CELLS       = Table->No_of_CELLS;
   P->No_of_CELLS       = Table->No_of_CELLS;
   P->No_of_INDIVIDUALS = Table->No_of_INDIVIDUALS;
   P->No_of_CELLS_X     = Table->No_of_CELLS_X;
   P->No_of_CELLS_Y     = Table->No_of_CELLS_Y;
+  P->TOTAL_GRAND_No_of_EVENTS = Table->TOTAL_GRAND_No_of_EVENTS;
 
   P->No_of_NEIGHBORS            = Table->No_of_NEIGHBORS;
   P->TYPE_of_NETWORK            = Table->TYPE_of_NETWORK;
@@ -308,6 +310,7 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->No_of_INDIVIDUALS = P_Source->No_of_INDIVIDUALS;
   P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
   P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
+  P_Destination->TOTAL_GRAND_No_of_EVENTS = P_Source->TOTAL_GRAND_No_of_EVENTS;
 
   /* Ex: 8 (without acummulating variables) */
   P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
@@ -421,8 +424,9 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->No_of_CELLS_X     = P_Source->No_of_CELLS_X;
   P_Destination->No_of_CELLS_Y     = P_Source->No_of_CELLS_Y;
   P_Destination->No_of_NEIGHBORS            = P_Source->No_of_NEIGHBORS;
-
   P_Destination->TOTAL_No_of_EVENTS         = P_Source->TOTAL_No_of_EVENTS;
+  P_Destination->TOTAL_GRAND_No_of_EVENTS = P_Source->TOTAL_GRAND_No_of_EVENTS;
+
   /* Total Number of Events within a patch, i.e., 18 * 4 = 72 */
   P_Destination->No_of_EVENTS               = P_Source->No_of_EVENTS;
   /* Number of Events within an age class, i.e., 18           */

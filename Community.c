@@ -433,7 +433,6 @@ void Community_Binary_Tree_Initialization (Parameter_Table * Table)
      This function sets up the partial sums of a previously allocated
      binary tree that will maintain the discrete probability distribution 
      always ready to be sampled. 
-  
   */
 
   treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
@@ -444,15 +443,16 @@ void Community_Binary_Tree_Initialization (Parameter_Table * Table)
   Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
 }
 
-void Community_Binary_Tree_Allocation (Parameter_Table * Table)
+void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS)
 {
-  int i, k, No_of_CELLS, No_of_LEAVES, No_of_TREE_LEVELS, No;
+  int i, k, No_of_LEAVES, No_of_TREE_LEVELS, No;
 
-  /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
-  No_of_CELLS       = Table->No_of_CELLS; 
+  /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS given that, at least, 
+     there should be for a No_of_CELLS of true active leaves 
+  */ 
   No_of_TREE_LEVELS = 0;   /* Only the root!!! */
   No_of_LEAVES      = 1;   /* The root!!!      */
-  
+
   i = 0; 
   if (No_of_CELLS > 1) {
     while( No_of_CELLS < power_int(2, i) || No_of_CELLS > power_int(2, i+1)) {
@@ -464,35 +464,7 @@ void Community_Binary_Tree_Allocation (Parameter_Table * Table)
   Table->No_of_LEAVES      = No_of_LEAVES;
   Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; 
 
-  Table->Leaves = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
-  for(i=0; i<No_of_LEAVES; i++){ 
-      Table->Leaves[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
-      Table->Leaves[i]->order = i;
-  } 
-
-  Table->Parent = (treenode ***)malloc(No_of_TREE_LEVELS * sizeof(treenode **));
-  for(k=0; k<No_of_TREE_LEVELS; k++){ 
-    No      = power_int(2, k);  /* Number of Leaves at level k */
-    Table->Parent[k] = (treenode **)malloc(No * sizeof(treenode *));
-    for(i=0; i<No; i++){ 
-      Table->Parent[k][i] = createtreenode(0.0, NULL, k);
-      Table->Parent[k][i]->order = i;
-    }
-  }
-
-  Table->Treeroot = Binary_Tree_Setting_Structure(Table->Parent, 
-                                                  Table->Leaves, No_of_TREE_LEVELS);
-}
-
-void Community_Binary_Tree_Free (Parameter_Table * Table) 
-{
-  int k; 
-
-  deleteTree(Table->Treeroot);
-  free(Table->Leaves);  
-
-  for(k=0; k<Table->No_of_TREE_LEVELS; k++){ 
-    free(Table->Parent[k]);
-  }
-  free(Table->Parent); 
+  Table->Treeroot = Binary_Tree_Allocation ( No_of_CELLS, 
+                                             &(Table->Leaves), 
+                                             &(Table->Parent) );
 }

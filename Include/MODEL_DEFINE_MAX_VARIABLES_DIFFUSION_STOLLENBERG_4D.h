@@ -14,4 +14,4 @@
                                          /* See definition_OutPut_Variables.c  */
 
 #define OUTPUT_VARIABLES_MAXIMUM 160013  /* MODEL_STATE_VARIABLES_MAXIMUM +
-					   OUTPUT_VARIABLES_GENUINE_MAXIMUM */
+					                        OUTPUT_VARIABLES_GENUINE_MAXIMUM */

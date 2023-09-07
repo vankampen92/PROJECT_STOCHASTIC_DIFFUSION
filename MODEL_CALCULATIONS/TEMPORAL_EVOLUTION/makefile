@@ -64,12 +64,22 @@ EXTRA_INCLUDE_PATH+=-I${FIXED_POINTS_DIR}
 ## C O M P I L A T I O N   O P T I O N   C O N T R O L I N G   N U M E R I C A L   R E C I P E S
 NR=NUMERICAL_RECIPES###############################
 ##############################################################################################################
-## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
+## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   S T O C H A S T I C   D Y N A M I C S
+## STOCHASTIC_OPTIMIZATION requires de definition of the Events Adjancy Matrix telling which events
+##                         influences the rate of occurrence of any other event, locally
+## BINARY_TREE_OPTIMIZATION requires setting up a binary tree for all the spatial individual cells
+## BINARY_TREE_SUPER_OPTIMIZATION requires setting up a bigger binary tree of every event at each cell 
 STO=STOCHASTIC_OPTIMIZATION#################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
+BT=BINARY_TREE_SUPER_OPTIMIZATION#################### Possibilities: 
+##################################################### (0) 'NON'
+##################################################### (1) 'BINARY_TREE_OPTIMIZATION/'
+##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION/'
+##############################################################################################################
+## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
 V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
 CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
-STATIONARITY=STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
+STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P A R A M E T E R   S P A C E ###############
 TYPE_of_BOUNDARY=###
@@ -110,7 +120,7 @@ EXE=${ODE_MODEL}
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
 LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -D${BT} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3
 # This makefile uses full power of conditional compilation. There is a bunch of variables that control this and

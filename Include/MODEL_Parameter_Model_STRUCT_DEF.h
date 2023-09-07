@@ -39,6 +39,7 @@ typedef struct Parameter_Modelinfo
   int TOTAL_No_of_EVENTS;
   /* Total Number of Events within a patch, i.e., 25 * 4 = 100 */
   int No_of_EVENTS;
+  int TOTAL_GRAND_No_of_EVENTS;                   /* TOTAL_No_of_EVENTS * No_of_CELLS */ 
 
   double * Vector_Model_Variables; 
   double * Vector_Model_Variables_Time_0;
