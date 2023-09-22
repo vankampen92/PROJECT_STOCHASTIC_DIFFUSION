@@ -15,6 +15,10 @@ typedef struct Time_Controlinfo
   double ** Accumulated_Variable;
 
   Stochastic_Rate * Rate;
+  
+#if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+  double * Vector_of_Rates;
+#endif 
 
   double *** Variable; 
 

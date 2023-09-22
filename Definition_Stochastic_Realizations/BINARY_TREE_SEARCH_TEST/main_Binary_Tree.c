@@ -4,13 +4,7 @@
 #include <math.h>
 #include "treenode.h"
 
-/* This function tests first certain basic functions from the 'treenode.c' library and 
-   creates a binary tree to sample discrete distributions by allocating nodes and 
-   creating the tree structure as nodes are added to the tree (as oposed to allocating 
-   first all Parent (internal nodes) and Leave (outer nodes) levels and then creating the 
-   binary structure between Parents and Leaves at each level). Whe the same binary tree
-   structure should be repeatedly used the latter method is more efficient.  
-*/
+/* This function creates a binary tree to sample discrete distributions and test the library functions */
 
 int main()
 {
@@ -19,30 +13,8 @@ int main()
     int n; /* No of TREE LEVELS 
               (from level 0 or 'root level' to level n or 'leaf level')
            */
-    /* First: Creating a Binary Tree */
-    treenode * n1 = createtreenode(10.0, NULL, 0);
-    treenode * n2 = createtreenode(12.0, n1, 1);  
-    treenode * n3 = createtreenode(15.0, n1, 1);
-    treenode * n4 = createtreenode(17.0, n2, 2);
-    treenode * n5 = createtreenode(20.0, n2, 2);
-    treenode * n6 = createtreenode(25.0, n3, 2);
-    treenode * n7 = createtreenode(29.0, n3, 2);
-    
-    n1->left = n2; n1->right = n3;
- 
-    n2->left = n4; n2->right = n5;
 
-    n3->left = n6; n3->right = n7; 
-
-    printtree(n1);
-    
-    printf("Print values in order: ");
-    printinorder(n1);
-    printf("\n");
-
-    deleteTree(n1); // n1 is the tree root (of all evil). 
-
-    /* Second: Creating a binary tree to sample and
+    /* First: Creating a binary tree to sample and
                update a discrete dirtribution:
               
               f = {f_1, ..., f_M}
@@ -61,23 +33,30 @@ int main()
     */
     M = power_int(2, n); 
     double * Rates     = (double *)calloc(M, sizeof(double));
-    treenode ** Leaves = (treenode **)malloc(M * sizeof(treenode *));
+    
+    int No_of_CELLS;
+    int No_of_LEAVES;
+    int No_of_TREE_LEVELS; 
+
+    No_of_CELLS       = M; 
+    No_of_TREE_LEVELS = n;
+
+    treenode ** Leaves; 
+    treenode *** Parent; 
+    treenode * root = Binary_Tree_Allocation( No_of_CELLS, &Leaves, &Parent );
+
     for (i=0; i<M; i++) {
         Rates[i]  = drand48();
-        Leaves[i] = createtreenode(Rates[i], NULL, n);
+        Leaves[i]->value = Rates[i];
         Leaves[i]->order = i;      
     }
 
+    root = sumBinaryTree_DiscreteDistribution(Parent, Leaves, No_of_TREE_LEVELS); 
+
     for (i=0; i<M; i++) 
         printf( "Rate[%d] = %g\n", i, Leaves[i]->value );
-
-    treenode * root = createBinaryTree_DiscreteDistribution(Leaves, n);       
-
+      
     printtree(root);
-
-    for (i=0; i<M; i++) 
-        printf( "Rate[%d] = %g\n", i, Leaves[i]->value );
-
     leafPrint(root); 
 
     double Delta = 2.0;
@@ -100,8 +79,9 @@ int main()
     printf(" Enter 0 to exit (the program will exit)... ... ...");
     scanf("%d", &n); 
 
-    deleteTree(root);
-
+    Binary_Tree_Free ( root, Leaves, Parent, 
+                       No_of_CELLS ); 
+    
     free(Rates);
     return(0);
 }

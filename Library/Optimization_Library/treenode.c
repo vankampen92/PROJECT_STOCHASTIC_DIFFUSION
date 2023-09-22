@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <assert.h>
 #include "treenode.h"
 
 treenode * createtreenode (double value, treenode * parent, int level)
@@ -11,8 +12,10 @@ treenode * createtreenode (double value, treenode * parent, int level)
     if( result != NULL ) {
 
         result->value  = value; 
-        result->level  = level;     /* Result is created at a level */
-
+        result->level  = level; /* Result is created at a level                */
+        result->index  = 0;     /* Index, only when functioning as a Priority Queu 
+                                   ( coupled to an array of pointers ) 
+                                */ 
         result->left   = NULL;
         result->right  = NULL;
         
@@ -278,8 +281,13 @@ treenode * Binary_Tree_Setting_Structure(treenode **** Parent,
                                          treenode *** Leaves, int n)
 {
     /*  Set up, recursively, the next parent level (n-1) from leaves 
-        (at level n) without setting up the partial sums that will 
-        maintain the discrete distribution ready to be sampled. 
+        (at level n) without any further settings, 
+        neither:
+        1. Partial sums that will maintain the discrete distribution ready 
+           to be sampled.
+        nor: 
+        2. Priority Queu settings that will maitain a minimum value at the 
+           root level.   
     */ 
     int i, M; 
     treenode * root; 
@@ -316,9 +324,23 @@ treenode * Binary_Tree_Setting_Structure(treenode **** Parent,
     } 
 }
 
-treenode * Binary_Tree_Allocation (int No_of_CELLS, 
+treenode *  Binary_Tree_Allocation (int No_of_CELLS, 
                                    treenode *** Leaves, treenode **** Parent)
 {
+  /* This function allocates the tree (from root). It creates space for the leaves 
+     (the outer and final tree level) and all internal nodes for each tree level 
+     (the parents). 
+
+     Then, it creates the binary structure of the tree by calling the function: 
+    
+     Binary_Tree_Setting_Structure();
+
+     which connects parents and leaves, as required, recursively. 
+
+     Output: 
+
+     . root, a pointer to the tree root.  
+  */
   int i, k, No_of_LEAVES, No_of_TREE_LEVELS, No;
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS */
@@ -334,6 +356,11 @@ treenode * Binary_Tree_Allocation (int No_of_CELLS,
     No_of_TREE_LEVELS = i+1;
   }
 
+  /* No_of_TREE_LEVELS is the No of (internal) TREE LEVELS 
+     (without counting the final outer LEAVE level)
+     This number will be used to create all Parent tree levels 
+  */
+
   (*Leaves) = (treenode **)malloc(No_of_LEAVES * sizeof(treenode *));
   for(i=0; i<No_of_LEAVES; i++){ 
       (*Leaves)[i] = createtreenode(0.0, NULL, No_of_TREE_LEVELS);
@@ -346,7 +373,7 @@ treenode * Binary_Tree_Allocation (int No_of_CELLS,
     (*Parent)[k] = (treenode **)malloc(No * sizeof(treenode *));
     for(i=0; i<No; i++){ 
       (*Parent)[k][i] = createtreenode(0.0, NULL, k);
-      (* Parent)[k][i]->order = i;
+      (*Parent)[k][i]->order = i;
     }
   }
 
@@ -382,4 +409,138 @@ void Binary_Tree_Free ( treenode * root, treenode ** Leaves, treenode *** Parent
   free(Parent); 
 }
 
+int Calculating_No_of_TREE_LEVELS(int M)
+{   
+    /* This function return the label, 'n", of the tree level that correspond to 'M' */
+    /* In fact, the total number of levels is always this number plus 1, because we  */
+    /* have counted the root as level 0 !!!
 
+        Input: 
+        . M, is an input index from equal to 0 to equal to 2*(2^n -1). 
+        
+       The algorithm determins 'n' from the input value 'M'. 
+    */
+    int No_of_TREE_LEVELS; 
+    int i; 
+
+    if (M == 0) 
+        No_of_TREE_LEVELS = 0; /* Only the root level */
+    else {
+        i = 0; 
+        while( M < ( power_int(2, i)-1 ) || M > ( 2*(power_int(2, i)-1) ) ) {
+                i++;  
+        }
+        No_of_TREE_LEVELS = i;
+    }
+    return(No_of_TREE_LEVELS);
+}
+
+void Priority_Queu_Insert_Value( int i, double Rate, int LEAVES_LEVEL, 
+                                 treenode ** Priority, 
+                                 treenode *** Parent, 
+                                 treenode ** Leaves)
+{    
+    /* This function inserts value 'Rate' corresponding to an index 'i' from 
+       i=0 to i=(2^{LEAVES_LEVEL} -1) into a priority queu using a binary tree, 
+       where Priority is an array of 'node' pointers, where, specifically, 
+       Priority[i] points to the tree node that contains index 'i'
+    */
+    int k, n, Sn;     
+    /* n, tree level from 0 to LEAVES_LEVEL */ 
+
+    n = Calculating_No_of_TREE_LEVELS(i); /* Tree level from 0 to l-1,  where 
+                                             l correspond to the total number
+                                             of tree levels, labeled from 
+                                             n = 0 (the root) to n = l-1 (the leaves) 
+                                          */
+    Sn = power_int(2, n) - 1; 
+    k = i - Sn;
+
+    if (n == 0) {
+            Parent[0][0]->value = Rate; 
+            Parent[0][0]->level  = 0; /* Result is created at a level 0 */
+            Parent[0][0]->index  = i;
+            Priority[i]          = Parent[0][0]; 
+    }
+    else if (n > 0 && n < LEAVES_LEVEL ) { 
+            Parent[n][k]->value = Rate;
+            Parent[n][k]->level = n;
+            Parent[n][k]->index = i;
+            Priority[i]         = Parent[n][k]; 
+            bubbling_up(Parent[n][k], Priority);
+    }
+    else {
+            Leaves[k]->value = Rate;
+            Leaves[k]->level = n;
+            Leaves[k]->index = i;
+            Priority[i]      = Leaves[k];
+            bubbling_up(Leaves[k], Priority); 
+    }    
+}
+
+void bubbling(treenode * Node, treenode ** Priority)
+{
+    treenode * Child_Min; 
+
+    if (Node->parent == NULL) return;  /* Root level has been reached */
+    else if(Node->value < Node->parent->value ){
+          swap_Node_values(Node, Node->parent, Priority); 
+          bubbling(Node->parent, Priority);
+    }
+    else{
+        Child_Min = Determining_Child_Min(Node);
+        
+        if (Child_Min == NULL) return; /* Leaf level has been reached */ 
+
+        if (Node->value > Child_Min->value) {
+            swap_Node_values(Node, Child_Min, Priority);
+            bubbling(Child_Min, Priority);
+        }
+    }
+}
+
+treenode * Determining_Child_Min(treenode * Node)
+{
+    treenode * child; 
+
+    if(Node->left == NULL && Node->right == NULL)
+        return(NULL);
+        
+    if(Node->left->value > Node->right->value)
+        child = Node->right; 
+    else    
+        child = Node->left; 
+
+    return(child); 
+}
+
+void bubbling_up (treenode * Node, treenode ** Priority)
+{
+    if (Node->parent == NULL) return; 
+    else {
+        if(Node->value < Node->parent->value ){
+          swap_Node_values(Node, Node->parent, Priority); 
+          bubbling_up(Node->parent, Priority);
+        }
+    }
+}
+
+void swap_Node_values(treenode * Node_0, treenode * Node_1, treenode ** Priority) 
+{
+    double value; 
+    int level; 
+    int index; 
+    treenode * Node; 
+
+    Node  = Priority[Node_0->index];
+    value = Node_0->value;
+    index = Node_0->index;
+    
+    Priority[Node_0->index] = Priority[Node_1->index];
+    Node_0->value = Node_1->value;
+    Node_0->index = Node_1->index;
+
+    Priority[Node_1->index] = Node;
+    Node_1->value = value;
+    Node_1->index = index;
+}

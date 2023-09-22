@@ -4,6 +4,12 @@
 #include <math.h>
 #include "treenode.h"
 
+/* This function tests first certain basic functions the the 'treenode.c' library and 
+   creates a binary tree to sample discrete distributions by independently allocating 
+   first all Parent (internal nodes) and Leave (outer) levels and then creating the 
+   binary structure between Parents and Leaves at each level 
+*/
+
 int main()
 {
     int i; 

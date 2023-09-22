@@ -69,12 +69,18 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   Table->Patch_System = PATCH;
 
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
-    Community_Binary_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS);
+    /* See Community.c !!! */
+    Community_Binary_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS);   
   #endif
   #if defined BINARY_TREE_OPTIMIZATION
-    Community_Binary_Tree_Allocation (Table, Table->No_of_CELLS); /* See Community.c !!! */ 
+    /* See Community.c !!! */
+    Community_Binary_Tree_Allocation (Table, Table->No_of_CELLS);   
   #endif
-  
+  #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+    /* See Community.c !!! */
+    Community_Priority_Queue_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS); 
+  #endif
+
   P->Leaves   = Table->Leaves;  
   /* END ----------------------------------------------------------------------------
    */
@@ -158,6 +164,11 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
     Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
                        Table->TOTAL_GRAND_No_of_EVENTS ); 
+  #endif
+  #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+    Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
+                       Table->No_of_LEAVES );
+    free(Table->Tree_Node_Index); 
   #endif
   
   return(0);

@@ -1,4 +1,4 @@
-OBJ = main_Tree_Discrete_Distribution_Bis.o treenode.o 
+OBJ = main_Priority_Queu.o treenode.o 
 LIB = -lm
 CC  = gcc -g
 CXXFLAGS+=

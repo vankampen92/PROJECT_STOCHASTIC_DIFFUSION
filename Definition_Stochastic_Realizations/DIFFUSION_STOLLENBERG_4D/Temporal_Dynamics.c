@@ -57,6 +57,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif 
     n++;
 
     /* 1: Propagule External Immigration event */
@@ -64,6 +67,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n]; 
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
 
@@ -73,6 +79,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 3: Propagule Production */
@@ -80,6 +89,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
     
@@ -89,6 +101,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 5: Resource Death  */
@@ -96,6 +111,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
     
@@ -108,6 +126,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 7: Consumer External Immigration (A ---> A + 1) */  
@@ -115,6 +136,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
     
@@ -124,6 +148,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 9: Attack: Consumer Consumption of a Resource Item and Dimmer Formation */
@@ -131,6 +158,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
     
@@ -140,6 +170,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 11: Production of new Consumer Individuals */
@@ -148,6 +181,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+    #endif
     n++;
     
     /* 12: Handling Consumer Death */
@@ -155,6 +191,9 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+    #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
     #endif
     n++;
       

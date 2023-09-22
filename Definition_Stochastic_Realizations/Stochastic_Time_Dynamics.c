@@ -100,6 +100,13 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
     Print_Press_Key(0, 0, "No Message");
   #endif
+  #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+    Community_Priority_Queue_Tree_Initialization(Table);
+    P->Treeroot = Table->Treeroot;
+    printf(" Priority Queue Binary Tree to store ordered putatitive event times has been successcully\n");
+    printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
+    Print_Press_Key(0, 0, "No Message");
+  #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
   /* int DISCARTING_EXTINCTIONS = P->DISCARTING_EXTINCTIONS;  */
@@ -289,6 +296,10 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
     /* Initiate values of the binary tree with the rates of every event at the leaves */
     Community_Binary_Tree_Initialization (Table);
+    P->Treeroot = Table->Treeroot;
+  #endif
+  #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+    Community_Priority_Queue_Tree_Initialization(Table);
     P->Treeroot = Table->Treeroot;
   #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/

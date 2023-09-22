@@ -2,10 +2,11 @@
   #define BINARY_TREE_STRUCTURE
   typedef struct treenode
   {
-    /* In this implementation, only true tree leaves are ordered      */
-    /* The order of internal nodes is not initialized                 */
-    int    level; /* Tree Level (0: root; n: leaves)                  */
-    int    order; /* Order within the leaf level, from 0 to 2^n - 1   */
+    /* In this implementation, only true tree leaves are ordered           */
+    /* The order of internal nodes is not initialized                      */
+    int    level; /* Tree Level (0: root; n: leaves)                       */
+    int    order; /* Order within the leaf level, from 0 to 2^n - 1        */
+    int    index; /* Index (when using the binary tree as a priority queu) */
     double value;
 
     struct treenode * left;
@@ -35,3 +36,14 @@ treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent,
                                               treenode ** Leaves, int n);
 void Binary_Tree_Free ( treenode * root, treenode ** Leaves, treenode *** Parent, 
                         int No_of_CELLS ); 
+void Priority_Queu_Insert_Value( int i, double Rate, int LEAVES_LEVEL, 
+                                 treenode ** Priority, 
+                                 treenode *** Parent, 
+                                 treenode ** Leaves);
+void bubbling_up (treenode * Node, treenode ** Priority);
+void swap_Node_values(treenode * Node_0, treenode * Node_1, treenode ** Priority);
+treenode * Determining_Child_Min(treenode * Node);
+void bubbling(treenode * Node, treenode ** Priority);
+int Calculating_No_of_TREE_LEVELS(int M);
+
+

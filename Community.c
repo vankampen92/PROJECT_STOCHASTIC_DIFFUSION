@@ -427,28 +427,12 @@ void Print_Meta_Community_Patch_System (Parameter_Table * Table)
   }
 }
 
-void Community_Binary_Tree_Initialization (Parameter_Table * Table)
-{
-  /* 
-     This function sets up the partial sums of a previously allocated
-     binary tree that will maintain the discrete probability distribution 
-     always ready to be sampled. 
-  */
-
-  treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
-  treenode ** Leaves  = Table->Leaves; /* from level 0 (root) to level n (leaves) */
-
-  int n = Table->No_of_TREE_LEVELS; 
-
-  Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
-}
-
 void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS)
 {
   int i, k, No_of_LEAVES, No_of_TREE_LEVELS, No;
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS given that, at least, 
-     there should be for a No_of_CELLS of true active leaves 
+     there should be enough for a No_of_CELLS/GRAND_No_of_EVENTS of true active leaves 
   */ 
   No_of_TREE_LEVELS = 0;   /* Only the root!!! */
   No_of_LEAVES      = 1;   /* The root!!!      */
@@ -467,4 +451,79 @@ void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS)
   Table->Treeroot = Binary_Tree_Allocation ( No_of_CELLS, 
                                              &(Table->Leaves), 
                                              &(Table->Parent) );
+}
+
+void Community_Binary_Tree_Initialization (Parameter_Table * Table)
+{
+  /* 
+     This function sets up the partial sums of a previously allocated
+     binary tree that will maintain the discrete probability distribution 
+     always ready to be sampled. 
+  */
+
+  treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
+  treenode ** Leaves  = Table->Leaves; /* from level 0 (root) to level n (leaves) */
+
+  int n = Table->No_of_TREE_LEVELS; 
+
+  Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
+}
+
+void Community_Priority_Queue_Tree_Allocation ( Parameter_Table * Table, 
+                                                int TOTAL_GRAND_No_of_EVENTS )
+{
+  int l, k, No_of_LEAVES, No_of_TREE_LEVELS, No;
+  double l_x; 
+
+  /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS given that, at least, 
+     there should be enough to acommodate a TOTAL_GRAND_No_of_EVENTS of true active nodes 
+     over the whole tree (counting both interval nodes and leaves). 
+  */ 
+  No_of_TREE_LEVELS = 0;     /* Only the root!!! */
+  No_of_LEAVES      = 1;     /* The root!!!      */
+
+  l = 0; 
+  if ( TOTAL_GRAND_No_of_EVENTS > 1) {
+    l_x = log((double)TOTAL_GRAND_No_of_EVENTS + 1.0)/log(2.0); 
+    l   = (int)ceil (i_x);
+
+    No_of_LEAVES      = power_int(2, l-1);
+    No_of_TREE_LEVELS = l-1;  /* No of (internal) TREE LEVELS 
+                                (without couting the final LEAVE level) */
+  }
+
+  assert( (power_int(2, l) - 1) > TOTAL_GRAND_No_of_EVENTS );
+
+  Table->No_of_LEAVES      = No_of_LEAVES;
+  Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; /* No of (internal) TREE LEVELS (without counting 
+                                                   the final outer LEAVE level)
+                                                */
+  Table->Tree_Node_Index = malloc(TOTAL_GRAND_No_of_EVENTS * sizeof(treenode *));
+                                           
+  Table->Treeroot = Binary_Tree_Allocation ( No_of_LEAVES, 
+                                             &(Table->Leaves), 
+                                             &(Table->Parent) );
+}
+
+void Community_Priority_Queue_Tree_Initialization (Parameter_Table * Table)
+{
+  /* 
+     This function sets up the partial sums of a previously allocated
+     binary tree that will maintain the discrete probability distribution 
+     always ready to be sampled. 
+  */
+  int i, k, n; 
+
+  treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
+  treenode ** Leaves  = Table->Leaves; /* from level 0 (root) to level n (leaves) */
+  double   * Vector   = Table->Vector_of_Rates;  
+
+  n = 0; 
+  for(k = 0; k < Table->No_of_TREE_LEVELS; k++) {
+    No      = power_int(2, k);  /* Number of Leaves at level k */  
+    for(i=0; i<No; i++){ 
+      (*Parent)[k][i]->index = n;
+      (*Parent)[k][i]->value = Vector[n]; 
+
+  Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
 }

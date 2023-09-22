@@ -47,6 +47,10 @@ void T_I_M_E___C_O_N_T_R_O_L___A_L_L_O_C( Time_Control * Time, Parameter_Table *
 
   Time->Rate = (Stochastic_Rate *)calloc( 1, sizeof(Stochastic_Rate) );
 
+#if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+  Time->Vector_of_Rates = (double *)calloc(P->TOTAL_GRAND_No_of_EVENTS, sizeof(double)); 
+#endif 
+
 #if defined VERBOSE
   printf(" Time_Control is being allocated: \n");
   printf(" %d stochastic realizations of length %d points will allocated\n", P->Realizations, I_Time);
@@ -140,6 +144,10 @@ void T_I_M_E___C_O_N_T_R_O_L___F_R_E_E( Time_Control * Time, Parameter_Table * P
   free (Time->Accumulated_Variable);
 
   free (Time->Rate);
+
+#if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+  free(Time->Vector_of_Rates);  
+#endif 
 
   for(i = 0; i<P->Realizations; i++){
     for(j = 0; j<P->SUB_OUTPUT_VARIABLES; j++) {
