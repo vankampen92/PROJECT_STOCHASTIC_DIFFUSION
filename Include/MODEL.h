@@ -76,6 +76,7 @@ typedef struct totalRateinfo
   double Total_Rate;
   double max_Probability;
   double Stochastic_Time;
+  double Stochastic_Time_Old; 
 }Stochastic_Rate;
 
 #ifndef BINARY_TREE_STRUCTURE 
@@ -86,6 +87,8 @@ typedef struct totalRateinfo
     /* The order of internal nodes is not initialized                 */
     int    level; /* Tree Level (0: root; n: leaves)                  */
     int    order; /* Order within the leaf level, from 0 to 2^n - 1   */
+    int    index; /* Index (when using the binary tree as a priority queu) */
+
     double value;
 
     struct treenode * left;

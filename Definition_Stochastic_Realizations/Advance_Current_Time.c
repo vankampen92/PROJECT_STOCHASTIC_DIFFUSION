@@ -15,7 +15,8 @@ extern gsl_rng * r;   /* Global generator (define at the main program level */
 */
 
 int Advance_Current_Time( Parameter_Table * Table, 
-			                    Stochastic_Rate * Rate, double * Time_Current, int * New )
+			                    Stochastic_Rate * Rate, double * Time_Current, 
+                          int * New )
 {
   /* (*New) counts the number of infection events */ 
   int k;
@@ -43,16 +44,32 @@ int Advance_Current_Time( Parameter_Table * Table,
 
   if( (Rate->Total_Rate) > 0){
 
-    inter_event_time = -1./(Rate->Total_Rate) * log(RANDOM);
-    (*Time_Current) += inter_event_time;
-    
+    #ifndef PRIORITY_QUEU_SUPER_OPTIMIZATION
+      inter_event_time = -1./(Rate->Total_Rate) * log(RANDOM);
+      (*Time_Current) += inter_event_time;
+    #endif 
     /* BEGIN : Stochastic Dynamic is actually performed : 
                The Community "Village" is updated accordingly 
     */
-      Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
+    Execute_One_Step( Village, Table, Max_Probability, &Event, Patch );
     /*   END : Stochasctic Dynamics * * * * * */
 
-    if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
+    // if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
+  
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      /* Advance time... */
+      /* Tree_Node_Index: Priority array of indexed pointers to all tree nodes */
+      int Index_Node_x = Table->TOTAL_No_of_EVENTS * Patch[0] + Event;
+
+      assert(Table->Tree_Node_Index[5]->index == 5);
+    
+      assert(Table->Tree_Node_Index[Index_Node_x] == Table->Treeroot);
+      
+      (*Time_Current)  = Table->Tree_Node_Index[Index_Node_x]->value;
+      
+      Rate->Stochastic_Time     = (*Time_Current);   
+    /* --------------- */
+    #endif 
   }
   else{    
 
@@ -63,27 +80,35 @@ int Advance_Current_Time( Parameter_Table * Table,
     return(1);  
   }
   
-  /* BEGIN: Calculation of the Total Rate of Change for the system       */
+  /* BEGIN: Updating of the Total Rate of Change for the system       */
   if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) {
-    /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
-    // Trend_Time_Dependence( Table, (*Time_Current) );
+      /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
+      // Trend_Time_Dependence( Table, (*Time_Current) );
   }
 
 #if defined STOCHASTIC_OPTIMIZATION 
-    Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
+  Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
 #else
-    Temporal_Dynamics(Village, Table, Rate);
+  Temporal_Dynamics(Village, Table, Rate);
 #endif
-  
+
+  if( * Time_Current < 1.0) { 
+    /* Only initial times are printed out...just for a check!!! */
+    printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
+            * Time_Current, Event, Patch[0], Patch[1]);
+    // Print_Meta_Community_Patch_System (Table);
+    printf("\n");
+  } 
+
   free(Patch); 
   /*   END: Calculation of Total Rate of Change */
 
 #if defined VERBOSE
-  printf(" Total population across the system at current time (t = %g)\n", (*Time_Current) );
-  
+  printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
+          * Time_Current, Event, Patch[0], Patch[1]);
+  printf(" Current system configurtion (t = %g):\n",  (*Time_Current) );
   Print_Meta_Community_Patch_System (Table);
 #endif
   
   return(0);
 }
-  

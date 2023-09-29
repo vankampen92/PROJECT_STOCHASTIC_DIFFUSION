@@ -38,7 +38,7 @@ void R_E_S_C_A_L_I_N_G___I_N_I_T_I_A_L___C_O_N_D_I_T_I_O_N_S ( Parameter_Table *
 }
 
 void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table,
-						      double Value)
+						                                          double Value)
 {
   /* Initial conditions from empirical data at the initial time ( -xn 0 ) */
 
@@ -56,45 +56,45 @@ void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table,
       
       /* Species 0 at the center */
       if (N_X%2 == 0 && N_Y%2 == 0) {
-	if ( J_X == N_X/2 && J_Y == N_Y/2 ) {
-	  n=0;                                             /* n=0: Propagules */
-	  m = Table->LOCAL_STATE_VARIABLES*J + n;
-	  Table->Vector_Model_Variables_Time_0[m] = Value;
-	}
-	else {
-	  n=0; 
-	  m = Table->LOCAL_STATE_VARIABLES*J + n;
-	  Table->Vector_Model_Variables_Time_0[m] = 0.0;
-	}
+	      if ( J_X == N_X/2 && J_Y == N_Y/2 ) {
+	        n=0;                                             /* n=0: Propagules */
+	        m = Table->LOCAL_STATE_VARIABLES*J + n;
+	        Table->Vector_Model_Variables_Time_0[m] = Value;
+      	}
+	      else {
+	        n=0; 
+	        m = Table->LOCAL_STATE_VARIABLES*J + n;
+	        Table->Vector_Model_Variables_Time_0[m] = 0.0;
+	      }
       }
       else {
-	
-	printf(" N_X = %d\tN_Y = %d, but both N_X and N_Y must be even!!!\n",
-	       N_X, N_Y);
-	printf(" The program will exit\n");
-	exit(0);
+	      printf(" N_X = %d\tN_Y = %d, but both N_X and N_Y must be even!!!\n",
+	             N_X, N_Y);
+	      printf(" The program will exit\n");
+	      exit(0);
       }
     }
-    
+
+    /* All other Species at scattered at a random cell (J_X_R, J_Y_R) */
     for(n=1; n<Table->LOCAL_STATE_VARIABLES; n++) {
       /* Species n>0 scattered at random */
       int J_X_R = (int)(Table->No_of_CELLS_X * gsl_rng_uniform(r));
       int J_Y_R = (int)(Table->No_of_CELLS_Y * gsl_rng_uniform(r));
       
       for (J=0; J<Table->No_of_CELLS; J++) {
-	J_X = J/N_X;
-	J_Y = J%N_X;
+	      J_X = J/N_X;
+	      J_Y = J%N_X;
 	
-	if ( J_X == J_X_R && J_Y == J_Y_R ) {
+	      if ( J_X == J_X_R && J_Y == J_Y_R ) {
 	  
-	  m = Table->LOCAL_STATE_VARIABLES*J + n;
-	  Table->Vector_Model_Variables_Time_0[m] = Value;
-	}
-	else {
+	        m = Table->LOCAL_STATE_VARIABLES*J + n;
+	        Table->Vector_Model_Variables_Time_0[m] = Value;
+	      }
+	      else {
 	  
-	  m = Table->LOCAL_STATE_VARIABLES*J + n;
-	  Table->Vector_Model_Variables_Time_0[m] = 0.0;
-	}
+	        m = Table->LOCAL_STATE_VARIABLES*J + n;
+	        Table->Vector_Model_Variables_Time_0[m] = 0.0;
+	      }
       }
     }
   }
@@ -110,8 +110,8 @@ void Initial_Condition_Centered_into_Parameter_Table (Parameter_Table * Table,
 }
 
 void Initial_Condition_One_Single_Cell_into_Parameter_Table (Parameter_Table * Table,
-							     double Value_0,
-							     double Value_1)
+							                                               double Value_0,
+							                                               double Value_1)
 {
   /* Initial conditions from empirical data at the initial time ( -xn 0 ) */
 

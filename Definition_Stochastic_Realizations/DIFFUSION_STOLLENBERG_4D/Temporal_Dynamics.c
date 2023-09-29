@@ -22,7 +22,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   #include <Model_Variables_Code.Include.c>
   
   P = My_Community[0];  /* P could be used as a pointer to the zero-th to be incremented 
-			                    if necessary (not used like that in this implementation) 
+			                     if necessary (not used like that in this implementation) 
 		                    */
   No_of_CELLS             = pa->No_of_CELLS;
   MODEL_STATE_VARIABLES   = pa->MODEL_STATE_VARIABLES;
@@ -31,7 +31,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   assert(Sp == 1);
   
   No_of_EVENTS            = pa->TOTAL_No_of_EVENTS; /* Total No of Events 
-						       within each local population */  
+						                                           within each local population */  
 
   Immigration_Preassure_on_Focal_Patch_Initialization( My_Community, pa );
 
@@ -208,6 +208,10 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   }
 
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
+  assert(GRAND_No_of_EVENTS == Table->TOTAL_GRAND_No_of_EVENTS);
+  #endif 
+  
+  #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
   assert(GRAND_No_of_EVENTS == Table->TOTAL_GRAND_No_of_EVENTS);
   #endif 
 

@@ -18,12 +18,21 @@ gsl_rng * r; /* Global generator defined in main.c */
    Exectution:
    
    1 species examples:                                       (OUTPUT_VARIABLES_GENUINE will be 4) 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 2 -v0 0 -v1 60 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 \ 
+                   -n 2 -v0 0 -v1 60 -G0 1 -G1 2 \ 
+                   -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 \
+                   -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0 
 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 -n 1 -v0 5054 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -Hu 0.1 \ 
+                   -n 1 -v0 5054 -G0 1 -G1 1 \
+                   -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 \ 
+                   -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 1100.0
 
    2 species examples:                                       (OUTPUT_VARIABLES_GENUINE will be 5) 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 10105 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 5 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 10000 -HX 100 -HY 100 -Hu 0.5 \
+                   -n 1 -v0 10105 -G0 1 -G1 1 \
+                   -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 5 -xn 0 -xN 1000 -HN 1000 \
+                   -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
 
    .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 100 -HX 10 -HY 10 -Hu 0.5 -n 1 -v0 115 -G0 1 -G1 1 -tn 20 -t0 0.0 -t1 5.0 -t4 0 -tR 5 -xn 0 -xN 98 -HN 98 -G2 1 -G3 0.0 -G4 5.0 -G5 1 -G6 0.0 -G7 100.0
 
@@ -67,7 +76,8 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
    This example produces a limit cycle. 
   
-   .~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+   .~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                                  -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
    This example produces damped oscillations
 
    See denition_OutPut_Variables.c to understand the difference between Genuine Output Variables
@@ -79,41 +89,86 @@ gsl_rng * r; /* Global generator defined in main.c */
    -H1  -H3  -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules, and Delta_C_0 for both searching and handling consumers)
    -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
    -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
-  
-   Multi-patch system: a 100 x 100 grid (-HM 10000 -HX 100 -HY 100), and 4 species ---RP, R, A, RA. The dynamics do not include triplet formation
+   -xN  is INITIAL_TOTAL_POPULATION (involved in fixing Ini Conditions: include.Initial_Conditions.[].c)
+   -HN  is No_of_INDIVIDUALS (involved in fixing some model parameters: see include.Parameter_Model.[].c )
+   -xR  bool variable (0/1: Initial Conditions are not/yes re-scaled to the INITIAL_TOTAL_POPULATION value)
+
+   Multi-patch system: a 100 x 100 grid (-HM 10000 -HX 100 -HY 100), and 4 species ---RP, R, A, RA. 
+   The dynamics do not include triplet formation
    . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 \
-                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000000 \
+                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                                   -G2 1 -G3 0.0 -G4 75.1 -G5 1 -G6 0.0 -G7 2000000 \
                                    -tn 200 -t0 0.0 -t1 75.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 \
                                    -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 200 -H20 20.0 \
                                    -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
 
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -tn 200 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 5.0 -HN 5.0 -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 200000 -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 \ 
+                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                                   -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 3 -xn 0 -xN 5.0 -HN 5.0 \ 
+                                   -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 200000 \
+                                   -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
+                                   -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0
 
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \ 
+                                   -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 \ 
+                                   -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 2000 \
+                                   -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H20 20.0 \
+                                   -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0 
+   
    . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 100 -HX 10 -HY 10 \
-                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 2000 \
+                                   -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                                   -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 2000 \
                                    -tn 200 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 5.0 -HN 5.0 \
-                                   -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 \
-                                   -HK 20 -H20 20.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
+                                   -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
+                                   -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
   
    MacArthur and Rosenzweig (two species 3D, R, A, RA):
-   .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 100 -t0 0.0 -t1 40.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 2000 -H1 0.0 -HK 2000.0  -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H4 25.0 -H1 0.0 -H6 5.0 -H9 17.0 -H10 5.0
+   .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                      -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \
+                      -tn 100 -t0 0.0 -t1 40.0 -t4 0 -tR 10 -xn 0 -xN 50.0 -HN 50.0 \ 
+                      -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 2000 \
+                      -H1 0.0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 \
+                      -H4 25.0 -H1 0.0 -H6 5.0 -H9 17.0 -H10 5.0 -HK 2000.0
 
    Coarse-grained 2D system (two species 1R and 1C):
-   .~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 4 -HX 2 -HY 2 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 50 -HN 50 -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 100.0 -H0 0.01 -H5 0.01 -H6 0.5
+   .~$ ./DIFFUSION_1R1C_2D -y0 4 -y2 1 -HS 1 -HM 4 -HX 2 -HY 2 \ 
+                           -n 2 -v0 0 -v1 1 -G0 1 -G1 2 \
+                           -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 50 -HN 50 \ 
+                           -G2 1 -G3 0.0 -G4 40.0 -G5 1 -G6 0.0 -G7 100.0 \
+                           -H0 0.01 -H5 0.01 -H6 0.5
 
    MODEL = DIFFUSION_BD_2D
    Feeding experiments at a constant number of total consumers: 
-   .~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   .~$ ./DIFFUSION_BD_2D -y0 13 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                         -n 2 -v0 0 -v1 1 -G0 1 -G1 2 \
+                         -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 \
+                         -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
+                         -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 \
+                         -H9 2.5 -H10 10.0 -H11 100.0 -H12 1.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
 
    MODEL = DIFFUSION_HII_nD
    Feeding experiments at a constant number of total consumers (-HN 20): 
-   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 \
-                          -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
-                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 2.5 -H10 10.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \ 
+                          -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \ 
+                          -tn 50 -t0 0.0 -t1 1.5 -t4 0 -tR 10 -xn 0 -xN 20.0 \
+                          -G2 1 -G3 0.0 -G4 1.5 -G5 1 -G6 0.0 -G7 20 \
+                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 \
+                          -H9 2.5 -H10 10.0 -Hp1 0.3725 -Hp2 0.5 -HN 20
 
-   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 8 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 10.5 -H10 10.0 -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
+   .~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \
+                                 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \
+                                 -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 \
+                                 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 8 \
+                                 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 \
+                                 -H9 10.5 -H10 10.0 -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
 
-   .~S -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 20 -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 -H9 10.5 -H10 0.1  -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
+   .~S ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 3 -HM 1 -HX 1 -HY 1 \
+                          -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \
+                          -tn 10 -t0 0.0 -t1 2.5 -t4 0 -tR 100 -xn 0 -xN 20.0 \
+                          -G2 1 -G3 0.0 -G4 2.5 -G5 1 -G6 0.0 -G7 20 \
+                          -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 \
+                          -H9 10.5 -H10 0.1  -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
    
    Relevant input arguments for model DIFFUSION_HII_nD:
 

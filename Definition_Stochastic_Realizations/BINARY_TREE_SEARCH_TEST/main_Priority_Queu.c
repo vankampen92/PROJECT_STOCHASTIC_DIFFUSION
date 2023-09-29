@@ -19,8 +19,9 @@ int main()
     /* First: Creating a priority quee with a binary tree 
     */
     printf("\n");
-    printf(" Creating a priority queu, which will maintain the minimum at the root level\n");
-    printf(" in spite of any change in node values by using the 'bubbling algorighm\n");
+    printf(" Creating a priority queu, which maintains the minimum at the root level\n");
+    printf(" in spite of any change in tree node values. The 'bubbling algorighm' reorders\n");
+    printf(" the tree to maintain the correct priority.\n");
     printf(" Press any key to start.\n");
     getchar();
 
@@ -53,13 +54,14 @@ int main()
         printf("Rate[%d] = %g\n", i, Rates[i]);
     }
 
+    Rates[5] = +INFINITY; 
+
     /* Inserting the Rates in the binary tree and creating the associated 
        priority vector of pointers to tree nodes 
     */
     for (i=0; i<M; i++) 
         Priority_Queu_Insert_Value(i, Rates[i], No_of_TREE_LEVELS, 
                                    Priority, Parent, Leaves);    
-  
     printtree(root);
     leafPrint(root); 
     printf("This tree has been ordered according to a priority queu...\n"); 

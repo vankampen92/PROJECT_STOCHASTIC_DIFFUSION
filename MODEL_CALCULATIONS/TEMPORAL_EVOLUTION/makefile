@@ -70,10 +70,11 @@ NR=NUMERICAL_RECIPES###############################
 ## BINARY_TREE_OPTIMIZATION requires setting up a binary tree for all the spatial individual cells
 ## BINARY_TREE_SUPER_OPTIMIZATION requires setting up a bigger binary tree of every event at each cell 
 STO=STOCHASTIC_OPTIMIZATION#################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
-BT=BINARY_TREE_SUPER_OPTIMIZATION#################### Possibilities: 
+BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities: 
 ##################################################### (0) 'NON'
-##################################################### (1) 'BINARY_TREE_OPTIMIZATION/'
-##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION/'
+##################################################### (1) 'BINARY_TREE_OPTIMIZATION'
+##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION'
+##################################################### (3) 'PRIORITY_QUEU_SUPER_OPTIMIZATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
 V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'

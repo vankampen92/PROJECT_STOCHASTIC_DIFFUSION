@@ -10,7 +10,7 @@
 		  fprintf(fp, "-xR  %d  ",Table->RESCALING_INITIAL_TOTAL_POPULATION);
 		
 		else if(argv[argcount][2]=='N') 
-		  fprintf(fp, "-xR  %g  ",Table->INITIAL_TOTAL_POPULATION);
+		  fprintf(fp, "-xN  %g  ",Table->INITIAL_TOTAL_POPULATION);
 		
 		else{
 		  printf("xn -xN -xR -x0 to -x9 are the only allowable keys.\n");

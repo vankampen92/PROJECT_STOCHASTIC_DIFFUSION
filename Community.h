@@ -11,3 +11,6 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 					    int i_Replicate, int j_Time);
 void Community_Binary_Tree_Initialization (Parameter_Table * Table);
 void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS);
+void Community_Priority_Queue_Tree_Allocation ( Parameter_Table * Table, 
+                                                int TOTAL_GRAND_No_of_EVENTS );
+void Community_Priority_Queue_Tree_Initialization (Parameter_Table * Table);

@@ -23,6 +23,11 @@ int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Paramet
 void Choose_Village_and_Event_Binary_Tree( double max_Probability, Community ** Pop,
                                            Parameter_Model * Par, 
                                            int * patch, int * event );
+
+void Choose_Village_and_Event_Priority_Queu(double max_Probability, Community ** Pop,
+                                       Parameter_Model * Par, 
+                                       int * patch, int * event );
+
 void Execute_One_Step(Community ** SP,
 		      Parameter_Table * Table,
 		      double max_Probability, 
@@ -44,7 +49,6 @@ int Some_Other_Patch_Population_Increase(int , int , Parameter_Table * );
 
 void Positivity_Control( int Event, Parameter_Table * Table,
 			 int x, int jS, double Y, int J);
-
 
 void Event_Adjacence_List_Initialization(Community ** PATCH,
 					 Parameter_Model * P); 

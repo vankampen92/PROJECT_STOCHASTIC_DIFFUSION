@@ -13,6 +13,12 @@ void Print_Discrete_Probability_Distribution(Parameter_Table * Table, int Event,
 
 #define ASSERTION_TRUE
 
+#ifndef BINARY_TREE_SUPER_OPTIMIZATION
+#ifndef PRIORITY_QUEU_SUPER_OPTIMIZATION
+  #define EVENT_DISCRETE_SAMPLING 
+#endif
+#endif
+
 void Execute_One_Step(Community ** SP,
 		                  Parameter_Table * Table,
 		                  double max_Probability,
@@ -38,6 +44,16 @@ void Execute_One_Step(Community ** SP,
       x = y   = Index_Patch; 
       n_Event = Index_Event;
     #endif
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      Choose_Village_and_Event_Priority_Queu(max_Probability, SP, P, 
+                                             &Index_Patch, &Index_Event);
+      x = y   = Index_Patch; 
+      n_Event = Index_Event;
+
+      assert(Index_Event == Table->Treeroot->index );
+    #endif
+    assert(x == 0); 
+    assert(y == 0);
   }
   else {
     #if defined BINARY_TREE_OPTIMIZATION
@@ -47,19 +63,30 @@ void Execute_One_Step(Community ** SP,
                                              &Index_Patch, &Index_Event);
         x = y   = Index_Patch; 
         n_Event = Index_Event;
+    #elif defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+        Choose_Village_and_Event_Priority_Queu(max_Probability, SP, P, 
+                                               &Index_Patch, &Index_Event);
+        x = y   = Index_Patch; 
+        n_Event = Index_Event;
+
+        assert( (Index_Patch * Table->TOTAL_No_of_EVENTS + Index_Event) == Table->Treeroot->index );
+
+        assert( Table->Tree_Node_Index[Table->Treeroot->index] == Table->Treeroot );
     #else
         x = y = Choose_Village(max_Probability, SP, P);
     #endif
   }
-  /* x and y will end up differing only in case there is movemnt event!!! */
-
+  /* When this function 'returns', 
+     x and y will end up being different only in case there is movemnt event!!! 
+  */
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
-  #ifndef BINARY_TREE_SUPER_OPTIMIZATION
+
+  #if defined EVENT_DISCRETE_SAMPLING
     if(Table->TOTAL_No_of_EVENTS > 1) 
       n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; 
       /* 0, ..., Tablel->TOTAL_No_of_EVENTS-1 */
   #endif
-
+  
   if (Table->TOTAL_No_of_EVENTS == 0) {
     printf(" The potential number of events that potentially could happen in patch %d\n", x);
     printf(" is zero??? (TOTAL_No_of_EVENTS = %d)\n", Table->TOTAL_No_of_EVENTS);
@@ -252,6 +279,12 @@ void Positivity_Control( int Event, Parameter_Table * Table,
     Print_Meta_Community_Patch_System (Table);
 
     treenode * nodeDum = leafPrint(Table->Treeroot);
+
+    #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+      printf("Time: %g\t Next_Time(Event=%d) = %g\n", 
+              Table->T->Rate->Stochastic_Time, Event, Table->Treeroot->value);
+      printtree(Table->Treeroot);       
+    #endif 
 
     exit(0);
   }

@@ -3,6 +3,7 @@
 /* This functions allocate, initialize and free a number of local communities,
    which make up our total patch system or metapopulation */
 extern gsl_rng * r; /* Global generator defined in main.c */
+#define RANDOM gsl_rng_uniform_pos(r)
 
 void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
 {
@@ -164,8 +165,7 @@ void Community_Initialization (Community ** PATCH,
     Event_Adjacence_List_Initialization(PATCH, P);
   }
   else{
-    printf(" Stochastic optimization has not been implemented for this model\n");
-    Print_Press_Key(1,0,".");
+    Print_Press_Key(1,1,"Stochastic optimization has not been implemented for this model.\n");
   }
 #endif
 }
@@ -445,6 +445,7 @@ void Community_Binary_Tree_Allocation (Parameter_Table * Table, int No_of_CELLS)
     No_of_LEAVES      = power_int(2, i+1);
     No_of_TREE_LEVELS = i+1;
   }
+
   Table->No_of_LEAVES      = No_of_LEAVES;
   Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; 
 
@@ -477,22 +478,21 @@ void Community_Priority_Queue_Tree_Allocation ( Parameter_Table * Table,
 
   /* Determine the value of No_of_LEAVES and No_of_TREE_LEVELS given that, at least, 
      there should be enough to acommodate a TOTAL_GRAND_No_of_EVENTS of true active nodes 
-     over the whole tree (counting both interval nodes and leaves). 
+     over the whole tree (counting from root node, and both interval nodes and leaves). 
   */ 
   No_of_TREE_LEVELS = 0;     /* Only the root!!! */
   No_of_LEAVES      = 1;     /* The root!!!      */
-
-  l = 0; 
+ 
   if ( TOTAL_GRAND_No_of_EVENTS > 1) {
-    l_x = log((double)TOTAL_GRAND_No_of_EVENTS + 1.0)/log(2.0); 
-    l   = (int)ceil (i_x);
-
-    No_of_LEAVES      = power_int(2, l-1);
-    No_of_TREE_LEVELS = l-1;  /* No of (internal) TREE LEVELS 
-                                (without couting the final LEAVE level) */
+    No_of_TREE_LEVELS = Calculating_No_of_TREE_LEVELS(TOTAL_GRAND_No_of_EVENTS);
+    No_of_LEAVES      = power_int(2, No_of_TREE_LEVELS);
+    /* No_of_TREE_LEVELS corresponds to the No of (internal) TREE LEVELS (without
+       counting the leaves) and, of course, also to the label of the tree level 
+       corresponding to the leaves (since the root tree level is labeled as zero).  
+    */
   }
 
-  assert( (power_int(2, l) - 1) > TOTAL_GRAND_No_of_EVENTS );
+  assert( (power_int(2, No_of_TREE_LEVELS+1) - 1) > TOTAL_GRAND_No_of_EVENTS );
 
   Table->No_of_LEAVES      = No_of_LEAVES;
   Table->No_of_TREE_LEVELS = No_of_TREE_LEVELS; /* No of (internal) TREE LEVELS (without counting 
@@ -508,22 +508,42 @@ void Community_Priority_Queue_Tree_Allocation ( Parameter_Table * Table,
 void Community_Priority_Queue_Tree_Initialization (Parameter_Table * Table)
 {
   /* 
-     This function sets up the partial sums of a previously allocated
-     binary tree that will maintain the discrete probability distribution 
-     always ready to be sampled. 
+     This function sets up the priority queu that will maintain the minimum
+     time value at the root level (in spite of changes in any internal 
+     tree node). See treenode.c library (bubbling algorithm).
   */
-  int i, k, n; 
+  int i, N, n, n_0, m, n_1; 
+  double Next_Time; 
 
   treenode *** Parent = Table->Parent; /* Set of Parent nodes at each level       */
   treenode ** Leaves  = Table->Leaves; /* from level 0 (root) to level n (leaves) */
-  double   * Vector   = Table->Vector_of_Rates;  
+  treenode ** Priority = Table->Tree_Node_Index; 
 
-  n = 0; 
-  for(k = 0; k < Table->No_of_TREE_LEVELS; k++) {
-    No      = power_int(2, k);  /* Number of Leaves at level k */  
-    for(i=0; i<No; i++){ 
-      (*Parent)[k][i]->index = n;
-      (*Parent)[k][i]->value = Vector[n]; 
+  double   * Vector   = Table->T->Vector_of_Rates;
 
-  Table->Treeroot = sumBinaryTree_DiscreteDistribution(Parent, Leaves, n); 
+  for(i=0; i<Table->TOTAL_GRAND_No_of_EVENTS; i++) {
+    if(Vector[i] > 0.0)
+      Next_Time = -1/Vector[i] * log (RANDOM);
+    else
+      Next_Time = INFINITY; 
+
+    Priority_Queu_Insert_Value(i, Next_Time, Table->No_of_TREE_LEVELS, 
+                               Priority, Parent, Leaves); 
+  } 
+  /* Those leaves that are not in use should be made: 
+        . index >= Table->TOTAL_No_of_EVENTS 
+        . value  = INFINITY 
+     because they should represent "impossible events" that will never 
+     bubble up to the root!!! 
+  */
+  /* Calculationg Leaves not in use */
+  N = Table->TOTAL_GRAND_No_of_EVENTS;
+  n = Table->No_of_TREE_LEVELS;
+  n_0 = N - power_int(2, n) + 1;
+  n_1 = power_int(2, n); 
+  m   = N; 
+  for(i=n_0; i<n_1; i++) {
+    Table->Leaves[i]->index = m++;  
+    Table->Leaves[i]->value = INFINITY; 
+  } 
 }

@@ -528,7 +528,6 @@ void bubbling_up (treenode * Node, treenode ** Priority)
 void swap_Node_values(treenode * Node_0, treenode * Node_1, treenode ** Priority) 
 {
     double value; 
-    int level; 
     int index; 
     treenode * Node; 
 

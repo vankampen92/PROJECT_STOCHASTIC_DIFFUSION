@@ -98,14 +98,20 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     P->Treeroot = Table->Treeroot;
     printf(" Binary Tree (from Leaves) to Sample Discrete Distribution has been successcully\n");
     printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
+    printf(" Initial Configuration of the system:\n");
+    Print_Meta_Community_Patch_System (Table);
     Print_Press_Key(0, 0, "No Message");
   #endif
   #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
     Community_Priority_Queue_Tree_Initialization(Table);
     P->Treeroot = Table->Treeroot;
+    // Print_Press_Key(0, 0, "Printing out after Priority Queue Initialization\n");
+    // printtree(Table->Treeroot);
+    printf(" Initial Configuration of the system:\n");  
+    Print_Meta_Community_Patch_System (Table);
     printf(" Priority Queue Binary Tree to store ordered putatitive event times has been successcully\n");
     printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
-    Print_Press_Key(0, 0, "No Message");
+    Print_Press_Key(0, 0, "Generation of a new stochastic replicate...\n");
   #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
@@ -118,16 +124,16 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
        Note: When the system is frozen (FROZEN_SYSTEM = 1), then
              this loop does not advance the system any more
     */
-    /* B E G I N :
+    /* B E G I N : ---------------------------------------------------------------
      *     CENTRAL POINT HERE: Stochastic Dynamics Loop While (up to the next time)
      */
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
       {
-	      FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
+        FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
       }
     /*     E N D
-     * -------------------------------------------------------------------
+     * ---------------------------------------------------------------------------
      */    
 #if defined EXTINCTION_CONTROL
     int EXTINCTION;
@@ -293,11 +299,13 @@ int Stochastic_Time_Dynamics_Numerical( int i,
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
   #endif
+
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
     /* Initiate values of the binary tree with the rates of every event at the leaves */
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
   #endif
+
   #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
     Community_Priority_Queue_Tree_Initialization(Table);
     P->Treeroot = Table->Treeroot;

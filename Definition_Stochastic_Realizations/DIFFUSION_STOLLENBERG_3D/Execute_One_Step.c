@@ -33,8 +33,8 @@ void Execute_One_Step(Community ** SP,
   if(P->No_of_CELLS == 1) x = y = 0;
   else                    x = y = Choose_Village(max_Probability, SP, P);
 
-  /* x and y will end up differing only in case there is movemnt event!!! */
-
+  /* When function 'returns', x and y will end up being different only in case there is movemnt event!!! 
+  */
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
 
   if(Table->TOTAL_No_of_EVENTS > 1) {

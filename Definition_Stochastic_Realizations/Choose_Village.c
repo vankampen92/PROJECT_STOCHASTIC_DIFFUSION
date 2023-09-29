@@ -38,7 +38,7 @@ int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Paramet
 
   No_of_Villages = Par->No_of_CELLS;
 
-  double x = Par->Treeroot->value * RANDOM; 
+  double x = Par->Treeroot->value * RANDOM;
   p = choose_Individual_Event(Par->Treeroot, x);  /* From treenode.c library */
   
   /* p should go from (0) to (No of Villages-1) */
@@ -61,9 +61,31 @@ void Choose_Village_and_Event_Binary_Tree( double max_Probability, Community ** 
   double x = Par->Treeroot->value * RANDOM; 
   p = choose_Individual_Event(Par->Treeroot, x);  /* From treenode.c library */
   
+  /* p should go from (0) to (TOTAL_GRAND_No_of_EVENTS-1) */
+  assert(p >= 0 && p < Par->TOTAL_GRAND_No_of_EVENTS);
+
+  * event = p%No_of_EVENTS; 
+  * patch = p/No_of_EVENTS;
+  
+  /* Possibility to store the generated random number for further re-use!!! */ 
+}
+
+void Choose_Village_and_Event_Priority_Queu(double max_Probability, Community ** Pop,
+                                       Parameter_Model * Par, 
+                                       int * patch, int * event )
+{
+  int i, p;
+  Community * P;
+  int No_of_EVENTS;
+
+  No_of_EVENTS  = Par->TOTAL_No_of_EVENTS;
+
+  p = Par->Treeroot->index; /* Just looking it up (at the root node, the heap of priority queue) */
+
   /* p should go from (0) to (No of Villages-1) */
   assert(p >= 0 && p < Par->TOTAL_GRAND_No_of_EVENTS);
 
   * event = p%No_of_EVENTS; 
-  * patch = p/No_of_EVENTS; 
+  * patch = p/No_of_EVENTS;
 }
+                                        

@@ -38,9 +38,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
-  if(Table->No_of_CELLS > 4)
-    Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
-  else if (Table->No_of_CELLS == 1)
+  if (Table->No_of_CELLS == 1)
     if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
 						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
@@ -51,12 +49,14 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 							 Table->INITIAL_TOTAL_POPULATION,
 							 Table->INITIAL_TOTAL_POPULATION);
     }
-  else 
+  else if(Table->No_of_CELLS <= 4)
     Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
-								 Table->INITIAL_TOTAL_POPULATION);
+								      Table->INITIAL_TOTAL_POPULATION);
+  else 
+    Initial_Condition_Centered_into_Parameter_Table (Table, 
+                                                     Table->INITIAL_TOTAL_POPULATION); /* -xN [] */
   /* END ----------------------------------------------------------------------------
    */
-
   /* BEGIN : -------------------------------------------------------------------------
    * Stochastic Community Set Up
    */
@@ -68,20 +68,21 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    */
   Table->Patch_System = PATCH;
 
-  #if defined BINARY_TREE_SUPER_OPTIMIZATION
-    /* See Community.c !!! */
-    Community_Binary_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS);   
-  #endif
   #if defined BINARY_TREE_OPTIMIZATION
     /* See Community.c !!! */
     Community_Binary_Tree_Allocation (Table, Table->No_of_CELLS);   
   #endif
+  #if defined BINARY_TREE_SUPER_OPTIMIZATION
+    /* See Community.c !!! */
+    Community_Binary_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS);   
+  #endif
   #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
     /* See Community.c !!! */
     Community_Priority_Queue_Tree_Allocation (Table, Table->TOTAL_GRAND_No_of_EVENTS); 
+    // Print_Press_Key(1,1,"Printing out Tree before entering the generation of stochastic replicates");
+    // printtree(Table->Treeroot);
   #endif
-
-  P->Leaves   = Table->Leaves;  
+  P->Leaves   = Table->Leaves;
   /* END ----------------------------------------------------------------------------
    */
   
@@ -92,7 +93,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 #endif
   
   /* BEGIN: Main loop: a number of REALIZATIONS (stochastic temporal evolutions) is computed */
-  printf("Entering Generation of Stochastic Realizations...\n");   Print_Press_Key(1,0,".");
+  printf("Entering Generation of Stochastic Realizations...\n");   
+  Print_Press_Key(1,1,"Entering Generation of Stochastic Realizations...\n");
   n = 0;
   while (n < Table->T->Realizations){
     // Notice that TDC has not been initialized when TYPE_of_TIME_DEPENDENCE = 0
@@ -168,7 +170,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
     Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
                        Table->No_of_LEAVES );
-    free(Table->Tree_Node_Index); 
+    free(Table->Tree_Node_Index); /* Priority array of indexed pointers to all tree nodes */
   #endif
   
   return(0);
