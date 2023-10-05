@@ -239,6 +239,38 @@ int choose_Individual_Event(treenode * root, double x)
     }   
 }
 
+void partial_sums_upto_p(treenode * root, int p, int  n, double * S)
+{
+    /* If the binary tree maintains partial sums to sample 
+       a discrete probability distribution, P[0], ..., P[2^N - 1],
+       where N = n-1, then this recursive function can be used to 
+       sum up to a certain p:
+
+                            S = P[0] + ... + P[p-1]  
+       
+       Notice that the discrete distribution takes values from 
+       p[0] to p[2^N - 1] while the input argument is n = N-1!!! 
+    */   
+    int a;
+    treenode * node = root; 
+
+    if(node->left == NULL && node->right == NULL)  
+        return;  
+
+    a = p/power_int(2, n);
+    p = p%power_int(2 , n);
+
+    if( a  == 1 ) {
+        * S += node->left->value;
+        n--; 
+        partial_sums_upto_p(node->right, p, n, S);
+    }
+    else {
+        n--;
+        partial_sums_upto_p(node->left, p, n, S);
+    }   
+}
+
 treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent, 
                                               treenode ** Leaves, int n)
 {

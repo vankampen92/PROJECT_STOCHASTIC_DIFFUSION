@@ -4,14 +4,18 @@ extern gsl_rng * r;   /* Global generator (define at the main program level */
 #define RANDOM gsl_rng_uniform_pos(r)
 
 /* This function advances the system one single time step, by changing
-   system configuration by one single discrete event.  Since
-   the stochastic dynamics is implemented following Gillespie algorithm
-   the exact time at which this occurs is sampled from an exponential
-   distribution at rate the represents the total rate at which the
+   system configuration by one single discrete event.  When 
+   the stochastic dynamics is implemented following Gillespie Direct 
+   algorithm the exact time at which this occurs is sampled from an exponential
+   distribution at a rate that represents the total rate at which the
    system changes configuration at any given time (Stochastic_Rate->Total_Rate).
+   When it is implemented using the next reaction method, time increases
+   according to the shortest waiting time over all events. These times are 
+   sampled from the specific expential distribution associated to each event.  
 
-   This function calls two fundamental functions, step() and Temporal_Dynamics(), 
-   where the actual model specific stochastic dynamics is defined.
+   This function calls two fundamental functions: Exectute_One_Step() and 
+   either Temporal_Dynamics() or Temporal_Dynamics_Update(), where the actual 
+   model-specific stochastic dynamics are defined.
 */
 
 int Advance_Current_Time( Parameter_Table * Table, 
@@ -45,8 +49,10 @@ int Advance_Current_Time( Parameter_Table * Table,
   if( (Rate->Total_Rate) > 0){
 
     #ifndef PRIORITY_QUEU_SUPER_OPTIMIZATION
+    #ifndef REUSE_RANDOM_NUMBER
       inter_event_time = -1./(Rate->Total_Rate) * log(RANDOM);
       (*Time_Current) += inter_event_time;
+    #endif
     #endif 
     /* BEGIN : Stochastic Dynamic is actually performed : 
                The Community "Village" is updated accordingly 
@@ -55,19 +61,29 @@ int Advance_Current_Time( Parameter_Table * Table,
     /*   END : Stochasctic Dynamics * * * * * */
 
     // if(Event == 0) (*New)++; /* Accumulating events of Type 0 between times */
-  
+    #if defined REUSE_RANDOM_NUMBER
+      #if defined BINARY_TREE_SUPER_OPTIMIZATION
+        inter_event_time = -1./(Rate->Total_Rate) * log(Rate->Reusable_Random_Number);
+        (*Time_Current) += inter_event_time;
+      #else
+        printf(" The reuse of random number is only possible if the stochastic opitmization\n");
+        printf(" at work is BINARY_TREE_SUPER_OPTIMIZATION, but this optimization level has\n");
+        printf(" not been defined at compilation time (through the makefile)\n");
+        printf(" The program will exit.");
+        exit(0);
+      #endif
+    #endif
+
     #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
       /* Advance time... */
       /* Tree_Node_Index: Priority array of indexed pointers to all tree nodes */
       int Index_Node_x = Table->TOTAL_No_of_EVENTS * Patch[0] + Event;
-
-      assert(Table->Tree_Node_Index[5]->index == 5);
     
       assert(Table->Tree_Node_Index[Index_Node_x] == Table->Treeroot);
       
       (*Time_Current)  = Table->Tree_Node_Index[Index_Node_x]->value;
       
-      Rate->Stochastic_Time     = (*Time_Current);   
+      Rate->Stochastic_Time = (*Time_Current);   
     /* --------------- */
     #endif 
   }

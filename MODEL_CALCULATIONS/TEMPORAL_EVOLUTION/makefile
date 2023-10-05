@@ -75,6 +75,11 @@ BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities:
 ##################################################### (1) 'BINARY_TREE_OPTIMIZATION'
 ##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION'
 ##################################################### (3) 'PRIORITY_QUEU_SUPER_OPTIMIZATION'
+RE=REUSE_RANDOM_NUMBER############################### (22) Possibilities;
+#####################################################      'NON_REUSE_RANDOM_NUMBER'
+#####################################################      'REUSE_RANDOM_NUMBER'
+# The optimation option of reusing random numbers is only availables in case 
+# BT=BINARY_TREE_SUPER_OPTIMIZATION
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
 V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
@@ -121,7 +126,7 @@ EXE=${ODE_MODEL}
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
 LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -D${BT} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -D${BT} -D${RE} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3
 # This makefile uses full power of conditional compilation. There is a bunch of variables that control this and

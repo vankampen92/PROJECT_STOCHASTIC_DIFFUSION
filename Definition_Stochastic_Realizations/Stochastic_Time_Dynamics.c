@@ -38,7 +38,6 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   file[0]='\0';  fitxer(file, "re_", i, ".dat"); FP = fopen(file, "w");
 
   /* BEGIN : Initial Conditions -------------------------------------------------------------*/
-  
   // printf(" Before  Initial_Conditions_Stochastic_Dynamics(...)\n");
   Initial_Conditions_Stochastic_Dynamics( Table, Table->Vector_Model_Variables );
   // printf(" After Initial_Conditions_Numerical_Integration(...). Initial Conditions:  ");
@@ -69,23 +68,26 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   /* Initial calculation of the system total rate of a configurational change and rates of
      the different configurational changes or events to occur.
      If any binary tree optimization is activated, Temporal_Dynamics() also initializes 
-     the tips of leaves of the tree 
+     the tips of leaves of the tree or save them in Vector_of_Rates array for further 
+     initilizing a priority queue. 
   */
   Temporal_Dynamics(PATCH, Table, Rate);
 
-  /* The binary tree has been previously allocated. The binary tree is allocated before 
-     starting generating stochastic replicates. This action should have been done 
-     before calling the current function, which generates a single stochastic replicate. 
-     The settting up of the community and the associated binary tree is done in 
-     MODEL_STO.c (from which this current function is called). Two optimization levels 
-     are possible.  
+  /* The binary tree should have been allocated before starting the generation of any 
+     stochastic replicate. In particular, memmory allocation should have been done before 
+     calling this current function, which is only used to generate a single stochastic 
+     replicate. The settting up of the community and the memmory allocation of the associated 
+     binary tree is done in MODEL_STO.c (from which this current function is called). 
+     Several optimization levels are possible (see makefile).  
   */
-  /* Community_Binary_Tree_Initialization() sets up the partial sums of a previously 
+  /* Community_Binary_Tree_Initialization() sets up the partial sums of the previously 
      allocated binary tree to maintain the discrete probability distribution 
-     always ready to be sampled. 
+     always ready to be sampled.
+     Community_Priority_Queu_Initialization() sets up the prioirty queu of the previously
+     allocated binary tree to maintain the queue of putative times. 
   */
   #if defined BINARY_TREE_OPTIMIZATION
-    /* Initiate values of the binary tree with total rates of every patch at the leaves */
+  /* Initiate values of the binary tree with total rates of every patch at the leaves */
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
     printf(" Binary Tree (from Leaves) to Sample Discrete Distribution has been successcully\n");
@@ -93,16 +95,22 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     Print_Press_Key(0, 0, "No Message");
   #endif
   #if defined BINARY_TREE_SUPER_OPTIMIZATION
-    /* Initiate values of the binary tree with the rates of every event at the leaves */
+  /* Initiate values of the binary tree with the actual single rates of every event at 
+     the leaves 
+  */
     Community_Binary_Tree_Initialization (Table);
     P->Treeroot = Table->Treeroot;
     printf(" Binary Tree (from Leaves) to Sample Discrete Distribution has been successcully\n");
     printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
     printf(" Initial Configuration of the system:\n");
-    Print_Meta_Community_Patch_System (Table);
-    Print_Press_Key(0, 0, "No Message");
+    // Print_Meta_Community_Patch_System (Table);
+    // Print_Press_Key(0, 0, "No Message");
   #endif
   #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+  /* Initiate values of the binary tree with the actual single putative absolute times for 
+     every event all over the nodes of the tree keeping the priority queu ordered, which, in 
+     particular, makes the minimm value bubble up at the root of the tree. 
+  */
     Community_Priority_Queue_Tree_Initialization(Table);
     P->Treeroot = Table->Treeroot;
     // Print_Press_Key(0, 0, "Printing out after Priority Queue Initialization\n");
@@ -110,8 +118,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     printf(" Initial Configuration of the system:\n");  
     Print_Meta_Community_Patch_System (Table);
     printf(" Priority Queue Binary Tree to store ordered putatitive event times has been successcully\n");
-    printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
-    Print_Press_Key(0, 0, "Generation of a new stochastic replicate...\n");
+    // printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
+    // Print_Press_Key(0, 0, "Generation of a new stochastic replicate...\n");
   #endif
   /*   END : Initial Conditions -------------------------------------------------------------*/
 
@@ -129,19 +137,20 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
      */
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
-      {
+    {
         FROZEN_SYSTEM = Advance_Current_Time( Table, Rate, &Time_Current, &new );
-      }
+    }
     /*     E N D
      * ---------------------------------------------------------------------------
      */    
-#if defined EXTINCTION_CONTROL
-    int EXTINCTION;
-    double Total_Population_of_Consumers;  
-    EXTINCTION = 0;
+    #if defined EXTINCTION_CONTROL
+      int EXTINCTION;
+      double Total_Population_of_Consumers;  
+      EXTINCTION = 0;
 
     if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
-      Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables, Table );
+      Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables, 
+                                                                  Table );
       if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
     
     // EXTINCTION = Extinction_Control_Condition(Table);
@@ -153,14 +162,14 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       if (FROZEN_SYSTEM == 1 && EXTINCTION == 1) FROZEN_SYSTEM = 1;
       break;  /* Don't advance more times */  
     }
-#endif
+    #endif
 
     if( Time_Current > Time->Time_Vector[j] + Time->EPSILON){
       (*Bad_Times)++;
-#if defined VERBOSE
+    #if defined VERBOSE
       printf("Time too far away from target: skipping this time...\n");
       printf("%d\t%g\t%g\n",j, Time_Current, Time->Time_Vector[j]);
-#endif
+    #endif
     }
     else{
       /* Saving and representing at values close to Time_values[j] * * * * * * * * * * * * */
@@ -196,30 +205,29 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       Time_Initial = Time->Time_Vector[j-1];
       Time_Final   = Time->Time_Vector[j];
 
-#if defined CPGPLOT_REPRESENTATION    /* Plotting Time evolution */
-      /* BEGIN: Grafical Representation per SUCCESSFUL time step */
-      C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S(Table->CPG->DEVICE_NUMBER,
-      						                                    1+i, j_Good, Table );
-      if( Table->No_of_CELLS > 4 ) 
+      #if defined CPGPLOT_REPRESENTATION    /* Plotting Time evolution */
+        /* BEGIN: Grafical Representation per SUCCESSFUL time step */
+        C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S(Table->CPG->DEVICE_NUMBER,
+      						                                      1+i, j_Good, Table );
+        if( Table->No_of_CELLS > 4 ) 
         /* GRID REPRESENTATION */
 	      Community_Scatter_Plot_Representation(Table, i, j);   
         // Print_Press_Key(1,0,"."); 
-      /*   END: Grafical Representation per time step */
-#endif
+        /*   END: Grafical Representation per time step */
+      #endif
+      
       /* BEGIN : Writing a costumized file ... */
-      fprintf(FP,"%g", Time_Current);
-      for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
-	      fprintf(FP,"\t%g", Table->Vector_Output_Variables[k]);
-      }
-      fprintf(FP,"\n");
+        fprintf(FP,"%g", Time_Current);
+        for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++)
+	        fprintf(FP,"\t%g", Table->Vector_Output_Variables[k]);
+        fprintf(FP,"\n");
       /*   END: Writing costumized file        */
     }
-
-#if defined VERBOSE
-    printf(" Total population across the system at current time (t = %g)\n", Time_Current );
-    Print_Meta_Community_Patch_System (Table);
-    Print_Press_Key(1,0,".");
-#endif
+    #if defined VERBOSE
+      printf(" Total population across the system at current time (t = %g)\n", Time_Current );
+      Print_Meta_Community_Patch_System (Table);
+      Print_Press_Key(1,0,".");
+    #endif
   }/* go further to the next time           */
 
   fclose(FP);
@@ -233,7 +241,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
 {
   /* This version of the same function does the same as before, this is, 
      it performs one single stochastic realization (the i-th one). 
-     No saving into files nor visually representing anything.
+     No saving into files is done, nor visually representing anything.
 
      Input Args:
 

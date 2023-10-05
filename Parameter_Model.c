@@ -111,6 +111,15 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
 
   P_Destination->y_R_i     = P_Source->y_R_i;
   P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
+
+  P_Destination->Time = P_Source->Time;
+  P_Destination->Treeroot = P_Source->Treeroot; 
+  P_Destination->Leaves = P_Source->Leaves; 
+  P_Destination->Parent = P_Source->Parent; 
+  P_Destination->No_of_LEAVES = P_Source->No_of_LEAVES;                                 
+  P_Destination->No_of_TREE_LEVELS = P_Source->No_of_TREE_LEVELS;
+  /* Imporant assert:                           */
+  /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 }
 
 void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
@@ -229,6 +238,15 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 
   P->y_R_i     = Table->y_R_i;
   P->Theta_Consumers = Table->Theta_Consumers;
+
+  P->Time = Table->T;
+  P->Treeroot = Table->Treeroot;
+  P->Leaves = Table->Leaves;
+  P->Parent = Table->Parent;  
+  P->No_of_LEAVES = Table->No_of_LEAVES;                                 
+  P->No_of_TREE_LEVELS = Table->No_of_TREE_LEVELS;
+  /* Imporant assert:                           */
+  /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 }
 
 void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, Parameter_Model * P_Source)
@@ -341,6 +359,15 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
 
   P_Destination->y_R_i     = P_Source->y_R_i;
   P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
+
+  P_Destination->T = P_Source->Time;
+  P_Destination->Treeroot = P_Source->Treeroot; 
+  P_Destination->Leaves = P_Source->Leaves; 
+  P_Destination->Parent = P_Source->Parent; 
+  P_Destination->No_of_LEAVES = P_Source->No_of_LEAVES;                                 
+  P_Destination->No_of_TREE_LEVELS = P_Source->No_of_TREE_LEVELS;
+  /* Imporant assert:                           */
+  /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 }
 
 void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
@@ -452,6 +479,15 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
 
   P_Destination->y_R_i     = P_Source->y_R_i;
   P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
+
+  P_Destination->Time = P_Source->T;
+  P_Destination->Treeroot = P_Source->Treeroot;  
+  P_Destination->Leaves = P_Source->Leaves; 
+  P_Destination->Parent = P_Source->Parent;
+  P_Destination->No_of_LEAVES = P_Source->No_of_LEAVES;                                 
+  P_Destination->No_of_TREE_LEVELS = P_Source->No_of_TREE_LEVELS;
+  /* Imporant assert:                           */
+  /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 }
 
 void Vector_Entries_into_Parameter_Model ( const gsl_vector * X, Parameter_Model * P,

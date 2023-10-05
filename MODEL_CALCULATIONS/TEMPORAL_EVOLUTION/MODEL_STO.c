@@ -4,6 +4,16 @@ extern gsl_rng * r;
 
 extern int TYPE_of_TIME_DEPENDENCE;
 
+#if defined BINARY_TREE_OPTIMIZATION
+    #define BINARY_TREE   
+#endif
+#if defined BINARY_TREE_SUPER_OPTIMIZATION
+    #define BINARY_TREE   
+#endif
+#if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+    #define BINARY_TREE
+#endif
+
 int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 {
   int i,j,k, n;
@@ -54,7 +64,8 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 								      Table->INITIAL_TOTAL_POPULATION);
   else 
     Initial_Condition_Centered_into_Parameter_Table (Table, 
-                                                     Table->INITIAL_TOTAL_POPULATION); /* -xN [] */
+                                                     Table->INITIAL_TOTAL_POPULATION); 
+                                                     /* -xN [] */
   /* END ----------------------------------------------------------------------------
    */
   /* BEGIN : -------------------------------------------------------------------------
@@ -82,7 +93,13 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     // Print_Press_Key(1,1,"Printing out Tree before entering the generation of stochastic replicates");
     // printtree(Table->Treeroot);
   #endif
-  P->Leaves   = Table->Leaves;
+  #if defined BINARY_TREE
+    P->Leaves            = Table->Leaves;
+    P->No_of_LEAVES      = Table->No_of_LEAVES;                                 
+    P->No_of_TREE_LEVELS = Table->No_of_TREE_LEVELS;
+    /* Important assert: */
+    assert(P->No_of_LEAVES == power_int(2, P->No_of_TREE_LEVELS));
+   #endif 
   /* END ----------------------------------------------------------------------------
    */
   

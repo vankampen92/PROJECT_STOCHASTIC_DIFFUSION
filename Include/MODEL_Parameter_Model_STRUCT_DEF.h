@@ -19,6 +19,8 @@ typedef struct Parameter_Modelinfo
 
   Trend_Control * Tr;
 
+  Time_Control * Time; 
+
 #if defined CPGPLOT_REPRESENTATION
   Parameter_CPGPLOT * CPG;
 #endif
@@ -50,6 +52,10 @@ typedef struct Parameter_Modelinfo
 
   treenode * Treeroot;                            /* Binary Sampling of a Discrete Distrubution */
   treenode ** Leaves;                             /* Leaves contain rates of individual events  */
+  treenode *** Parent;                            /* Parent tree levels, but not the leaves     */ 
+
+  int No_of_LEAVES;                               /* Imporant assert:                           */
+  int No_of_TREE_LEVELS;                          /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 
   /* Master Equation Numerical Integration */
   int TOTAL_No_of_RESOURCES;

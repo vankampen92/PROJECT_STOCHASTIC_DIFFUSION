@@ -80,7 +80,6 @@ void Execute_One_Step(Community ** SP,
      x and y will end up being different only in case there is movemnt event!!! 
   */
   Patch = SP[x];  /* x represents the chosen patch undegoing a change. */
-
   #if defined EVENT_DISCRETE_SAMPLING
     if(Table->TOTAL_No_of_EVENTS > 1) 
       n_Event = Discrete_Sampling(Patch->rToI, Table->TOTAL_No_of_EVENTS) - 1; 

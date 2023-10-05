@@ -186,15 +186,15 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
       
       n=0;
       for(i = 0; i<Table->No_of_CELLS; i++) {
-	Patch = P[i]; 
-	for(j = 0; j<Patch->n[Sp]; j++) {
-	  x_Data[n] = (float)(Patch->center.x - 0.5 + gsl_rng_uniform(r));
-	  /* This is because STEP is 1.0 */
-	  y_Data[n] = (float)(Patch->center.y - 0.5 + gsl_rng_uniform(r));
-	  /* This is because STEP is 1.0 */
-	  n++;
-	}
-    }
+	      Patch = P[i]; 
+	      for(j = 0; j<Patch->n[Sp]; j++) {
+	        x_Data[n] = (float)(Patch->center.x - 0.5 + gsl_rng_uniform(r));
+	        /* This is because STEP is 1.0 */
+	        y_Data[n] = (float)(Patch->center.y - 0.5 + gsl_rng_uniform(r));
+	        /* This is because STEP is 1.0 */
+	        n++;
+	      }
+      }
       
       type_of_Line = 1;
       type_of_Width = 2;
@@ -205,17 +205,23 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
       cpgslct(DEVICE_NUMBER);      /* Selecting Device */
       
       if (Sp == 0) {
-	color_Index    = 3;          /* 3: Green      */
-	type_of_Symbol = 1;          /* 1: .  (point) */
-	cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
-		       color_Index, type_of_Symbol,
-		       "X", "Y", "");
+	      color_Index    = 4;          /* 4: Blue       */
+	      type_of_Symbol = 1;          /* 1: .  (point) */
+	      cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
+		                     color_Index, type_of_Symbol,
+		                     "X", "Y", "");
+      }
+      else if (Sp == 1) {
+        color_Index    = 3;    /* 3: Green  5: Light Blue  6: Magenta    */
+	      type_of_Symbol = 2;    /* 2: +      3: *           4: o (cercle) */ 
+	      cpg_XY_same_scattered(n, x_Data, y_Data,
+			                        color_Index, type_of_Symbol);
       }
       else {
-	color_Index    = 3 + Sp;    /* 4: Blue  5: Light Blue  6: Magenta    */
-	type_of_Symbol = 1 + Sp;    /* 2: +     3: *           4: o (cercle) */ 
-	cpg_XY_same_scattered(n, x_Data, y_Data,
-			      color_Index, type_of_Symbol);
+	      color_Index    = 3 + Sp;    /* 4: Blue  5: Light Blue  6: Magenta    */
+	      type_of_Symbol = 1 + Sp;    /* 2: +     3: *           4: o (cercle) */ 
+	      cpg_XY_same_scattered(n, x_Data, y_Data,
+			                        color_Index, type_of_Symbol);
       }
       cpgsls(1);
     cpgslw(1);

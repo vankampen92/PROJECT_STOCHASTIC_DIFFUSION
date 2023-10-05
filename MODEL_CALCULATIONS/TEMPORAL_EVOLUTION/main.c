@@ -34,7 +34,10 @@ gsl_rng * r; /* Global generator defined in main.c */
                    -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 5 -xn 0 -xN 1000 -HN 1000 \
                    -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
 
-   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 100 -HX 10 -HY 10 -Hu 0.5 -n 1 -v0 115 -G0 1 -G1 1 -tn 20 -t0 0.0 -t1 5.0 -t4 0 -tR 5 -xn 0 -xN 98 -HN 98 -G2 1 -G3 0.0 -G4 5.0 -G5 1 -G6 0.0 -G7 100.0
+   .~$ ./DIFFUSION -y0 0 -y2 1 -HS 2 -HM 100 -HX 10 -HY 10 -Hu 0.5 \
+                   -n 1 -v0 115 -G0 1 -G1 1 \
+                   -tn 20 -t0 0.0 -t1 5.0 -t4 0 -tR 5 -xn 0 -xN 98 -HN 98 \
+                   -G2 1 -G3 0.0 -G4 5.0 -G5 1 -G6 0.0 -G7 100.0
 
    3 species example:                                        (OUTPUT_VARIABLES_GENUINE will be 6) 
    .~$ ./DIFFUSION -y0 0 -y2 1 -HS 3 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -n 1 -v0 15156 -G0 1 -G1 1 -tn 100 -t0 0.0 -t1 30.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 30.0 -G5 1 -G6 0.0 -G7 1100.0
@@ -53,7 +56,7 @@ gsl_rng * r; /* Global generator defined in main.c */
    .~$ ./DIFFUSION_S_RESOURCES -y0 1 -y2 1 -HS 10 -HM 10000 -HX 100 -HY 100 -Hu 0.5 -H0 0.01 -H1 0.5 -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
 
    Important notice: MODEL.h contains a 'define' of No_of_RESOURCES_MAXIMUM. If you overcome that
-   limit, program crashes. 
+   limit, the program crashes. 
 
    4 species (4 different species ---R, A, RA, ARA---, therefore OUTPUT_VARIABLES_GENUINE is 7) 
    .~$ ./DIFFUSION_1R1C -y0 2 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100  -n 2 -v0 0 -v1 1 -G0 1 -G1 2 -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 4 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1100.0
@@ -102,12 +105,26 @@ gsl_rng * r; /* Global generator defined in main.c */
                                    -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 200 -H20 20.0 \
                                    -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
 
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 \ 
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 10000 -HX 100 -HY 100 \
                                    -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
-                                   -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 3 -xn 0 -xN 5.0 -HN 5.0 \ 
+                                   -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 3 -xn 0 -xN 5.0 -HN 5.0 \
                                    -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 200000 \
                                    -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
                                    -H1 1.0 -H3 5.0 -H6 0.5 -H9 20.0 -H10 2.0 -H4 5.0 -H17 1.0
+
+    . ~$ ./STOLLENBERG_4D_3 -y0 15 -y2 1 -HS 1 -HM 1600 -HX 40 -HY 40 \
+                            -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                            -tn 100 -t0 0.0 -t1 200.0 -t4 0 -tR 3 -xn 0 -xN 5.0 -HN 5.0 \
+                            -G2 1 -G3 0.0 -G4 200.1 -G5 1 -G6 0.0 -G7 32000 \
+                            -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
+                            -H1 1.0 -H3 5.0 -H6 0.5 -H9 10.0 -H10 2.0 -H4 5.0 -H17 1.0
+
+    . $ ./STOLLENBERG_4D_3  -y0 15 -y2 1 -HS 1 -HM 6400 -HX 80 -HY 80 \
+                            -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2  \
+                            -tn 400 -t0 0.0 -t1 600.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                            -G2 1 -G3 0.0 -G4 600.1 -G5 1 -G6 0.0 -G7 128000 \
+                            -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
+                            -H1 1.0 -H3 5.0 -H6 0.5 -H9 15.5 -H10 2.0 -H4 5.0 -H17 1.0
 
    . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
                                    -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \ 

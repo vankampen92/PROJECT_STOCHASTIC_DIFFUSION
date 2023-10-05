@@ -14,7 +14,7 @@ treenode * createtreenode (double value, treenode * parent, int level)
         result->value  = value; 
         result->level  = level; /* Result is created at a level                */
         result->index  = 0;     /* Index, only when functioning as a Priority Queu 
-                                   ( coupled to an array of pointers ) 
+                                   (coupled to an array of pointers) 
                                 */ 
         result->left   = NULL;
         result->right  = NULL;
@@ -28,7 +28,8 @@ treenode * createtreenode (double value, treenode * parent, int level)
 void printtreenode(treenode * Node)
 {
     printf("Level: %d\t", Node->level);
-    printf("Value: %g\n", Node->value);
+    printf("Value: %g\t", Node->value);
+    printf("Index: %d\n", Node->index);
 }
 
 void printtabs (int No_of_TABS)
@@ -52,6 +53,8 @@ void printtree_rec (treenode * root, int level)
             printf("Level (parent)= %d\n", root->parent->level);
             printtabs(level);
             printf("Value (parent)= %g\n", root->parent->value);
+            printtabs(level);
+            printf("Index (parent)= %d\n", root->parent->index);
         }
     }
     
@@ -59,6 +62,8 @@ void printtree_rec (treenode * root, int level)
     printf("Level (node)= %d\n", root->level);
     printtabs(level);
     printf("Value (node)= %g\n", root->value);
+    printtabs(level);
+    printf("Index (node)= %d\n", root->index);
     
     printtabs(level+1);
     printf("left\n");
@@ -234,6 +239,38 @@ int choose_Individual_Event(treenode * root, double x)
     }   
 }
 
+void partial_sums_upto_p(treenode * root, int p, int  n, double * S)
+{
+    /* If the binary tree maintains partial sums to sample 
+       a discrete probability distribution, P[0], ..., P[2^N - 1],
+       where N = n-1, then this recursive function can be used to 
+       sum up to a certain p:
+
+                            S = P[0] + ... + P[p-1]  
+       
+       Notice that the discrete distribution takes values from 
+       p[0] to p[2^N - 1] while the input argument is n = N-1!!! 
+    */   
+    int a;
+    treenode * node = root; 
+
+    if(node->left == NULL && node->right == NULL)  
+        return;  
+
+    a = p/power_int(2, n);
+    p = p%power_int(2 , n);
+
+    if( a  == 1 ) {
+        * S += node->left->value;
+        n--; 
+        partial_sums_upto_p(node->right, p, n, S);
+    }
+    else {
+        n--;
+        partial_sums_upto_p(node->left, p, n, S);
+    }   
+}
+
 treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent, 
                                               treenode ** Leaves, int n)
 {
@@ -325,7 +362,7 @@ treenode * Binary_Tree_Setting_Structure(treenode **** Parent,
 }
 
 treenode *  Binary_Tree_Allocation (int No_of_CELLS, 
-                                   treenode *** Leaves, treenode **** Parent)
+                                    treenode *** Leaves, treenode **** Parent)
 {
   /* This function allocates the tree (from root). It creates space for the leaves 
      (the outer and final tree level) and all internal nodes for each tree level 
@@ -443,7 +480,13 @@ void Priority_Queu_Insert_Value( int i, double Rate, int LEAVES_LEVEL,
     /* This function inserts value 'Rate' corresponding to an index 'i' from 
        i=0 to i=(2^{LEAVES_LEVEL} -1) into a priority queu using a binary tree, 
        where Priority is an array of 'node' pointers, where, specifically, 
-       Priority[i] points to the tree node that contains index 'i'
+       Priority[i] points to the tree node that contains index 'i'. 
+       
+       The re-use of this Priority Queu without re-allocating the binary tree 
+       requires that consecutive nodes should be inserted at increasing values 
+       of the input argument, the index 'i'. In this way, the whole tree is     
+       correctly re-initialized from the root node up to the leaves with new 
+       new values. 
     */
     int k, n, Sn;     
     /* n, tree level from 0 to LEAVES_LEVEL */ 
@@ -480,9 +523,19 @@ void Priority_Queu_Insert_Value( int i, double Rate, int LEAVES_LEVEL,
 
 void bubbling(treenode * Node, treenode ** Priority)
 {
-    treenode * Child_Min; 
+    treenode * Child_Min;
 
-    if (Node->parent == NULL) return;  /* Root level has been reached */
+    if (Node->parent == NULL){ /* Root level has been reached */
+        Child_Min = Determining_Child_Min(Node);
+        
+        if (Child_Min == NULL) return; /* Leaf level has been reached 
+                                          (single node tree !!!)  
+                                       */
+        if (Node->value > Child_Min->value) {
+            swap_Node_values(Node, Child_Min, Priority);
+            bubbling(Child_Min, Priority);
+        }
+    }
     else if(Node->value < Node->parent->value ){
           swap_Node_values(Node, Node->parent, Priority); 
           bubbling(Node->parent, Priority);

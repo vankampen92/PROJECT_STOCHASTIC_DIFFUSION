@@ -28,6 +28,7 @@ void printinorder(treenode * root);
 int power_int(int a, int n);
 treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n);
 void sum_Delta_upto_Root(treenode * root, treenode * Leaf, double Delta);
+void partial_sums_upto_p(treenode * root, int p, int  n, double * S);
 int choose_Individual_Event(treenode * root, double x);
 treenode * Binary_Tree_Allocation (int No_of_CELLS, 
                                    treenode *** Leaves, treenode **** Parent);

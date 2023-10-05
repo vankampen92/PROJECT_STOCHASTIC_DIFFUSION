@@ -4,7 +4,8 @@
 #include <math.h>
 #include "treenode.h"
 
-/* This function creates a binary tree to sample discrete distributions and test the library functions */
+/* This function creates a binary tree to sample discrete distributions and 
+   test the library functions */
 
 int main()
 {
@@ -66,15 +67,40 @@ int main()
     printtree(root);
 
     for (i=0; i<M; i++) 
-        printf( "Rate[%d] = %g\n", i, Leaves[i]->value );
+        printf( "Rate[%d] = %g\n", i, Leaves[i]->value ); 
 
     leafPrint(root); 
 
     double x = root->value * drand48();
     int Event = choose_Individual_Event(root, x);
-
     printf(" The winner event is... the %d-th!!!\n", Event);
     printf(" (from 0 to %d)\n", M-1);
+
+    double S; 
+    int p = (M * drand48());
+    printf(" Accummulated distribution up to p = %d\n", p);
+    if( p > 0) 
+        printf(" S = P[0] + ... + P[%d]\n", p-1);
+    else
+        printf(" S = 0");
+
+    S = 0.0; 
+    partial_sums_upto_p(root, p, n-1, &S);
+    printf("S_1 = P[0] + ... + P[%d] = %g\n", p-1, S);
+
+    S = 0.0; 
+    for (i=0; i<p; i++) 
+        S += Leaves[i]->value; 
+    printf("S_2 = P[0] + ... + P[%d] = %g\n", p-1, S);
+
+    printf("S_1 and S_2 should perfectly match!!!\n");
+
+    printf(" If p = 0, then S should be also 0!!!\n");
+    S = 0.0;
+    partial_sums_upto_p(root, 0, n-1, &S);
+    printf("S = %g\n", S);
+    if( S == 0.0)
+        printf("Your code works perfectly fine!!!\n");
 
     printf(" Enter 0 to exit (the program will exit)... ... ...");
     scanf("%d", &n); 

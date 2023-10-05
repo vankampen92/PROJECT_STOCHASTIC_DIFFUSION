@@ -1,4 +1,4 @@
-OBJ = main_Priority_Queu.o treenode.o 
+OBJ = main_Binary_Tree.o treenode.o 
 LIB = -lm
 CC  = gcc -g
 CXXFLAGS+=

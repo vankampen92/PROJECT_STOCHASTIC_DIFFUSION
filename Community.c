@@ -136,8 +136,8 @@ void Community_Initialization (Community ** PATCH,
      and number of patch connections for each patch (PATCH[i]->No_NEI)
      should be initialized                                          */
   Network_Structure_Inititialization (PATCH,
-				      P->No_of_NEIGHBORS,
-				      P->TYPE_of_NETWORK);
+				                              P->No_of_NEIGHBORS,
+				                              P->TYPE_of_NETWORK);
 #if defined VERBOSE
   Writing_Adjacency_List(PATCH);
   if (P->TYPE_of_NETWORK == 1) Writing_Adjacency_List_VonNeumann(PATCH);

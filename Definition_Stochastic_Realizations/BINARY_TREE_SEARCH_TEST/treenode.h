@@ -7,6 +7,7 @@
     int    level; /* Tree Level (0: root; n: leaves)                       */
     int    order; /* Order within the leaf level, from 0 to 2^n - 1        */
     int    index; /* Index (when using the binary tree as a priority queu) */
+    
     double value;
 
     struct treenode * left;
@@ -27,6 +28,7 @@ void printinorder(treenode * root);
 int power_int(int a, int n);
 treenode * createBinaryTree_DiscreteDistribution(treenode ** Leaves, int n);
 void sum_Delta_upto_Root(treenode * root, treenode * Leaf, double Delta);
+void partial_sums_upto_p(treenode * root, int p, int  n, double * S);
 int choose_Individual_Event(treenode * root, double x);
 treenode * Binary_Tree_Allocation (int No_of_CELLS, 
                                    treenode *** Leaves, treenode **** Parent);

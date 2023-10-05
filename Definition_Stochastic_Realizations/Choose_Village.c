@@ -31,9 +31,10 @@ int Choose_Village(double max_Probability, Community ** Pop, Parameter_Model * P
 
 int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Parameter_Model * Par)
 {
-  /* This function depends on a function from treenode library called choose_Indvidual_Event() */
+  /* This function depends on a function from treenode library called choose_Indvidual_Event() 
+     (see Treenode.c)
+  */
   int i, p;
-  Community * P;
   int No_of_Villages;
 
   No_of_Villages = Par->No_of_CELLS;
@@ -43,6 +44,8 @@ int Choose_Village_Binary_Tree(double max_Probability, Community ** Pop, Paramet
   
   /* p should go from (0) to (No of Villages-1) */
   assert(p >= 0 && p < No_of_Villages); 
+  /* The total rate of change for each patch is correctly stored at leave level */
+  assert(Pop[p]->ratePatch == Par->Leaves[p]->value);
   
   return(p);
 }
@@ -51,23 +54,35 @@ void Choose_Village_and_Event_Binary_Tree( double max_Probability, Community ** 
                                            Parameter_Model * Par, 
                                            int * patch, int * event )
 {
-  /* This function depends on a function from treenode library called choose_Indvidual_Event() */
-  int i, p;
-  Community * P;
-  int No_of_EVENTS;
-
-  No_of_EVENTS  = Par->TOTAL_No_of_EVENTS;
+  /* This function depends on a function from treenode library called choose_Indvidual_Event() 
+     (see Treenode.c)
+  */
+  int i, p, n;
+  int No_of_EVENTS, No_of_TREE_LEVELS;
+  double S; 
  
-  double x = Par->Treeroot->value * RANDOM; 
+  No_of_EVENTS  = Par->TOTAL_No_of_EVENTS;
+  No_of_TREE_LEVELS = Par->No_of_TREE_LEVELS; 
+ 
+  double x = Par->Treeroot->value * RANDOM;
   p = choose_Individual_Event(Par->Treeroot, x);  /* From treenode.c library */
   
   /* p should go from (0) to (TOTAL_GRAND_No_of_EVENTS-1) */
   assert(p >= 0 && p < Par->TOTAL_GRAND_No_of_EVENTS);
 
   * event = p%No_of_EVENTS; 
-  * patch = p/No_of_EVENTS;
-  
-  /* Possibility to store the generated random number for further re-use!!! */ 
+  * patch = p/No_of_EVENTS; 
+
+  /* The rate of each event is correctly stored at leave level */
+  assert(Par->Leaves[p]->value == Pop[*patch]->rToI[*event]);
+
+  #if defined REUSE_RANDOM_NUMBER 
+    /* Possibility to store a generated random number for further re-use!!! */
+    n = No_of_TREE_LEVELS -1 ; 
+    S = 0.0;
+    partial_sums_upto_p(Par->Treeroot, p, n, &S);
+    Par->Time->Rate->Reusable_Random_Number = (x - S)/Par->Leaves[p]->value; 
+  #endif
 }
 
 void Choose_Village_and_Event_Priority_Queu(double max_Probability, Community ** Pop,
@@ -80,7 +95,8 @@ void Choose_Village_and_Event_Priority_Queu(double max_Probability, Community **
 
   No_of_EVENTS  = Par->TOTAL_No_of_EVENTS;
 
-  p = Par->Treeroot->index; /* Just looking it up (at the root node, the heap of priority queue) */
+  p = Par->Treeroot->index; /* Just looking it up (at the root node, the heap of the 
+                               priority queue */
 
   /* p should go from (0) to (No of Villages-1) */
   assert(p >= 0 && p < Par->TOTAL_GRAND_No_of_EVENTS);

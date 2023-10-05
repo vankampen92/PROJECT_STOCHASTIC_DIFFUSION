@@ -76,7 +76,7 @@ typedef struct totalRateinfo
   double Total_Rate;
   double max_Probability;
   double Stochastic_Time;
-  double Stochastic_Time_Old; 
+  double Reusable_Random_Number; 
 }Stochastic_Rate;
 
 #ifndef BINARY_TREE_STRUCTURE 
