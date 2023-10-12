@@ -28,12 +28,12 @@
 
 #define MODEL_PARAMETERS_MAXIMUM 30     /* Maximum No of MODEL (input) PARAMETERS */
                                         /* The total number of parameters in all 
-					                              model-paramater-related assign functions.
-					                              This is the whole parameter pool from which a 
-					                              parameter subspace can be defined for 
-					                              optimization searches and parameter scans  
-					                              for any specified model
-					                         */
+					                                 model-paramater-related assign functions.
+					                                 This is the whole parameter pool from which a 
+					                                 parameter subspace can be defined for 
+					                                 optimization searches and parameter scans  
+					                                 for any specified model
+					                              */
 #define ME_n_DIMENSION_MAXIMUM 20       /* Maximum dimension of the probability distribution 
                                         // in a master equation */
 

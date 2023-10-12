@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch Binary Tree Test",
+            "name": "(gdb) Launch Hoshen-Kopelman",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Definition_Stochastic_Realizations/BINARY_TREE_SEARCH_TEST/program",
+            "program": "${workspaceFolder}/UNITARY_TESTS/CLUSTERING_ALGORITHM_TEST/hk",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

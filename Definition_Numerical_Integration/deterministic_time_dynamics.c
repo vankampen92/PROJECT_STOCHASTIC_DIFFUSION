@@ -148,10 +148,12 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     }
 #if defined CPGPLOT_REPRESENTATION
       /* This should be only activated in case we want to animate ODE time evolution by
-	 representing the solution as time progresses                                       */
+	       representing the solution as time progresses                                       */
       // C_P_G___S_U_B___P_L_O_T_T_I_N_G ( Table, j, Table->CPG->x_Time, Table->CPG->y_Time );
       // C_P_G___P_H_A_S_E____D_I_A_G_R_A_M ( Table, 0, 1, j,
       //                                      Table->CPG->y_Time );
+      // This is useful for spatially extended systems: 
+      // C_P_G___G_R_I_D___P_L_O_T_T_I_N_G___S_H_A_D_E_S ( Table );
 #endif
     /* BEGIN : Writing a costumized file ... */
       // fprintf(FP,"%g", Time_Current/360.0);

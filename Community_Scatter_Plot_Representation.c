@@ -145,7 +145,7 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 }
 #else 
 void Community_Scatter_Plot_Representation( Parameter_Table * Table,
-					    int i_Replicate, int j_Time )
+					                                  int i_Replicate, int j_Time )
 {
   int i,j;
   int N, n;
@@ -223,8 +223,9 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 	      cpg_XY_same_scattered(n, x_Data, y_Data,
 			                        color_Index, type_of_Symbol);
       }
+      
       cpgsls(1);
-    cpgslw(1);
+      cpgslw(1);
     }
     
     /* n: Total number of individuals across species */

@@ -28,7 +28,7 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
     PATCH[i]->rate = (double *)calloc(P->TOTAL_No_of_EVENTS, sizeof( double ));
     PATCH[i]->rToI = (double *)calloc(P->TOTAL_No_of_EVENTS, sizeof( double ));
 
-    PATCH[i]->Patch_Connections = (int *)calloc(P->No_of_NEIGHBORS, sizeof( double ));
+    PATCH[i]->Patch_Connections = (int *)calloc(P->No_of_NEIGHBORS, sizeof( int ));
 
     PATCH[i]->NEI  = (Community **)calloc(P->No_of_NEIGHBORS, sizeof(Community *) );
 
@@ -214,8 +214,8 @@ void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
 }
 
 void Network_Structure_Inititialization (Community ** PATCH,
-					 int No_of_NEIGHBORS,
-					 int TYPE_of_NETWORK)
+					                               int No_of_NEIGHBORS,
+					                               int TYPE_of_NETWORK)
 {
   int a, i,j,n, no, N_X, N_Y;
   int Sp;
@@ -224,7 +224,7 @@ void Network_Structure_Inititialization (Community ** PATCH,
   double Total_Per_Capita_Out_Migration_Rate;
 
   switch ( TYPE_of_NETWORK )
-    {
+  {
     case 0: /* Fully Connected Graph */
 
       no        = PATCH[0]->No_of_CELLS;
@@ -272,39 +272,37 @@ void Network_Structure_Inititialization (Community ** PATCH,
 
       for(i=0; i<no; i++){
 
-	  i_x = i/PATCH[i]->No_of_CELLS_X;
-	  j_y = i%PATCH[i]->No_of_CELLS_X;
+	      i_x = i/PATCH[i]->No_of_CELLS_X;
+	      j_y = i%PATCH[i]->No_of_CELLS_X;
 
-	  PATCH[i]->center.x = (double)j_y + 0.5*STEP_X;
-	  PATCH[i]->center.y = (double)i_x + 0.5*STEP_Y;
+	      PATCH[i]->center.x = (double)j_y + 0.5*STEP_X;
+	      PATCH[i]->center.y = (double)i_x + 0.5*STEP_Y;
 
-	  Set_Von_Neumann_1st_Neighbors(PATCH, no, N_X, N_Y, i);
+	      Set_Von_Neumann_1st_Neighbors(PATCH, no, N_X, N_Y, i);
 
-	  for( a=0; a<Sp; a++ ) {
+	      for( a=0; a<Sp; a++ ) {
 
-	    Total_Per_Capita_Out_Migration_Rate = 0.0;
-	    for(j=0; j<No_of_NEIGHBORS; j++){
+	        Total_Per_Capita_Out_Migration_Rate = 0.0;
+	        for(j=0; j<No_of_NEIGHBORS; j++){
 
-	      PATCH[i]->Out_Migration_Vector[a][j] = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
-	      PATCH[i]->In_Migration_Vector[a][j]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
+	          PATCH[i]->Out_Migration_Vector[a][j] = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
+	          PATCH[i]->In_Migration_Vector[a][j]  = PATCH[i]->Metapop_Connectivity_Matrix[a][i][j];
 
-	      Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][j];
-	    }
+	          Total_Per_Capita_Out_Migration_Rate += PATCH[i]->Out_Migration_Vector[a][j];
+	        }
 
-	    PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
-	  }
-
-	  PATCH[i]->No_NEI = No_of_NEIGHBORS;
+	        PATCH[i]->Total_Per_Capita_Out_Migration_Rate[a] = Total_Per_Capita_Out_Migration_Rate;
+	      }
+	      PATCH[i]->No_NEI = No_of_NEIGHBORS;
       }
-
-      break;
+    break;
 
     default:
       printf("Type of Network not yet defined!!!\n");
       printf("Allowed Network Codes are: 0 and 1\n");
       printf("TYPE of NETWORK = %d\n", TYPE_of_NETWORK);
       exit(0);
-    }
+  }
 }
 
 void  Set_Von_Neumann_1st_Neighbors(Community ** PATCH, int no, int N_X, int N_Y, int i)
