@@ -1,5 +1,5 @@
 /* Tobin Fricke's implementation of the Hoshen-Kopelman algorithm for
-   cluster labeling.
+   cluster labeling (header file version)
 
    Copyright (c) September 9, 2000, by Tobin Fricke <tobin@splorg.org>
    Distributed under the terms of the GNU Public License.

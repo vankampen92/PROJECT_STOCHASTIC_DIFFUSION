@@ -317,14 +317,15 @@ treenode * sumBinaryTree_DiscreteDistribution(treenode *** Parent,
 treenode * Binary_Tree_Setting_Structure(treenode **** Parent, 
                                          treenode *** Leaves, int n)
 {
-    /*  Set up, recursively, the next parent level (n-1) from leaves 
-        (at level n) without any further settings, 
-        neither:
+    /*  Set up the next parent level (n-1) from leaves (at level n) 
+        without any further settings neither:
         1. Partial sums that will maintain the discrete distribution ready 
-           to be sampled.
+           to be sampled (Gillespie Direct Method).
         nor: 
         2. Priority Queu settings that will maitain a minimum value at the 
-           root level.   
+           root level (Gillespie Next Reaction Method).
+
+        The process is performed recursively unitl root is reached.    
     */ 
     int i, M; 
     treenode * root; 
@@ -448,9 +449,11 @@ void Binary_Tree_Free ( treenode * root, treenode ** Leaves, treenode *** Parent
 
 int Calculating_No_of_TREE_LEVELS(int M)
 {   
-    /* This function return the label, 'n", of the tree level that correspond to 'M' */
-    /* In fact, the total number of levels is always this number plus 1, because we  */
-    /* have counted the root as level 0 !!!
+    /* This function returns the label, 'n", of the tree level that correspond to 'M', 
+       where 'M' is a node label (0, 1, ...). The output for this function should be
+       an integer between 0 and the labe of tree leaves                               */
+    /* In fact, the total number of levels in the the tree is always the label of tree
+       leaves plus 1, because we have labeled the root as level 0 !!!
 
         Input: 
         . M, is an input index from equal to 0 to equal to 2*(2^n -1). 
@@ -485,7 +488,7 @@ void Priority_Queu_Insert_Value( int i, double Rate, int LEAVES_LEVEL,
        The re-use of this Priority Queu without re-allocating the binary tree 
        requires that consecutive nodes should be inserted at increasing values 
        of the input argument, the index 'i'. In this way, the whole tree is     
-       correctly re-initialized from the root node up to the leaves with new 
+       correctly re-initialized from the root node up to the leaves with brand 
        new values. 
     */
     int k, n, Sn;     

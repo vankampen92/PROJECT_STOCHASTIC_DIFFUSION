@@ -1,5 +1,5 @@
 /* Tobin Fricke's implementation of the Hoshen-Kopelman algorithm for
-   cluster labeling.
+   cluster labeling (library version, no main function here).
 
    Copyright (c) September 9, 2000, by Tobin Fricke <tobin@splorg.org>
    Distributed under the terms of the GNU Public License.
@@ -10,7 +10,7 @@
    This program is written in the 1999 standard of the C language (C99).  Older C
    compilers will refuse to compile it.   You can use a C++ compiler, a C99 compiler,
    or you can modify this code to comply with a previous version of the C standard.
-   The GCC compiler supports C99 as of version 3.0.  Compile this program with:
+   The GCC compiler supports C99 as of version 3.0.  Compile the library with:
 
    gcc-3.0 -Wall -std=c99 -c hk.c
 

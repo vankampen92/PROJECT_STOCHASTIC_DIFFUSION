@@ -1,4 +1,4 @@
-/* David Alonso's implementation of the Hoshen-Kopelman algorithm for cluster 
+/* David Alonso's implementation of the spanning clustering algorithm for cluster 
    labeling in general networks.
 
    This code is inspired by Tobin Fricke's code:
@@ -14,9 +14,9 @@
    or you can modify this code to comply with a previous version of the C standard.
    The GCC compiler supports C99 as of gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
    
-   Compile this program with (-g- for debugging!!!)
+   Compile this program with (-g for debugging!!!)
 
-   gcc -Wall -g -std=c99 main.c hk.c -o cluster
+   gcc -Wall -g -std=c99 main.c hk.c node.c -o cluster
 
 */
 #include <stdio.h>
@@ -24,188 +24,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include <assert.h>
-/* #include "node.h" */ /* where the "class" node is definded */
 #include "hk.h"
-
-struct point
-{
-  float x;
-  float y;
-};
-
-typedef struct node
-{
-  struct point center;  /* Coordinates of the position of the center of patch */
-
-  int id;               /* node identification                      */
-    
-  int val;              /* 1 or 0                                   */
-
-  int cluster_class;    /* size of the cluster the node belongs to  */
-  int cluster_id;       /* cluster identification                   */  
-     
-  int dg;               /* node degree                              */
-  struct node ** AD;
-  int * AD_List;        /* List of nodes IDs a node is connected to */
-}node;
-
-void  Set_Von_Neumann_1st_Neighbors(node ** PATCH, int N_X, int N_Y, 
-                                    int i)
-{
-  /* This function creates the neighborhood a node i in a list and its adjacency list, 
-     where nodes are initially arranged in a squared matrix N_X times N_Y 
-  */
-  int i_x, i_y;
-  int n_x, n_y;
-  int nei;
-
-  i_x = i/N_X;
-  i_y = i%N_X;
-
-  /* Upper Neighbor */
-  n_x = i_x;
-  n_y = (i_y+1)%N_Y;                    /* Periodic Boundary Condition */
-  nei = n_x * N_X  + n_y;
-  PATCH[i]->AD[0] = PATCH[nei];
-  PATCH[i]->AD_List[0] = nei;
-
-  /* Right Neighbor */
-  n_x = (i_x+1)%N_X;                    /* Periodic Boundary Condition */
-  n_y = i_y;
-  nei = n_x * N_X  + n_y;
-  PATCH[i]->AD[1] = PATCH[nei];
-  PATCH[i]->AD_List[1] = nei;
-
-  /* Lower Neighbor */
-  n_x = i_x;
-  n_y = (i_y == 0) ? (N_Y-1) : (i_y-1); /* Periodic Boundary Condition */
-  nei = n_x * N_X  + n_y;
-  PATCH[i]->AD[2] = PATCH[nei];
-  PATCH[i]->AD_List[2] = nei;
-
-  /* Left Neighbor */
-  n_x = (i_x == 0) ? (N_X-1) : (i_x-1); /* Periodic Boundary Condition */
-  n_y = i_y;
-  nei = n_x * N_X  + n_y;
-  PATCH[i]->AD[3] = PATCH[nei];
-  PATCH[i]->AD_List[3] = nei;
-}
-
-void Writing_Adjacency_List(node ** PATCH, int No_of_NODES)
-{
-  int i,j, no;
-
-  no  = No_of_NODES;
-  for(i=0; i<no; i++){
-      printf("%s %d %s", "Node No", i, "is conntected to [  ");
-      for(j=0; j<PATCH[i]->dg; j++) {
-        printf("%d ", PATCH[i]->AD_List[j]);
-      }
-      printf("%s\n", " ].");
-    }
-    printf("\n");
-}
-
-void Writing_Adjacency_List_VonNeumann(node ** PATCH, int No_of_NODES, int N_X, int N_Y)
-{
-  int i,j, no;
-  int i_x, i_y;
-  int j_x, j_y;
-
-  no    = No_of_NODES;
-
-  for(i=0; i<no; i++){
-    i_x = i/N_X;
-    i_y = i%N_X;
-    printf("%s %d %s (%d, %d) %s", "Grid node of ID=", i, "located at ", i_x, i_y, "is conntected to [");
-    for(j=0; j<PATCH[i]->dg; j++) {
-	      j_x = PATCH[i]->AD_List[j]/N_X;
-	      j_y = PATCH[i]->AD_List[j]%N_X;
-        printf("  [grid node %d located at (%d, %d)]  ",
-	              PATCH[i]->AD_List[j], j_x, j_y);
-      }
-      printf("%s\n", " ].");
-    }
-    printf("\n");
-}
-
-void Network_Allocation(node ** nw, int No_of_NODES, int No_of_NEIGHBORS)
-{
-  /* Network allocation */
-  int i; 
-
-  for(i=0; i<No_of_NODES; i++){
-    nw[i] = (node *)calloc(1, sizeof(node));
-    nw[i]->AD_List = (int *)calloc(No_of_NEIGHBORS+1, sizeof( int ));
-    nw[i]->AD      = (node **)calloc(No_of_NEIGHBORS, sizeof(node *) );
-  }
-}
-
-void Network_Free( node ** nw, int No_of_NODES)
-{
-  int i;
-      
-  for (i=0; i<No_of_NODES; i++) {
-    free(nw[i]->AD);
-    free(nw[i]->AD_List);
-    free(nw[i]);
-  }
-  free(nw);
-}
-
-void initiating_squared_grid_network_from_matrix(int ** matrix, int N_X, int N_Y, 
-                                                 double X_DIMENSION, double Y_DIMENSION, 
-                                                 int No_of_NEIGHBORS, 
-                                                 node ** nw)
-{ 
-  int i, No_of_NODES; 
-  int i_x, j_y; 
-  double STEP_X, STEP_Y;
-
-  No_of_NODES = N_X * N_Y;  
-  STEP_X      = X_DIMENSION/(double)N_X;
-  STEP_Y      = Y_DIMENSION/(double)N_Y;
-  
-  for(i=0; i<No_of_NODES; i++){
-
-	  i_x = i/N_X;
-	  j_y = i%N_X;
-
-    nw[i]->center.x = (double)j_y + 0.5*STEP_X;
-	  nw[i]->center.y = (double)i_x + 0.5*STEP_Y;
-
-    if(matrix[i_x][j_y] == 1) 
-      nw[i]->val = 1; 
-    else
-      nw[i]->val = 0; 
-	  
-    nw[i]->id = i; 
-    nw[i]->cluster_class = 0; 
-    nw[i]->cluster_id    = 0;
-    nw[i]->dg = No_of_NEIGHBORS; 
-    nw[i]->AD_List[No_of_NEIGHBORS] = No_of_NEIGHBORS;   
-
-	  Set_Von_Neumann_1st_Neighbors(nw, N_X, N_Y, i);
-  }
-}
-
-int spanning_cluster(node ** nw, int No_of_NODES, int n) 
-{
-  /* Input: 
-      . nw, Full Network Structure 
-      . No_of_Nodes, 
-      . n, ID of an activated node (nw[n]->val = 1).
-     Ouput:
-      . cluster_size, No of Nodes of the Spanning Cluster starting at the n-th node.
-  */ 
-  int cluster_size; 
-
-  cluster_size = 1; 
-
-  assert(nw[n]->val == 1);
-
-  return cluster_size;
-}
+#include "node.h" /* where the "class" node for generic networks is definded */
 
 /* The sample program reads in a matrix from file or standard input, and runs 
    the clustering labelling algorithm. After that, it gives the distribution of cluster
@@ -249,54 +69,83 @@ int spanning_cluster(node ** nw, int No_of_NODES, int n)
    The program reports 2 clusters found of sizes ( 15, 19 )
 
    Unitary test:
-     1. Transform the inpupt matrix in a regular squared network or grid,  
-        where occupied nodes are labeled with 1, and non-occupied nodes 
-        with 0.     
-     2. Test the algorithm to label and locate all the clusters of 
-        occupied nodes. 
-     3. Transform the collection of clusters or network components of 
+     1. Transform the inpupt matrix in a regular squared network or grid
+        (Von Neumann neighborhoood), where occupied/activated nodes are 
+        labeled with 1, and non-occupied/non-activated nodes with 0.     
+     2. Test the spanning cluster algorithm to label and locate all the 
+        clusters (connected components) of occupied/activated nodes. 
+     3. Transform the collection of clusters or sub-network components of 
         different sizes back into a matrix representation where clusters are 
-        labeled in increasing order from 1 to the total number clusters. 
+        left labeled in increasing order from 1 to the total number clusters
+        (cluser_id).
      4. Apply Tobin's function: 
                  int clusters = hoshen_kopelman(matrix,m,n);
         to compare results 
-     5. Use the output to write the size of every cluster and the 
-          corresponding distribution of cluster sizes.
+     5. Give as an output the size of every cluster in the population 
+        of connected subnetworks of occupied/activated nodes and the 
+        corresponding distribution of cluster sizes.
+*/
+/* Experiment: the relationship between site occupation probability and the resulting 
+   number of clusters (if number of rows and columns are both larger than 10)
 */
 
-int main(int argc, char **argv) {
-
-  int i, n, m, i_x, j_y;
+int main(int argc, char **argv) 
+{
+  int i, j, k, n, m, i_x, j_y;
   int ** matrix;
+  double p; 
 
-  /* Read in the matrix from standard input
+  /* Read in the matrix from standard input or let the program generate a random matrix.
 
-     The whitespace-deliminated matrix input is preceeded
-     by the number of rows and number of columns */
-
+     The whitespace-deliminated matrix input is preceeded by the number of rows and 
+     number of columns 
+  */
   printf("\n");
-  printf(" Cluster labelling in generic networks based on Tobin Fricke's implementation of\n"); 
+  printf(" Cluster labelling in generic networks inspired in Tobin Fricke's code for\n"); 
   printf(" the Hoshen-Kopelman algorithm for cluster labeling\n");
+  printf(" Here the spanning clustering algorithm is tested and compared to Tobin's output\n");
+  printf(" on regular squared networks. Notice that Tobin's code does not consider\n");
+  printf(" periodic boundary conditions. Here, instead, we prescribe these conditions.\n");
+  printf(" Results from the two algorithms will only exactly match when there are no clusters\n");
+  printf(" wrapping around the boundaries of the squared grid. If there are, Hoshen-Kopelman\n");
+  printf(" labels them as two different clusters, while the spanning clustering algorithm\n");
+  printf(" will consider them the same cluster.\n");
  
-  printf(" Press any key to start.\n");
-  getchar();
-
   printf("Enter n (No of Rows)... ");
   scanf("%d", &n); 
   printf("Enter n (No of Columns)... ");
   scanf("%d", &m); 
   // n = rows, m = columns
-  
-  printf("Enter the matrix row per row...\n");
-  matrix = (int **)calloc(n, sizeof(int*));
-  for (int i=0; i<n; i++) {
+
+  printf(" If number of rows and columns are both larger than 10,\n");
+  printf(" a random matrix will be generated with an occupancy probability, p\n");
+  if( n > 10 && m > 10) {
+    printf("Enter p (occupancy probability)... ");
+    scanf("%lf", &p);
+
+    matrix = (int **)calloc(n, sizeof(int*));
+    for (i=0; i<n; i++) 
       matrix[i] = (int *)calloc(m, sizeof(int));
-      for (int j=0; j<n; j++)
-	      scanf("%d",&(matrix[i][j]));
+
+    for (i=0; i<n; i++) 
+      for (j=0; j<m; j++)
+	      matrix[i][j] = (drand48() < p);
   }
-    
+  else {
+    printf("Enter the matrix row per row...\n");
+    matrix = (int **)calloc(n, sizeof(int*));
+    for (i=0; i<n; i++) {
+      matrix[i] = (int *)calloc(m, sizeof(int));
+      for (j=0; j<m; j++)
+	      scanf("%d",&(matrix[i][j]));
+    }
+  }  
+
   printf(" --input matrix-- \n");
   print_matrix(matrix, n,m);
+
+  printf(" Press any key to start.\n");
+  getchar();
     
   int No_of_NODES = m * n; 
   int No_of_NEIGHBORS = 4;    /* Von Newman Squared Network */
@@ -309,25 +158,54 @@ int main(int argc, char **argv) {
   /* Process the matrix into a proper network of connected nodes */
   initiating_squared_grid_network_from_matrix(matrix, n, m, X_DIMENSION, Y_DIMENSION, 
                                               No_of_NEIGHBORS, nw);
+  int max_cluster_size;                                               
   int cluster_size; 
-  int * cluster_size_distribution = (int *)calloc(No_of_NODES+1, sizeof(int));
+  int * cluster_size_distribution = (int *)calloc(No_of_NODES, sizeof(int));
   /* If the whole network is activated (nw[i]->val = 1 for all i), then there
-       will a single cluster of size No_of_NODES: 
-                     cluster_size_distribution[No_of_NODES] = 1
-                     cluster_size_distribution[i] = 0 for i<No_of_NODES; 
+     will a single cluster of size No_of_NODES: 
+                     cluster_size_distribution[No_of_NODES-1] = 1
+                     cluster_size_distribution[i] = 0 for all i<No_of_NODES;
+     Here we prescribe: 
+          cluster_size_distribution[0]: No of clusters of size 1
+          ...
+          cluster_size_distribution[k-1]: No of clusters of size k
+          ...
+          cluster_size_distribution[No_of_NODES-1]: No of clusters of size No_of_NODES            
   */
-  int No_of_CLUSTERS = 0; 
+  /* D will store pointers to the whole population of clusters of 
+     different sizes. For instance, ( D[1][j][0], D[1][j][1] ) represents
+     a set of two points to the 2 nodes corresponding to the j-th cluster of size 2.
+     These are pointers to the two particular nodes, for instance, ( nw[3], nw[4] )
+     representing this cluster. 
+  */
+  node **** D = (node ****)calloc(No_of_NODES, sizeof(node ***));
+  for(k=0; k<No_of_NODES; k++){
+    D[k] = (node ***)calloc(No_of_NODES/(k+1), sizeof(node **));
+    for (j=0; j < No_of_NODES/(k+1); j++)
+      D[k][j] = (node **)calloc(k+1, sizeof(node *));
+  }
+
+  int No_of_CLUSTERS = 0;
+  int acc_csz        = 0;
+  max_cluster_size = 0;   
   for(i=0; i<No_of_NODES; i++) {
     if(nw[i]->val == 1 && nw[i]->cluster_id == 0){
-      cluster_size = spanning_cluster(nw, No_of_NODES, i);
+      No_of_CLUSTERS++; /* Increasing labels for cluster_id's 
+                           from 1, 2, 3, ... */ 
+      cluster_size = spanning_cluster(nw, i, 
+                                      No_of_NODES,
+                                      acc_csz, cluster_size_distribution, 
+                                      No_of_CLUSTERS, D);
+      acc_csz     += cluster_size;
+      
+      max_cluster_size = max(max_cluster_size, cluster_size);
 
-      cluster_size_distribution[cluster_size]++; 
-      No_of_CLUSTERS++;
+      cluster_size_distribution[cluster_size-1]++; 
     }
   }
 
-  /* Transform the collection of clusters (or network components) of 
-     different sizes back into a matrix representation where clusters are 
+  /* Transform the collection of clusters (or sub-network components) of 
+     different sizes back again into a matrix representation where clusters are 
      labeled in increasing order from 1 to the total number clusters.
   */
   for(i=0; i<No_of_NODES; i++) {
@@ -340,12 +218,47 @@ int main(int argc, char **argv) {
   print_matrix(matrix, n,m);
 
   int clusters = hoshen_kopelman(matrix, n,m);
-    /* Output the result */
-  printf(" --output-- \n");    
+  
+  /* Output the result */
+  printf(" --output (from the Hoshen-Kopelman algorithm)-- \n");    
   print_matrix(matrix,n,m);
     
-  printf("HK reports %d spanning clusters found\n", No_of_CLUSTERS);
-  printf("HK reports %d HK clusters found\n", clusters);
+  printf("Spanning clustering algorithm reports %d spanning clusters found\n", 
+          No_of_CLUSTERS);
+  printf("Hoshen-Kopelman algorithm reports %d clusters found\n", clusters);
+
+  /* Checking the structure D pointing to the different clusters of different 
+     sizes
+  */
+  for(i = 0; i<max_cluster_size; i++) 
+    if(cluster_size_distribution[i] > 0) {
+        printf("As many as %d clusters of size %d has been found\n", 
+                cluster_size_distribution[i], i+1);
+      for(k=0; k<cluster_size_distribution[i]; k++){
+        printf("The %d-th cluster of size %d has been processed\n", 
+                k+1, i+1);
+      for(j=0; j<i+1; j++) {
+        i_x = D[i][k][j]->id / n;
+	      j_y = D[i][k][j]->id % n;
+      
+        matrix[i_x][j_y] = D[i][k][j]->cluster_id; 
+      }
+    }
+  }
+  /* Output the result */
+  printf(" --output (from the spanning cluster algorithm)-- \n");    
+  print_matrix(matrix,n,m);
+
+  printf(" The spanning clustering algorithm reports a total of %d spanning clusters across all sizes\n", 
+          No_of_CLUSTERS);
+  printf(" The maximum cluster spans %d nodes.\n", max_cluster_size);
+  printf(" The distribution of cluster sizes is: [ ");
+  for(i = 0; i<max_cluster_size; i++) 
+    if(cluster_size_distribution[i] > 0) 
+      printf("[n(%d) = %d] ", i+1, cluster_size_distribution[i]);
+  printf("]\n");
+
+  free(cluster_size_distribution);
 
   for (i=0; i<n; i++)
     free(matrix[i]);
@@ -353,9 +266,14 @@ int main(int argc, char **argv) {
 
   Network_Free( nw, No_of_NODES ); 
 
-  free(cluster_size_distribution);
+  for(k=0; k<No_of_NODES; k++){
+    for (j=0; j < No_of_NODES/(k+1); j++)
+      free(D[k][j]);
+    free(D[k]); 
+  }
+  free(D);
   
-  return 0;
+  return (0);
 }
 
 
