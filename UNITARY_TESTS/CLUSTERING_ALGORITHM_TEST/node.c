@@ -179,7 +179,7 @@ void add_node_to_spanning_cluster(node * cn, node ** sc, int * csz,
      of a given node 'cn'. If they are activated and not added yet to 
      the spanning cluster, it adds them to the current spanning cluster, 
      'sc' and, recursively, call the same function with each of the activeted 
-     neighors that have not been added yet until no neighbor is activated
+     neighbors that have not been added yet until no neighbor is activated
      (no further adding is possible).
   */
   int i;
@@ -218,13 +218,13 @@ int spanning_cluster( node ** nw, int n,
              ...
       . cluster_id, cluster id label in the population of all clusters  
      Ouput:
-      . cluster_size, Total No of Nodes of the Spanning Cluster that nucleated
-        around the n-th input node.
-      . D[cluster_size-1] is the structure pointing to the cluster of this size 
-      This structure will store the family of clusters of the different sizes. 
+      . csz, Total No of Nodes of the Spanning Cluster that nucleated
+        around the n-th input node (cluster size).
+      . D[csz-1][j] is the structure pointing to the j-th cluster of 
+      size 'csz'. Through the different calls from main() this structure 
+      will end up storing the family of all clusters of different sizes. 
   */
   int k, i;  
-  int cluster_size;
   int csz;  
   int max_csz;      /* max size of current spanning cluster */  
  
@@ -248,20 +248,19 @@ int spanning_cluster( node ** nw, int n,
   csz  = 0;  
   add_node_to_spanning_cluster(sc[0], sc, &csz, cluster_id);
   
-  /* Storing the 'k-th' subnetwork component of size 'csz' into the whole 
+  /* Adding the 'k-th' subnetwork component of size 'csz' into the whole 
      population of clusters of different sizes 
   */
   k = csd[csz-1];
   for(i=0; i<csz; i++){
-    D[csz-1][k][i]  = sc[i];
+    D[csz-1][k][i]                = sc[i];
     D[csz-1][k][i]->cluster_class = csz; 
     D[csz-1][k][i]->cluster_id    = cluster_id;
   }
 
   free(sc); 
 
-  cluster_size = csz; 
-  return cluster_size;
+  return csz;
 }
 
 

@@ -16,7 +16,7 @@
    
    Compile this program with (-g for debugging!!!)
 
-   gcc -Wall -g -std=c99 main.c hk.c node.c -o cluster
+   gcc -Wall -g main.c hk.c node.c -o cluster
 
 */
 #include <stdio.h>
@@ -24,8 +24,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include <assert.h>
-#include "hk.h"
-#include "node.h" /* where the "class" node for generic networks is definded */
+#include "hk.h"   /* where the Hoshen-Kopelman algorithm is implemented (hk.c)        */
+#include "node.h" /* where the "class" node for generic networks is definded (node.c) */
 
 /* The sample program reads in a matrix from file or standard input (or creates it
  * with a particular occupancy probability), and runs two clustering labelling 
@@ -76,19 +76,20 @@
         labeled with 1, and non-occupied/non-activated nodes with 0.     
      2. Test the spanning cluster algorithm to label and locate all the 
         clusters (connected components) of occupied/activated nodes. 
-     3. Transform the collection of clusters or sub-network components of 
+     3. Apply Tobin's function: 
+                 int clusters = hoshen_kopelman(matrix,m,n);
+        to compare results 
+     4. Transform the collection of clusters or sub-network components of 
         different sizes back into a matrix representation where clusters are 
         left labeled in increasing order from 1 to the total number clusters
         (cluser_id).
-     4. Apply Tobin's function: 
-                 int clusters = hoshen_kopelman(matrix,m,n);
-        to compare results 
      5. Give as an output the size of every cluster in the population 
         of connected subnetworks of occupied/activated nodes and the 
         corresponding distribution of cluster sizes.
 */
 /* Experiment: the relationship between site occupation probability and the resulting 
-   number of clusters (if number of rows and columns are both larger than 10)
+   number of clusters (if number of rows and columns are both larger than 10) can be 
+   explored. 
 */
 
 int main(int argc, char **argv) 
@@ -111,8 +112,8 @@ int main(int argc, char **argv)
   printf(" Results from the two algorithms will only exactly match when there are no clusters\n");
   printf(" wrapping around the boundaries of the squared grid (boundaries of the the square grid\n");
   printf(" should be zeroed). If not, there may be clusters wrapping around the borders, and\n");
-  printf(" Hoshen-Kopelman labels them as two different clusters, while the spanning-cluster algorithm\n");
-  printf(" will consider them the same cluster.\n\n");
+  printf(" Hoshen-Kopelman will label them as two different clusters, while the spanning-cluster \n");
+  printf(" algorithm will consider them the same cluster.\n\n");
  
   printf("Enter n (No of Rows)... ");
   scanf("%d", &n); 
@@ -156,7 +157,7 @@ int main(int argc, char **argv)
   double Y_DIMENSION  = 1.0;
 
   node ** nw = (node **)malloc( No_of_NODES * sizeof(node *) );
-  Network_Allocation( nw, No_of_NODES, No_of_NEIGHBORS); 
+  Network_Allocation(nw, No_of_NODES, No_of_NEIGHBORS); 
 
   /* Process the matrix into a proper network of connected nodes */
   initiating_squared_grid_network_from_matrix(matrix, n, m, X_DIMENSION, Y_DIMENSION, 
