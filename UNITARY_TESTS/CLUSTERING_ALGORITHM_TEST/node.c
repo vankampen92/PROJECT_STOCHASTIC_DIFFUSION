@@ -16,7 +16,7 @@
    
    Compile this program with (-g- for debugging!!!)
 
-   gcc -Wall -g -std=c99 main.c hk.c node.c -o cluster
+   gcc -Wall -g -std=c99 -c node.c
 
 */
 #include <stdio.h>
@@ -220,7 +220,8 @@ int spanning_cluster( node ** nw, int n,
      Ouput:
       . cluster_size, Total No of Nodes of the Spanning Cluster that nucleated
         around the n-th input node.
-      . D structure pointing to all the clusters of different sizes. 
+      . D[cluster_size-1] is the structure pointing to the cluster of this size 
+      This structure will store the family of clusters of the different sizes. 
   */
   int k, i;  
   int cluster_size;

@@ -1,4 +1,4 @@
-OBJ = main.o treenode.o 
+OBJ = main.o node.o hk.o 
 LIB = -lm
 CC  = gcc -g
 CXXFLAGS+=

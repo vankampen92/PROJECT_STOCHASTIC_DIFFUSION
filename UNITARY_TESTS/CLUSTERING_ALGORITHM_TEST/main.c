@@ -1,4 +1,4 @@
-/* David Alonso's implementation of the spanning clustering algorithm for cluster 
+/* David Alonso's implementation of the spanning cluster algorithm for cluster 
    labeling in general networks.
 
    This code is inspired by Tobin Fricke's code:
@@ -27,13 +27,15 @@
 #include "hk.h"
 #include "node.h" /* where the "class" node for generic networks is definded */
 
-/* The sample program reads in a matrix from file or standard input, and runs 
-   the clustering labelling algorithm. After that, it gives the distribution of cluster
-   sizes 
-   
-   The form of the input from standard input is two integers giving the
-   dimensions of the matrix, followed by the matrix elements (with data separated by
-   whitespace). For instance, a sample input file is the following:
+/* The sample program reads in a matrix from file or standard input (or creates it
+ * with a particular occupancy probability), and runs two clustering labelling 
+ * algorithms (Hoshen-Kopelman and the spanning-cluster) for comparison.
+ *  
+ * After that, it gives the distribution of cluster sizes 
+ *  
+ * The form of the input from standard input is two integers giving the
+ * dimensions of the matrix, followed by the matrix elements (with data separated by
+ * whitespace). For instance, a sample input file is the following:
 
    8 8
    1 1 1 1 1 1 1 1
@@ -103,13 +105,14 @@ int main(int argc, char **argv)
   printf("\n");
   printf(" Cluster labelling in generic networks inspired in Tobin Fricke's code for\n"); 
   printf(" the Hoshen-Kopelman algorithm for cluster labeling\n");
-  printf(" Here the spanning clustering algorithm is tested and compared to Tobin's output\n");
+  printf(" Here the spanning-cluster algorithm is tested and compared to Tobin's output\n");
   printf(" on regular squared networks. Notice that Tobin's code does not consider\n");
   printf(" periodic boundary conditions. Here, instead, we prescribe these conditions.\n");
   printf(" Results from the two algorithms will only exactly match when there are no clusters\n");
-  printf(" wrapping around the boundaries of the squared grid. If there are, Hoshen-Kopelman\n");
-  printf(" labels them as two different clusters, while the spanning clustering algorithm\n");
-  printf(" will consider them the same cluster.\n");
+  printf(" wrapping around the boundaries of the squared grid (boundaries of the the square grid\n");
+  printf(" should be zeroed). If not, there may be clusters wrapping around the borders, and\n");
+  printf(" Hoshen-Kopelman labels them as two different clusters, while the spanning-cluster algorithm\n");
+  printf(" will consider them the same cluster.\n\n");
  
   printf("Enter n (No of Rows)... ");
   scanf("%d", &n); 
@@ -132,7 +135,7 @@ int main(int argc, char **argv)
 	      matrix[i][j] = (drand48() < p);
   }
   else {
-    printf("Enter the matrix row per row...\n");
+    printf("Otherwise, enter the matrix row per row...\n");
     matrix = (int **)calloc(n, sizeof(int*));
     for (i=0; i<n; i++) {
       matrix[i] = (int *)calloc(m, sizeof(int));
@@ -173,10 +176,10 @@ int main(int argc, char **argv)
           cluster_size_distribution[No_of_NODES-1]: No of clusters of size No_of_NODES            
   */
   /* D will store pointers to the whole population of clusters of 
-     different sizes. For instance, ( D[1][j][0], D[1][j][1] ) represents
-     a set of two points to the 2 nodes corresponding to the j-th cluster of size 2.
-     These are pointers to the two particular nodes, for instance, ( nw[3], nw[4] )
-     representing this cluster. 
+     different sizes. For instance, ( D[1][j][0], D[1][j][1] ) would represent
+     a set of two pointers to the 2 nodes corresponding to the j-th cluster of size 2.
+     These would be pointers to the two connected/activated nodes, for instance, 
+     ( nw[3], nw[4] ), that make up this particular 2-node cluster. 
   */
   node **** D = (node ****)calloc(No_of_NODES, sizeof(node ***));
   for(k=0; k<No_of_NODES; k++){
@@ -204,10 +207,6 @@ int main(int argc, char **argv)
     }
   }
 
-  /* Transform the collection of clusters (or sub-network components) of 
-     different sizes back again into a matrix representation where clusters are 
-     labeled in increasing order from 1 to the total number clusters.
-  */
   for(i=0; i<No_of_NODES; i++) {
       i_x = i/n;
 	    j_y = i%n;
@@ -228,7 +227,9 @@ int main(int argc, char **argv)
   printf("Hoshen-Kopelman algorithm reports %d clusters found\n", clusters);
 
   /* Checking the structure D pointing to the different clusters of different 
-     sizes
+     sizes. Transform the collection of clusters (or sub-network components) of 
+     different sizes back again into a matrix representation where clusters are 
+     labeled in increasing order from 1 to the total number clusters.
   */
   for(i = 0; i<max_cluster_size; i++) 
     if(cluster_size_distribution[i] > 0) {
@@ -249,7 +250,7 @@ int main(int argc, char **argv)
   printf(" --output (from the spanning cluster algorithm)-- \n");    
   print_matrix(matrix,n,m);
 
-  printf(" The spanning clustering algorithm reports a total of %d spanning clusters across all sizes\n", 
+  printf(" The spanning cluster algorithm reports a total of %d spanning clusters across all sizes\n", 
           No_of_CLUSTERS);
   printf(" The maximum cluster spans %d nodes.\n", max_cluster_size);
   printf(" The distribution of cluster sizes is: [ ");
