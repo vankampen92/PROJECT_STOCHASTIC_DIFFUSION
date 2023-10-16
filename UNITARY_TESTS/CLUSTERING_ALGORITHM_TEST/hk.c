@@ -21,7 +21,7 @@
 #include <assert.h>
 #include "hk.h"
 
-/* Implementation of Union-Find Algorithm (as a librar of functions)
+/* Implementation of Union-Find Algorithm (as a library of functions)
    There is no main() function here: see Hoshen-Kopelman.c file for a full test 
    main program.
 */
