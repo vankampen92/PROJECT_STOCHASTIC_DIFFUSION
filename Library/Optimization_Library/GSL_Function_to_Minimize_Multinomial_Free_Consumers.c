@@ -82,18 +82,18 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
     }   
     // printf("\n");
 
-    for(j=0; j<No_of_POINTS; j++) {
-	  
+    for(j=0; j<No_of_POINTS; j++) { 
+
       t = F->Data->Time_Data_Vector[j];
       
       n_H = 0; p_Sum = 0.0; 
       for(i=0; i<Table->SUB_OUTPUT_VARIABLES; i++) {
-        n[i] = (int)Data[i][j];
-        n_H += n[i]; 
+          n[i] = (int)Data[i][j];
+          n_H += n[i]; 
 	
-	p[i] = (Table->Theta_Consumers[i]/Table->Nu_Consumers[i])/(1.0 + Nu_Sum) * (1.0-exp(-(Table->Nu_Consumers[i] + Theta_Sum)*t));
+	        p[i] = (Table->Theta_Consumers[i]/Table->Nu_Consumers[i])/(1.0 + Nu_Sum) * (1.0-exp(-(Table->Nu_Consumers[i] + Theta_Sum)*t));
 
-	p_Sum += p[i];
+	        p_Sum += p[i];
       }
       
       n[No_of_VARIABLES] = Table->TOTAL_No_of_CONSUMERS - n_H; /*-HN 20 [TOTAL_No_of_CONSUMERS]*/ 
@@ -102,7 +102,8 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
       assert(n[No_of_VARIABLES] <= Table->TOTAL_No_of_CONSUMERS);
       assert(n[No_of_VARIABLES] >= 0);
 
-      Theory[j] =  - gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);
+      Theory[j] =  - log(gsl_ran_multinomial_pdf(No_of_VARIABLES+1, p, n));
+                    
     }
 
     free(n); free(p);

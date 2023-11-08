@@ -1,5 +1,5 @@
-/* David Alonso's implementation of the spanning cluster algorithm for cluster 
-   labeling in general networks.
+/* David Alonso's implementation of the spanning-cluster algorithm for cluster 
+   labeling and calculation of the distribution of cluster sizes in general networks.
 
    This code is inspired by Tobin Fricke's code:
    http://www.ocf.berkeley.edu/~fricke/projects/hoshenkopelman/hoshenkopelman.html 
@@ -31,7 +31,7 @@
  * with a particular occupancy probability), and runs two clustering labelling 
  * algorithms (Hoshen-Kopelman and the spanning-cluster) for comparison.
  *  
- * After that, it gives the distribution of cluster sizes 
+ * In addition, the distribution of cluster sizes is also calculated.
  *  
  * The form of the input from standard input is two integers giving the
  * dimensions of the matrix, followed by the matrix elements (with data separated by
@@ -87,9 +87,9 @@
         of connected subnetworks of occupied/activated nodes and the 
         corresponding distribution of cluster sizes.
 */
-/* Experiment: the relationship between site occupation probability and the resulting 
-   number of clusters (if number of rows and columns are both larger than 10) can be 
-   explored. 
+/* Further experiment: the relationship between site occupation probability and 
+   the resulting number of clusters (if number of rows and columns are both larger 
+   than 10) can be explored. 
 */
 
 int main(int argc, char **argv) 
@@ -110,10 +110,11 @@ int main(int argc, char **argv)
   printf(" on regular squared networks. Notice that Tobin's code does not consider\n");
   printf(" periodic boundary conditions. Here, instead, we prescribe these conditions.\n");
   printf(" Results from the two algorithms will only exactly match when there are no clusters\n");
-  printf(" wrapping around the boundaries of the squared grid (boundaries of the the square grid\n");
-  printf(" should be zeroed). If not, there may be clusters wrapping around the borders, and\n");
-  printf(" Hoshen-Kopelman will label them as two different clusters, while the spanning-cluster \n");
-  printf(" algorithm will consider them the same cluster.\n\n");
+  printf(" wrapping around the boundaries of the squared grid. For the two algorithms to yield\n");
+  printf(" the same result, the boundaries of the square grid should be zeroed.\n");
+  printf(" If not, there may be clusters wrapping around the borders, which\n");
+  printf(" Hoshen-Kopelman will break them into two different clusters,  \n");
+  printf(" while the spanning-cluster algorithm will consider them the same cluster.\n\n");
  
   printf("Enter n (No of Rows)... ");
   scanf("%d", &n); 
@@ -168,7 +169,8 @@ int main(int argc, char **argv)
   /* If the whole network is activated (nw[i]->val = 1 for all i), then there
      will a single cluster of size No_of_NODES: 
                      cluster_size_distribution[No_of_NODES-1] = 1
-                     cluster_size_distribution[i] = 0 for all i<No_of_NODES;
+                     cluster_size_distribution[i] = 0 for all i<(No_of_NODES-1)
+                     represening all clusters of sizes smaller than No_of_NODES;
      Here we prescribe: 
           cluster_size_distribution[0]: No of clusters of size 1
           ...
@@ -176,11 +178,11 @@ int main(int argc, char **argv)
           ...
           cluster_size_distribution[No_of_NODES-1]: No of clusters of size No_of_NODES            
   */
-  /* D will store pointers to the whole population of clusters of 
-     different sizes. For instance, ( D[1][j][0], D[1][j][1] ) would represent
-     a set of two pointers to the 2 nodes corresponding to the j-th cluster of size 2.
-     These would be pointers to the two connected/activated nodes, for instance, 
-     ( nw[3], nw[4] ), that make up this particular 2-node cluster. 
+  /* D will store pointers to the whole population of clusters of different sizes. 
+     For instance, { D[1][j][0], D[1][j][1] } would represent a set of two pointers  
+     to the 2 nodes corresponding to the j-th cluster of size 2. These pointers point
+     to two connected and activated nodes, say, { nw[3], nw[4] }, which make up 
+     a particular 2-node cluster. 
   */
   node **** D = (node ****)calloc(No_of_NODES, sizeof(node ***));
   for(k=0; k<No_of_NODES; k++){
@@ -223,14 +225,14 @@ int main(int argc, char **argv)
   printf(" --output (from the Hoshen-Kopelman algorithm)-- \n");    
   print_matrix(matrix,n,m);
     
-  printf("Spanning clustering algorithm reports %d spanning clusters found\n", 
+  printf("Spanning-cluster algorithm reports %d clusters found\n", 
           No_of_CLUSTERS);
   printf("Hoshen-Kopelman algorithm reports %d clusters found\n", clusters);
 
   /* Checking the structure D pointing to the different clusters of different 
      sizes. Transform the collection of clusters (or sub-network components) of 
      different sizes back again into a matrix representation where clusters are 
-     labeled in increasing order from 1 to the total number clusters.
+     labeled in increasing order from 1 to the total number of clusters.
   */
   for(i = 0; i<max_cluster_size; i++) 
     if(cluster_size_distribution[i] > 0) {
@@ -251,9 +253,9 @@ int main(int argc, char **argv)
   printf(" --output (from the spanning cluster algorithm)-- \n");    
   print_matrix(matrix,n,m);
 
-  printf(" The spanning cluster algorithm reports a total of %d spanning clusters across all sizes\n", 
+  printf(" The spanning cluster algorithm reports a total of %d clusters across all sizes\n", 
           No_of_CLUSTERS);
-  printf(" The maximum cluster spans %d nodes.\n", max_cluster_size);
+  printf(" The maximum cluster spans over %d nodes.\n", max_cluster_size);
   printf(" The distribution of cluster sizes is: [ ");
   for(i = 0; i<max_cluster_size; i++) 
     if(cluster_size_distribution[i] > 0) 
@@ -261,10 +263,6 @@ int main(int argc, char **argv)
   printf("]\n");
 
   free(cluster_size_distribution);
-
-  for (i=0; i<n; i++)
-    free(matrix[i]);
-  free(matrix);
 
   Network_Free( nw, No_of_NODES ); 
 
@@ -274,10 +272,10 @@ int main(int argc, char **argv)
     free(D[k]); 
   }
   free(D);
-  
+
+  for (i=0; i<n; i++)
+    free(matrix[i]);
+  free(matrix);
+
   return (0);
 }
-
-
-
-

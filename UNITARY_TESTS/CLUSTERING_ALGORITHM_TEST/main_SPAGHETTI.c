@@ -354,17 +354,18 @@ int main(int argc, char **argv) {
 
      The whitespace-deliminated matrix input is preceeded
      by the number of rows and number of columns */
-
   printf("\n");
   printf(" Cluster labelling in generic networks inspired in Tobin Fricke's code for\n"); 
   printf(" the Hoshen-Kopelman algorithm for cluster labeling\n");
-  printf(" Here the spanning clustering algorithm is tested and compared to Tobin's output\n");
+  printf(" Here the spanning-cluster algorithm is tested and compared to Tobin's output\n");
   printf(" on regular squared networks. Notice that Tobin's code does not consider\n");
   printf(" periodic boundary conditions. Here, instead, we prescribe these conditions.\n");
   printf(" Results from the two algorithms will only exactly match when there are no clusters\n");
-  printf(" wrapping around the boundaries of the squared grid. If there are, Hoshen-Kopelman\n");
-  printf(" labels them as two different clusters, while the spanning clustering algorithm\n");
-  printf(" will consider them belonging to the same cluster.\n");
+  printf(" wrapping around the boundaries of the squared grid. For the two algorithm to yield\n");
+  printf(" the same result, the boundaries of the square grid should be zeroed.\n");
+  printf(" If not, there may be clusters wrapping around the borders, which\n");
+  printf(" Hoshen-Kopelman will break them into two different clusters,  \n");
+  printf(" while the spanning-cluster algorithm will consider them the same cluster.\n\n");
  
   printf(" Press any key to start.\n");
   getchar();

@@ -11,13 +11,20 @@
    
    double Function (Parameter_Table * Table); 
 
-   In this example, a negative logLikelihood function is defined. 
+   In this example, several negative logLikelihood functions can be analized. 
+   In the directory ./VISUAL_2DIM_PARAM_SCAN_LK_DYNAMICS, main functions use 
+   time-dependent likelihoods for different models (as opposed to likelihood
+   functions that are defined at stationarity, which are addressed in 
+   the directory ./VISUAL_2DIM_PARAM_SCAN_LK_STATIONARITY). The definitions
+   of the likelihood functions themselves can be found in the directory
+   ./Library/Optimization_Library/ where the functions are implemented 
+   as the static library libda_Optimization.a 
  
-   This definition is based on the (in general) multivariate probability distri-
-   bution associated to the jump process. The temporal evolution of this object
-   is considered. For some models, there is a close expression for the time 
-   evolution of this probability (MODELl=DIFFUSION_HII_nD), but most models 
-   rely on the numerical integration of the master equation.    
+   These definitions are based on the (in general) multivariate probability 
+   distributions associated to a jump process. The temporal evolution of this 
+   object is considered. For some models, there is a close expression for the 
+   time evolution of this probability (MODELl=DIFFUSION_HII_nD), but most 
+   models rely on the numerical integration of the master equation.    
 
    Parameter ranges (in 2D) are defined in Parameter_Space structure. Parameters 
    to scan are defined as input arguments. 
@@ -147,7 +154,8 @@ int main(int argc, char **argv)
   Time_Dependence_Control Time_Dependence; 
   double Value_0, Value_1; 
   double Initial_Value_0, Initial_Value_1;
-  
+  double Likelihood_Minimum, x_Val, y_Val;
+
   P_ARG = &Table;
 
 #include "default.c"
@@ -257,7 +265,7 @@ int main(int argc, char **argv)
     printf(" Time_Control structure has been correctly allocated and set up\n");
   }
   else {
-#include <include.Time_Dependence_Control.default.aux.c>
+    #include <include.Time_Dependence_Control.default.aux.c>
     printf(" Time_Dependence_Control and Time_Control structures will be allocated: \n");
     printf(" %d output variables of length %d points will be allocated\n",
 	   SUB_OUTPUT_VARIABLES, I_Time);
@@ -311,7 +319,7 @@ int main(int argc, char **argv)
   Observed_Data_Alloc( Data, SUB_OUTPUT_VARIABLES, Time.Realizations);
   printf(" Observed_Data structure has been correctly allocated\n");
   /*     E N D : -------------------------------------------------------------- */
-  /* B E G I N : Reserving memmory for Parameter Fitting Structure */
+  /* B E G I N : Reserving memmory for Parameter Fitting Structure ------------ */
   Parameter_Fitting * F = (Parameter_Fitting*)calloc(1,sizeof(Parameter_Fitting));
   F->Data                  = Data;
   F->Space                 = Space;
@@ -347,9 +355,8 @@ int main(int argc, char **argv)
     printf("\n");
   }
   Table.Fitting_Data = (void *)F;
-  
   printf("Parameter_Fitting structure has been correctly allocated and initiated\n");
-  /*     E N D : ------------------------------------- */
+  /*     E N D : ----------------------------------------------------------------- */
   
   int No_of_COLS;
   if( No_of_FILES > 0) No_of_COLS = F_y_GRID[0];        /* -Y0 [VALUE] */
@@ -385,11 +392,13 @@ int main(int argc, char **argv)
     
     printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
 	          No_of_REPETITIONS, k);
-    printf("\t %d stochastic realizations are sampled from t=%.2g\n",
+    printf("\t %d stochastic realizations are sampled from t=%.2g to t_1\n",
 	          Realizations, Time_0);
+   #if defined VERBOSE
     for(i = 0; i<Time.Realizations; i++) 
-      printf("\t to t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
-    printf("\t For each realization, a different final time (t_1) is used!!!\n"); 
+      printf("\n t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
+   #endif
+    printf("\n For each realization, a different final time (t_1) is used!!!\n"); 
     
     /* In order to produce pseudata always with the same true parameters, they need to be set up again. 
        because the 2D scan changes its values in the Parameter_Table structure  
@@ -431,11 +440,13 @@ int main(int argc, char **argv)
     for (i=0; i<Realizations; i++)
       Realizations_Vector[i] = (double)i + 1.0;
     
+    #if defined VERBOSE
     Writing_Empirical_Time_Vector(F, Realizations);
     Writing_Standard_Data_Matrix( Empirical_Data_Matrix,
 				                          SUB_OUTPUT_VARIABLES, Realizations,
 				                          1, Name_of_Rows,
 				                          0, Realizations_Vector);
+    #endif
 
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
@@ -464,7 +475,6 @@ int main(int argc, char **argv)
 								                                                Function_to_Minimize, 
 								                                                W_GRID, "Negative LogLikelihood",
 								                                                X_LINEAR, Y_LINEAR);
-    double Likelihood_Minimum, x_Val, y_Val;
     Minimum_Parameter_2D_Scan(&Table,
 			                        No_of_POINTS_1, Input_Parameter_1,
 			                        No_of_POINTS_2, Input_Parameter_2,
@@ -475,7 +485,14 @@ int main(int argc, char **argv)
     fprintf(FP_mle_y, "%g\t%g\n", Initial_Value_1, y_Val); 
 
     x_Val_mle[k] = x_Val; 
-    y_Val_mle[k] = y_Val;  
+    y_Val_mle[k] = y_Val;
+
+    printf(" Output values of Minimum Parameter 2D Scan(...) function:\n");
+    printf(" Optimal Negative logLikelihood: %g\n", Likelihood_Minimum); 
+    printf("   %s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Val);
+    printf("   %s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val);
+    printf(" (This is the mininum loglikelihood value over the 2D scan\n");
+    printf("  within the subparameter space analyzed)\n");
     /*   E N D : Main Function Call -------------------------------------------------*/
     
   if(No_of_REPETITIONS < 10) {
@@ -631,13 +648,6 @@ int main(int argc, char **argv)
     Print_Press_Key(1,0,".");
     /*    E N D :   Drawing likelihood profiles -------------------------------------------*/
     
-    printf("Output values of Minimum_Parameter_2D_Scan(...) function:\n");
-    printf("Optimal Negative logLikelihood: %g\n", Likelihood_Minimum); 
-    printf("%s=%f\t", Table.Symbol_Parameters[Input_Parameter_1], x_Val);
-    printf("%s=%f\n", Table.Symbol_Parameters[Input_Parameter_2], y_Val);
-    printf("This is the mininum loglikelihood value over the 2D scan\n");
-    printf("(within the subparameter space analyzed)\n");
-
     printf("Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2)...\n");
     Print_Press_Key(1,0,".");
     /* B E G I N :  Calculating Confidence Intervals (Input_Parameter_1 and Input_Parameter_2) */
@@ -674,17 +684,18 @@ int main(int argc, char **argv)
   }
 #endif
     
-    free (W_GRID);
-    free (Realizations_Vector); 
+  free (W_GRID);
+  free (Realizations_Vector); 
 }
 
-if(No_of_REPETITIONS > 10000) {  
+if(No_of_REPETITIONS > 500) {  
   Table.CPG->CPG_RANGE_X_0 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_min );
   Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_1, Space->Parameter_MAX );
+  int No_of_BINS = No_of_REPETITIONS/100;
   int SAME = 0; int BAR = 1; 
   CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( SAME,
                                                            Table.CPG, 
-                                                           REPETITIONS, x_Val_mle, 50, 
+                                                           No_of_REPETITIONS, x_Val_mle, No_of_BINS, 
                                                            Table.Symbol_Parameters[Input_Parameter_1], 
                                                            "Frequency", "", 
                                                            0, 0, 
@@ -695,14 +706,14 @@ if(No_of_REPETITIONS > 10000) {
   Table.CPG->CPG_RANGE_X_1 = Parameter_Model_into_Vector_Entry( Input_Parameter_2, Space->Parameter_MAX ); 
   CPGPLOT___X_Y___H_I_S_T_O_G_R_A_M___N_O_R_M_A_L_I_Z_E_D( SAME,
                                                            Table.CPG, 
-                                                           REPETITIONS, y_Val_mle, 50, 
+                                                           No_of_REPETITIONS, y_Val_mle, No_of_BINS, 
                                                            Table.Symbol_Parameters[Input_Parameter_2], 
                                                            "Frequency", "", 
                                                            0, 0,
                                                            BAR ); 
-  Print_Press_Key(1, 1, "Freeing All Memmory...");                                       
 }
 
+  Print_Press_Key(1, 1, "Freeing All Memmory...");
   free(x_Val_mle);  free(y_Val_mle);
   fclose(FP_x);     fclose(FP_y);
   fclose(FP_mle_x); fclose(FP_mle_y);
@@ -816,11 +827,11 @@ void Minimum_Parameter_2D_Scan (Parameter_Table * Table,
 	  }
 	}
 
-	//#if defined VERBOSE
+  #if defined VERBOSE
 	printf("Optimal Negative logLikelihood: %g\n", Minimum_Value); 
 	printf("%s=%f\t", Table->Symbol_Parameters[Input_Parameter_1], x_Data[j_MIN]);
 	printf("%s=%f\n", Table->Symbol_Parameters[Input_Parameter_2], y_Data[k_MIN]);
-	//#endif
+	#endif
 
 	* Likelihood_Minimum = Minimum_Value; 
 	* x_Value_MLE = x_Data[j_MIN];

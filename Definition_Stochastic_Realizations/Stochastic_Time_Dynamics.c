@@ -151,7 +151,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
       Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables, 
                                                                   Table );
-      if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
+        if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
     
     // EXTINCTION = Extinction_Control_Condition(Table);
     }
@@ -180,7 +180,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
 	      kk = Table->OUTPUT_VARIABLE_INDEX[k];
-	      value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables, Time->Time_Vector[0], Table);
+	      value = definition_OutPut_Variables(kk, Table->Vector_Model_Variables, 
+                                            Time->Time_Vector[0], Table);
 	      Time->summ[k][j] += value;
 	      Time->summ_var[k][j] += value * value;
 

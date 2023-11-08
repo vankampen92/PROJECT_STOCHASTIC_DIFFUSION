@@ -106,7 +106,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    /* Redefining the Time_Vector: 
       Each realization is controled by a different time vector and finishing at a different time. 
    */
-    Time->Time_1 = Time->Time_Vector_Real[n][1];
+      Time->Time_1 = Time->Time_Vector_Real[n][1];
     for(i=0; i < Time->I_Time; i++)
       Time->Time_Vector[i] = Time->Time_Vector_Real[n][i];
           

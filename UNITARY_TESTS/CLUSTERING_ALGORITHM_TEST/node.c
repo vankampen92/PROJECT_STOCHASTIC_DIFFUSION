@@ -1,5 +1,5 @@
 /* David Alonso's implementation of the spanning-clustering algorithm for cluster 
-   labeling in general networks.
+   labeling and calculation of the distribution of cluster sizes in general networks.
 
    This code is inspired by Tobin Fricke's code:
    http://www.ocf.berkeley.edu/~fricke/projects/hoshenkopelman/hoshenkopelman.html 

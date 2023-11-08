@@ -108,6 +108,7 @@ int Advance_Current_Time( Parameter_Table * Table,
   Temporal_Dynamics(Village, Table, Rate);
 #endif
 
+#if defined VERBOSE
   if( * Time_Current < 1.0) { 
     /* Only initial times are printed out...just for a check!!! */
     printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
@@ -115,6 +116,7 @@ int Advance_Current_Time( Parameter_Table * Table,
     // Print_Meta_Community_Patch_System (Table);
     printf("\n");
   } 
+#endif 
 
   free(Patch); 
   /*   END: Calculation of Total Rate of Change */
