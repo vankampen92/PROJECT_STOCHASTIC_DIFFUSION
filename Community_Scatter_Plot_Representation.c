@@ -79,11 +79,11 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
       
       for(j = 0; j<Patch->n[Sp]; j++) {
 	
-	x_Data[n] = (float)(c_x - 0.25 + gsl_rng_uniform(r));
-	/* This is because STEP is 1.0 */
-	y_Data[n] = (float)(c_y - 0.25 + gsl_rng_uniform(r));
-	/* This is because STEP is 1.0 */
-	n++;
+	      x_Data[n] = (float)(c_x - 0.25 + gsl_rng_uniform(r));
+	      /* This is because STEP is 1.0 */
+	      y_Data[n] = (float)(c_y - 0.25 + gsl_rng_uniform(r));
+	      /* This is because STEP is 1.0 */
+	      n++;
       }
     }
       
@@ -245,7 +245,7 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
     cpgqch(&char_Size);
     cpgsch(2.0);
     cpgsci(0);
-    cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.0, Time_Eraser);
+    cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Time_Eraser);
     cpgsci(1);
     cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Plot_Time);
     cpgsch(char_Size);

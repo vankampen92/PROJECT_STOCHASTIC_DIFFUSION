@@ -313,7 +313,7 @@ int main(int argc, char **argv)
   Parameter_Values_into_Parameter_Table(&Table);
   M_O_D_E_L( &Table );
   
-  // Some models (such as DIFFUSION_1R1C_2D and so on) do no have a stochastic
+  // Some models (such as DIFFUSION_1R1C_2D and so on) do not have a stochastic
   // counter-part implemented yet!
 #ifndef DIFFUSION_1R1C_2D
 #ifndef DIFFUSION_DRAG

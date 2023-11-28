@@ -13,7 +13,7 @@
    which is a generic common function which is always called
    for any implemented particular model
 */
-#define BIO_NEGATIVE_VALUE 1.0E-10
+#define BIO_NEGATIVE_VALUE -1.0E-10
 
 int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Table )
 {
@@ -122,14 +122,15 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
        Note: When the system is frozen (FROZEN_SYSTEM = 1), then
        this loop does not advance the system any more
     */
-    if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) Time_Dependence_Apply( Table, Time_Current );
-/*-------------------------------------------------------------------*/
-/* B E G I N :
- *     CENTRAL POINT HERE: Numerical Integration up to the next time
- */
+    if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) 
+      Time_Dependence_Apply( Table, Time_Current );
+    /*-------------------------------------------------------------------*/
+    /* B E G I N :
+     *     CENTRAL POINT HERE: Numerical Integration up to the next time
+     */
     State = numerical_Integration_Driver( Table, j, &Time_Current );
-/*     E N D
- *-------------------------------------------------------------------*/
+    /*     E N D
+     * ------------------------------------------------------------------*/
 
     if (State != GSL_SUCCESS) break;
 
@@ -153,7 +154,7 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
       // C_P_G___P_H_A_S_E____D_I_A_G_R_A_M ( Table, 0, 1, j,
       //                                      Table->CPG->y_Time );
       // This is useful for spatially extended systems: 
-      // C_P_G___G_R_I_D___P_L_O_T_T_I_N_G___S_H_A_D_E_S ( Table );
+      // C_P_G___G_R_I_D___P_L_O_T_T_I_N_G___S_H_A_D_E_S ( Table, j );
 #endif
     /* BEGIN : Writing a costumized file ... */
       // fprintf(FP,"%g", Time_Current/360.0);
@@ -182,31 +183,23 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     printf("\n\n"); // Print_Press_Key(1,0,".");
 #endif
 
-   // double No_of_XX, No_of_WW, No_of_TOTAL_Women;
-	 // No_of_WW = total_Female_Sexual_Workers (Table->Vector_Model_Variables, Table);
-	 // No_of_XX = total_Female_Non_Sexual_Workers (Table->Vector_Model_Variables, Table);
-	 // No_of_TOTAL_Women = total_Females (Table->Vector_Model_Variables, Table);
-	 // printf("t=%g\tXX = %g\tWW = %g\tTotal=%g\n",Time_Current, No_of_XX, No_of_WW, No_of_TOTAL_Women);
-   // Print_Press_Key(1,0,".");
-
-   /* Break if some variables take negative values */
-      NEGATIVE_VALUE = 0; 
-      for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) { 
+    /* Break if some variables take negative values */
+    NEGATIVE_VALUE = 0; 
+    for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) { 
 	
-	if (Table->Vector_Output_Variables[k] < 0.0 ) {
-	  if (fabs(Table->Vector_Output_Variables[k]) > BIO_NEGATIVE_VALUE )
-	    NEGATIVE_VALUE = 1;
-	  else 
-	    Table->Vector_Output_Variables[k] = 0.0;
-	}
-      }
-      
-      if (NEGATIVE_VALUE == 1) 	{
-	      State = -State;
-	      break;
-      }
+	    if (Table->Vector_Output_Variables[k] < 0.0 ) {
+	      if (fabs(Table->Vector_Output_Variables[k]) > BIO_NEGATIVE_VALUE )
+	        NEGATIVE_VALUE = 1;
+	      else 
+	      Table->Vector_Output_Variables[k] = 0.0;
+	    }
+    }     
+    if (NEGATIVE_VALUE == 1) 	{
+	    State = -State;
+	    break;
+    }
   }/* ------> go further to the next time step */
-  
+
   // fclose(FP);
 
 #if defined VERBOSE
@@ -215,7 +208,25 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     if(NEGATIVE_VALUE == 1)
       printf(" Some outvariables are negative!!!\n");
   }
-#endif
-  
+#endif  
   return(State);
 }
+
+/* The function call in this file:
+
+  C_P_G___G_R_I_D___P_L_O_T_T_I_N_G___S_H_A_D_E_S ( Table, j );
+
+  is defined in:
+
+  ~/CPGPLOT/CPGPLOT_Parameter_Table/CPGPLOT___GRID___Parameter_Table.c
+
+  This function is a wrapper for a usual function of the CPGPLOT library:
+
+  void C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___S_H_A_D_E_S( Parameter_CPGPLOT * CPG,
+							                                               double * W, 
+							                                               int FIRST_PLOT,
+							                                               int W_SCALE, 
+							                                               double W_min, 
+                                                             double W_MAX, 
+							                                               double i_PLOT )
+*/

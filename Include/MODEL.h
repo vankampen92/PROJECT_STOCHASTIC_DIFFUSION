@@ -186,6 +186,7 @@ typedef struct totalRateinfo
 #if defined CPGPLOT_REPRESENTATION
 /* Header file for Parameter Table dependent CPGPLOT plotting auxiliary functions */
 #include <CPGPLOT_Parameter_Table/CPGPLOT___X_Y___Parameter_Table.h>
+#include <CPGPLOT_Parameter_Table/CPGPLOT___GRID___Parameter_Table.h>
 #else
 #define MAX_No_of_FILES 20
 #endif

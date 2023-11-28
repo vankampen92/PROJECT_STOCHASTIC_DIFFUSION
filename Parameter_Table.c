@@ -320,7 +320,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	          Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;
 	        else
 	          Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
-          }
+  }
   else {
     assert(Table->TYPE_of_NETWORK == 1) ;
 
@@ -585,9 +585,9 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   /* Definition of type of network */
   P->TYPE_of_NETWORK    = TYPE_of_NETWORK;
                                /* 0: Fully Connected Network
-				  1: Square Grid with Von Neuman neighborhood
-				  More network structures under construction 
-			       */
+				                          1: Square Grid with Von Neuman neighborhood
+				                          More network structures under construction 
+			                          */
   P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
 
   P->No_of_RESOURCES    = No_of_RESOURCES;

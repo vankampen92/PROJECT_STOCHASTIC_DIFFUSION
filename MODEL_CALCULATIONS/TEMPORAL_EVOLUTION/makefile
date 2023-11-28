@@ -75,7 +75,7 @@ BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities:
 ##################################################### (1) 'BINARY_TREE_OPTIMIZATION'
 ##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION'
 ##################################################### (3) 'PRIORITY_QUEU_SUPER_OPTIMIZATION'
-RE=REUSE_RANDOM_NUMBER############################### (22) Possibilities;
+RE=NON_REUSE_RANDOM_NUMBER############################### (22) Possibilities;
 #####################################################      'NON_REUSE_RANDOM_NUMBER'
 #####################################################      'REUSE_RANDOM_NUMBER'
 # The optimation option of reusing random numbers is only availables in case 
@@ -150,6 +150,7 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Comm
 	Model_Variables_Code.o definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o \
 	stat.o                                                                                                                    \
 	CPGPLOT___X_Y___Parameter_Table.o                                                                                         \
+	CPGPLOT___GRID___Parameter_Table.o                                                                                        \
 	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               \
 	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o
 # \ # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
@@ -282,6 +283,9 @@ Initial_Condition_Boundary_Values.o:  ${PROJECT_DIR}Definition_Numerical_Integra
 # Functions to control graphical plots
 CPGPLOT___X_Y___Parameter_Table.o: ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___X_Y___Parameter_Table.c ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___X_Y___Parameter_Table.h
 	${CC} -c ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___X_Y___Parameter_Table.c $(CXXFLAGS)
+
+CPGPLOT___GRID___Parameter_Table.o: ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___GRID___Parameter_Table.c ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___X_Y___Parameter_Table.h
+	${CC} -c ${CPGPLOT}CPGPLOT_Parameter_Table/CPGPLOT___GRID___Parameter_Table.c $(CXXFLAGS)
 
 # Functions controling numerical integration of the ODE system
 deterministic_time_dynamics.o: ${ODE_DIR_GENERAL}deterministic_time_dynamics.c ${HEAD.H}

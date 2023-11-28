@@ -48,23 +48,22 @@ int numerical_Integration_Driver( Parameter_Table * Table,
     
   while (   (*t) < t1   )
     {
-           status = gsl_odeiv_evolve_apply (e, c, s,
-                                                &sys, 
-                                                t, t1,
-                                                &h, y);
+      status = gsl_odeiv_evolve_apply (e, c, s,
+                                       &sys, 
+                                       t, t1,
+                                       &h, y);
      
-           if (status != GSL_SUCCESS) break;
+      if (status != GSL_SUCCESS) break;
 
-#if defined VERBOSE
-           if (Table->MODEL_STATE_VARIABLES >= 2 )
-	     printf ("%.5g %.5g %.5g\n", *t, y[0], y[1]);
-#endif
+      #if defined VERBOSE
+          if (Table->MODEL_STATE_VARIABLES >= 2 )
+	          printf ("%.5g %.5g %.5g\n", *t, y[0], y[1]);
+      #endif
     }
      
   gsl_odeiv_evolve_free (e);
   gsl_odeiv_control_free (c);
   gsl_odeiv_step_free (s);
-  
   
   return status;
 }
