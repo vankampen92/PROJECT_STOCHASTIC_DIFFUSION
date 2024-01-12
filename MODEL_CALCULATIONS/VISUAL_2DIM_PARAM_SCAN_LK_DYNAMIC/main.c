@@ -66,12 +66,35 @@
                            -G2 1 -G3 0.0 -G4 4.0 -G5 1 -G6 0.0 -G7 10.0 \
                            -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 0.3750 -Hp2 1.0 \
                            -G30 R -Fn 0
-   . Use -Fn 0 to generate pseudo data. 
-   . -tn collects an input parameter controling the number time data points. 
-   . '#define' REPETITIONS (see below) tells the program how many times you will repeat the 
-     same experiment (which consists in generating -tR [Realizations] from time -t0 [Initial Time] 
-     up to time -t1 [Last Time].  
-   . -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
+
+   . ~$ ./DIFFUSION_HII_nD -y0 16 -y2 1 -HS 5 -HM 1 -HX 1 -HY 1 \
+                           -n 5 -v0 0 -v1 1 -v2 2 -v3 3 -v4 4 \
+                           -G0 2 -G1 2 \
+                           -sT 1.0E-06 -sN 300 -sP 2 \
+                           -H9 5.0 -I1 16 -m1 0.01 -M1 20.0 -A1 0.01 -d1 200 \
+                           -H10 10.0 -I0 17 -m0 0.01 -M0 25.0 -A0 0.01 -d0 200 \
+                           -iP 0 -en 0 -e0 426.012 -DP 0 -DC 0 -D0 0 -D1 0 -D2 0 -a0 0 \
+                           -tn 2 -t0 0.0 -t1 0.25 -t4 0 -tR 10 -tE 0.1 -xn 0 -xN 20.0 -HN 20 \
+                           -G2 1 -G3 0.0 -G4 15.0 -G5 1 -G6 0.0 -G7 10.0 \
+                           -HK 10000 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -Hp1 1.0 -Hp2 1.0 \
+                           -G30 R -Fn 0
+   . Parameter Definitions: 
+     -HuR -HuC are the jumping rates
+     -H0 -H2 -H5  are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
+     -H20 is the establishment rate 
+     -H1 -H3 -H6 are the death rates (Delta_R_0, Delta_R_1 for propagules, and Delta_C_0 for both searching and handling consumers)
+     -H9 and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
+     -H4 and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
+     -xN is INITIAL_TOTAL_POPULATION (involved in fixing Ini Conditions: include.Initial_Conditions.[].c)
+     -HN is No_of_INDIVIDUALS (involved in fixing some model parameters: see include.Parameter_Model.[].c )
+     -xR  bool variable (0/1: Initial Conditions are not/yes re-scaled to the INITIAL_TOTAL_POPULATION value)
+     -Fn 1/0 to generate pseudo data. Important: Use -Fn 0 to generate pseudo data. 
+     -tn collects an input parameter controling the number time data points (usually two: Time_0 and Time_1). 
+     -G30 R // Position of scale color bar: R, right side / L, left side / B, bottom side / T, top side .  
+   
+   . '#define' REPETITIONS (see below) tells the program how many times you will repeat the same experiment, 
+      which consists in generating -tR [Realizations] from time -t0 [Initial Time] up to time -t1 [Last Time].
+      However, the program may also ask you how many REPETITIONS to conduct at running time. 
 */
 #define REPETITIONS 20000
 // #define CONFIDENCE_INTERVALS
@@ -385,20 +408,37 @@ int main(int argc, char **argv)
        because, after each repetition, this vector has taken the values of real final times
        (Time_Current values of the last step) for every realization. 
     */
+
     for(i = 0; i<Time.Realizations; i++) {
       Time.Time_Vector_Real[i][0] = Time_0;
       Time.Time_Vector_Real[i][1] = Time_0 + (double)(i+1) * (Time_1 - Time_0)/(double)(Time.Realizations);
     }
     
+    /* 
+      Time_0 = 0.0; 
+      Time_1 = Table.Tiempo_Propio;  
+      for(i = 0; i<Time.Realizations/2; i++) {
+        Time.Time_Vector_Real[i][0] = Time_0;
+        Time.Time_Vector_Real[i][1] = Time_0 + (double)(i+1) * (Time_1 - Time_0)/(double)(Time.Realizations);
+      }
+
+      Time_0 = 9.0 * Table.Tiempo_Propio; 
+      Time_1 = 10.0 * Table.Tiempo_Propio; 
+      for(i = Time.Realizations/2; i<Time.Realizations; i++) {
+        Time.Time_Vector_Real[i][0] = Time_0;
+        Time.Time_Vector_Real[i][1] = Time_0 + (double)(i+1) * (Time_1 - Time_0)/(double)(Time.Realizations);
+      }
+    */
+
     printf("\t Total number of experiment repetitions: %d (current repetion: %d)\n",
 	          No_of_REPETITIONS, k);
-    printf("\t %d stochastic realizations are sampled from t=%.2g to t_1\n",
+    printf("\t %d stochastic realizations are sampled from t_0=%.2g to t_1\n",
 	          Realizations, Time_0);
-   #if defined VERBOSE
+    
     for(i = 0; i<Time.Realizations; i++) 
       printf("\n t_1 (Relization %d) = %1.3g\n", i, Time.Time_Vector_Real[i][1]);
-   #endif
-    printf("\n For each realization, a different final time (t_1) is used!!!\n"); 
+    
+    printf("\n For each realization, a different final time is used!!!\n"); 
     
     /* In order to produce pseudata always with the same true parameters, they need to be set up again. 
        because the 2D scan changes its values in the Parameter_Table structure  
@@ -440,20 +480,20 @@ int main(int argc, char **argv)
     for (i=0; i<Realizations; i++)
       Realizations_Vector[i] = (double)i + 1.0;
     
-    #if defined VERBOSE
+    // #if defined VERBOSE
     Writing_Empirical_Time_Vector(F, Realizations);
     Writing_Standard_Data_Matrix( Empirical_Data_Matrix,
 				                          SUB_OUTPUT_VARIABLES, Realizations,
 				                          1, Name_of_Rows,
 				                          0, Realizations_Vector);
-    #endif
+    // #endif
 
     /* B E G I N : Observed Data Control Initization (Initializing value)       */
     Observed_Data_Initialization( Data, SUB_OUTPUT_VARIABLES,
 				                          Realizations, Empirical_Data_Matrix,
 				                          "" );
     printf(" Observed_Data structure has been correctly initiated with an instance\n");
-    printf(" of (real or pseudo) emprical data \n");
+    printf(" of (real or pseudo) empirical data \n");
     Print_Press_Key(0, 0, ".");
     /*     E N D : -------------------------------------------------------------- */
 
@@ -680,7 +720,7 @@ int main(int argc, char **argv)
     free(Profile_x_Data); free(Profile_y_Data);
     /*     E N D :  Calculating Confidence Intervals ------------------------------------------*/
   #endif
-  Print_Press_Key (1, 1, "Next Experiment Repetition");
+    Print_Press_Key (1, 1, "Next Experiment Repetition");
   }
 #endif
     
@@ -925,7 +965,7 @@ void Profiling_2D_Scanned_Function( Parameter_Table * Table,
 	/* BEGIN : Free memory!!!                                     * * * * * * */
 	for( i = 0; i < No_of_POINTS_2; i++) free(z_SOL[i]); 
 	free(z_SOL);
-	/*   END : Free memmory!!!                                     * * * * * */
+	/*   END : Free memmory!!!                                    * * * * * */
 }
       
 void Creating_Standard_Data_Matrix_from_Model ( Parameter_Table * Table,
@@ -975,7 +1015,8 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
      particular likelihood of the MODEL DIFFUSION_HII_nD to be calculated. 
      This likelihood procedure uses only two times, I_Time = 2 (-tn 2 in argument list)
   */
-  int k,i;
+  double t, p;
+  int k, i;
   int No_of_POINTS; 
 
   Parameter_Fitting * F = (Parameter_Fitting *)Table->Fitting_Data; 
@@ -994,6 +1035,56 @@ void Creating_HII_nD_Data_Matrix_from_Model ( Parameter_Table * Table,
       F->Data->Time_Data_Vector[i] = Table->T->Time_Vector_Real[i][1];          
     }
   }
+
+  /* Estimating Average Values at time t: <n> = p_i(t) * No_of_CONSUMERS */
+  double ** n_AVE = (double **)calloc(Table->No_of_RESOURCES, sizeof(double *));
+  for(k = 0; k<Table->No_of_RESOURCES; k++)
+    n_AVE[k] = (double *)calloc(Table->T->Realizations, sizeof(double)); 
+  
+  double Theta_Sum, Sum_ThetaNu_Ratio;
+  Theta_Nu_Sums (Table->Theta_Consumers, Table->Nu_Consumers, 
+                 &Theta_Sum, &Sum_ThetaNu_Ratio, 
+                 Table->No_of_RESOURCES);
+
+  for(k = 0; k<Table->No_of_RESOURCES; k++)
+    for(i = 0; i<Table->T->Realizations; i++) {
+      t = F->Data->Time_Data_Vector[i];
+
+      p = Function___poft (Table->Theta_Consumers[k], Table->Nu_Consumers[k], 
+                           Sum_ThetaNu_Ratio, Theta_Sum, 
+                           t);
+      n_AVE[k][i] = p*Table->TOTAL_No_of_CONSUMERS;
+    }
+
+  /* Saving pseudo-data matrix in file Empirical_Data_Matrix.dat */
+  FILE * fp = fopen("Empirical_Data_Matrix.dat", "w");
+  for(i=0; i<Table->T->Realizations; i++) 
+    fprintf(fp, "%g\t", F->Data->Time_Data_Vector[i]);
+  
+  fprintf(fp, "\n");
+
+  for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) {
+      for(i=0; i<Table->T->Realizations; i++) {
+        fprintf(fp, "%g\t", Empirical_Data_Matrix[k][i]);
+      }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+
+  /* Saving theoretical matrix (with expected values) in file Theoretical_Expected_Matrix.dat */
+  fp = fopen("Theoretical_Expected_Matrix.dat", "w");
+  for(i=0; i<Table->T->Realizations; i++) 
+    fprintf(fp, "%g\t", F->Data->Time_Data_Vector[i]);
+
+  fprintf(fp, "\n");
+
+  for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++) {
+      for(i=0; i<Table->T->Realizations; i++) {
+        fprintf(fp, "%g\t", n_AVE[k][i]);
+      }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
 }
 
 void Pointer_To_Function_Fitting_Structure (Parameter_Fitting * F, Parameter_Table * Table)

@@ -29,6 +29,14 @@ double GSL_Function_to_Minimize_Binomial_Free_Consumers( const gsl_vector * x, v
 
 double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x, void * Par );
 
+void Theta_Nu_Sums (double * Theta_Vector, double * Nu_Vector, 
+                    double * Theta_Sum, double * Sum_ThetaNu_Ratio, 
+                    int N);
+
+double Function___poft (double Theta, double Nu, 
+                        double Sum_ThetaNu_Ratio, double Theta_Sum, 
+                        double t);
+
 double GSL_Function_to_Minimize_Beddington_DeAngelis( const gsl_vector * x, void * Par ); 
 
 double GSL_Function_to_Minimize_Beddington_DeAngelis_Marginal_0(const gsl_vector * x, void * Par);

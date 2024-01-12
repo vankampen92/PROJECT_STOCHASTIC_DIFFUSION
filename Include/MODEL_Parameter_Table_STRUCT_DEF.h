@@ -168,6 +168,8 @@ typedef struct Parameter_Tableinfo
   int TOTAL_No_of_FREE_CONSUMERS;
   int TOTAL_No_of_HANDLING_CONSUMERS; 
 
+  /* Used in MODEL = DIFFUSION_HII_nD */
+  double Tiempo_Propio; 
 }Parameter_Table;
 
 // void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * );

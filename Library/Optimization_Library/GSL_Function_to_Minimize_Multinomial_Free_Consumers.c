@@ -69,7 +69,10 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
      
     int * n = (int *)calloc(No_of_VARIABLES+1, sizeof(int));
     double * p = (double *)calloc(No_of_VARIABLES+1, sizeof(double)); 
-    
+
+    // Theta_Nu_Sums (Table->Theta_Consumers, Table->Nu_Consumers, 
+    //                &Theta_Sum, &Nu_Sum, Table->No_of_RESOURCES); 
+                   
     Theta_Sum = 0.0; Nu_Sum  = 0.0;  
     for (j=0; j<Table->No_of_RESOURCES; j++){ 
       Theta_Sum += Table->Theta_Consumers[j];
@@ -91,9 +94,13 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
           n[i] = (int)Data[i][j];
           n_H += n[i]; 
 	
-	        p[i] = (Table->Theta_Consumers[i]/Table->Nu_Consumers[i])/(1.0 + Nu_Sum) * (1.0-exp(-(Table->Nu_Consumers[i] + Theta_Sum)*t));
+        //  p[i] = Function___p_of_t (Table->Theta_Consumers[i], 
+        //                            Table->Nu_Consumers[i], 
+        //                            Nu_Sum, Theta_Sum, t);
 
-	        p_Sum += p[i];
+	      p[i] = (Table->Theta_Consumers[i]/Table->Nu_Consumers[i])/(1.0 + Nu_Sum) * (1.0-exp(-(Table->Nu_Consumers[i] + Theta_Sum)*t));
+
+	      p_Sum += p[i];
       }
       
       n[No_of_VARIABLES] = Table->TOTAL_No_of_CONSUMERS - n_H; /*-HN 20 [TOTAL_No_of_CONSUMERS]*/ 
@@ -102,8 +109,7 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
       assert(n[No_of_VARIABLES] <= Table->TOTAL_No_of_CONSUMERS);
       assert(n[No_of_VARIABLES] >= 0);
 
-      Theory[j] =  - log(gsl_ran_multinomial_pdf(No_of_VARIABLES+1, p, n));
-                    
+      Theory[j] =  -gsl_ran_multinomial_lnpdf(No_of_VARIABLES+1, p, n);                
     }
 
     free(n); free(p);
@@ -122,4 +128,28 @@ double GSL_Function_to_Minimize_Multinomial_Free_Consumers( const gsl_vector * x
   free(Theory);
   
   return(Value);
+}
+
+void Theta_Nu_Sums (double * Theta_Vector, double * Nu_Vector, 
+                    double * Theta_Sum, double * Sum_ThetaNu_Ratio, 
+                    int N)
+{
+    int j; 
+
+    * Theta_Sum = 0.0; * Sum_ThetaNu_Ratio = 0.0;  
+    for (j=0; j<N; j++){ 
+        * Theta_Sum += Theta_Vector[j];
+        * Sum_ThetaNu_Ratio += (Theta_Vector[j]/Nu_Vector[j]);
+    }
+}
+
+double Function___poft (double Theta, double Nu, 
+                        double Sum_ThetaNu_Ratio, double Theta_Sum, 
+                        double t)
+{
+    double p; 
+
+    p = (Theta/Nu)/(1.0 + Sum_ThetaNu_Ratio) * (1.0-exp(-(Nu + Theta_Sum)*t));
+
+    return p;
 }

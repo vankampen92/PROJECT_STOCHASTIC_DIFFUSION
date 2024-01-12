@@ -455,22 +455,40 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table)
 
   K_R = (double)Table->K_R; 
 
-  if (Table->No_of_RESOURCES > 0 ) {
+  if ( Table->No_of_RESOURCES == 5) {
+    Table->y_R_i[0]              = 0.9 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[0]    = Table->Alpha_C[0] * Table->y_R_i[0]/K_R;
+
+    Table->y_R_i[1]              = 0.7 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[1]    = Table->Alpha_C[1] * Table->y_R_i[1]/K_R;
+
+    Table->y_R_i[2]              = 0.5 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[2]    = Table->Alpha_C[2] * Table->y_R_i[2]/K_R;
+
+    Table->y_R_i[3]              = 0.3 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[3]    = Table->Alpha_C[3] * Table->y_R_i[3]/K_R;
+
+    Table->y_R_i[4]              = 0.1 * Table->TOTAL_No_of_RESOURCES;
+    Table->Theta_Consumers[4]    = Table->Alpha_C[4] * Table->y_R_i[4]/K_R;
+  }
+  else {
+    if (Table->No_of_RESOURCES > 0 ) {
     Table->y_R_i[0]        = 0.5 * Table->TOTAL_No_of_RESOURCES;
     Table->Theta_Consumers[0]    = Table->Alpha_C[0] * Table->y_R_i[0]/K_R;
-  }
-  if (Table->No_of_RESOURCES > 1 ) {
+    }
+    if (Table->No_of_RESOURCES > 1 ) {
     Table->y_R_i[1]        = 0.3 * Table->TOTAL_No_of_RESOURCES;
     Table->Theta_Consumers[1]    = Table->Alpha_C[1] * Table->y_R_i[1]/K_R;
-  }
-  if (Table->No_of_RESOURCES > 2 ) {
+    }
+    if (Table->No_of_RESOURCES > 2 ) {
     Table->y_R_i[2] = 0.2 / ((double)(Table->No_of_RESOURCES) - 2.0) * Table->TOTAL_No_of_RESOURCES;
     Table->Theta_Consumers[2] = Table->Alpha_C[2] * Table->y_R_i[2]/K_R;
-  }
-  if (Table->No_of_RESOURCES > 3 ) {
-    for(j=3; j < Table->No_of_RESOURCES; j++) {
+    }
+    if (Table->No_of_RESOURCES > 3 ) {
+      for(j=3; j < Table->No_of_RESOURCES; j++) {
       Table->y_R_i[j]  = 0.2 / ((double)(Table->No_of_RESOURCES) - 2.0) * Table->TOTAL_No_of_RESOURCES;
       Table->Theta_Consumers[j]  = Table->Alpha_C[j] * Table->y_R_i[j]/K_R;
+      }
     }
   }
 }
@@ -498,6 +516,9 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
   }
 
   T_C = 1.0 / (Nu + Theta);
+
+  Table->Tiempo_Propio = T_C; 
+  
   printf(" Exact Characteristic Time (only is the handling time is the same across all resources):\n"); 
   printf(" T = %g\n", T_C);
 

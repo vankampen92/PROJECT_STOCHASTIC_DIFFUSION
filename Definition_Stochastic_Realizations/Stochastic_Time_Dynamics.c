@@ -326,6 +326,10 @@ int Stochastic_Time_Dynamics_Numerical( int i,
   int FROZEN_SYSTEM               = 0;
   (*Bad_Times)                    = 0; j_Good = 0;
   
+  printf("TIMES = %d\n", TIMES);
+  printf("Time->Time_Vector[0] = %g\t Time->Time_Vector[1] = %g]\n", 
+      Time->Time_Vector[0], Time->Time_Vector[1]);
+
   for( j = 1; j < TIMES; j++ ) {
     /* This loop advances the system sequentially from
        intitial time 0 to 1st time , ...,  from time (j-1) to j, and so on.
@@ -335,6 +339,9 @@ int Stochastic_Time_Dynamics_Numerical( int i,
     /* B E G I N :
      *     CENTRAL PROGRAM CORE HERE: Stochastic Dynamics Loop While (up to the next time)
      */
+
+    
+
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
       {

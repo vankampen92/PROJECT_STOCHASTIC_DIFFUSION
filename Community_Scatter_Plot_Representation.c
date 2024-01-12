@@ -36,7 +36,7 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
   Range_y[0] = 0.0;  Range_y[1] = P[0]->Y_DIMENSION;
 
   if(i_Replicate == 0 && j_Time == 1) {
-    DEVICE_NUMBER = cpgopen( "/XSERVE" );
+    DEVICE_NUMBER = cpgopen( "/XSERVE" ); // "/PNG"
     cpgsubp(1, 1);
     cpgask( 0 );
   }
@@ -177,7 +177,7 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
     Range_y[0] = 0.0;  Range_y[1] = P[0]->Y_DIMENSION;
     
     if(i_Replicate == 0 && j_Time == 1) {
-      DEVICE_NUMBER = cpgopen( "/XSERVE" );
+      DEVICE_NUMBER = cpgopen( "/TPNG" ); // /TPNG
       cpgsubp(1, 1);
       cpgask( 0 );
     }
@@ -195,25 +195,26 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 	        n++;
 	      }
       }
-      
-      type_of_Line = 1;
-      type_of_Width = 2;
-      cpgsls(type_of_Line);
+                              /* color Index (codes):                            */
+      type_of_Line = 1;       /* (2: Red)(3: Green)(4: Blue)(5: Light Blue)      */ 
+                              /* (6: Magenta)(7: Yellow)                         */
+      type_of_Width = 2;      /* type of Symbol (codes):                         */
+      cpgsls(type_of_Line);   /* (1: .)(2: +)(3: *)(4: o, cercle)                */
       cpgslw(type_of_Width);
       cpgask( 0 );
       
       cpgslct(DEVICE_NUMBER);      /* Selecting Device */
       
       if (Sp == 0) {
-	      color_Index    = 4;          /* 4: Blue       */
+	      color_Index    = 2;          /* 2: Red        */
 	      type_of_Symbol = 1;          /* 1: .  (point) */
 	      cpg_XY_scattered(n, x_Data, y_Data, Range_x, Range_y,
 		                     color_Index, type_of_Symbol,
 		                     "X", "Y", "");
       }
       else if (Sp == 1) {
-        color_Index    = 3;    /* 3: Green  5: Light Blue  6: Magenta    */
-	      type_of_Symbol = 2;    /* 2: +      3: *           4: o (cercle) */ 
+        color_Index    = 7;          /* 7: Yellow     */
+	      type_of_Symbol = 2;          /* 2:  +         */
 	      cpg_XY_same_scattered(n, x_Data, y_Data,
 			                        color_Index, type_of_Symbol);
       }
@@ -260,5 +261,4 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
     free(y_Data);
   }
 }
-
 #endif
