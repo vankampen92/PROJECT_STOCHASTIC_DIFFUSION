@@ -100,6 +100,11 @@ typedef struct Parameter_Tableinfo
   int RA;
   int ARA;
 
+  int W;
+  int Q;
+  int F; 
+  int WF; 
+
   int V;
   int G;
   

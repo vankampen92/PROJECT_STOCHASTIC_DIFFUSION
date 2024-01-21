@@ -38,8 +38,14 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #endif
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
+#ifdef DIFFUSION_AZTECA_4D
+    case 10:  p = strcat(Label, "Nest Carrying Capacity (for Workers)");   /* Patch Carrying Capacity */
+      break;  
+#else
     case 10:  p = strcat(Label, "Patch Carrying Capacity");   /* Patch Carrying Capacity */
       break;
+#endif 
+
     case 11: p=strcat(Label,  "Resource Local Reproduction Rate");        /* -H5 */
       break;
 
@@ -47,15 +53,25 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break;
     case 13: p=strcat(Label,  "Consumer Death Rate (0)");      /* -H6 */
       break;
+#ifdef DIFFUSION_AZTECA_4D
+    case 14: p=strcat(Label,  "Max No of Nests per Patch");     /* -H7 */
+      break;
+#else
     case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");     /* -H7 */
       break;
+#endif      
     case 15: p=strcat(Label,  "Consumer Death Rate (1)");      /* -H8 */ 
       break; 
       
     case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");      /* -H9 */
       break;
+#ifdef DIFFUSION_AZTECA_4D
+    case 17: p=strcat(Label,  "Nu, Larva (Flies) Develpment Rate");  /* -H10 */
+      break;
+#else
     case 17: p=strcat(Label,  "Nu = 1/Tau (One over the handling time)");  /* -H10 */
       break;
+#endif
 
     case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
       break;
@@ -81,7 +97,7 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
       break; 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;  
-    case 29:  p = strcat(Label, "Propagule Establishment Rate");
+    case 29:  p = strcat(Label, "Establishment Rate");
       break;  
       
     default:

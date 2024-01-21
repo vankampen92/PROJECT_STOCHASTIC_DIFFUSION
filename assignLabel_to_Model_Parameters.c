@@ -37,24 +37,42 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #endif
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
+
+#ifdef DIFFUSION_AZTECA_4D
+    case 10:  p = strcat(Label, "Nest Carrying Capacity (Workers)");  /* Working Carrying Carrying Capacity per Nest */
+#else
     case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */
       break;
-    case 11: p=strcat(Label,  "Resource Local Reproduction Rate");        /* -H5 */
+#endif
+
+    case 11: p=strcat(Label,  "Resource Local Reproduction Rate");        /* -H4 */
       break;
 
-    case 12: p=strcat(Label,  "Consumer External Immigration Rate (0)");     /* -H5 */
+    case 12: p=strcat(Label,  "Consumer External Immigration Rate (0)");  /* -H5 */
       break;
-    case 13: p=strcat(Label,  "Consumer Death Rate (0)");      /* -H6 */
+    case 13: p=strcat(Label,  "Consumer Death Rate (0)");                 /* -H6 */
       break;
-    case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");     /* -H7 */
+
+#ifdef DIFFUSION_AZTECA_4D
+    case 14: p=strcat(Label,  "MAX No of NESTS per LOCAL PATCH");         /* -H7 */
       break;
-    case 15: p=strcat(Label,  "Consumer Death Rate (1)");      /* -H8 */ 
+#else      
+    case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");  /* -H7 */
+      break;
+#endif
+    case 15: p=strcat(Label,  "Consumer Death Rate (1)");                 /* -H8 */ 
       break; 
       
-    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");      /* -H9 */
+    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");                   /* -H9  */
       break;
-    case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");  /* -H10 */
+
+#ifdef DIFFUSION_AZTECA_4D
+    case 17: p=strcat(Label,  "Larval Development Rate (Nu) of Flies");/* -H10 */
       break;
+#else 
+    case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");/* -H10 */
+      break;
+#endif
 
     case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
       break;
@@ -88,7 +106,7 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #endif      
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;
-    case 29:  p = strcat(Label, "Propagule Establishment Rate");
+    case 29:  p = strcat(Label, "Establishment Rate");
       break;
       
     default:
