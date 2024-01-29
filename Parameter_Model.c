@@ -33,7 +33,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->p_1        = P_Source->p_1;     /* -Hp1 */ /* 1st Cooperation probability  */ 
   P_Destination->p_2        = P_Source->p_2;    /* -Hp2 */  /* 2on Cooperation probability  */
 
-  P_Destination->Eta_R      = P_Source->Eta_R;    /* -H20 */  /* 2on Cooperation probability  */ 
+  P_Destination->Eta_R      = P_Source->Eta_R;    /* -H20 */  /* Establishment rate  */ 
 
   P_Destination->No_of_IC = P_Source->No_of_IC;
   P_Destination->TYPE_of_INITIAL_CONDITION = P_Source->TYPE_of_INITIAL_CONDITION;

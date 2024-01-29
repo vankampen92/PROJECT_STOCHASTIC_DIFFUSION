@@ -47,6 +47,15 @@ void Some_Other_Patch_Population_Decrease(int , int , Parameter_Table * );
 
 int Some_Other_Patch_Population_Increase(int , int , Parameter_Table * );
 
+int Other_Patch_Population_Increase(int Event, int x, int n, int Sp,
+					                Parameter_Table * Table);
+
+int Boundness_Control( int Event, Parameter_Table * Table,
+			                 int x_out, int x_in, int Sp, int jS, double Y, int J);
+
+void Boundness_Control_Local_Patch(int Event, Parameter_Table * Table, 
+                                   int x, int jS, double Y, int J);							 
+
 void Positivity_Control( int Event, Parameter_Table * Table,
 			 int x, int jS, double Y, int J);
 

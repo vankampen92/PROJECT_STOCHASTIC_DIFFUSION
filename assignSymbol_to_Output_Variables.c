@@ -182,7 +182,7 @@ void AssignCPGPLOT_Symbol_to_Output_Variables(int j, char * Label, Parameter_Tab
       p = strcat(Label , "n[R]");         /*  3: Resources */
       break;
     case  4:
-	p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
+	    p = strcat(Label , "n[A]");         /*  4: Total Free Consumers */
         break;
     case  5:
       p = strcat(Label , "n[A_R]");       /*  5: Total Reproductive Consumers */

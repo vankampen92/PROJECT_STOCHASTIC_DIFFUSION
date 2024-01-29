@@ -23,7 +23,7 @@ void Fixed_Points_All( Parameter_Table * Table,
 
   #include <Model_Variables_Code.Include.c>
 
-  if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->Lambda_R_1 == 0.0 && Table->No_of_CELLS == 1) {
+  if (Table->Lambda_C_0 == 0.0 && Table->Lambda_R_0 == 0.0 && Table->No_of_CELLS == 1) {
 
     /* Under these conditions, four Dynamic Regimes at Stationarity are possible */
     if ( b_R < (1.0 + d_P/e_R) ){

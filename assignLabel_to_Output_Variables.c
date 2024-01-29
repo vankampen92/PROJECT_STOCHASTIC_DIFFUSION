@@ -4,8 +4,7 @@
   
     Local Variables, Genuine Variables, The Rest of Model Variables 
   */
-
-
+ 
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
   int k, i, n, m;
@@ -333,7 +332,22 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       free(q);
       break;
 
+    case  17:
+      p = strcat(L[0], "W");
+      p = strcat(L[1], "Q");
+      p = strcat(L[2], "F");
+      p = strcat(L[3], "WF");
 
+      break;
+
+    case  18:
+      p = strcat(L[0], "W");
+      p = strcat(L[1], "Q");
+      p = strcat(L[2], "F");
+      p = strcat(L[3], "WF");
+
+      break;
+      
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);
       printf(".... The permited correspondences are: 0 to 10\n");

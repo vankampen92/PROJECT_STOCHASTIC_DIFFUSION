@@ -85,7 +85,6 @@ void NR_Eigenvalue_Calculation_float ( double * y_Sol,  int K, int W,
 				       Parameter_Table * P, 
 				       float * l_re, float * l_im ); 
 
-
 double Well_Defined_Matrix_Elements(float **mm, int N, float xmin, float xmax);
 
 int showing_eigenValues(float *l_re, float *l_im, int n); 

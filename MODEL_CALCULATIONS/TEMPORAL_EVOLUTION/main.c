@@ -139,7 +139,79 @@ gsl_rng * r; /* Global generator defined in main.c */
                                    -tn 200 -t0 0.0 -t1 200.0 -t4 0 -tR 10 -xn 0 -xN 5.0 -HN 5.0 \
                                    -HuR 5.0 -HuC 1.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 20 -H20 20.0 \
                                    -H1 1.0 -H3 5.0 -H6 0.5 -H9 5.0 -H10 2.0 -H4 5.0 -H17 1.0
-  
+
+  . ~$ ./DIFFUSION_AZTECA_4D -y0 17 -y2 1 -HS 1 -HM 6400 -HX 80 -HY 80 \
+                             -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2  \
+                             -tn 400 -t0 0.0 -t1 600.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                             -G2 1 -G3 0.0 -G4 600.1 -G5 1 -G6 0.0 -G7 128000 \
+                             -HuR 1.0 -HuC 5.0 -H0 0.0 -H5 0.0 \
+                             -HK 100 -H7 5 \
+                             -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                             -H9 15.5 -H10 2.0 -H4 5.0 -H20 20.0
+
+  ~$ ./DIFFUSION_AZTECA_4D -y0 17 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                           -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                           -tn 100 -t0 0.0 -t1 100.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 \
+                           -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 3000 \
+                           -HuR 5.0 -HuC 1.0 -H0 0.0 -H5 0.0 \
+                           -HK 1000 -H7 3 \
+                           -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                           -H9 15.5 -H10 2.0 -H4 5.0 -H20 20.0
+
+  ~$ ./DIFFUSION_AZTECA_4D -y0 17 -y2 1 -HS 1 -HM 6400 -HX 80 -HY 80 \
+                           -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2  \
+                           -tn 400 -t0 0.0 -t1 600.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                           -G2 1 -G3 0.0 -G4 600.1 -G5 1 -G6 0.0 -G7 128000 \
+                           -HuR 1.0 -HuC 5.0 -H0 0.0001 -H5 0.0001 \
+                           -HK 1000 -H7 100 \
+                           -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                           -H9 10000.5 -H10 2.0 -H4 10.0 -H20 10.0 -tE 2.1
+
+  For the AZTECA_4D model,
+  -HuR and -HuC are jumping rates of workers and flies, respectively.
+  -H0 and -H5 are external immigrations rates (Lambda_R_0 and Lambda_C_0). Usually equal to zero
+  -H7 is the maximum number of nests (queens) per local area, cell or local community (Lambda_C_1 !!!)
+  -HK is the maximum number of workers per nest. 
+  -H20 is the establishment rate (of a new nest, Eta_R)
+  -H4 is the per capita rate at which queens produce new workers (Beta_R)
+  -H9 is the attack rate (Alpha_C_0)
+  -H10 is the larval development rate (Nu_C_0)  
+  -H1 -H3 -H6 -H8 are death rates (workers, queens, flies, and parasitezed workers, respectively) 
+  -xN n_0. For instance, the initial condition is (0, n_0, 0, 0) at the center of the grid and 
+           (0, n_0, n_0, n_0) at a number of randomly chosen cells across the grid. 
+
+  AZTECA_4D_0 only uses one single carrying capacity, the total number of pontential nesting trees, 
+  which can be initialized by using -HK [Number] as an input argument 
+  ~$ ./DIFFUSION_AZTECA_4D_0 -y0 18 -y2 1 -HS 1 -HM 6400 -HX 80 -HY 80 \
+                             -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2  \
+                             -tn 100 -t0 0.0 -t1 60.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                             -G2 1 -G3 0.0 -G4 60.1 -G5 1 -G6 0.0 -G7 128000 \
+                             -HuR 1.0 -HuC 5.0 -H0 0.0001 -H5 0.0001 \
+                             -HK 10 \
+                             -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                             -H9 100.5 -H10 2.0 -H4 10.0 -H20 10.0 -tE 2.1
+
+  ~$ ./DIFFUSION_AZTECA_4D_0 -y0 18 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+                            -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                            -tn 100 -t0 0.0 -t1 100.0 -t4 0 -tR 10 -xn 0 -xN 500.0 -HN 500.0 \
+                            -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 3000 \
+                            -HuR 5.0 -HuC 1.0 -H0 0.0 -H5 0.0 \
+                            -HK 1000 \
+                            -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                            -H9 15.5 -H10 2.0 -H4 5.0 -H20 20.0
+
+  For the AZTECA_4D_0 model,
+  -HuR and -HuC are jumping rates of workers and flies, respectively.
+  -H0 and -H5 are external immigrations rates (Lambda_R_0 and Lambda_C_0). Usually equal to zero
+  -HK is the maximum number of potential nesting trees (queens) per local area, cell or local community (K_R)  
+  -H20 is the establishment rate (of a new nest, Eta_R)
+  -H4 is the per capita rate at which queens produce new workers (Beta_R)
+  -H9 is the attack rate (Alpha_C_0)
+  -H10 is the larval development rate (Nu_C_0)  
+  -H1 -H3 -H6 -H8 are death rates (workers, queens, flies, and parasitezed workers, respectively) 
+  -xN n_0. For instance, the initial condition is (0, n_0, 0, 0) at the center of the grid and 
+           (0, n_0, n_0, n_0) at a number of randomly chosen cells across the grid. 
+
    MacArthur and Rosenzweig (two species 3D, R, A, RA):
    .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
                       -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \
@@ -187,8 +259,7 @@ gsl_rng * r; /* Global generator defined in main.c */
                           -HK 10000 -HuR 0.0 -HuC 0.0 -H0 5.0 -H2 1.0 -H5 0.0 \
                           -H9 10.5 -H10 0.1  -Hp1 0.3725 -Hp2 1.0 -HN 20 -tE 0.2
    
-   Relevant input arguments for model DIFFUSION_HII_nD:
-
+Relevant input arguments for model DIFFUSION_HII_nD:
    -HK  [N or Total Carrying Capacity (for resources)]
    -Hp1 [approx y_R = f_i * p1 * N: Different resource levels at time 0.0, with f_i = 0.5, 0.3, 0.2, but this can be changed] 
    -Hp2 [Total No of Free Consumers at time 0.0: p2 * No_of_CONSUMERS]
@@ -285,7 +356,9 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (0, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  // Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, "/TPNG");
+  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  
   printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
   printf(" These will open two windows (or two ploting devices of the same kind)\n");
   printf(" Table.CPG will store deterministic dynamic variables to plot\n");
@@ -300,7 +373,12 @@ int main(int argc, char **argv)
   if(Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14) 
     /* Models where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
- 
+
+    /* Models where the TOTAL_No_of_CONSUMERS is not a CONSTANT 4D Consumer-Resource Models */
+    /* MODEL = DIFFUSION_AZTECA_4D  and MODEL = DIFFUSION_STOLLENBERG_4D                    */
+    // if(Table.TYPE_of_MODEL == 15 || Table.TYPE_of_MODEL == 17) 
+    // Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table); //Under construction
+
   if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
     /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     /* and they feed on multiple resources                      */

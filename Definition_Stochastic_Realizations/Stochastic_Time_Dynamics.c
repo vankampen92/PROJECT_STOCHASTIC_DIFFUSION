@@ -25,6 +25,13 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   double Time_Initial, Time_Current, Time_Final, value;
   Stochastic_Rate * Rate;
 
+  /* Setting up titles for output variables */
+  char ** Y_label = (char **)malloc( sizeof(char *) * Table->SUB_OUTPUT_VARIABLES );
+  for(j=0; j < Table->SUB_OUTPUT_VARIABLES; j++){
+    k = Table->OUTPUT_VARIABLE_INDEX[j];
+    Y_label[j]  = Table->Output_Variable_Name[k];
+  }
+
   P            = Table->P;
   PATCH        = Table->Patch_System;
 
@@ -117,7 +124,8 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     // printtree(Table->Treeroot);
     printf(" Initial Configuration of the system:\n");  
     Print_Meta_Community_Patch_System (Table);
-    printf(" Priority Queue Binary Tree to store ordered putatitive event times has been successcully\n");
+    printf(" Priority Queue Binary Tree to store ordered putatitive event times\n");
+    printf(" has been successcully intiated!!!\n");
     // printf(" initiated [Realization: %d (out of %d)]\n", i, Time->Realizations); 
     // Print_Press_Key(0, 0, "Generation of a new stochastic replicate...\n");
   #endif
@@ -151,9 +159,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
     if (Table->TYPE_of_MODEL == 2 || Table->TYPE_of_MODEL == 8) {
       Total_Population_of_Consumers = Total_Population_Consumers (Table->Vector_Model_Variables, 
                                                                   Table );
-        if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
+      if (Total_Population_of_Consumers == 0.0) EXTINCTION = 1;
     
-    // EXTINCTION = Extinction_Control_Condition(Table);
+      // EXTINCTION = Extinction_Control_Condition(Table);
     }
     
     if (FROZEN_SYSTEM == 1 || EXTINCTION == 1) {
@@ -175,7 +183,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       /* Saving and representing at values close to Time_values[j] * * * * * * * * * * * * */
       /* Notice that Time_Current is always the last time which is the closest possible to
 	      (and a little bit larger than) the time stored in Time->Time_Vector[j].           */
-      j_Good++;            /* Counting good times of the i-th realization  */
+      
       Time->count[j]++;    /* Counting good realizations corresponding to the j-th time */ 
 
       for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
@@ -186,9 +194,9 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 	      Time->summ_var[k][j] += value * value;
 
         #if defined CPGPLOT_REPRESENTATION
- 	        P->CPG->y_Time[k][j_Good] = value;
+ 	        P->CPG->y_Time[k][j_Good]       = value;
         #endif
-	      Time->Variable[i][k][j]   = value;
+	      Time->Variable[i][k][j]           = value;
 	      Table->Vector_Output_Variables[k] = value;
       }
 
@@ -200,7 +208,6 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
       #endif
       
       Time->time_DEF[j_Good] = Time_Current;
-      
       Time->Accumulated_Variable[i][j] = (double)new;
 
       Time_Initial = Time->Time_Vector[j-1];
@@ -210,11 +217,19 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
         /* BEGIN: Grafical Representation per SUCCESSFUL time step */
         C_P_G___S_U_B___P_L_O_T_T_I_N_G___n___P_L_O_T_S(Table->CPG->DEVICE_NUMBER,
       						                                      1+i, j_Good, Table );
-        if( Table->No_of_CELLS > 4 ) 
+        if( Table->No_of_CELLS > 4 ) {
         /* GRID REPRESENTATION */
-	      Community_Scatter_Plot_Representation(Table, i, j);
-        // Community_Shading_Plot_Representation(Table, i, j);    
-        // Print_Press_Key(1,0,"."); 
+	         Community_Scatter_Plot_Representation_4Sp(Table, i, j_Good);  /* All four species together */
+           Community_Scatter_Plot_Representation(Table, i, j_Good);      /* Four subplot              */
+           // Community_Shading_Plot_Representation(Table, i, j);        /* Work in progress...  */    
+           // Print_Press_Key(1,0,".");
+
+           printf("Time=%g\t", Time_Current);
+           for(k=0; k < Table->SUB_OUTPUT_VARIABLES; k++){
+            printf("y[%s] = %g  ", Y_label[k], value);
+           }
+           printf("\n");
+        } 
         /*   END: Grafical Representation per time step */
       #endif
       
@@ -224,7 +239,10 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
 	        fprintf(FP,"\t%g", Table->Vector_Output_Variables[k]);
         fprintf(FP,"\n");
       /*   END: Writing costumized file        */
+      
+      j_Good++; /* After processing, counting good times of the i-th realization  */
     }
+
     #if defined VERBOSE
       printf(" Total population across the system at current time (t = %g)\n", Time_Current );
       Print_Meta_Community_Patch_System (Table);
@@ -233,7 +251,7 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   }/* go further to the next time           */
 
   fclose(FP);
-
+  free(Y_label); //Labels for the output variables
   return(FROZEN_SYSTEM); 
 }
 
@@ -350,7 +368,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
     /*     E N D
      * -------------------------------------------------------------------
      */    
-#if defined EXTINCTION_CONTROL
+  #if defined EXTINCTION_CONTROL
     int EXTINCTION;
     double Total_Population_of_Consumers;  
     EXTINCTION = 0;
@@ -369,7 +387,7 @@ int Stochastic_Time_Dynamics_Numerical( int i,
       if (FROZEN_SYSTEM == 1 && EXTINCTION == 1) FROZEN_SYSTEM = 1;
       break;  /* Don't advance more times */  
     }
-#endif
+  #endif
 
     if( Time_Current > Time->Time_Vector[j] + Time->EPSILON){
       (*Bad_Times)++;

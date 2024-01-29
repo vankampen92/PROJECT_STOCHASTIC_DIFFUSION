@@ -38,10 +38,10 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   Rate->max_Probability = 0.0;
   Rate->Total_Rate      = 0.0;
 
-  /* K_W: Total Carrying Capacity (Workers): Max No of Worker per Nest */
-  double K_W = (double)Table->K_R * (double)Table->Lambda_C_1;
+  /* K_W: Total Carrying Capacity (Workers), and Table->K_R is the max No of Worker per Nest */
+  double K_W = (double)Table->K_R * (double)Table->Lambda_C_1;  /* -HK  -H7 */
   /* K_Q: Total Max No of Nests (per local patch) */ 
-  double K_Q = (double)Table->Lambda_C_1; 
+  double K_Q = (double)Table->Lambda_C_1;                       /* -H7      */
 
   GRAND_No_of_EVENTS = 0;
   for(i=0; i<No_of_CELLS; i++){
@@ -55,7 +55,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     OutMigration = P->Total_Per_Capita_Out_Migration_Rate[W];
     assert( 4 * Table->Mu ==  OutMigration ); 
         
-    P->rate[n] = OutMigration;       P->rToI[n]  = OutMigration * (double)P->n[W]; 
+    P->rate[n] = OutMigration;                            P->rToI[n]  = OutMigration * (double)P->n[W]; 
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
@@ -66,7 +66,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     n++;
 
     /* 1: Worker External Immigration event */
-    P->rate[n] = Table->Lambda_R_0;  P->rToI[n]  = Table->Lambda_R_0; 
+    P->rate[n] = Table->Lambda_R_0;                        P->rToI[n]  = Table->Lambda_R_0; 
     P->ratePatch += P->rToI[n]; 
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
@@ -77,7 +77,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     n++;
 
     /* 2: Death of Workers  */
-    P->rate[n] = Table->Delta_R_0;   P->rToI[n]  = Table->Delta_R_0 * (double)P->n[W];
+    P->rate[n] = Table->Delta_R_0;                         P->rToI[n]  = Table->Delta_R_0 * (double)P->n[W];
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
@@ -179,7 +179,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     n++;
     
     /* 11: Parasitized workers death */
-    P->rate[n] = Table->Delta_C_1;                         P->rToI[n]  = Table->Delta_C_0 * (double)P->n[WF];
+    P->rate[n] = Table->Delta_C_1;                         P->rToI[n]  = Table->Delta_C_1 * (double)P->n[WF];
     P->ratePatch += P->rToI[n];
     #if defined BINARY_TREE_SUPER_OPTIMIZATION
       Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];

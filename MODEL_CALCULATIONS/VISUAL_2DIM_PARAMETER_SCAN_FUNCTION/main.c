@@ -98,10 +98,19 @@ which here define the 2D parameter space to explore.
 
    . ~S ./DIFFUSION_STOLLENBERG_3D -y0 10 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300 -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H17 1.0 -H1 1.0 -H6 0.5 -H9 10.0 -H10 2.0
 
-   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300  -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H20 20.0 -H17 1.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 10.0 -H10 2.0  
-*/
+   . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300  -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H20 20.0 -H17 1.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 10.0 -H10 2.0
 
-
+. ~$ ./DIFFUSION_AZTECA_4D_0 -y0 18 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+		                         -G0 1 -G1 1 \
+			                       -sT 1.0E-06 -sN 300 -sP 2 \
+			                       -I1 11 -m1 1.0 -M1 100.0 -A1 0.01 -d1 500 \
+			                       -I0 17 -m0 0.1 -M0 5.0 -A0 0.01 -d0 500 \
+			                       -iP 0 -en 0 \
+                             -HuR 0.0 -HuC 0.0 -H0 0.0 -H5 0.0 \
+                             -HK 1 \
+                             -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
+                             -H9 15.5 -H10 2.0 -H4 5.0 -H20 20.0
+*/			     
 gsl_rng * r; /* Global generator defined in main.c */
 
 int main(int argc, char **argv)
@@ -318,3 +327,4 @@ int main(int argc, char **argv)
   printf("\nEnd of progam\n");
   return (0);
 }
+

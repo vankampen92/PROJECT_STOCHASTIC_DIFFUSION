@@ -13,7 +13,7 @@
 
 #define EPSILON 1.0E-06
 
-  extern gsl_rng * r;
+extern gsl_rng * r;
 
 void Initial_Conditions_Stochastic_Dynamics( Parameter_Table * Table, double * y_INI )
 {

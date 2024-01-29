@@ -30,7 +30,7 @@ int M_O_D_E_L( Parameter_Table * Table )
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
-  if(Table->No_of_CELLS > 4)
+  if(Table->No_of_CELLS > 4) /* For instance, models DIFFUSION_AZTECA_4D and DIFFUSION_STOLLENBERG_4D */
     Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
   else if (Table->No_of_CELLS == 1)
     if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
@@ -56,7 +56,7 @@ int M_O_D_E_L( Parameter_Table * Table )
   Community_Allocation( PATCH, P ); 
   Community_Initialization (PATCH, P);
   /* The Parameter Model structure also keeps the three memmory addresses pointing to 
-   *   the Patch System, the Time Control structure, and the CPG structure to plot   
+   * the Patch System, the Time Control structure, and the CPG structure to plot   
    */
   Table->Patch_System = PATCH;
   /* END ----------------------------------------------------------------------------
@@ -81,8 +81,16 @@ int M_O_D_E_L( Parameter_Table * Table )
 		    Table->Vector_Model_Variables_MultiStability[2],
 		    EPSILON );
 
-  /* This function depends on the JACOBIAN at the fixed point, which is 
-     only available for MODEL = DIFFUSION_1R1C 
+  /* The 'Function_to_Type_of_Stability()' function depends on the 
+     JACOBIAN at the fixed point, which is only available for cetain models. 
+     Please check the actual definition of the Jacobian matrix in the files 
+     from the directory:  
+     
+        ./Definition_Numerical_Integration/ODE_Definitions/Include_ODE/
+
+    of the type: 
+
+        include.JAC_sys_[TYPE_of_MODEL].c
   */
   x = Function_to_Type_of_Stability( Table );
   Print_Press_Key(1,0,"."); 

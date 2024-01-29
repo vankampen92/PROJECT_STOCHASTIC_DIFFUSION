@@ -28,11 +28,10 @@ void Initial_Conditions_Numerical_Integration( Parameter_Table * Table, double *
   else if (Table->TYPE_of_INITIAL_CONDITION == 2) {
     Print_Press_Key (STAT_BOOL_VERBOSE, 0, 
 	  "Initial Conditions are defined as the fixed points of the system\n");
-    // fixed_Points(P, y_INI, EPSILON);  /* Calculating Lower/Single point... */ 
-				         /* (see fixed_Points.c)              */
-
+    // Fixed Points should have been already calculated in a previous call 
+    // to the function 'Fixed_Points_All();
     for( i = 0; i < Table->MODEL_STATE_VARIABLES; i++ ) 
-       Table->Vector_Model_Variables_Stationarity[i] = y_INI[i] ;
+       y_INI[i] = Table->Vector_Model_Variables_Stationarity[i];
   }
   else {
     printf(" Attention: Initial Condition Value is undefined:\n");

@@ -55,10 +55,10 @@ int numerical_Integration_Driver( Parameter_Table * Table,
      
       if (status != GSL_SUCCESS) break;
 
-      #if defined VERBOSE
-          if (Table->MODEL_STATE_VARIABLES >= 2 )
-	          printf ("%.5g %.5g %.5g\n", *t, y[0], y[1]);
-      #endif
+      // #if defined VERBOSE
+          if (Table->MODEL_STATE_VARIABLES >= 4 )
+	          printf ("t = %.5g (%.5g, %.5g, %.5g, %.5g)\n", *t, y[0], y[1], y[2], y[3]);
+      // #endif
     }
      
   gsl_odeiv_evolve_free (e);

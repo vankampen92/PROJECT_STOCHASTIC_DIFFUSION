@@ -180,6 +180,14 @@ void Temporal_Dynamics_Update( Community ** My_Community,
     #endif
       
     Rate->max_Probability = MAX( Rate->max_Probability, Pa->ratePatch );   
+
+    /* Printing total rates at patch */
+    if(Table->No_of_CELLS == 1 ) { 
+      printf("Printing total rates at patch (%d): [ ", x);
+      for (i=0; i<Table->TOTAL_No_of_EVENTS; i++)
+        printf("%g ", Pa->rToI[i]);
+      printf(" ]\n");
+    }
   }
   else {  /* MOVEMENT EVENT involving two Patches: 
              x: patch exporting an individual 
@@ -421,7 +429,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
 
   int * n = Pa->n;
 
-  /* K_W: Total Carrying Capacity (Workers): Max No of Worker per Nest */
+  /* K_W: Total Carrying Capacity (Workers), where K_R is the max No of Worker per Nest */
   double K_W = (double)Table->K_R * (double)Table->Lambda_C_1;
   /* K_Q: Total Max No of Nests (per local patch) */ 
   double K_Q = (double)Table->Lambda_C_1; 
@@ -450,19 +458,19 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     break;
     
     case 3: /* 3: Worker Production by Queens */
-      Delta_Matrix[3][3] = -Table->Beta_R/K_W * (double)n[Q];;;
+      Delta_Matrix[3][3] = -Table->Beta_R/K_W * (double)n[Q];
       Delta_Matrix[3][4] = +Table->Eta_R/K_Q * (K_Q - (double)n[Q]);
       Delta_Matrix[3][9] = +Table->Alpha_C_0/K_W * (double)n[F];
     break;
       
     case 4: /* 4: Nest Establishment  (new queen) */  
-      Delta_Matrix[4][3] = +Table->Beta_R * (K_W - ((double)n[W]+1) + (double)n[Q])/K_W;
-      Delta_Matrix[4][4] = -Table->Eta_R *(K_Q -(double)n[Q] +(double)n[W] +1)/K_Q;
+      Delta_Matrix[4][3] = +Table->Beta_R/K_W * (K_W - (double)n[W] + (double)n[Q] -1.0);
+      Delta_Matrix[4][4] = -Table->Eta_R/K_Q *(K_Q -(double)n[Q] + (double)n[W] + 1.0);
       Delta_Matrix[4][9] = -Table->Alpha_C_0/K_W * (double)n[F];
     break;
     
     case 5:  /* 5: Queen Death  */
-      Delta_Matrix[5][3] = -Table->Beta_R/K_W * (K_W- (double)n[W])/K_W;
+      Delta_Matrix[5][3] = -Table->Beta_R/K_W * (K_W- (double)n[W]);
       Delta_Matrix[5][4] = +Table->Eta_R/K_Q * (double)n[W];
     break;
     
@@ -486,7 +494,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     break;
 
     case 10: /* 10: Larval development into adult flies ( RA ---> A) */ 
-      Delta_Matrix[10][9] = +Table->Alpha_C_0/K_R * (double)n[W];
+      Delta_Matrix[10][9] = +Table->Alpha_C_0/K_W * (double)n[W];
       
     break;
 
@@ -498,7 +506,7 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Ta
     default:
       /* Something is very very wrong!!! */
       printf(" Type_of_Event = %d\t This value is not possible!!!\n", Type_of_Event);
-      printf(" Only 0 to 12 are possible. Type of Event is ill-defined\n");
+      printf(" Only 0 to 11 are possible. Type of Event is ill-defined\n");
       printf(" The program will exit\n");
       Print_Press_Key(1,0,"."); 
       exit(0);

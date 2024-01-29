@@ -9,10 +9,10 @@ double K_Q = (double)Table->Lambda_C_1;
   x = -Table->Delta_R_0 -Table->Beta_R* y[Q]/K_W  -Table->Alpha_C_0* y[F]/K_W; 
   gsl_matrix_set(m, W, 0, x);
  
-  x = Table->Beta_R * (K_W - y[W])/K_W +  Table->Eta_R * y[RP]/K_R;
+  x = Table->Beta_R * (K_W - y[W])/K_W;
   gsl_matrix_set(m, W, 1, x);
 
-  x= 0.0;
+  x= -Table->Alpha_C_0 *y[W]/K_W;
   gsl_matrix_set(m, W, 2, x);
 
   x= 0.0;
@@ -45,7 +45,7 @@ double K_Q = (double)Table->Lambda_C_1;
   gsl_matrix_set(m, F, 3, x);
 
   /* F_WF( y; parameters) */
-  x= 0.0;
+  x= Table->Alpha_C_0 *y[F]/K_W;
   gsl_matrix_set(m, WF, 0, x);
 
   x= 0.0;

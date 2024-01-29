@@ -38,8 +38,10 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
 
-#ifdef DIFFUSION_AZTECA_4D
+#ifdef DIFFUSION_AZTECA_4D                                            /* -HK  */
     case 10:  p = strcat(Label, "Nest Carrying Capacity (Workers)");  /* Working Carrying Carrying Capacity per Nest */
+#elif DIFFUSION_AZTECA_4D_0
+    case 10:  p = strcat(Label, "Max No of Potential Nesting Trees");  /* Potential Number of Nesting Trees (per local Cell) */
 #else
     case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */
       break;
@@ -63,12 +65,15 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 15: p=strcat(Label,  "Consumer Death Rate (1)");                 /* -H8 */ 
       break; 
       
-    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");                   /* -H9  */
+    case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");                /* -H9  */
       break;
 
 #ifdef DIFFUSION_AZTECA_4D
     case 17: p=strcat(Label,  "Larval Development Rate (Nu) of Flies");/* -H10 */
       break;
+#elif DIFFUSION_AZTECA_4D_0 
+    case 17:  p = strcat(Label, "Larval Development Rate (Nu) of Flies");  /* Working Carrying Carrying Capacity per Nest */
+      break; 
 #else 
     case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");/* -H10 */
       break;

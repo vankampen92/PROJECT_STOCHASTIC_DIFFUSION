@@ -12,4 +12,4 @@ RP =Table->RP; R = Table->R;  A = Table->A;      RA = Table->RA;   ARA = Table->
 
 V = Table->V;  R = Table->R;     G = Table->G; 
 
-W = Table->W;  Q = Table->Q;   F = Table->F;     WR = Table->WF;
+W = Table->W;  Q = Table->Q;   F = Table->F;     WF = Table->WF;

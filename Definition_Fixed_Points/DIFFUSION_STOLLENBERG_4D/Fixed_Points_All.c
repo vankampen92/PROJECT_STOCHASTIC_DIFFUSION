@@ -278,7 +278,6 @@ double Function_to_Type_of_Stability( Parameter_Table * Table )
     Stationary_Solution_Feasibility_Control ( Table ); 
 
     /* Eigen Values: Y1[k] + i Y2[k] from k=0 to Table->MODEL_STATE_VARIABLES-1 */
-    
     GSL_Eigenvalue_Calculation(Y0, Table->MODEL_STATE_VARIABLES, Table,  Y1, Y2);
     // NR_Eigenvalue_Calculation(Y0, Table->MODEL_STATE_VARIABLES, Table,  Y1, Y2);
     

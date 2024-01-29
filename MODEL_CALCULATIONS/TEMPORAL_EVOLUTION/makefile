@@ -69,7 +69,7 @@ NR=NUMERICAL_RECIPES###############################
 ##                         influences the rate of occurrence of any other event, locally
 ## BINARY_TREE_OPTIMIZATION requires setting up a binary tree for all the spatial individual cells
 ## BINARY_TREE_SUPER_OPTIMIZATION requires setting up a bigger binary tree of every event at each cell 
-STO=STOCHASTIC_OPTIMIZATION#################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
+STO=STOCHASTIC_OPTIMIZATION###################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
 BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities: 
 ##################################################### (0) 'NON'
 ##################################################### (1) 'BINARY_TREE_OPTIMIZATION'
@@ -78,8 +78,8 @@ BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities:
 RE=NON_REUSE_RANDOM_NUMBER############################### (22) Possibilities;
 #####################################################      'NON_REUSE_RANDOM_NUMBER'
 #####################################################      'REUSE_RANDOM_NUMBER'
-# The optimation option of reusing random numbers is only availables in case 
-# BT=BINARY_TREE_SUPER_OPTIMIZATION
+# The optimation option of reusing random numbers is only available in case 
+# BT=BINARY_TREE_SUPER_OPTIMIZATION (otherwise does not make sense)
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
 V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
@@ -102,7 +102,7 @@ ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
 ODE_DIR=${ODE_DIR_GENERAL}${ODE_MODEL}/#########
 ODE_DEF=${ODE_DIR_GENERAL}ODE_Definitions/###########################
 ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
-TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
+TYPE_NUMERICAL_INTEGRATION=GSL_RK45#############################
 ######################################## Possibilities:
 ######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be 
 ########################################  provided in JAC_sys${SYS}.c.

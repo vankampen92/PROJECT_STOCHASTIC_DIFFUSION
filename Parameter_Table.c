@@ -368,7 +368,26 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	        for(i=0; i<Table->No_of_CELLS; i++)
 	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
 	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;
-              
+
+    else if (Table->TYPE_of_MODEL == 17 || Table->TYPE_of_MODEL == 18)  
+    /* DIFFUSION_AZTECA_4D or DIFFUSION_AZTECA_4D_0*/
+      for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
+	      if(a == 0)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;   /* Workers */
+	      else if (a == 1)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;         /* Queens  */
+        else if (a == 2)
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_C; /* Flies   */
+	      else 
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;         /* Parasitized Workers */ 
     else{
       printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
 	     Table->TYPE_of_MODEL);

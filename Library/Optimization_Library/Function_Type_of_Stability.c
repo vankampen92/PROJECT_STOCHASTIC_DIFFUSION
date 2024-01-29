@@ -1,5 +1,7 @@
 #include <MODEL.h>
 
+/* Under Constrution */
+
 int Function_to_Type_of_Stability( Parameter_Table * Table )
 {
   /* 	
@@ -27,6 +29,8 @@ int Function_to_Type_of_Stability( Parameter_Table * Table )
 
   Type_of_Stability = Coexistence_Condition ( Table ); 
   
+  assert( Type_of_Stability )
+
   if (Type_of_Stability == 0 ) return(Type_of_Stability);
   else {
     

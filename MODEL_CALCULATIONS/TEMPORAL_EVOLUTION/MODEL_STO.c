@@ -129,6 +129,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
 	      }
       }
     }
+    
     // GSL_Init_Random_Seed(r); /* According to Computer time */
     /* Input variables: 
        . i, lable of current realization 
