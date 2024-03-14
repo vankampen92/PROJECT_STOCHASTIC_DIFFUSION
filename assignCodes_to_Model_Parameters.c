@@ -36,8 +36,13 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 13:  p = strcat(Label, "-H6");    /* Delta_C_0 */   
       break;
+#ifdef DIFFUSION_AZTECA_4D_1
+    case 14:  p = strcat(Label, "-HuQ");   /* Lambda_C_1 */ /* Overloaded!!! */     
+      break;
+#else
     case 14:  p = strcat(Label, "-H7");    /* Lambda_C_1 */     
       break;
+#endif
     case 15:  p = strcat(Label, "-H8");    /* Delta_C_1 */   
       break; 
       

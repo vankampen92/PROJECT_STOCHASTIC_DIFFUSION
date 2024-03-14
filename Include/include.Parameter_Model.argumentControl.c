@@ -13,10 +13,12 @@ case 'H': /* Maximum and Minimum Transmission Rate */
 	else if(argv[argcount][2]=='u') {
 		if(argv[argcount][3]=='\0')   sscanf(argv[argcount+1],"%lf",
 						&Mu);                        /* u */
-		else if(argv[argcount][3]=='R')  sscanf(argv[argcount+1],"%lf",         /*  uR */
-					&Mu); 
-		else if(argv[argcount][3]=='C')  sscanf(argv[argcount+1],"%lf",
-					&Mu_C);                              /* uC */
+		else if(argv[argcount][3]=='R')  sscanf(argv[argcount+1],"%lf",  
+						&Mu);                       /*  u */
+		else if(argv[argcount][3]=='C')  sscanf(argv[argcount+1],"%lf",   
+						&Mu_C);                      /* uC */
+		else if(argv[argcount][3]=='Q')  sscanf(argv[argcount+1],"%lf",
+						&Lambda_C_1);                /* uQ */
 		else {
 			printf(" Error in include.Parameter_Model.argumentControl.c\n");
 			printf(" Error at reading input arguments: %s  \n", argv[argcount]);
@@ -31,11 +33,11 @@ case 'H': /* Maximum and Minimum Transmission Rate */
 	else if(argv[argcount][2]=='S')   sscanf(argv[argcount+1],"%d",
 					&No_of_RESOURCES);               /* S */
 
-	else if(argv[argcount][2]=='K')   sscanf(argv[argcount+1],"%d",            /* K */
+	else if(argv[argcount][2]=='K')   sscanf(argv[argcount+1],"%d", 
 					&K_R);                      
 
 	else if(argv[argcount][2]=='0')  sscanf(argv[argcount+1],"%lf",
-						&Lambda_R_0);                /* 0 */
+					&Lambda_R_0);                    /* 0 */
 
 	else if(argv[argcount][2]=='1')  {
 		if(argv[argcount][3]=='\0')   sscanf(argv[argcount+1],"%lf",
@@ -82,8 +84,8 @@ case 'H': /* Maximum and Minimum Transmission Rate */
 	}
 
 	else if(argv[argcount][2]=='p')   {
-		if(argv[argcount][3]=='1')  sscanf(argv[argcount+1],"%lf",         /* p1 */
-					&p_1);    
+		if(argv[argcount][3]=='1')  sscanf(argv[argcount+1],"%lf",        
+					&p_1);                           /* p1 */
 		else if(argv[argcount][3]=='2')  sscanf(argv[argcount+1],"%lf",
 					&p_2);                          /* p2 */
 		else {
@@ -94,7 +96,7 @@ case 'H': /* Maximum and Minimum Transmission Rate */
 		}
 	}
 
-	else if(argv[argcount][2]=='3')   sscanf(argv[argcount+1],"%lf",      /* 3 */
+	else if(argv[argcount][2]=='3')   sscanf(argv[argcount+1],"%lf",      
 					&Delta_R_1);                
 
 	else if(argv[argcount][2]=='4')   sscanf(argv[argcount+1],"%lf",

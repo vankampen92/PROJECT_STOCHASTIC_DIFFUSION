@@ -88,4 +88,19 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 16 );
   
 #endif
+#if defined  DIFFUSION_AZTECA_4D
+  
+    assert ( P->TYPE_of_MODEL == 17 );
+  
+#endif
+#if defined  DIFFUSION_AZTECA_4D_0
+  
+    assert ( P->TYPE_of_MODEL == 18 );
+  
+#endif
+#if defined  DIFFUSION_AZTECA_4D_1
+  
+    assert ( P->TYPE_of_MODEL == 19 );
+  
+#endif
 }

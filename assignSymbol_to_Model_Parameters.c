@@ -48,8 +48,13 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 13: p=strcat(Label, "\\gd\\u(C)\\d\\d0\\u");    
       break;
-    case 14: p=strcat(Label, "\\gl\\u(C)\\d\\d1\\u");    
+#ifdef DIFFUSION_AZTECA_4D_1 
+    case 14: p=strcat(Label, "\\gm\\u(Q)\\d\\d1\\u");    
       break; 
+#else
+    case 14: p=strcat(Label, "\\gl\\u(C)\\d\\d1\\u");    
+      break;
+#endif
     case 15: p=strcat(Label, "\\gd\\u(C)\\d\\d1\\u");    
       break; 
       
@@ -171,8 +176,13 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 13: p=strcat(Label,"Delta_C_0");      /* -H6 */
       break;
+#ifdef DIFFUSION_AZTECA_4D_1 
+    case 14: p=strcat(Label,"Mu_Q");     /* -H7 */
+      break;
+#else
     case 14: p=strcat(Label,"Lambda_C_1");     /* -H7 */
       break;
+#endif
     case 15: p=strcat(Label,"Delta_C_1");      /* -H8 */ 
       break; 
       

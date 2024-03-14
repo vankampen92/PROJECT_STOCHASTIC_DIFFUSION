@@ -18,7 +18,7 @@ double Beta_R;         /* -H4 */
   
 double Lambda_C_0;     /* -H5 */
 double Delta_C_0;      /* -H6 */
-double Lambda_C_1;     /* -H7 */
+double Lambda_C_1;     /* -H7 *//* -HuQ */
 double Delta_C_1;      /* -H8 */ 
       
 double Alpha_C_0;      /* -H9 */

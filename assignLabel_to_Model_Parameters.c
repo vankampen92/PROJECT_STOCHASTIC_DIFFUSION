@@ -58,7 +58,10 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_AZTECA_4D
     case 14: p=strcat(Label,  "MAX No of NESTS per LOCAL PATCH");         /* -H7 */
       break;
-#else      
+#elif DIFFUSION_AZTECA_4D_1
+    case 14: p=strcat(Label,  "Jumping/Diffusion Rate of Queens");        /* -HuQ */
+      break;
+#else 
     case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");  /* -H7 */
       break;
 #endif

@@ -11,6 +11,8 @@
 						       
 		else if(argv[argcount][3]=='C') fprintf(fp, "-HuC %g  ", Table->Mu_C);  /*  uC */
 		
+		else if(argv[argcount][3]=='Q') fprintf(fp, "-HuQ %g  ", Table->Lambda_C_1);  /*  uQ */
+		
 		else {
 		  printf(" Error in include.Parameter_Model.argumentControl.c\n");
 		  printf(" Error at reading input arguments: %s  \n", argv[argcount]);

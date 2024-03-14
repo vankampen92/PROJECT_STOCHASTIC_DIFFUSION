@@ -818,9 +818,11 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* List of the 14 (potentially searcheable) model parameters:  */
       /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
       n = 0;
-      Table->Index[n++] = 0; /* Worker Movement Rate */ /* mu_R */ 
+  
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
-
+      
+      Table->Index[n++] = 0; /* Worker Movement Rate */ /* mu_R */ 
+      
       Table->Index[n++] = 6; /* External Immigration Rate (0) */ /* W */
       
       Table->Index[n++] = 7; /* Death Rate (0) */ /* W */   /* Delta_R_0 */
@@ -842,6 +844,59 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->Index[n++]   = 29; /* Establishment Rate  (nest starting) *//* W ---> Q */
 
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
+    case 19: /* AZTECA_4D_1 * * * * * * * * * */
+
+      /* No_of_EVENTS, i.e, common events that can occur to every/some of the species: */
+      Table->No_of_EVENTS = 3;  /* (Only Diffusion + External Immigration + Death) 
+				                            W, Q, and F can undergo these three same processes 
+				                        */
+      Table->TOTAL_No_of_EVENTS = 3 * Table->No_of_EVENTS + 5;
+      Table->LOCAL_STATE_VARIABLES = 4; /* 1 W + 1 Q + 1 F + 1 WF           */
+                                        /* WF \equiv RA (handling consumer or
+                                           fly larva developing )     
+                                        */
+
+      assert(Table->No_of_RESOURCES == 1);
+      
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+	    
+      /* Conventions */
+      Table->K   = n-1;     /* Label last class */
+      Table->W = 0; Table->Q = 1;  Table->F = 2; Table->WF = 3; 
+
+      /* List of the 16 (potentially searcheable) model parameters:  */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+
+      Table->Index[n++] = 5; /* No_of_RESOURCES */
+
+      Table->Index[n++] = 0;  /* Worker Movement/Diffusion Rate */ /* Mu */ 
+      Table->Index[n++] = 14; /* Queen Movement/Diffusion Rate  */ /* Lambda_C_1 */ 
+      Table->Index[n++] = 20; /* Fly Movement/Diffusion RAte    */ /* Mu_C */
+      
+      Table->Index[n++] = 6;  /* External Immigration Rate */ /* W */ /* Lambda_R_0 */
+      Table->Index[n++] = 8;  /* External Immigration Rate */ /* Q */ /* Lambda_R_1 */
+      Table->Index[n++] = 12; /* External Immigration Rate */ /* F */ /* Lambda_C_0 */
+
+      Table->Index[n++] = 10; /* Queen Carrying  Capacity */ /* K_R */
+
+      Table->Index[n++] = 7; /* Death Rate (0) */ /* W */   /* Delta_R_0 */
+      Table->Index[n++] = 9; /* Death Rate (1) */ /* Q */   /* Delta_R_1 */
+      Table->Index[n++] = 13; /* Consumer Death Rate */ /* F */ /* Delta_C_0 */    
+      Table->Index[n++] = 15; /* WF Death Rate */       /* WF *//* Delta_C_1 */
+       
+      Table->Index[n++] = 11; /* Worker Local Production Rate */ /* Beta_R *//* W ---> W + 1 */
+      Table->Index[n++] = 29; /* Worker Local Production Rate */ /* Eta_R  *//* Q ---> Q + 1 */
+
+      Table->Index[n++] = 16; /* Consumer Attack Rate */ /* Alpha */
+      Table->Index[n++] = 17; /* Nu = 1/Tau, Tau, Handling Time */ /* Nu */
+            
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
@@ -1098,6 +1153,18 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       break;
 
     case 18: /* DIFFUSION_AZTECA_4D_0 * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 19: /* DIFFUSION_AZTECA_4D_0 * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)

@@ -158,11 +158,12 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_HII_1D           TYPE_of_MODEL = 12
      . MODEL=DIFFUSION_HII_nD           TYPE_of_MODEL = 16
      . MODEL=DIFFUSION_AZTECA_4D        TYPE_of_MODEL = 17
-     . MODEL=DIFFUSION_AZTECA_4D_0        TYPE_of_MODEL = 18
+     . MODEL=DIFFUSION_AZTECA_4D_0      TYPE_of_MODEL = 18
+     . MODEL=DIFFUSION_AZTECA_4D_1      TYPE_of_MODEL = 19
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
+  if(P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
     Event_Delta_Matrix_Initialization(PATCH, P);
     Event_Adjacence_List_Initialization(PATCH, P);
   }

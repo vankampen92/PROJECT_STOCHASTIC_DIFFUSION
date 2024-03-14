@@ -1,8 +1,115 @@
 {
     "version": "0.2.0",
-    "configurations": [
-
-
+    "configurations": [ 
+        {
+            "name": "(gdb) Launch AZTECA_4D_1",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/DIFFUSION_AZTECA_4D_1",
+            "args": [
+                "-y0",
+                "19",
+                "-y2",
+                "1",
+                "-HS",
+                "1",
+                "-HM",
+                "36",
+                "-HX",
+                "6",
+                "-HY",
+                "6",
+                "-n",
+                "4",
+                "-v0",
+                "0",
+                "-v1",
+                "1",
+                "-v2",
+                "2",
+                "-v3",
+                "3",
+                "-G0",
+                "2",
+                "-G1",
+                "2",
+                "-tn",
+                "100",
+                "-t0",
+                "0.0",
+                "-t1",
+                "20.0",
+                "-t4",
+                "0",
+                "-tR",
+                "1",
+                "-xn",
+                "0",
+                "-xN",
+                "1.0",
+                "-HN",
+                "1.0",
+                "-G2",
+                "1",
+                "-G3",
+                "0.0",
+                "-G4",
+                "20.1",
+                "-G5",
+                "1",
+                "-G6",
+                "0.0",
+                "-G7",
+                "200",
+                "-HuR",
+                "1.0",
+                "-HuQ",
+                "2.5",
+                "-HuC",
+                "5.0",
+                "-H0",
+                "0.0",
+                "-H2",
+                "0.0",
+                "-H5",
+                "0.0",
+                "-HK",
+                "10",
+                "-H1",
+                "1.5",
+                "-H3",
+                "1.0",
+                "-H6",
+                "1.0",
+                "-H8",
+                "1.5",
+                "-H9",
+                "50.5",
+                "-H10",
+                "2.0",
+                "-H4",
+                "8.5.0",
+                "-H20",
+                "1.0"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
         {
             "name": "(gdb) Launch Hoshen-Kopelman",
             "type": "cppdbg",
@@ -752,7 +859,7 @@
                     "ignoreFailures": true
                 }
             ]
-        }
+        } 
     ]
 }
 

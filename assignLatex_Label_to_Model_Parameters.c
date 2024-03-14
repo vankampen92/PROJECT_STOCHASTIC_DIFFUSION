@@ -56,6 +56,9 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_AZTECA_4D
     case 14: p=strcat(Label,  "Max No of Nests per Patch");     /* -H7 */
       break;
+#elif DIFFUSION_AZTECA_4D_1
+    case 14: p=strcat(Label,  "Jumpling/Diffusion rate of queens (1)");     /* -HuQ*/
+      break;
 #else
     case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");     /* -H7 */
       break;
@@ -182,8 +185,13 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
       break;
     case 13: p=strcat(Label,"$\\delta^{(C)}_0$");     /* -H6 */
       break;
+#ifdef DIFFUSION_AZTECA_4D_1
+    case 14: p=strcat(Label,"$\\mu^{(Q)}$");    /* -H7 */
+      break;
+#else
     case 14: p=strcat(Label,"$\\lambda^{(C)}_1$");    /* -H7 */
       break;
+#endif
     case 15: p=strcat(Label,"$\\delta^{(C)}_1$");     /* -H8 */ 
       break; 
       

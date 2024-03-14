@@ -212,6 +212,28 @@ gsl_rng * r; /* Global generator defined in main.c */
   -xN n_0. For instance, the initial condition is (0, n_0, 0, 0) at the center of the grid and 
            (0, n_0, n_0, n_0) at a number of randomly chosen cells across the grid. 
 
+  ~$ ./DIFFUSION_AZTECA_4D_1 -y0 19 -y2 1 -HS 1 -HM 6400 -HX 80 -HY 80  \
+                        -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2 \
+                        -tn 300 -t0 0.0 -t1 300.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                        -G2 1 -G3 0.0 -G4 300.0 -G5 1 -G6 0.0 -G7 50000 \
+                        -HuR 1.0 -HuQ 2.5 -HuC 5.0 \
+                        -H0 0.0001 -H2 0.0001 -H5 0.0001 \
+                        -HK 10.0 \
+                        -H1 1.5 -H3 1.0 -H6 1.5 -H8 1.0 \
+                        -H9 50.0 -H10 2.0 -H4 8.5 -H20 1.0
+
+  For the AZTECA_4D_1 model,
+  -HuR -HuQ and -HuC are jumping rates of workers, queens and flies, respectively.
+  -H0 -H2 and -H5 are external immigrations rates (Lambda_R_0, Lambda_R_1, and Lambda_C_0). Usually equal to zero
+  -HK is the maximum number of potential nesting queens per local area, cell or local community (K_R)  
+  -H20 is the food per unit worker carried back to the nest (times a conversion factor) (Eta_R)
+  -H4 is the per capita rate at which queens produce new workers (Beta_R)
+  -H9 is the attack rate (Alpha_C_0)
+  -H10 is the larval development rate (Nu_C_0)  
+  -H1 -H3 -H6 -H8 are death rates (workers, queens, flies, and parasitezed workers, respectively) 
+  -xN n_0. For instance, the initial condition is (0, n_0, 0, 0) at the center of the grid and 
+           (0, n_0, n_0, n_0) at a number of randomly chosen cells across the grid.                       
+
    MacArthur and Rosenzweig (two species 3D, R, A, RA):
    .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
                       -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \

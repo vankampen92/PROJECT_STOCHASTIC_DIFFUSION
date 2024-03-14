@@ -347,10 +347,18 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       p = strcat(L[3], "WF");
 
       break;
+    
+    case  19:
+      p = strcat(L[0], "W");
+      p = strcat(L[1], "Q");
+      p = strcat(L[2], "F");
+      p = strcat(L[3], "WF");
+
+      break;
       
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);
-      printf(".... The permited correspondences are: 0 to 10\n");
+      printf(".... The permited correspondences are: 0 to 19\n");
       exit(0);
     }
 }
