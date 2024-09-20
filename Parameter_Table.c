@@ -103,6 +103,12 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   Table->Theta_Consumers = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->y_R_i     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
 
+  Table->Delta_RP  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Eta_RP    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Mu_RP     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Beta_AP   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Delta_AP  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
   Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES_MAXIMUM,
 							  sizeof(double **) );
@@ -199,6 +205,12 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
  
   free(Table->Theta_Consumers);
   free(Table->y_R_i);
+
+  free(Table->Delta_RP); 
+  free(Table->Eta_RP);
+  free(Table->Mu_RP);
+  free(Table->Beta_AP);
+  free(Table->Delta_AP);
 
   for(a=0; a<No_of_RESOURCES_MAXIMUM; a++) {  
     for(i=0; i<Table->No_of_CELLS; i++) 
@@ -322,7 +334,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	          Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0; 
   }
   else {
-    assert(Table->TYPE_of_NETWORK == 1) ;
+    assert(Table->TYPE_of_NETWORK == 1) ;  /* Squared Grid */
 
     if( Table->TYPE_of_MODEL == 0 || Table->TYPE_of_MODEL == 1 )
       for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++) 
@@ -408,10 +420,22 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	        for(i=0; i<Table->No_of_CELLS; i++)
 	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
 	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0.0;  /* Parasitized Workers */ 
+
+    else if (Table->TYPE_of_MODEL == 20)  
+    /* DIFFUSION_ECOEVO_PLANTS */
+      for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
+	      if(a%2 == 0)                                           /* (a%2 == 0, this is, resource propagules) */
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu;   /* Propagues, RP, move at rate Mu      */
+	      else                                                   /* (a%2 == 1, this is, established adult plants) */
+	        for(i=0; i<Table->No_of_CELLS; i++)
+	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0;           /* Adult Plants, AP, on't move themseleves */
     
     else{
       printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
-	     Table->TYPE_of_MODEL);
+	          Table->TYPE_of_MODEL);
       printf(" This model is not ready for multi-patch dynamics\n");
       assert(Table->No_of_CELLS == 1); 
     }
@@ -421,6 +445,37 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   */
   Resetting_Lambda_Delta_Vectors (Table); 
   /* END -------------------------------------------------*/
+}
+
+void Ressetting_Species_Characteristic_Parameters (Parameter_Table * Table)
+{
+  /* This function defines all species-specific parameters. 
+     It is used to introduce tradeoffs between parameters 
+  */
+
+  int i; 
+  
+  assert(Table->TYPE_of_MODEL == 20);  /* 20: MODEL=DIFFUSION_ECOEVO_PLANTS */
+  
+  double p       = Table->p_1;
+  double r_0     = Table->p_2;
+  double z_0     = Table->p_2;
+  double Eta_MIN = Table->Delta_C_0; 
+  double Eta_MAX = Table->Delta_C_1;
+   
+  for(i=0; i<Table->No_of_RESOURCES; i++) {
+
+    Table->Delta_RP[i] = Table->Delta_R_0; 
+    Table->Delta_AP[i] = Table->Delta_R_1;
+    
+    Table->Eta_RP[i]= Eta_MIN + (double)i/((double)Table->No_of_RESOURCES - 1.0) * (Eta_MAX - Eta_MIN);
+    /* Tradeoff: Between Eta and Beta based on an invasion criterion (r_0) */
+    Table->Beta_AP[i] = r_0 * (Table->Eta_RP[i] + Table->Delta_RP[i])/(Table->Eta_RP[i]*(1.0-2.0*p)) * Table->Delta_AP[i]; 
+    /* Tradeoff: Between Eta and Beta based on the amount of free space (z_0): equi-fitness manifold */
+    // Table->Beta_AP[i]=(Table->Delta_RP[i] + z_0*Table->Eta_RP[i])/(z_0*Table->Eta_RP[i]) * Table->Delta_AP[i]; 
+
+    Table->Mu_RP[i]  = Table->Mu; 
+  }
 }
 
 void Resetting_Lambda_Delta_Vectors (Parameter_Table * Table)
@@ -564,21 +619,21 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
 
   Print_Press_Key(0,0,".");
 } 
+
 /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */
 /*   int i;                                                                   */
 /*   for(i=0; i<N; i++) P->Index[i] = Index[i];                               */
 /* }                                                                          */
 
-/*
+void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
+{
+  /*
    The purpose of this simple function is just to upload
    ALL input parameters, controling both model definition
    and running simulations, which are defined as global variables,
    into the corresponding Parameter_Table Structure
-*/
-void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
-{ 
-
+  */ 
   P->Mu_C        = Mu_C; 
   P->Mu          = Mu;
   
@@ -608,10 +663,10 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->Beta_C     = Beta_C;         /* -H17 */ /* Consummer Reproduction Rate */
   P->k_E        = k_E;            /* -H18 */ /* 2* k_E is the resourse value in energy units */
   P->Theta_C    = Theta_C;        /* -H19 */ /* Energy loss rate for maintenance */
-  P->p_1        = p_1;    /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
-  P->p_2        = p_2;    /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
+  P->p_1        = p_1;            /* -Hp1 */ /* Cooperation probability 1st position in the triplet */ 
+  P->p_2        = p_2;            /* -Hp2 */ /* Cooperation probability 2on position in the triplet */ 
 
-  P->Eta_R      = Eta_R;  /* -H20 */ /* Propagule establisment Rate */
+  P->Eta_R      = Eta_R;          /* -H20 */ /* Propagule establisment Rate */
   
   P->No_of_IC = No_of_IC;
   P->TYPE_of_INITIAL_CONDITION = TYPE_of_INITIAL_CONDITION;

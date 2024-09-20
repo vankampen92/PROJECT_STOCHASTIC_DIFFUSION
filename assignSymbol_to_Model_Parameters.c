@@ -83,10 +83,23 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 26:  p = strcat(Label, "\\gz\\d(C)\\u");   
       break;
-    case 27:  p = strcat(Label, "p\\d1\\u");   
+
+#ifdef DIFFUSION_ECOEVO_PLANTS 
+    case 27:  p = strcat(Label, "p");        /* Mutation Probability */   
       break; 
+#else
+    case 27:  p = strcat(Label, "p\\d1\\u");   
+      break;
+#endif
+
+#ifdef DIFFUSION_ECOEVO_PLANTS
+    case 28:  p = strcat(Label, "r\\d0\\u");   
+      break;
+#else
     case 28:  p = strcat(Label, "p\\d2\\u");   
       break;
+#endif    
+    
     case 29:  p = strcat(Label, "\\ge\\dR\\u");   
       break;
       
@@ -217,12 +230,22 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       
     case 26:  p = strcat(Label, "Theta_C");   
       break;
-      
+ 
+ #ifdef DIFFUSION_ECOEVO_PLANTS     
+    case 27:  p = strcat(Label, "p");   /* Mutation Probability */   
+      break;
+ #else
     case 27:  p = strcat(Label, "p_1");   
       break;
-      
+ #endif
+
+#ifdef DIFFUSION_ECOEVO_PLANTS
+    case 28:  p = strcat(Label, "r_0"); /* Tradeoff factor     */   
+      break;
+#else
     case 28:  p = strcat(Label, "p_2");   
       break;
+#endif
 
     case 29:  p = strcat(Label, "Eta_R");   
       break;

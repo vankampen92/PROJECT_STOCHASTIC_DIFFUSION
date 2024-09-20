@@ -13,10 +13,12 @@ typedef struct Communityinfo
 			of the patch at any given time. This only coicides with the 
 			total MODEL_STATE_VARIABLES when the we have only one patch          */
 
+  int m_0;   /* Total Empty Space in a local communit */
+
   int * n;           /* n[0], ..., n[LOCAL_STATE_VARIABLES-1] defines the state
 			of the patch completely                                              */
   double * rate;     /* Transition probability for an individual of each species               */
-  double * rToI;     /* Transition probability for all individuals of a spcies              */ 
+  double * rToI;     /* Transition probability for all individuals of a species              */ 
   double ratePatch;  /* Transition probability of this patch                                 */
   
   struct point center;  /* Coordinates of the position of the center of patch              */
@@ -37,7 +39,9 @@ typedef struct Communityinfo
 
   int ** Event_Adjacence_List;
 
-  double **Event_Delta_Matrix; 
+  double **Event_Delta_Matrix;
+
+  double ***Event_Delta_Tensor;  /* One matrix per species */
   
   struct Communityinfo ** NEI; /* An array of pointers to the neighbors the focal patch 
 				  is connected to                                            */

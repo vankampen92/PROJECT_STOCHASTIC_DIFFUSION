@@ -1,7 +1,8 @@
 #include <MODEL.h>
 
 /* This functions allocate, initialize and free a number of local communities,
-   which make up our total patch system or metapopulation */
+   (or patches), which make up our total patch system or metacommunity
+*/
 extern gsl_rng * r; /* Global generator defined in main.c */
 #define RANDOM gsl_rng_uniform_pos(r)
 
@@ -10,7 +11,7 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
   int i, j, a;
   int N, no, Sp;
 
-  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species
+  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species 
 					                              potentially coexisting locally,
 					                              and, therefore, also the
 					                              Total Number of State Variables
@@ -48,13 +49,32 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
     for(a=0; a<Sp; a++)
       PATCH[i]->Imm_Rates_Preassure[a] = (double *)calloc(P->No_of_NEIGHBORS, sizeof( double ));
 
-    PATCH[i]->Event_Delta_Matrix = (double **)calloc(N, sizeof(double *) );
-    for(a=0; a<N; a++)
-      PATCH[i]->Event_Delta_Matrix[a] = (double *)calloc(N, sizeof(double) );
+    /* Certain ECOEVO models require the organization of the Event_Delta_Matrix as a tensor,
+       where each outter level represents the matrix associated to a species or type 
+       of size No_of_EVENTS x No_of_EVENTS, where this is the number of events each species 
+       can undergo 
+    */
+    if(P->TYPE_of_MODEL == 20) {
+      PATCH[i]->Event_Delta_Tensor = (double ***)calloc(P->No_of_RESOURCES, sizeof(double **) );
+      for(a=0; a<P->No_of_RESOURCES; a++) {
+        PATCH[i]->Event_Delta_Tensor[a] = (double **)calloc(P->No_of_EVENTS, sizeof(double *) );
+        for(j=0; j<P->No_of_EVENTS; j++)
+          PATCH[i]->Event_Delta_Tensor[a][j] = (double *)calloc(P->No_of_EVENTS, sizeof(double) );
+      }
 
-    PATCH[i]->Event_Adjacence_List = (int **)calloc(N, sizeof(int *) );
-    for(a=0; a<N; a++)
-      PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(N+1, sizeof(int) );
+      PATCH[i]->Event_Adjacence_List = (int **)calloc(P->No_of_EVENTS, sizeof(int *) );
+      for(a=0; a<P->No_of_EVENTS; a++)
+        PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(P->No_of_EVENTS+1, sizeof(int) );  
+    }
+    else {
+      PATCH[i]->Event_Delta_Matrix = (double **)calloc(N, sizeof(double *) );
+      for(a=0; a<N; a++)
+        PATCH[i]->Event_Delta_Matrix[a] = (double *)calloc(N, sizeof(double) );
+      
+      PATCH[i]->Event_Adjacence_List = (int **)calloc(N, sizeof(int *) );
+      for(a=0; a<N; a++)
+        PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(N+1, sizeof(int) );
+    }
   }
 }
 
@@ -62,8 +82,15 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
 {
   int Sp, K, i, j, a;
 
-  Sp  = P->No_of_RESOURCES; /* Ex: 11 times 4 */
-
+  Sp  = P->LOCAL_STATE_VARIABLES;     /*  LOCAL_STATE_VARIABLES:
+                                          (For instance, 2 times No_of_RESOURCES for
+                                          DIFFUSION_ECOEVO_PLANTS model, this is the 
+                                          Total Number of species and stages (R or RP, 
+                                          for each species) potentially coexisting 
+                                          together locally). In general, this is, the
+					                                Total Number of State Variables
+					                                fully determining the local state
+				                             */
   /* BEGIN: Patch Total Destruction */
   for (i=0; i<P->No_of_CELLS; i++){
 
@@ -92,6 +119,32 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
       free(PATCH[i]->Imm_Rates_Preassure[a]);
     free(PATCH[i]->Imm_Rates_Preassure);
 
+    if(P->TYPE_of_MODEL == 20) {
+      for(a=0; a<P->No_of_RESOURCES; a++) {
+        for(j=0; j<P->No_of_EVENTS; j++)
+          free(PATCH[i]->Event_Delta_Tensor[a][j]);
+
+        free(PATCH[i]->Event_Delta_Tensor[a]);  
+      }
+      free(PATCH[i]->Event_Delta_Tensor);
+
+      for(a=0; a<P->No_of_EVENTS; a++)
+        free(PATCH[i]->Event_Adjacence_List[a]);
+
+      free(PATCH[i]->Event_Adjacence_List);    
+    }
+    else {
+      for(a=0; a<Sp; a++)                         /*  Sp, LOCAL_STATE_VARIABLES */
+        free(PATCH[i]->Event_Delta_Matrix[a]);
+      
+      free(PATCH[i]->Event_Delta_Matrix);
+
+      for(a=0; a<Sp; a++)                         /*  Sp, LOCAL_STATE_VARIABLES */
+        free(PATCH[i]->Event_Adjacence_List[a]);
+
+      free(PATCH[i]->Event_Adjacence_List);
+    }  
+    
     free(PATCH[i]);
   }
 
@@ -129,7 +182,6 @@ void Community_Initialization (Community ** PATCH,
     }
 
     PATCH[i]->Metapop_Connectivity_Matrix = P->Metapop_Connectivity_Matrix;
-
   }
 
   /* When PATCH represents a multi-patch network, patch connections
@@ -160,10 +212,11 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_AZTECA_4D        TYPE_of_MODEL = 17
      . MODEL=DIFFUSION_AZTECA_4D_0      TYPE_of_MODEL = 18
      . MODEL=DIFFUSION_AZTECA_4D_1      TYPE_of_MODEL = 19
+     . MODEL=DIFFUSION_ECOEVO_PLANTS    TYPE_of_MODEL = 20
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
+  if(P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
     Event_Delta_Matrix_Initialization(PATCH, P);
     Event_Adjacence_List_Initialization(PATCH, P);
   }
@@ -207,8 +260,8 @@ void Immigration_Preassure_on_Focal_Patch_Initialization( Community ** PATCH,
 
       Imm_Rate = 0.0;
       for(n=0; n < PATCH[i]->No_NEI; n++){
-	  Imm_Rate += PATCH[i]->In_Migration_Vector[j][n]*(double)PATCH[i]->NEI[n]->n[j];
-	  PATCH[i]->Imm_Rates_Preassure[j][n] = PATCH[i]->In_Migration_Vector[j][n]*(double)PATCH[i]->NEI[n]->n[j];
+	      Imm_Rate += PATCH[i]->In_Migration_Vector[j][n]*(double)PATCH[i]->NEI[n]->n[j];
+	      PATCH[i]->Imm_Rates_Preassure[j][n] = PATCH[i]->In_Migration_Vector[j][n]*(double)PATCH[i]->NEI[n]->n[j];
       }
 
       PATCH[i]->Total_Imm_Rate_Preassure[j] = Imm_Rate;

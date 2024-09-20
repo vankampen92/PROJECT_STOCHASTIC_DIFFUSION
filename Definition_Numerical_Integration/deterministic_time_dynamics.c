@@ -115,7 +115,10 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
     // fprintf(FP,"\n");
   /*   END: Writing costumized file        */
 
-    //printf(" Initiating Numerical Integration\n");
+  if(Table->TYPE_of_MODEL == 20)             /* MODEL = DIFFUSION_ECOEVO_PLANTS  */
+    Community_Bar_Plot_Representation(Table, 0); /* Initial Condition t = Time_0 */
+
+  //printf(" Initiating Numerical Integration\n");
   for( j = 1; j < TIMES; j++ ) {
     /* This loop advances the system sequentially from
        intitial time 0 to 1st time , ...,  from time (j-1) to j, and so on.
@@ -153,6 +156,14 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
       // C_P_G___S_U_B___P_L_O_T_T_I_N_G ( Table, j, Table->CPG->x_Time, Table->CPG->y_Time );
       // C_P_G___P_H_A_S_E____D_I_A_G_R_A_M ( Table, 0, 1, j,
       //                                      Table->CPG->y_Time );
+      // This is useful for representing the abundances of all species or types
+      // together in the same plot (as bar plot):
+      
+      if(Table->TYPE_of_MODEL == 20)             /* MODEL = DIFFUSION_ECOEVO_PLANTS  */
+        /// -----> 
+        Community_Bar_Plot_Representation(Table, j);
+        
+      // getchar();
       // This is useful for spatially extended systems: 
       // C_P_G___G_R_I_D___P_L_O_T_T_I_N_G___S_H_A_D_E_S ( Table, j );
 #endif
@@ -229,4 +240,10 @@ int D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Parameter_Table * Tab
 							                                               double W_min, 
                                                              double W_MAX, 
 							                                               double i_PLOT )
+
+  where the input is just Table (a pointer to a structure of type Parameter_Table)
+  and an index to represent a sequence of times from i=0 to (Table->T->I_Time-1).
+
+  See Community_Scatter_Plot_Representation.c for the actual implementation of
+  the function itself. 
 */

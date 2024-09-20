@@ -16,27 +16,24 @@
 
    which defines the maxim dinension of the whole parameter space for that particular model 
 */
-
 #define MAX_No_of_CONFIGURATIONAL_STATES 100000000 /* Max No of Eqs in the Master Equation */   
 
 #define No_of_TDC_FUNC_AUX_PARAM_MAX 10 /* Maximum No of Time Dependence Function Auxiliary 
-                                        // Parameters required to define the potential 
-                                        // functional time dependence of each model parameter 
-                                        // */
-
-#define DEPENDENT_PARAMETERS_MAXIMUM 30 /* Maximum number of potentially forced parameters */
-
+                                           Parameters required to define the potential 
+                                           functional time dependence for each model parameter 
+                                        */
+#define DEPENDENT_PARAMETERS_MAXIMUM 30 /* Maximum number of potentially time-dependent 
+                                           forcing parameters */
 #define MODEL_PARAMETERS_MAXIMUM 30     /* Maximum No of MODEL (input) PARAMETERS */
                                         /* The total number of parameters in all 
 					                                 model-paramater-related assign functions.
 					                                 This is the whole parameter pool from which a 
 					                                 parameter subspace can be defined for 
-					                                 optimization searches and parameter scans  
-					                                 for any specified model
+					                                 optimization searches, parameter scans,   
+					                                 and each specific model
 					                              */
 #define ME_n_DIMENSION_MAXIMUM 20       /* Maximum dimension of the probability distribution 
                                         // in a master equation */
-
 #ifdef DIFFUSION_1RnC_E
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_1RnC_E.h"
 #elif defined DIFFUSION_1R1C
@@ -75,6 +72,8 @@
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_AZTECA_4D_0.h"
 #elif defined DIFFUSION_AZTECA_4D_1
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_AZTECA_4D_1.h"
+#elif defined DIFFUSION_ECOEVO_PLANTS
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_ECOEVO_PLANTS.h"
 #endif
 
 typedef struct totalRateinfo
@@ -102,59 +101,40 @@ typedef struct totalRateinfo
     struct treenode * parent;
   }treenode;
 #endif
-
+/* More Stucture Defintions:                               */
 #include "MODEL_Trend_Control_STRUCT_DEF.h"
-
 #include "MODEL_Time_Control_STRUCT_DEF.h"
-
 #include "MODEL_Time_Dependence_Control_STRUCT_DEF.h"
-
 #include "MODEL_Parameter_Model_STRUCT_DEF.h"
-
 #include "MODEL_Community_STRUCT_DEF.h"
-
 #include "MODEL_Parameter_Space_STRUCT_DEF.h"
-
 #include "MODEL_Master_Equation_STRUCT_DEF.h"
-
 #include "MODEL_Parameter_Table_STRUCT_DEF.h"
-
 #include "MODEL_Generic_Root_Data_STRUCT_DEF.h"
-
 #include "MODEL_Observed_Data_STRUCT_DEF.h"
-
 #include "MODEL_Parameter_Fitting_STRUCT_DEF.h"
-
+/*  * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <Time_Control.h>
-
 #include <Observed_Data.h>
-
 #include <Parameter_Model.h>
-
 #include <Parameter_Table.h>
-
 #include <Community.h>
-
 #include <In_Out_Migration_Functions.h>
 
 /* Auxliary Libraries at ./Library common directory */
 #include <GSL_Optimization.h>
-
 #include <IO_Procedures.h>
-
 #include <GSL_stat.h>
 
+/* ...and more prototype definitions */
 #include <Definition_Error_Model/Error_Library.h>
-
 #include <Definition_Fixed_Points/Fixed_Points_All.h>
-
 #include <Definition_Master_Equation/Master_Equation_Functions.h>
-
 #if defined DIFFUSION_HII_nD
   #include <Definition_Master_Equation/DIFFUSION_HII_nD/Model_Parameters_Master_Equation.h>
 #endif 
 
-/* Auxiliary Functions */
+/* More Auxiliary Functions Prototype defintions */
 #include "main.H"
 #include <assign.h>
 #include <Model_Variables_Code.h>

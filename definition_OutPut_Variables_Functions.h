@@ -21,3 +21,5 @@ double Total_Population_Handling_Consumers(double * , Parameter_Table * );
 double Total_Population_Triplet_Consumers(double * , Parameter_Table * ); 
 
 double Total_Population_Consumers  ( double * , Parameter_Table *  );
+
+double Local_Population_Resources(int , const double * , Parameter_Table * );

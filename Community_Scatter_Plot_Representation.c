@@ -245,3 +245,83 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
     free(y_Data);
   }
 }
+
+void Plotting_Current_Time_On_Top(float *Range_x, float *Range_y, Parameter_Table * Table, int j_Time)
+{
+  char *Plot_Time = (char *)calloc(50, sizeof(char));
+  char *Time_Eraser = (char *)calloc(50, sizeof(char));
+  float char_Size;
+  float x_Time_Position = 0.5 * Range_x[1];
+  float y_Time_Position = 1.09 * Range_y[1];
+  static double Current_Time = 0.0;
+  double Last_Time = Current_Time;
+  Current_Time = Table->T->Time_Vector[j_Time];
+  sprintf(Time_Eraser, "Time = %5.2f", Last_Time);
+  sprintf(Plot_Time, "Time = %5.2f", Current_Time);
+  cpgqch(&char_Size);
+  cpgsch(2.0);
+  cpgsci(0);
+  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Time_Eraser);
+  cpgsci(1);
+  cpgptxt(x_Time_Position, y_Time_Position, 0.0, 0.5, Plot_Time);
+  cpgsch(char_Size);
+  free(Plot_Time);
+  free(Time_Eraser);
+}
+
+void Community_Bar_Plot_Representation(Parameter_Table * Table, int j_Time) 
+{  
+  int SAME_PLOT = 0; 
+  int i,j,k;
+  int R, RP; 
+
+  assert( Table->TYPE_of_MODEL == 20); /* MODEL = DIFFUSION_ECOEVO_PLANTS */
+
+  double * X = (double *)calloc(Table->No_of_RESOURCES, sizeof(double));
+  double * Y = (double *)calloc(Table->No_of_RESOURCES, sizeof(double)); /* Every entry to zero!!! */
+ 
+  for(i=0; i<Table->No_of_RESOURCES; i++)  X[i] = (double)i+1.0; /* Species labeled 
+                                                                    as 1 to No_of_RESOURCES types 
+                                                                  */
+  for(k = 0; k<Table->No_of_RESOURCES; k++) {  
+    for (j=0; j<Table->No_of_CELLS; j++) {
+    
+      RP  = j*Table->LOCAL_STATE_VARIABLES + 2*k;
+      R   = j*Table->LOCAL_STATE_VARIABLES + 2*k+1;
+
+      Y[k] += Table->Vector_Model_Variables[R];  /* Established adult plants across cells */
+    }
+  } 
+  
+  if (j_Time == 0) SAME_PLOT = 0; 
+  else             SAME_PLOT = 1;  /* Always redrawing the plot.
+                                      Otherwise, SAME_PLOT = 1, for j_Time != 0 */ 
+
+  float * Range_x = (float *)calloc(2, sizeof(float));
+  float * Range_y = (float *)calloc(2, sizeof(float));
+
+  int SCALE_X = 1; /* Respect always this given rage for the X axis  */
+  Table->CPG->CPG_RANGE_X_0 = 0.0;   
+  Table->CPG->CPG_RANGE_X_1 = (double)Table->No_of_RESOURCES + 1.0;
+  /* Y axis range is controlled by command line 1 (according to carrying capacity, i.e., -HK 1000) */
+  Range_x[0] = Table->CPG->CPG_RANGE_X_0; Range_x[1] = Table->CPG->CPG_RANGE_X_1;
+  Range_y[0] = Table->CPG->CPG_RANGE_Y_0; Range_y[1] = Table->CPG->CPG_RANGE_Y_1; 
+                     
+  /* B E G I N : Plotting Current Time on Top */
+  // Plotting_Current_Time_On_Top(Range_x, Range_y, Table, j_Time);
+  /*     E N D : Plotting Current Time on Top */
+
+  /* Deleting the title: Table->CPG->Title[0] = '\0'; */
+  Table->CPG->color_Index = 1+j_Time; 
+  CPGPLOT___B_A_R___P_L_O_T_T_I_N_G___S_A_M_E___P_L_O_T ( Table->CPG,
+                                                          SAME_PLOT,
+                                                          Table->No_of_RESOURCES,
+                                                          X, Y,
+                                                          "Species Phenotypes",
+                                                          "Abundance",
+                                                          "", 
+                                                          SCALE_X, Table->CPG->CPG_SCALE_Y );
+
+  free(Range_x); free(Range_y); 
+  free(X); free(Y);
+}

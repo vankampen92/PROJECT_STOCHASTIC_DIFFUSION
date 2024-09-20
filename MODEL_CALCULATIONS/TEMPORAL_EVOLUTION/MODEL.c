@@ -115,22 +115,49 @@ int M_O_D_E_L( Parameter_Table * Table )
 
   D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Table ) ;
 
+#if defined DIFFUSION_ECOEVO_PLANTS
+  assert(Table->No_of_CELLS == 1);
+  i = 0;
+  double y_S, z_0, f_S;  
+  
+  y_S = Local_Population_Resources(i, Table->Vector_Model_Variables, Table);
+  z_0 = (Table->K_R-y_S)/Table->K_R;
+  
+  for (k=0; k < Table->No_of_RESOURCES; k++) {
+    n   = i*Table->LOCAL_STATE_VARIABLES + 2*k+1;
+    
+    y_S = Table->Vector_Model_Variables[n]/Table->K_R;
+    
+    f_S = Table->Beta_AP[k]/Table->Delta_AP[k] * z_0*Table->Eta_RP[k]*(1.0-2.0*Table->p_1) / (z_0 * Table->Eta_RP[k] + Table->Delta_RP[k]);
+
+    printf("S=%d\t y=%.3f \t f=%.3f\t Beta=%.3f \t Eta=%.3f\n", 
+            k+1,   y_S,      f_S, Table->Beta_AP[k], Table->Eta_RP[k]);
+  } 
+
+  Press_Key();
+#endif 
+
 #if defined CPGPLOT_REPRESENTATION
   /* Notice that j = TIMES now, as expected, since the program is just out
      from the loop:
         for( j = 1; j < TIMES; j++ ) { ... }
   */
-
-  //  Parameter Table dependent costumized plotting is defined in ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
-  int TIMES           = Table->T->I_Time;
-  int Input_Parameter = 0; /* The value of this model parameter appears in the title */
-  // C_P_G___S_U_B___P_L_O_T_T_I_N_G ( Table, TIMES, Table->CPG->x_Time, Table->CPG->y_Time );
-  C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E ( Table,
+  if(Table->TYPE_of_MODEL != 20) {   /* 20: MODEL = DIFFUSION_ECOEVO_PLANTS */
+  ///    /* Temporal Evolution of the different output variables in separate subplots. 
+  ///       For the ECOEVO_PLANTS model, only one dynamic bar plot  
+  ///    */
+    
+    //  Parameter Table dependent costumized plotting is defined in ~/CPGPLOT/CPGPLOT_Parameter_Table/ files
+    int TIMES           = Table->T->I_Time;
+    int Input_Parameter = 0; /* The value of this model parameter appears in the title */
+    // C_P_G___S_U_B___P_L_O_T_T_I_N_G ( Table, TIMES, Table->CPG->x_Time, Table->CPG->y_Time );
+    C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E ( Table,
    								      TIMES,
    								      Table->CPG->x_Time,
    								      Table->CPG->y_Time,
    								      Input_Parameter );
-
+                        
+  }
 #endif
   free( Table->Vector_Model_Variables_Time_0);
   free( Table->Vector_Model_Variables );

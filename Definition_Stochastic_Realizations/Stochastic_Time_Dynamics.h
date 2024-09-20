@@ -47,6 +47,8 @@ void Some_Other_Patch_Population_Decrease(int , int , Parameter_Table * );
 
 int Some_Other_Patch_Population_Increase(int , int , Parameter_Table * );
 
+int Some_Other_Species_Establishes(int , int S, Parameter_Table * Table);
+
 int Other_Patch_Population_Increase(int Event, int x, int n, int Sp,
 					                Parameter_Table * Table);
 

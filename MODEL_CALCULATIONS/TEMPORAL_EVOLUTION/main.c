@@ -234,6 +234,67 @@ gsl_rng * r; /* Global generator defined in main.c */
   -xN n_0. For instance, the initial condition is (0, n_0, 0, 0) at the center of the grid and 
            (0, n_0, n_0, n_0) at a number of randomly chosen cells across the grid.                       
 
+  Tradeoff: Between Eta and Beta based on an invasion criterion (r_0): 
+  Table->Beta_AP[i] = r_0 * (Table->Eta_RP[i] + Table->Delta_RP[i])/(Table->Eta_RP[i]*(1.0-2.0*p)) * Table->Delta_AP[i];
+
+  ~$ ./DIFFUSION_ECOEVO_PLANTS  -y0 20 -y2 1 -HS 100 -HM 1 -HX 1 -HY 1  \
+                                -n 1 -G0 1 -G1 1 \
+                                -tn 300 -t0 0.0 -t1 300.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                                -G2 1 -G3 0.0 -G4 300.0 -G5 1 -G6 0.0 -G7 100 \
+                                -HuR 0.0 \
+                                -H0 0.0 \
+                                -HK 1000.0 \
+                                -H1 1.5 -H3 1.0 -H6 0.25 -H8 4.0 \
+                                -Hp1 0.0001 \
+                                -Hp2 2.0 \
+                                -H20 5.0 -H4 2.0
+  
+  Tradeoff: Between Eta and Beta based on the amount of free space (z_0): 
+  Table->Beta_AP[i] = z_0*(Table->Delta_RP[i]+Table->Eta_RP[i])/( z_0*(Table->Delta_RP[i]+Table->Eta_RP[i])-Table->Delta_RP[i]) * Table->Delta_AP[i]; 
+ 
+  ~$ ./DIFFUSION_ECOEVO_PLANTS  -y0 20 -y2 1 -HS 100 -HM 1 -HX 1 -HY 1  \
+                                -n 1 -G0 1 -G1 1 \
+                                -tn 300 -t0 0.0 -t1 300.0 -t4 0 -tR 1 -xn 0 -xN 5.0 -HN 5.0 \
+                                -G2 1 -G3 0.0 -G4 300.0 -G5 1 -G6 0.0 -G7 1000 \
+                                -HuR 0.0 \
+                                -H0 0.0 \
+                                -HK 1000.0 \
+                                -H1 1.0 -H3 0.5 -H6 0.5 -H8 8.0 \
+                                -Hp1 0.0001 \
+                                -Hp2 0.8 \
+                                -H20 5.0 -H4 2.0
+
+  In case you want to represent local variables across cells, keep in mind that there are 2 local variables (RP and R)
+  per species. If -HS 100, then you have 200 local variables to represent. For example, you can decide to plot the
+  following 16 sp in a 4 x 4 subpanel organization:
+
+  -G0 4 -G1 4 \
+  -n 16 -v0 69 -v1 71 -v2 73 -v3 75 -v4 77 -v5 79 -v6 81 -v7 83 -v8 85 -v9 87 -v10 89 -v11 91 -v12 93 -v13 95 -v14 97 -v15 99
+
+  Other subplotting: -n 4 -v0 0 -v1 1 -v2 2 -v3 3 -G0 2 -G1 2. Subplotting is called from int M_O_D_E_L( Parameter_Table * Table )
+  in MODEL.c. 
+  
+  Otherwise:
+          -n 1, and only one plot controls de the deterministic evolution of the different types in a single bar plot
+                  
+  -HN (No_of_INDIVIDUALS) is not in use in ECOEVO_PLANTS model (only -xN, INITIAL_TOTAL_POPULATION )
+                       
+  If -HM 1, there is only one patch, then -HuR (or -Hu) should be 0.0. Propagule movement between patches does not make sense.
+
+  For the ECOEVO_PLANTS model,
+  -HS is the number of resource type (discretization of the trait axis) (No_of_RESOURCES)
+  -HuR (or -Hu) is the jumping rate of resource propagules.
+  -H0 is the external immigrations rate (Lambda_R_0) of resource propagules. Usually equal to zero
+  -HK is the maximum number of potential sites per local area, cell or local community (K_R)  
+  -H20 is a establishment rate of resource propagules into adult plants (Eta_R)
+  -H4 is the per capita rate at which adult plants produce new propagules (Beta_R)
+  -H1 -H3 are death rates of resource probagules (Delta_R_0) and adult plants (Delta_R_1), respectively) 
+  -H6 -H8 are max and min parameter values defining a tradeoff (Delta_C_0 is the min and Delta_C_1 is the MAX)
+  -Hp1 is the mutation rate (p_1)    0 < p_1 < 1
+  -Hp2 is the tradeoff factor (p_2)  0 < p_2  (no greater than 10, because there is an assert(p_2 < 10.0) )    
+  -xN n_0. For instance, the initial condition is (n_0, 0) for species 0 at the center of the grid and 
+           (n_0, 0) at a number of randomly chosen cells across the grid.
+
    MacArthur and Rosenzweig (two species 3D, R, A, RA):
    .~$ ./DIFFUSION_MR -y0 7 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
                       -n 3 -v0 0 -v1 1 -v2 2 -G0 1 -G1 3 \
@@ -401,7 +462,7 @@ int main(int argc, char **argv)
     // if(Table.TYPE_of_MODEL == 15 || Table.TYPE_of_MODEL == 17) 
     // Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table); //Under construction
 
-  if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HIIl_nD
+  if(Table.TYPE_of_MODEL == 16) { // DIFFUSION_HII_nD
     /* Also model where the TOTAL_No_of_CONSUMERS is a CONSTANT */
     /* and they feed on multiple resources                      */
     Common_Initial_Condition_Command_Line_Arguments_into_Table(&Table);
@@ -411,6 +472,9 @@ int main(int argc, char **argv)
   }
   /* Deterministic Time Dynamics */
   Parameter_Values_into_Parameter_Table(&Table);
+  if(Table.TYPE_of_MODEL == 20) // DIFFUSION_ECOEVO_PLANTS
+    Ressetting_Species_Characteristic_Parameters (&Table);
+  
   M_O_D_E_L( &Table );
   
   // Some models (such as DIFFUSION_1R1C_2D and so on) do not have a stochastic
@@ -419,9 +483,14 @@ int main(int argc, char **argv)
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
+#ifndef DIFFUSION_ECOEVO_PLANTS  /* Test: 1st without stochastic realizations       */
   /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
   Parameter_Values_into_Parameter_Table(&Table);
+  if(Table.TYPE_of_MODEL == 20) // DIFFUSION_ECOEVO_PLANTS
+  	Ressetting_Species_Characteristic_Parameters (&Table);
+  
   M_O_D_E_L___S_T_O( &Table );
+#endif
 #endif
 #endif
 #endif

@@ -11,6 +11,8 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
 					    int i_Replicate, int j_Time);
 void Community_Scatter_Plot_Representation_4Sp(Parameter_Table *Table,
                                                int i_Replicate, int j_Time);
+void Plotting_Current_Time_On_Top(float *Range_x, float *Range_y, Parameter_Table * Table, int j_Time);
+void Community_Bar_Plot_Representation(Parameter_Table *Table, int j_Time);
 void cpgslct(int DEVICE_NUMBER);
 void Community_Binary_Tree_Initialization(Parameter_Table *Table);
 void Community_Binary_Tree_Allocation(Parameter_Table *Table, int No_of_CELLS);

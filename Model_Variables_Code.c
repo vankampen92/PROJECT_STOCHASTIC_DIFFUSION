@@ -54,12 +54,12 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->Index[n++] = 5; /* No_of_RESOURCES */ 
 
       if ( Table->No_of_RESOURCES > 0 ) {
-	Table->Index[n++] = 6;
-	Table->Index[n++] = 7; 
+	      Table->Index[n++] = 6;
+	      Table->Index[n++] = 7; 
       }
       if ( Table->No_of_RESOURCES > 1 ) {
-	Table->Index[n++] = 8;
-	Table->Index[n++] = 9; 
+	      Table->Index[n++] = 8;
+	      Table->Index[n++] = 9; 
       }
       Table->Index[n++]   = 10; /* No_of_RESOURCES */ 
       
@@ -900,6 +900,54 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
+  
+  case 20: /* ECOEVO_PLANTS * * * * * * * * * */
+
+      /* No_of_EVENTS, i.e, common events that can occur to every/some of the species: */
+      Table->No_of_EVENTS = 8;  /* All species (strains or phenotypes) can undergo the 
+                                   same 8 processes  
+				                        */
+      Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES;
+      Table->LOCAL_STATE_VARIABLES = 2 * Table->No_of_RESOURCES; /* 1 RP + 1 R */
+                                        /* RP, resource propagules
+                                           R,  individual resource items      
+                                        */
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+	    
+      /* Conventions */
+      Table->K   = n-1; /* Label last class */
+      Table->RP = 0; Table->R = 1; 
+
+      /* List of the 16 (potentially searcheable) model parameters:  */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+
+      Table->Index[n++] = 5;                                           /* No_of_RESOURCES */
+
+      Table->Index[n++] = 0;  /* Propagule Movement/Diffusion Rate */  /* Mu */ 
+      
+      Table->Index[n++] = 6;  /* External Immigration Rate */ /* RP */ /* Lambda_R_0 */
+      
+      Table->Index[n++] = 10; /* Queen Carrying  Capacity */           /* K_R */
+
+      Table->Index[n++] = 7; /* Death Rate (0) */ /* RP */             /* Delta_R_0 */
+      Table->Index[n++] = 9; /* Death Rate (1) */ /* R  */             /* Delta_R_1 */
+       
+      Table->Index[n++] = 13; /* Propagule Local Death Rate */         /* Delta_C_0 *//* RP ---> RP - 1 */
+      Table->Index[n++] = 15; /* Adult Local Death Rate */             /* Delta_C_1 *//* R  ---> R  - 1 */
+
+      Table->Index[n++] = 11; /* Propagule Local Production Rate */    /* Beta_R *//* RP ---> RP + 1 */
+      Table->Index[n++] = 29; /* Propagule Local Establisment Rate */  /* Eta_R  *//* R  ---> R + 1 */
+      
+      Table->Index[n++] = 27; /* Mutation Probability */                 /* p_1 */
+      Table->Index[n++] = 28; /* Tradeoff Constant, for instance, R_0 */ /* p_2 */
+            
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
       printf(" Models (0 to 10): Check input argument list!!!\n");
@@ -1165,6 +1213,18 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       break;
 
     case 19: /* DIFFUSION_AZTECA_4D_0 * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+
+    case 20: /* DIFFUSION_ECOEVO_PLANTS * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)

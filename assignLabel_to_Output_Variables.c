@@ -1,9 +1,9 @@
 #include <MODEL.h>
 
-/* Output Variables: 
+/* Output Variables are organized in this order: 
   
     Local Variables, Genuine Variables, The Rest of Model Variables 
-  */
+*/
  
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Table)
 {
@@ -11,7 +11,8 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
   char * p;
 
   char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
-  for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
+  for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) 
+    L[i] = (char *)calloc(10, sizeof(char));
 
   Defining_Output_Variables_Labels (Table, L);
 
@@ -20,11 +21,11 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
 
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
-    /* The first output variables are the model variables */
+    
     AssignLabel_to_Model_Variables(j, Label, Table);
   }
   else if (j < Table->LOCAL_STATE_VARIABLES ) {
-
+    /* The first output variables are the model variables */
     if(Table->TYPE_of_MODEL == 3) {
       k = j%Table->LOCAL_STATE_VARIABLES;
       n_Label[0] = '\0';
@@ -107,6 +108,7 @@ void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * Tabl
       }
   }
   free(n_Label);
+
   for(i=0; i<Table->LOCAL_STATE_VARIABLES; i++) free(L[i]);
   free(L);
 }
@@ -353,6 +355,22 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       p = strcat(L[1], "Q");
       p = strcat(L[2], "F");
       p = strcat(L[3], "WF");
+
+      break;
+
+    case  20:
+
+      char * sp = (char *)calloc(5, sizeof(char));
+      for(i=0; i<Table->No_of_RESOURCES; i++){
+        sprintf(sp, "%d", i);
+ 
+        p = strcat(L[2*i], "RP_");
+        p = strcat(L[2*i], sp);
+
+        p = strcat(L[2*i+1], "R_");
+        p = strcat(L[2*i+1], sp);
+      } 
+      free(sp);
 
       break;
       

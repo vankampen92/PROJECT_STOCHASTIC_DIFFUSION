@@ -35,7 +35,14 @@ int Advance_Current_Time( Parameter_Table * Table,
      involve any movement between patches
   */
   
-  int * Patch                = (int *)calloc(2, sizeof(int)); 
+  int * Patch                = (int *)calloc(3, sizeof(int));
+  Patch[2]                   = Table->No_of_RESOURCES; 
+  /* This array stores information about the event that has occurred: 
+     Patch[0] Local Patch (where the event has occurred ) 
+     Patch[1] Patch receiving the immigrant if a movement event has occurred 
+     Patch[2] Index of the species receiving the mutant from a local mutation (Sp_Out)
+     0 <= Sp_Out <= Table->No_of_RESOURCES-1
+  */
   
   Parameter_Model * P        = Table->P; 
   Community ** Village       = Table->Patch_System;   

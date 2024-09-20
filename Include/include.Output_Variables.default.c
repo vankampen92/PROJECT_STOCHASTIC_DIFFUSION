@@ -67,11 +67,11 @@ SUB_OUTPUT_VARIABLES = OUTPUT_VARIABLES_MAXIMUM;
   variable_58 = 58;
   variable_59 = 59;
 
-// Index_Output_Variables = (int *)calloc(OUTPUT_VARIABLES_MAXIMUM, sizeof(int));
+  Index_Output_Variables = (int *)calloc(OUTPUT_VARIABLES_MAXIMUM, sizeof(int));
 
-// We have reserved 60 int space because this is what it is
+// Alternatively, we may reserve less space, for instance, 
+// 60 int space, and, then, make sure that this is what it is
 // used in include.Output_Variables.default.aux.c !!!
-
-Index_Output_Variables = (int *)calloc(60, sizeof(int));
+// Index_Output_Variables = (int *)calloc(60, sizeof(int));
 
 #include <include.Output_Variables.default.aux.c>

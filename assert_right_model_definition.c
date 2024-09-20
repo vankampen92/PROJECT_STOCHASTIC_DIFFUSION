@@ -103,4 +103,14 @@ void assert_right_model_definition( Parameter_Table * P )
     assert ( P->TYPE_of_MODEL == 19 );
   
 #endif
+#if defined  DIFFUSION_ECOEVO_PLANTS
+  
+    assert ( P->TYPE_of_MODEL == 20 );
+  
+#endif
+#if defined  DIFFUSION_ECO_PLASMIDS
+  
+    assert ( P->TYPE_of_MODEL == 21 );
+  
+#endif
 }

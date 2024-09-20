@@ -137,6 +137,14 @@ typedef struct Parameter_Tableinfo
   
   double * Theta_Consumers;
   double * y_R_i;
+
+  double * Delta_RP; /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS) */
+  double * Eta_RP;   /* Propagule Establishment Rate  (DIFFUSION_ECOEVO_PLANTS) */
+
+  double * Beta_AP;   /* Propagule Production Rate of Adult Plants (DIFFUSION_ECOEVO_PLANTS) */
+  double * Delta_AP;  /* Death Rate of Adult Plants                (DIFFUSION_ECOEVO_PLANTS) */
+
+  double * Mu_RP;     /* Species-specific Diffusion/Movement Rate (DIFFUSION_ECOEVO_PLANTS)  */   
   
 #if defined CPGPLOT_REPRESENTATION
 #include <include.CPG.global.h>

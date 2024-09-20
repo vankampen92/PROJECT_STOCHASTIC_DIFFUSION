@@ -65,4 +65,6 @@ typedef struct Parameter_Modelinfo
   int TOTAL_No_of_FREE_CONSUMERS;
   int TOTAL_No_of_HANDLING_CONSUMERS;
   
+  void * Table; 
+  
 }Parameter_Model;

@@ -17,3 +17,5 @@ void Resetting_Alpha_Nu_Vectors_Constant (Parameter_Table * Table);
 void Resetting_Multiresource_Levels (Parameter_Table * Table);
 
 void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table);
+
+void Ressetting_Species_Characteristic_Parameters (Parameter_Table * Table);

@@ -13,3 +13,9 @@ Index_Output_Variables[50]=variable_50; Index_Output_Variables[51]=variable_51; 
 Index_Output_Variables[54]=variable_54; Index_Output_Variables[55]=variable_55;
 Index_Output_Variables[56]=variable_56; Index_Output_Variables[57]=variable_57;
 Index_Output_Variables[58]=variable_58; Index_Output_Variables[59]=variable_59;
+
+/* Indeces of Output Variables greater than 60 will always be fully ordered. 
+   Therefore, this indeces cannot be modified by using command line arguments 
+*/
+for(i=60; i<OUTPUT_VARIABLES_MAXIMUM; i++)
+    Index_Output_Variables[i] = i; 

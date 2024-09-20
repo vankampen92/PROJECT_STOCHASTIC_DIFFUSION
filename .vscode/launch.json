@@ -2,6 +2,30 @@
     "version": "0.2.0",
     "configurations": [ 
         {
+            "name": "(gdb) Launch ECOEVO_PLANTS",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/DIFFUSION_ECOEVO_PLANTS",
+            "args": ["-y0", "20", "-y2", "1", "-HS", "100", "-HM", "1", "-HX", "1", "-HY", "1", "-n", "1", "-tn", "300", "-t0", "0.0", "-t1", "300.0", "-t4", "0", "-tR", "1", "-xn", "0", "-xN", "5.0", "-HN", "5.0", "-G2", "1", "-G3", "0.0", "-G4", "300.0", "-G5", "1", "-G6", "0.0", "-G7", "1000", "-HuR", "0.0", "-H0", "0.0", "-HK", "1000.0", "-H1", "1.5", "-H3", "1.0", "-H6", "1.0", "-H8", "10.0", "-Hp1", "0.0001", "-Hp2", "5.0"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "(gdb) Launch AZTECA_4D_1",
             "type": "cppdbg",
             "request": "launch",

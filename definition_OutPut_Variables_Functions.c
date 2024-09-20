@@ -1,5 +1,33 @@
 #include <MODEL.h>
 
+double Local_Population_Resources(int i, const double * Y, Parameter_Table * Table)
+{
+  /* Input: 
+  
+      . i : the i-th Local Population or Patch
+      . Y : the total state vector 
+      . Table:  Full Table of Parameters 
+    
+     Output:
+
+      . y_S: total local population of resources over all resources types or species
+        at the i-th local patch. 
+  */
+  double y_S; 
+  int k, n; 
+
+  assert(Table->TYPE_of_MODEL == 20); 
+
+  y_S = 0.0;
+  for(k = 0; k < Table->No_of_RESOURCES; k++) {
+      
+      n   = i*Table->LOCAL_STATE_VARIABLES + 2*k+1;
+      y_S += Y[n];
+  }
+
+  return (y_S);
+}
+
 double Total_Population_Resources(double * Y, Parameter_Table * Table)
 {
   double x;

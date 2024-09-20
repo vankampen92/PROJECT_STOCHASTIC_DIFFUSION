@@ -1,5 +1,3 @@
-#include "./Include/MODEL.h"
-
 void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 {
   char * p;
@@ -8,9 +6,14 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
   switch(j)
     {
     case  0:  p = strcat(Label, "Jumping Rate");  
-	break;
+	    break;
+#ifdef DIFFUSION_ECO_PLASMIDS
+    case  1:  p = strcat(Label, "No of PLASMIDS");  
+      break;
+#else
     case  1:  p = strcat(Label, "No of INDIVIDUALS");  
       break;
+#endif
     case  2:  p = strcat(Label, "No of CELLS");  
       break;
     case  3:  p = strcat(Label, "No of CELLS (in horizontal dimension)");  
@@ -31,12 +34,21 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_HII_nD
     case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
       break;
+#elif DIFFUSION_ECO_PLASMIDS
+    case  8:  p = strcat(Label, " Conjugation or Pair-Formation Rate ");  
+      break;
 #else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
       break;
 #endif
+	      
+#elif DIFFUSION_ECO_PLASMIDS
+    case  9:  p = strcat(Label, "Competition-Induced Mortality (1)");
+      break;
+#else
     case  9:  p = strcat(Label, "Decaying Rate (1)");
       break;
+#endif
 
 #ifdef DIFFUSION_AZTECA_4D                                            /* -HK  */
     case 10:  p = strcat(Label, "Nest Carrying Capacity (Workers)");  /* Working Carrying Carrying Capacity per Nest */
@@ -52,8 +64,14 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
     case 12: p=strcat(Label,  "Consumer External Immigration Rate (0)");  /* -H5 */
       break;
+
+#ifdef DIFFUSION_ECOEVO_PLANTS
+    case 13: p=strcat(Label,  "min Parameter Value (i.e, Eta_min)");      /* -H6 */
+      break;
+#else
     case 13: p=strcat(Label,  "Consumer Death Rate (0)");                 /* -H6 */
       break;
+#endif
 
 #ifdef DIFFUSION_AZTECA_4D
     case 14: p=strcat(Label,  "MAX No of NESTS per LOCAL PATCH");         /* -H7 */
@@ -65,8 +83,14 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 14: p=strcat(Label,  "Consumer External Immigration Rate (1)");  /* -H7 */
       break;
 #endif
-    case 15: p=strcat(Label,  "Consumer Death Rate (1)");                 /* -H8 */ 
-      break; 
+
+#ifdef DIFFUSION_ECOEVO_PLANTS
+    case 15: p=strcat(Label,  "MAX Parameter Value (i.e, Eta_MAX)");      /* -H8 */
+      break;
+#else
+    case 15: p=strcat(Label,  "Consumer Death Rate (1)");                 /* -H8 */
+      break;
+#endif
       
     case 16: p=strcat(Label,  "Comsumer Attack Rate (0)");                /* -H9  */
       break;
@@ -82,8 +106,14 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
 #endif
 
+#ifdef DIFFUSION_ECO_PLASMIDS
+    case  18:  p = strcat(Label, "Plasmid Transmission Probability");  /* -H11 */ 
+      break;
+#else
     case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
       break;
+#endif
+
     case 19: p=strcat(Label,  "Triplet desintegration (0)");        /* -H12 */
       break;
 
@@ -102,18 +132,29 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
     case 26:  p = strcat(Label, "Maintainance Energy loss rate");   
       break;
+
 #ifdef DIFFUSION_DRAG     
     case 27:  p = strcat(Label, "Guano Conversion Factor");   
       break;
 #elif defined DIFFUSION_VGR
     case 27:  p = strcat(Label, "Guano Conversion Factor");   
       break;
+#elif defined DIFFUSiON_ECOEVO_PLANTS
+    case 27:  p = strcat(Label, "Mutation Probability");   
+      break;
 #else 	      
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
       break;
-#endif      
+#endif
+
+#ifdef DIFFUSION_ECOEVO_PLANTS
+    case 28:  p = strcat(Label, "Tradeoff Factor, i.e., R_0");
+      break;
+#else 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;
+#endif
+
     case 29:  p = strcat(Label, "Establishment Rate");
       break;
       
