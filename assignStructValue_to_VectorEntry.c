@@ -59,7 +59,7 @@ double AssignStructValue_to_VectorEntry(int j, Parameter_Table * P)
       break;
     case  9: value = P->Delta_R_1; 
       break;
-    case 10: value = P->K_R;              /* Resource Carrying Capacity */ 
+    case 10: value = P->K_R;           /* Resource Carrying Capacity */ 
       break;
     case 11: value = P->Beta_R;        /* -H5 */
       break;

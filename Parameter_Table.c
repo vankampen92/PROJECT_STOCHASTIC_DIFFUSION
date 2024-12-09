@@ -12,6 +12,8 @@
 #include <include.Error_Control.extern.h>
 #include <include.Type_of_Model.extern.h>
 
+extern gsl_rng * r; /* Global generator defined in main.c */
+
 void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
 {
   int i, j, a;
@@ -99,6 +101,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   Table->Lambda_R  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Delta_R   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Nu_Consumers      = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+  Table->Nu_C              = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) ); /* DIFFUSION_ECO_PLASMIDS */
   Table->Alpha_C   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Theta_Consumers = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->y_R_i     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
@@ -108,6 +111,10 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   Table->Mu_RP     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Beta_AP   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Delta_AP  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
+
+#if defined DIFFUSION_ECO_PLASMIDS
+  Table->Nu_C   = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+#endif
 
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
   Table->Metapop_Connectivity_Matrix = (double ***)calloc(No_of_RESOURCES_MAXIMUM,
@@ -121,6 +128,49 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
     }
   }
   /* END: Allocating and Setting up Connectivity Matrix */
+
+#if defined DIFFUSION_ECO_PLASMIDS
+  /* BEGIN: Allocating and Setting Matrices:
+            1.  Competition Matrix, ABB 
+            2.  Conjugation Matrix, HBB 
+            3.  Plasmid-Bacteria Infection Matrix, IPB
+            4.  Plasmid-Plasmid Compatibility Matrix, CPP
+  */
+    Table->ABB = (double **)calloc(No_of_STRAINS_MAXIMUM, sizeof(double *) ); 
+    for(i=0; i<No_of_STRAINS_MAXIMUM; i++) 
+      Table->ABB[i] = (double *)calloc(No_of_STRAINS_MAXIMUM, sizeof(double) );
+    
+    Table->HBB = (double **)calloc(No_of_STRAINS_MAXIMUM, sizeof(double *) ); 
+    for(i=0; i<No_of_STRAINS_MAXIMUM; i++) 
+      Table->HBB[i] = (double *)calloc(No_of_STRAINS_MAXIMUM, sizeof(double) );
+
+    Table->IBP = (double **)calloc(No_of_STRAINS_MAXIMUM, sizeof(double *) ); 
+    for(i=0; i<No_of_STRAINS_MAXIMUM; i++) 
+      Table->IBP[i] = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+    
+    Table->CPP = (double **)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double *) ); 
+    for(i=0; i<No_of_PLASMIDS_MAXIMUM; i++) 
+      Table->CPP[i] = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+  /* END: Allocating and Setting Matrices */
+
+    /* No of actual viable profiles per strain. It can be different per each strain */ 
+    Table->n = (int *)calloc(No_of_STRAINS_MAXIMUM, sizeof(int)); 
+    Table->n_0 = (int *)calloc(No_of_STRAINS_MAXIMUM, sizeof(int)); /* Strain ID corresponding 
+                                                                       to a strain without plasmids 
+                                                                    */
+    Table->n_R = (int *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(int)); /* No of Recipeints of 
+                                                                         every Strain ID 
+                                                                      */
+    Table->Strain_Profiles = (int ***)calloc(No_of_STRAINS_MAXIMUM, sizeof(int **));
+    for(j=0; j<No_of_STRAINS_MAXIMUM; j++){
+      Table->Strain_Profiles[j] = (int **)calloc(No_of_PROFILES_MAXIMUM, sizeof(int *));
+      for(i=0; i < No_of_PROFILES_MAXIMUM; i++) 
+        Table->Strain_Profiles[j][i] = (int *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(int));      
+    }
+
+    Table->Global_Strains_Population = (double *)calloc(No_of_STRAINS_MAXIMUM, sizeof(double));  
+    Table->Global_Plasmid_Population = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double));  
+#endif  
   
   Table->A_P = (int *)calloc(N_E, sizeof(int) );
   Table->RA_P = (int *)calloc(N_E, sizeof(int) );
@@ -192,19 +242,23 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
 
   free(Table->OUTPUT_VARIABLE_INDEX);
   free(Table->Vector_Output_Variables);
-  for (i=0; i<Table->SUB_OUTPUT_VARIABLES; i++) free(Table->Matrix_Output_Variables[i]);
+  for (i=0; i<Table->SUB_OUTPUT_VARIABLES; i++) 
+    free(Table->Matrix_Output_Variables[i]);
   free(Table->Matrix_Output_Variables);
 
   free(Table->Default_Vector_Output_Variables);
 
   free(Table->Lambda_R);
   free(Table->Delta_R);
-
   free(Table->Alpha_C);
   free(Table->Nu_Consumers);
- 
+  free(Table->Nu_C);             /* DIFFUSION_ECO_PLASMIDS */
   free(Table->Theta_Consumers);
   free(Table->y_R_i);
+
+#if defined DIFFUSION_ECO_PLASMIDS
+  free(Table->Nu_C);
+#endif
 
   free(Table->Delta_RP); 
   free(Table->Eta_RP);
@@ -218,7 +272,70 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
     
     free(Table->Metapop_Connectivity_Matrix[a]); 
   }
-  free(Table->Metapop_Connectivity_Matrix); 
+  free(Table->Metapop_Connectivity_Matrix);
+
+  #if defined DIFFUSION_ECO_PLASMIDS
+  /* BEGIN: De-Allocating Matrices:
+            1.  Competition Matrix, ABB 
+            2.  Conjugation Matrix, HBB 
+            3.  Plasmid-Bacteria Infection Matrix, IPB
+            4.  Plasmid-Plasmid Compatibility Matrix, CPP
+  */
+    for(i=0; i<No_of_STRAINS_MAXIMUM; i++) {
+      free(Table->ABB[i]); 
+      free(Table->HBB[i]);
+      free(Table->IBP[i]); 
+    }
+    free(Table->ABB);  
+    free(Table->HBB);  
+    free(Table->IBP); 
+
+    for(i=0; i<No_of_PLASMIDS_MAXIMUM; i++) 
+      free(Table->CPP[i]);
+    free(Table->CPP);  
+  /* END: Allocating and Setting up Connectivity Matrix */
+
+  /* No of actual viable profiles per strain. It can be different per each strain */ 
+    free(Table->n);  
+    free(Table->n_0);
+    free(Table->n_R);
+   
+    for(j=0; j<No_of_STRAINS_MAXIMUM; j++){
+      for(i=0; i < No_of_PROFILES_MAXIMUM; i++) 
+        freee(Table->Strain_Profiles[j][i]);      
+
+      free(Table->Strain_Profiles[j]);
+    }
+    free(Table->Strain_Profiles);
+
+    free(Table->Global_Strains_Population);  
+    free(Table->Global_Plasmid_Population);
+
+    for(i=0; i<Table->No_of_RESOURCES; i++) {
+      free(Table->Competition_Induced_Death[i]);
+      free(Table->Competition_List_Indeces[i]);
+      free(Table->Conjugation_List_Indeces[i]);
+      free(Table->Recipient_List_Indeces[i])  ;
+      free(Table->Donor_List_Indeces[i])      ;
+      free(Table->No_of_Event_Conjugation_Pair[i]);
+      free(Table->StrainType_and_Profile[i]);
+    }
+    free(Table->StrainType_and_Profile);
+    free(Table->No_of_Event_Conjugation_Pair);
+    free(Table->Competition_Induced_Death);
+    free(Table->Competition_List_Indeces) ;
+    free(Table->Conjugation_List_Indeces) ;
+    free(Table->Recipient_List_Indeces)   ;
+    free(Table->Donor_List_Indeces)       ;
+
+    for(i=0; i<Table->No_of_PLASMIDS; i++) 
+      free(Table->Plasmid_Compatibility_Indeces[i]); 
+    free(Table->Plasmid_Compatibility_Indeces);
+
+    for(i=0; i<Table->No_of_CONJUGATION_EVENTS; i++) 
+      free(Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs[i]); 
+    free(Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs);    
+  #endif  
 }
 
 void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int * Index_Output_Variables )
@@ -232,12 +349,65 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   Table->No_of_INDIVIDUALS = No_of_INDIVIDUALS;
   Table->No_of_CELLS_X     = No_of_CELLS_X;
   Table->No_of_CELLS_Y     = No_of_CELLS_Y;
-  
-  /* Parameter Model Upload */
-  Parameter_Values_into_Parameter_Table(Table);
 
   /* Type of Model upload  */
   Table->TYPE_of_MODEL = TYPE_of_MODEL;  assert_right_model_definition( Table );
+
+  /* Parameter Model Upload */
+  Parameter_Values_into_Parameter_Table(Table);
+
+  #ifdef DIFFUSION_ECO_PLASMIDS
+  /* Setting up of the strain and plasmid characteristics and the 4 driving interaction matrices 
+     The sparcity of these matrix determine the number of state variables to describe the configuration 
+     of the system */
+    assert(Table->TYPE_of_MODEL == 21) // DIFFUSION_ECO_PLASMIDS
+
+    Setting_Interaction_Matrices (Table); // ABB, HBB, IBP, CPP
+  
+    /* Determining actual No_of_RESOURCES after considering the constraints established 
+       by the plasmid-plasmid compatibilty matrix (certain plasmids are incompatible in the same 
+       bacterial cell), and infection matrix (certain strains are immune to certain plasmids) 
+    */
+    Table->No_of_RESOURCES = Determining_actual_No_of_RESOURCES (Table); /* No_of_LOCAL_VARIABLES, 
+                                                                            this is, for instance, 
+                                                                            the i-th strain with 
+                                                                            profile p 
+                                                                          */
+                                                                          /* In Ying-Jie labelling, 
+                                                                             No of SUBPOPULATIONS 
+                                                                          */
+    Setting_Plasmid_Characteristic_Parameters (Table); //Plasmid Reproduction Costs
+    Setting_Strain_Characteristic_Parameters (Table);  //Bacteria
+
+    /* Both allocating and initializing Adjacancy Lists from interaction matrices */
+    Table->Competition_Induced_Death = (double **)calloc(Table->No_of_RESOURCES, sizeof(double *));
+    Table->Competition_List_Indeces = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    Table->Conjugation_List_Indeces = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    Table->Recipient_List_Indeces   = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    Table->Donor_List_Indeces       = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    Table->Plasmid_Compatibility_Indeces = (int **)calloc(Table->No_of_PLASMIDS, sizeof(int *));
+    Table->No_of_Event_Conjugation_Pair = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    Table->StrainType_and_Profile       = (int **)calloc(Table->No_of_RESOURCES, sizeof(int *));
+    for(i=0; i<Table->No_of_RESOURCES; i++) {
+      Table->StrainType_and_Profile[i]       = (int *)calloc(2, sizeof(int));
+      Table->No_of_Event_Conjugation_Pair[i] = (int *)calloc(Table->No_of_RESOURCES, sizeof(int));
+      Table->Competition_Induced_Death[i]    = (double *)calloc(Table->No_of_RESOURCES, sizeof(double));
+      Table->Competition_List_Indeces[i]     = (int *)calloc(Table->No_of_RESOURCES + 1, sizeof(int));
+      Table->Conjugation_List_Indeces[i]     = (int *)calloc(Table->No_of_RESOURCES + 1, sizeof(int));
+      Table->Recipient_List_Indeces[i]       = (int *)calloc(Table->No_of_RESOURCES + 1, sizeof(int));
+      Table->Donor_List_Indeces[i]           = (int *)calloc(Table->No_of_RESOURCES + 1, sizeof(int));
+    }
+    for(i=0; i<Table->No_of_PLASMIDS; i++) 
+      Table->Plasmid_Compatibility_Indeces[i] = (int *)calloc(Table->No_of_PLASMIDS + 1, sizeof(int)); 
+        
+    Setting_Adjacency_Lists_from_Interaction_Matrices (Table);
+
+    Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs = (int **)calloc(Table->No_of_CONJUGATION_EVENTS, 
+                                                                              sizeof(int *));
+    for(i=0; i<Table->No_of_CONJUGATION_EVENTS; i++) 
+      Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs[i] = (int *)calloc(2, sizeof(int)); 
+  #endif
+
   Model_Variables_Code_into_Parameter_Table (Table);
 
   /* Total number of potential input paramters */
@@ -433,6 +603,15 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
 	          for(j=0; j<Table->No_of_NEIGHBORS; j++)
 	            Table->Metapop_Connectivity_Matrix[a][i][j] = 0;           /* Adult Plants, AP, on't move themseleves */
     
+    else if (Table->TYPE_of_MODEL == 21)  
+    /* DIFFUSION_ECOEVO_PLANTS */
+      for(a=0; a<Table->LOCAL_STATE_VARIABLES; a++)
+	      for(i=0; i<Table->No_of_CELLS; i++)
+	        for(j=0; j<Table->No_of_NEIGHBORS; j++)
+	          Table->Metapop_Connectivity_Matrix[a][i][j] = Table->Mu_RP[a];   /* All bacterial strains move at the same rate Mu */
+                                                                       /* This can be reset according to a 
+                                                                          strain diffusion vector 
+                                                                        */
     else{
       printf(" TYPE of MODEL (%d) not defined (at Parameter_Table.c)\n",
 	          Table->TYPE_of_MODEL);
@@ -440,10 +619,13 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
       assert(Table->No_of_CELLS == 1); 
     }
   }
+
   /* This function should be called always after having called 
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   */
-  Resetting_Lambda_Delta_Vectors (Table); 
+  #ifndef DIFFUSiON_ECO_PLASMIDS
+    Resetting_Lambda_Delta_Vectors (Table);
+  #endif 
   /* END -------------------------------------------------*/
 }
 
@@ -625,6 +807,419 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
 /*   int i;                                                                   */
 /*   for(i=0; i<N; i++) P->Index[i] = Index[i];                               */
 /* }                                                                          */
+/* -------------------------------------------------------------------------- */
+
+void Setting_Interaction_Matrices (Parameter_Table * Table) 
+{
+    int i, j;
+
+    assert(Table->TYPE_of_MODEL == 21);  /* 21: MODEL=DIFFUSION_ECO_PLASMIDS */
+
+    for (i=0; i<Table->No_of_STRAINS; i++) {
+      
+      for (j=i; j<Table->No_of_STRAINS; j++) {
+        // ABB, competition matrix: symmetric competition
+
+        if(j == i) 
+          Table->ABB[i][j] = 0.0;
+
+        else if(gsl_rng_uniform_pos(r) < Table->p_2){
+          
+          Table->ABB[i][j] = Table->Delta_C_0;
+          Table->ABB[j][i] = Table->Delta_C_0;
+        }
+        
+        else {
+          Table->ABB[i][j] = 0.0;
+          Table->ABB[j][i] = 0.0;
+        } 
+      }
+
+      for (j=i; j<Table->No_of_STRAINS; j++) {
+        // HBB Conjugation Matrix  
+        
+        if(j == i) 
+          Table->HBB[i][j] = 1.0;      /* Self-conjugation between two cells of the 
+                                          same bacterial type is always possible.
+                                          Efective conjungation will depend on their
+                                          respective plasmid profiles.  
+                                          However, conjugation between two individual 
+                                          cells with the same plasmid profile never 
+                                          yields a transconjungant different from the 
+                                          recipient. It is an event that will not 
+                                          change the configuration of the system. 
+                                          It will not be considered. 
+                                       */
+        else if (gsl_rng_uniform_pos(r) < Table->p_2){
+           Table->HBB[i][j] = 1.0;
+           Table->HBB[j][i] = 1.0;
+        }
+
+        else {
+          Table->HBB[i][j] = 0.0;
+          Table->HBB[j][i] = 0.0; 
+        }
+      }
+         
+      for (j=0; j<Table->No_of_PLASMIDS; j++) {
+        // IBP Bacteria-Plasmid Interaction Matrix  (Bipartite Network)
+        if(gsl_rng_uniform_pos(r) < Table->p_2)
+          Table->IBP[i][j] = 1.0;
+        else
+          Table->IBP[i][j] = 0.0;
+      }
+    }
+
+    // CPP, Plasmid-Plasmid Compatibility Matrix
+    for (i=0; i<Table->No_of_PLASMIDS; i++) {
+
+      for (j=i+1; j<Table->No_of_PLASMIDS; j++) {
+        if(gsl_rng_uniform_pos(r) < Table->p_2) {
+          Table->CPP[i][j] = 1.0; 
+          Table->CPP[j][i] = 1.0;
+        }
+        else {
+          Table->CPP[i][j] = 0.0;
+          Table->CPP[j][i] = 0.0;
+        }
+      }
+
+      Table->CPP[i][i] = 1.0; /* Reinforicing plasmid self-compatibility */
+    } 
+}
+
+void Setting_Strain_Characteristic_Parameters (Parameter_Table * Table)
+{
+    int i, j, k, n;
+    double COST, RESISTANCE;  
+    
+    assert(Table->TYPE_of_MODEL == 21);      /* 21: MODEL=DIFFUSION_ECO_PLASMIDS */
+
+    n = 0;
+    for (i=0; i<Table->No_of_STRAINS; i++) {  
+      for(j=0; j<Table->n[i]; j++) { 
+        
+        c = 0.0; COST = 1.0; RESISTANCE = 0.0;        
+        for(k=0; k<Table->No_of_PLASMIDS; k++) {
+          if(Table->Strain_Profiles[i][j][k] == 1) { 
+            c = Table->Alpha_C[k];
+            RESISTANCE = MAX(RESISTANCE, Table->Nu_C[k]);
+            COST *= (1.0 - c);
+          }
+        }
+
+        Table->Beta_AP[n]  = Table->Beta_R * COST;                                        /* Bacteria Cell Division Rates */
+        Table->Eta_RP[n]   = Table->Lambda_R_1;                                           /* Bacteria Conjugation Rates   */
+        Table->Delta_AP[n] = Table->Delta_R_0 + Table->Delta_R_1 * (1.0 - RESISTANCE);    /* Bacteria Death Rates         */
+        Table->Mu_RP[n]    = Table->Mu;                                                   /* Bacteria Diffusion Rates     */
+        Table->Segregation_Error[n]= Table->p_1;                                          /* Bacterial Segregation Error  */
+
+        n++; 
+      }
+    }
+
+    assert(n == Table->No_of_RESOURCES);
+}  
+
+void Setting_Plasmid_Characteristic_Parameters (Parameter_Table * Table)
+{
+    //Plasmid Cost and Resistance 
+    int i; 
+    
+    assert(Table->TYPE_of_MODEL == 21);  /* 20: MODEL=DIFFUSION_ECO_PLASMIDS */
+
+    for (i=0; i<Table->No_of_PLASMIDS; i++) {
+      Table->Alpha_C[i]  = Table->Alpha_C_0;    /* Plasmid reproduction costs */
+      Table->Nu_C[i]     = Table->Nu_C_0;       /* Plasmid resistance         */
+    }
+
+} 
+
+int Determining_actual_No_of_RESOURCES(Parameter_Table * Table)
+{
+  int N; /* Actual No of viable RESOURCES (actual number of different subpopulations)*/
+  
+  int n_bool_infection;
+  int n_bool_incompatibility;  
+
+  int No_of_POTENTIAL_PROFILES_per_STRAIN;
+  int i, j, k, l; 
+
+  No_of_POTENTIAL_PROFILES_per_STRAIN = pow(2.0, Table->No_of_PLASMIDS);
+
+  int ** Profile = (int **)calloc(No_of_POTENTIAL_PROFILES_per_STRAIN, sizeof(int *));
+  for(i=0; i < No_of_POTENTIAL_PROFILES_per_STRAIN; i++) 
+    Profile[i] = (int *)calloc(Table->No_of_PLASMIDS, sizeof(int));
+
+  /* No of actual viable profiles per strain. It can be different per each strain */ 
+  int *  n = Table->n;  
+  int *** Strain_Profiles = Table->Strain_Profiles; 
+
+  Create_Binary_Combination( Profile, No_of_POTENTIAL_PROFILES_per_STRAIN, Table->No_of_PLASMIDS );
+
+  for(i = 0; i < No_of_POTENTIAL_PROFILES_per_STRAIN; i++) {
+  
+    printf("%d:\t\t Binary Combination[%d] = [ ", i, i);
+    for(j = 0; j<Table->No_of_PLASMIDS; j++)
+      printf("%d ", Profile[i][j]);
+    printf("]\n");
+  }
+  printf("\n");
+
+  N = 0;  
+  for(i = 0; i < Table->No_of_STRAINS; i++) {
+
+    Table->n_0[i] = N;  /* Saving the Strain ID of a plasmid free strain */
+
+    n[i] = 0;  
+    for(j = 0; j<No_of_POTENTIAL_PROFILES_per_STRAIN; j++) {
+      
+      n_bool_infection = 1; n_bool_incompatibility = 0;
+      for(k = 0; k<Table->No_of_PLASMIDS; k++) {
+        if( Profile[j][k] == 1) {  
+
+        /* Infection Constraint */ 
+          if(Table->IBP[i][k] == 1.0) n_bool_infection = 1; 
+          else                        n_bool_infection = 0;
+        
+          n_bool_incompatibility = 0;
+          for(l = 0; l<Table->No_of_PLASMIDS; l++) {
+            if( Profile[j][l] == 1) {
+            /* Plasmid Incompatibility Co-Infection Constraints */
+              if(Table->CPP[k][l] == 0.0) 
+                n_bool_incompatibility += 1;
+            }
+          } 
+        }
+      }
+
+      if(n_bool_infection == 1 && n_bool_incompatibility == 0) { 
+
+        for(k = 0; k<Table->No_of_PLASMIDS; k++)         
+          Strain_Profiles[i][n[i]][k] = Profile[j][k];
+
+        Table->StrainType_and_Profile[N][0] = i;     /* Strain Type          */
+        Table->StrainType_and_Profile[N][1] = n[i];  /* Profile No Specifier */
+
+        n[i]++;
+        N++;                
+      }      
+    }        
+  }
+
+  printf("Number of different strains and profiles: %d \n", N);
+  N = 0; 
+  for(i = 0; i < Table->No_of_STRAINS; i++) {
+
+    assert( Table->n_0[i] == N);
+    
+    N += n[i];
+    
+    for(j = 0; j < n[i]; j++) {
+      printf("Strain Type [Profile] %d: ", i);
+
+      printf("[ ");      
+      for(k=0; k<Table->No_of_PLASMIDS; k++)
+        printf("%d ", Strain_Profiles[i][j][k]);
+
+      printf("]\n"); 
+    }
+    printf("\n");
+  }  
+
+  assert( N == Table->No_of_RESOURCES );
+
+  for(i=0; i < No_of_POTENTIAL_PROFILES_per_STRAIN; i++) 
+    free(Profile[i]);
+  free(Profile);
+
+  return(N); 
+}
+
+void Setting_Adjacency_Lists_from_Interaction_Matrices (Parameter_Table *Table)
+{
+  int i, j, k, N;
+  int nc, nh, ni, nd;  
+  int i_Focal, i_List;
+  int k_Focal, k_List; 
+
+  /* Adjacent Lists: */
+  Table->No_of_CONJUGATION_EVENTS = 0;
+
+  for(i = 0; i<Table->No_of_RESOURCES; i++) {
+    Calculate_Strain_and_Profile(Table, i, &i_Focal, &k_Focal);
+
+    assert( i_Focal >= 0 && i_Focal < Table->No_of_STRAINS);
+    assert( k_Focal >= 0 && k_Focal < Table->n[i_Focal]);
+
+    nc = 0; nh = 0; 
+    for(j = 0; j<Table->No_of_RESOURCES; j++) {
+      Calculate_Strain_and_Profile(Table, j, &i_List, &k_List);
+      if( Table->ABB[i_Focal][i_List] > 0.0 ) {
+        Table->Competition_List_Indeces[i][nc] = j;
+        Table->Competition_Induced_Death[i][nc] = Table->ABB[i_Focal][i_List];
+        nc++;
+      }
+      if( Table->HBB[i_Focal][i_List] > 0.0 )
+        Table->Conjugation_List_Indeces[i][nh++] = j;      
+    }
+    Table->Competition_List_Indeces[i][Table->No_of_RESOURCES] = nc;     
+    Table->Conjugation_List_Indeces[i][Table->No_of_RESOURCES] = nh;
+    
+    /* Recipient list of strain with the true index i (the DONOR)*/
+    N = 0;
+    for(k = 0; k<Table->No_of_PLASMIDS; k++)
+     if(Table->Strain_Profiles[i_Focal][k_Focal][k] == 1)
+      N++; 
+
+    if(N == 0) { 
+      assert( k_Focal == 0 );
+      /* Empty Recipient List */
+      Table->Recipient_List_Indeces[i][Table->No_of_RESOURCES] = 0;
+    }
+    else {
+      if( j != i ) {
+        ni = 0; 
+        for(j = 0; j<Table->No_of_RESOURCES; j++) {
+          Calculate_Strain_and_Profile(Table, j, &i_List, &k_List);
+
+          N = 0;
+          if(Table->HBB[i_List][i_Focal] > 0.0)      /* Conjugation is permitted */ 
+            for(k = 0; k<Table->No_of_PLASMIDS; k++) /* Infection is permitted */
+              if(Table->Strain_Profiles[i_Focal][k_Focal][k] == 1 && Table->IBP[i_List][k] > 0.0) 
+                N++;
+
+          if(N > 0)
+            Table->Recipient_List_Indeces[i][ni++] = j;
+        }       
+        Table->Recipient_List_Indeces[i][Table->No_of_RESOURCES] = ni;
+        Table->n_R[i]                                            = ni; /* No of Recipients of Strain ID 'i' */
+        Table->No_of_CONJUGATION_EVENTS                         += ni;
+      }         
+    }
+    
+    /* Donor list of strain with the true index i (the RECIPIENT) */
+    N = 0;
+    for(k = 0; k<Table->No_of_PLASMIDS; k++)
+     if(Table->Strain_Profiles[i_Focal][k_Focal][k] == 1)
+      N++; 
+
+    if(N == Table->No_of_PLASMIDS) { 
+      /* Empty Donor List */
+      Table->Donor_List_Indeces[i][Table->No_of_RESOURCES] = 0;
+    }
+    else {
+      if( j != i ) {
+        nd = 0; 
+        for(j = 0; j<Table->No_of_RESOURCES; j++) {
+          Calculate_Strain_and_Profile(Table, j, &i_List, &k_List);
+          N = 0;
+          if(Table->HBB[i_List][i_Focal] > 0.0)      /* Conjugation is permitted */ 
+            for(k = 0; k<Table->No_of_PLASMIDS; k++) /* Infection is permitted   */
+              if(Table->Strain_Profiles[i_List][k_List][k] == 1 && Table->IBP[i_Focal][k] > 0.0) 
+                N++;
+            
+          if(N > 0)
+            Table->Donor_List_Indeces[i][nd++] = j;      
+        } 
+        Table->Donor_List_Indeces[i][Table->No_of_RESOURCES] = nd;
+      }  
+    }
+  }
+
+  /* Plasmid Compatitibility List */
+  for(i = 0; i<Table->No_of_PLASMIDS; i++) {
+    N = 0; 
+    for(j = 0; j<Table->No_of_PLASMIDS; j++) {
+      if(Table->CPP[i][j] > 0.0)
+        Table->Plasmid_Compatibility_Indeces[i][N++] = j;
+    }
+    Table->Plasmid_Compatibility_Indeces[i][Table->No_of_PLASMIDS] = N;
+  }  
+}
+
+void Calculate_Strain_and_Profile(Parameter_Table * Table, int n, int * i_Strain, int * k_Profile)
+{
+  /* Input: 
+     . n, ID label of a subpopulation or Strain ID or local variable index 
+          (true index of the local variable) 
+     Output:
+     . i_Strain, label of the strain type (from 0 to No_of_STRAINS-1)
+     . k_Profile, label of the profile (within the i_Strain)
+  */
+  int i;
+  int N; 
+
+  N = Table->n[0]; 
+  i = 0; 
+  while ( (n - N) >= 0 )
+  {
+    N += Table->n[i+1];
+    i++;   
+  }
+  * i_Strain = i; 
+  
+  N = 0; 
+  for(i=0; i < (* i_Strain); i++)
+  { 
+    N += Table->n[i]; 
+  }
+  * k_Profile = n - N; 
+}
+
+void Printing_Strains_Profiles_and_Lists(Parameter_Table * Table)
+{
+  int i, j, k; 
+  int i_Focal, k_Focal; 
+
+  for(i=0; i<Table->No_of_STRAINS; i++)
+    printf("Strain Type: %d\t No of Profiles of this strain type: %d\n", i, Table->n[i]);
+  printf("\n");
+
+  /* Adjacent Lists: */
+  for(i = 0; i<Table->No_of_RESOURCES; i++) {
+   Calculate_Strain_and_Profile(Table, i, &i_Focal, &k_Focal); 
+   printf("Strain ID: %d\t Strain Type: %d\t Strain Profile [", i, i_Focal);
+    for(k=0; k<Table->No_of_PLASMIDS; k++) 
+      printf("%d ", Table->Strain_Profiles[i_Focal][k_Focal][k]);
+    printf("]");
+  
+    printf("\n");
+    printf("Competition List [%d: (%d, %d)] = {", i, i_Focal, k_Focal);
+    for(j=0; j<Table->Competition_List_Indeces[i][Table->No_of_RESOURCES]; j++)
+      printf(" %d ", Table->Competition_List_Indeces[i][j]);
+    printf("}"); 
+
+    printf("\n");
+    printf("Conjugation List [%d: (%d, %d)] = {", i, i_Focal, k_Focal);
+    for(j=0; j<Table->Conjugation_List_Indeces[i][Table->No_of_RESOURCES]; j++)
+      printf(" %d ", Table->Conjugation_List_Indeces[i][j]);
+    printf("}");
+
+    printf("\n");
+    printf("Recipient List [%d: (%d, %d)] = {", i, i_Focal, k_Focal);
+    for(j=0; j<Table->Recipient_List_Indeces[i][Table->No_of_RESOURCES]; j++)
+      printf(" %d ", Table->Recipient_List_Indeces[i][j]);
+    printf("}"); 
+
+    printf("\n");
+    printf("Donor List [%d: (%d, %d)] = {", i, i_Focal, k_Focal);
+    for(j=0; j<Table->Donor_List_Indeces[i][Table->No_of_RESOURCES]; j++)
+      printf(" %d ", Table->Donor_List_Indeces[i][j]);
+    printf("}");
+
+    printf("\n\n");
+  }
+  
+  printf("\n");
+  printf("Plasmid Compatibility List:\n");
+  for(i=0; i<Table->No_of_PLASMIDS; i++) {
+    printf("Plasmid ID: %d\t Compatibility list: [ ", i);
+    for(j=0; j<Table->Plasmid_Compatibility_Indeces[i][Table->No_of_PLASMIDS]; j++)
+      printf("%d ", Table->Plasmid_Compatibility_Indeces[i][j]);
+    printf("]\n");
+  }        
+}
 
 void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 {
@@ -643,8 +1238,8 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->Lambda_R_1 = Lambda_R_1; 
   P->Delta_R_1  = Delta_R_1;
 
-  P->K_R        = K_R;
-  P->Beta_R     = Beta_R;        /* -H5 */ 
+  P->K_R        = K_R;            /* -HK */
+  P->Beta_R     = Beta_R;         /* -H4 */ 
   
   P->Lambda_C_0 = Lambda_C_0;     /* -H5 */
   P->Delta_C_0  = Delta_C_0;      /* -H6 */
@@ -704,7 +1299,11 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 				                          1: Square Grid with Von Neuman neighborhood
 				                          More network structures under construction 
 			                          */
-  P->No_of_NEIGHBORS    = No_of_NEIGHBORS;
+  P->No_of_NEIGHBORS  = No_of_NEIGHBORS;
 
-  P->No_of_RESOURCES    = No_of_RESOURCES;
+  P->No_of_STRAINS    = No_of_RESOURCES;   /* -HS 100, for instance */
+
+  P->No_of_PLASMIDS   = No_of_INDIVIDUALS; /* -HN 10, for instance  */
+
+  P->No_of_RESOURCES  = P->No_of_STRAINS * pow(2.0, P->No_of_PLASMIDS); /* Potential number of different species */
 }

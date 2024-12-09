@@ -35,15 +35,15 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
       break;
 #elif DIFFUSION_ECO_PLASMIDS
-    case  8:  p = strcat(Label, " Conjugation or Pair-Formation Rate ");  
+    case  8:  p = strcat(Label, " Conjugation or Pair-Formation Rate "); /* Lambda_R_1 */ 
       break;
 #else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
       break;
 #endif
 	      
-#elif DIFFUSION_ECO_PLASMIDS
-    case  9:  p = strcat(Label, "Competition-Induced Mortality (1)");
+#ifdef DIFFUSION_ECO_PLASMIDS
+    case  9:  p = strcat(Label, "Stressed Induced Mortality (i.e., presence of antibiotics)");
       break;
 #else
     case  9:  p = strcat(Label, "Decaying Rate (1)");
@@ -67,6 +67,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
 #ifdef DIFFUSION_ECOEVO_PLANTS
     case 13: p=strcat(Label,  "min Parameter Value (i.e, Eta_min)");      /* -H6 */
+      break;
+#elif DIFFUSION_ECO_PLASMIDS 
+    case 13:  p = strcat(Label, "Competition-Induced Mortality");  /* Working Carrying Carrying Capacity per Nest */
       break;
 #else
     case 13: p=strcat(Label,  "Consumer Death Rate (0)");                 /* -H6 */
@@ -101,6 +104,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #elif DIFFUSION_AZTECA_4D_0 
     case 17:  p = strcat(Label, "Larval Development Rate (Nu) of Flies");  /* Working Carrying Carrying Capacity per Nest */
       break; 
+#elif DIFFUSION_ECO_PLASMIDS 
+    case 17:  p = strcat(Label, "Resistance to Stress (confered by a plasmid)");  /* Working Carrying Carrying Capacity per Nest */
+      break;
 #else 
     case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");/* -H10 */
       break;
@@ -142,6 +148,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #elif defined DIFFUSiON_ECOEVO_PLANTS
     case 27:  p = strcat(Label, "Mutation Probability");   
       break;
+#elif defined DIFFUSION_ECO_PLASMIDS
+    case 27:  p = strcat(Label, "Segregation Error at Reproduction");   
+      break;
 #else 	      
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
       break;
@@ -149,6 +158,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
 #ifdef DIFFUSION_ECOEVO_PLANTS
     case 28:  p = strcat(Label, "Tradeoff Factor, i.e., R_0");
+      break;
+#elif defined DIFFUSION_ECO_PLASMIDS
+    case 28:  p = strcat(Label, "Sparsity Parameter (Connectance of the Interaction Matrices)");   
       break;
 #else 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");

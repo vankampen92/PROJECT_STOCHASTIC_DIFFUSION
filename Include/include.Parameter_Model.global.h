@@ -1,12 +1,19 @@
 int No_of_NEIGHBORS; 
-int No_of_INDIVIDUALS;     
+int No_of_INDIVIDUALS;   
+
+int No_of_PLASMIDS; /* Used in DIFFUSION_ECO_PLASMIDS */
+int No_of_STRAINS;  /* Used in DIFFUSION_ECO_PLASMIDS */
 
 double Mu;                  /* Jumping Rate                    */
 
 int No_of_CELLS;            /* No of CELLS                     */
 int No_of_CELLS_X;          /* No of CELLS X Dimension         */
 int No_of_CELLS_Y;          /* No of CELLS X Dimension         */
-int No_of_RESOURCES;
+
+int No_of_RESOURCES;  /* Number of different species */
+                      /* This number depends on the scarcity parameter 
+                         in the DIFFUSION_ECO_PLASMIDS model 
+                      */
 
 double Lambda_R_0;    /* -H0 */
 double Delta_R_0;     /* -H1 */
@@ -17,7 +24,7 @@ int K_R;              /* -HK: Resource Carrying Capacity */
 double Beta_R;         /* -H4 */ 
   
 double Lambda_C_0;     /* -H5 */
-double Delta_C_0;      /* -H6 */
+double Delta_C_0;      /* -H6 */  /* Overload! Also, Competition-induced mortality in DIFFUSION_ECO_PLASMIDS */
 double Lambda_C_1;     /* -H7 *//* -HuQ */
 double Delta_C_1;      /* -H8 */ 
       

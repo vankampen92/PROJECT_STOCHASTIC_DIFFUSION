@@ -42,3 +42,9 @@ void Percentile_Calculation_Simple(double *X, double ** Variable_0,
 				   int No, int No_REPLICATES, 
 				   double * Per_Cent, int NoPer_Cent, 
 				   double ** Y) ; 
+				   
+/* Creation of Binary Combination exhaustively */
+void Create_Binary_Combination( int ** Binary_Combination, int N, int LENGTH );
+void int_buffer_rec(int ** Number_List, int N, int * number, int n, int length);			   
+				   
+				   

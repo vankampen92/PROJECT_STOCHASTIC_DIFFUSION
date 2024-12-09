@@ -948,6 +948,74 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
+  case 21: /* ECO_PLASMIDS * * * * * * * * * */
+
+  #if defined OPLUS
+      /* No_of_EVENTS, i.e, common events that can occur to every species: */
+      Table->No_of_EVENTS = 7;  /* All species (strains or phenotypes) can undergo the 
+                                   same 7 processes  */
+      Table->TOTAL_No_of_EVENTS = (Table->No_of_EVENTS-1)*Table->No_of_RESOURCES + Table->No_of_CONJUGATION_EVENTS; 
+  #else 
+      /* No_of_EVENTS, i.e, common events that can occur to every species: */
+      Table->No_of_EVENTS = 7;  /* All species (strains or phenotypes) can undergo the 
+                                   same 7 processes  */
+      Table->TOTAL_No_of_EVENTS    = Table->No_of_EVENTS * Table->No_of_RESOURCES;
+  #endif    
+      
+      Table->LOCAL_STATE_VARIABLES = Table->No_of_RESOURCES; /* No of different subpopulations */
+                                        
+      n = 0;
+      for(i=0; i<Table->No_of_CELLS; i++)
+	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+	    
+      /* Conventions */
+      Table->K   = n-1; /* Label last class */
+      Table->R   = 0;  
+
+      /* List of the 15 (potentially searcheable) model parameters:  */
+      /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+      n = 0;
+      Table->Index[n++] = 1;  /* No_of_INDIVIDUALS: No_of_PLASMIDS */                                          /* -HN: No_of_PLASMIDS */
+      /* No_of_PLASMIDS will be initilized with this argument (No_of_INDIVIDUALS) */
+
+      Table->Index[n++] = 5;  /* No_of_RESOURCES: No_of_SPECIES or bacteria No_of_STRAINS */                   /* -HS:  No_of_STRAINS */
+      /* No_of_STRAINS will initialized with this argument (No_of_RESOURCES), but then 
+         No_of_RESOURCES will be recalculated according to the contraints 
+         given by the interaction structure of the interaction matrices 
+         (see: int Determining_actual_No_of_RESOURCES(...)::Patameter_Table.c)
+      */
+      Table->Index[n++] = 10; /* Carrying  Capacity */ /* K_R */                                               /* -HK:  K_R */
+
+      Table->Index[n++] = 7;  /* Death Rate (0) */ /* Delta_R_0 */                                             /* -H1:  Delta_R_0 */ 
+                             
+                              /* Delta = Delta_R_0 + Delta_R_1 * (1.0-Resistance ) */
+
+      Table->Index[n++] = 9;  /* Death Rate (1) */ /* Delta_R_1 */                                             /* -H3:  Delta_R_1 */
+
+      Table->Index[n++] = 13; /* Competition induced Death Rate (competition matrix) */                        /* -H6:  Delta_C_0 */      
+      
+      Table->Index[n++] = 11; /* Cell division rate *//* R ---> R + 1 */                                       /* -H4:  Beta_R */
+
+      Table->Index[n++] = 16; /* Reproduction cost associated to the presence of a plasmid */                  /* -H9:  Alpha_C_0 */ 
+
+      Table->Index[n++] = 17; /* Resistance to stress-induced death associated to the presence of a plasmid */ /* -H10: Nu_C_0    */
+
+      Table->Index[n++] = 0;  /* Bacteria Movement/Diffusion Rate */                                           /* -Hu:  Mu */ 
+      
+      Table->Index[n++] = 6;  /* External Immigration Rate */                                                  /* -H0:  Lambda_R_0 */
+      
+      Table->Index[n++] = 8;  /* Conjugation/encounter rate */                                                 /* -H2:  Lambda_R_1 */    
+      
+      Table->Index[n++] = 18; /* Plasmid Transmission Probability, x */                                        /* -H11:  Xhi_C_0 */
+      
+      Table->Index[n++] = 27; /* Segregation error at reproduction */                                          /* -Hp1:  p_1 */
+       
+      Table->Index[n++] = 28; /* Sparsity parameter (a matrix connectance ) */                                 /* -Hp2:  p_2 */ 
+            
+      Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
       printf(" Models (0 to 10): Check input argument list!!!\n");
@@ -1225,6 +1293,18 @@ void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
       break;
 
     case 20: /* DIFFUSION_ECOEVO_PLANTS * * * * * * * * * * * * * * * * * * * * * * */
+      
+      n = 0;
+      for(i=0; i<P->No_of_CELLS; i++)
+	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+	        n++;
+       
+      /* Conventions */
+      P->K   = n-1;     /* Label last class            */
+      
+      break;
+    
+    case 21: /* DIFFUSION_ECO_PLASMIDS * * * * * * * * * * * * * * * * * * * * * * */
       
       n = 0;
       for(i=0; i<P->No_of_CELLS; i++)

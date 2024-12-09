@@ -3,7 +3,8 @@
 extern gsl_rng * r;   /* Global generator (define at the main program level */
 #define RANDOM gsl_rng_uniform_pos(r)
 
-/* This function advances the system one single time step, by changing
+/* 
+   This function advances the system one single time step, by changing
    system configuration by one single discrete event.  When 
    the stochastic dynamics is implemented following Gillespie Direct 
    algorithm the exact time at which this occurs is sampled from an exponential
@@ -14,8 +15,8 @@ extern gsl_rng * r;   /* Global generator (define at the main program level */
    sampled from the specific expential distribution associated to each event.  
 
    This function calls two fundamental functions: Exectute_One_Step() and 
-   either Temporal_Dynamics() or Temporal_Dynamics_Update(), where the actual 
-   model-specific stochastic dynamics are defined.
+   either Temporal_Dynamics() or Temporal_Dynamics_Update(), where the  
+   model-specific stochastic dynamics and rates are defined.
 */
 
 int Advance_Current_Time( Parameter_Table * Table, 
@@ -35,13 +36,20 @@ int Advance_Current_Time( Parameter_Table * Table,
      involve any movement between patches
   */
   
-  int * Patch                = (int *)calloc(3, sizeof(int));
-  Patch[2]                   = Table->No_of_RESOURCES; 
+  int * Patch                = (int *)calloc(5, sizeof(int));
+  Patch[2]                   = Table->No_of_RESOURCES; /* Impossible Species ID */
+  Patch[3]                   = Table->No_of_RESOURCES; /* Impossible Species ID */
+  Patch[4]                   = 1;                      /* 0: No configurational change has occured */
+                                                       /* 1: A configuration change has occured, and
+                                                             the update of the array of rates 
+                                                             is required    
+                                                       */
   /* This array stores information about the event that has occurred: 
      Patch[0] Local Patch (where the event has occurred ) 
      Patch[1] Patch receiving the immigrant if a movement event has occurred 
-     Patch[2] Index of the species receiving the mutant from a local mutation (Sp_Out)
-     0 <= Sp_Out <= Table->No_of_RESOURCES-1
+     Patch[2] Index of an extra species involved in the event
+     Patch[3] Index of a second extra species also involved in the event
+     (Sp_ID equal to Table->No_of_RESOURCES is impossible, becasue 0 <= Sp_ID <= Table->No_of_RESOURCES-1)
   */
   
   Parameter_Model * P        = Table->P; 
@@ -105,15 +113,15 @@ int Advance_Current_Time( Parameter_Table * Table,
   
   /* BEGIN: Updating of the Total Rate of Change for the system       */
   if (Table->T->TYPE_of_TIME_DEPENDENCE > 0) {
-      /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
-      // Trend_Time_Dependence( Table, (*Time_Current) );
+    /* Update_Time_Dependence (Table->TYPE_of_TIME_DEPENDENCE, Time_Current, Table ); */
+    // Trend_Time_Dependence( Table, (*Time_Current) );
   }
-
-#if defined STOCHASTIC_OPTIMIZATION 
-  Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
-#else
-  Temporal_Dynamics(Village, Table, Rate);
-#endif
+  
+  #if defined STOCHASTIC_OPTIMIZATION 
+    Temporal_Dynamics_Update( Village, Table, Rate, Event, Patch );
+  #else
+    Temporal_Dynamics(Village, Table, Rate);
+  #endif
 
 #if defined VERBOSE
   if( * Time_Current < 1.0) { 

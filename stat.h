@@ -76,6 +76,7 @@ double lnGamma(int n);
 double Euclidean_Distance_between_Two_Positions(position p_YX, position p_2);
 float Euclidean_distance(float,float, float,float); 
 double distance(struct point, struct point);
+int CombiNumber(int k, int n);
 double logCombiNumber(double x, int y);
 double log_Combinatorial_Number(int N, int n);
 double logProchrammer(double , int );

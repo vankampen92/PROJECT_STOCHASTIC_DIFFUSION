@@ -74,6 +74,8 @@
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_AZTECA_4D_1.h"
 #elif defined DIFFUSION_ECOEVO_PLANTS
 #include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_ECOEVO_PLANTS.h"
+#elif defined DIFFUSION_ECO_PLASMIDS
+#include "MODEL_DEFINE_MAX_VARIABLES_DIFFUSION_ECO_PLASMIDS.h"
 #endif
 
 typedef struct totalRateinfo
@@ -106,6 +108,8 @@ typedef struct totalRateinfo
 #include "MODEL_Time_Control_STRUCT_DEF.h"
 #include "MODEL_Time_Dependence_Control_STRUCT_DEF.h"
 #include "MODEL_Parameter_Model_STRUCT_DEF.h"
+#include "MODEL_Strain_STRUCT_DEF.h"
+#include "MODEL_Plasmid_STRUCT_DEF.h"
 #include "MODEL_Community_STRUCT_DEF.h"
 #include "MODEL_Parameter_Space_STRUCT_DEF.h"
 #include "MODEL_Master_Equation_STRUCT_DEF.h"

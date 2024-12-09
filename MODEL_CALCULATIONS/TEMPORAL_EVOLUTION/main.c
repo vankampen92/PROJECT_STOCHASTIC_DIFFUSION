@@ -470,24 +470,40 @@ int main(int argc, char **argv)
     Resetting_Multiresource_Levels (&Table);  
     Writing_Alpha_Nu_Theta_Vectors(&Table);  
   }
-  /* Deterministic Time Dynamics */
-  Parameter_Values_into_Parameter_Table(&Table);
+
+#ifndef DIFFUSION_ECO_PLASMIDS /* First Test without Deterministic Dynamics */     
+    Parameter_Values_into_Parameter_Table(&Table);
+
+  /* Deterministic Time Dynamics */  
   if(Table.TYPE_of_MODEL == 20) // DIFFUSION_ECOEVO_PLANTS
     Ressetting_Species_Characteristic_Parameters (&Table);
-  
+
   M_O_D_E_L( &Table );
-  
+#endif
+
   // Some models (such as DIFFUSION_1R1C_2D and so on) do not have a stochastic
   // counter-part implemented yet!
 #ifndef DIFFUSION_1R1C_2D
 #ifndef DIFFUSION_DRAG
 #ifndef DIFFUSION_VRG
 #ifndef DIFFUSION_MR
-#ifndef DIFFUSION_ECOEVO_PLANTS  /* Test: 1st without stochastic realizations       */
+#ifndef DIFFUSION_ECOEVO_PLANTS  /* Implemeted, but only tested 1st without stochastic realizations */
+
   /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
+  int No_of_RESOURCES_ACTUAL = Table.No_of_RESOURCES; 
   Parameter_Values_into_Parameter_Table(&Table);
+
   if(Table.TYPE_of_MODEL == 20) // DIFFUSION_ECOEVO_PLANTS
   	Ressetting_Species_Characteristic_Parameters (&Table);
+
+  if(Table.TYPE_of_MODEL == 21) // DIFFUSION_ECO_PLASMIDS
+    Table->No_of_RESOURCES = Determining_actual_No_of_RESOURCES (&Table); /* No_of_LOCAL_VARIABLES, 
+                                                                             this is, for instance, 
+                                                                             No of SPECIES. In Ying-Jie 
+                                                                             style of labelling, 
+                                                                             No of SUBPOPULATIONS 
+                                                                          */
+  assert(No_of_RESOURCES_ACTUAL == Table.No_of_RESOURCES);
   
   M_O_D_E_L___S_T_O( &Table );
 #endif
@@ -504,7 +520,7 @@ int main(int argc, char **argv)
                                                     boundary_File,
                                                     &Table,
                                                     Space->P_MAX->data,
-                                                    Space->P_min->data, Space->No_of_PARAMETERS);
+                                                    Space->P_min->data, Space->No_of_PARAMETERS );
   /*  END : ------------------------------------------------------------------------*/
 
   /* BEGIN : Freeing All Memmory * * * * * * * * * * * * * * */

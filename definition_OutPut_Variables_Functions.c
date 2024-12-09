@@ -16,12 +16,21 @@ double Local_Population_Resources(int i, const double * Y, Parameter_Table * Tab
   double y_S; 
   int k, n; 
 
-  assert(Table->TYPE_of_MODEL == 20); 
+  assert(Table->TYPE_of_MODEL == 20 || Table->TYPE_of_MODEL == 21); 
 
   y_S = 0.0;
   for(k = 0; k < Table->No_of_RESOURCES; k++) {
-      
-      n   = i*Table->LOCAL_STATE_VARIABLES + 2*k+1;
+      if(Table->TYPE_of_MODEL == 20)
+        n   = i*Table->LOCAL_STATE_VARIABLES + 2*k+1;
+      else if (Table->TYPE_of_MODEL == 21)
+        n   = i*Table->LOCAL_STATE_VARIABLES + k;
+      else {
+        printf(" Only Table->TYPE_of_MODEL == 20 and Table->TYPE_of_MODEL == 21  can make use\n"); 
+        printf(" of the Local_Population_Resources (...); (definition_OutPut_Variables_Functions.c)\n");
+        printf(" at this state\n");
+        assert(Table->TYPE_of_MODEL == 20 || Table->TYPE_of_MODEL == 21); 
+      }       
+
       y_S += Y[n];
   }
 
@@ -158,10 +167,11 @@ double Total_Population_Resource_Species (double * Y, Parameter_Table * Table)
   double x;
   int i, j;
 
-  j = Table->Focal_Resource;
+  j = Table->Focal_Resource;  /*j-th state variable */
   x = 0.0;
   for(i=0; i<Table->MODEL_STATE_VARIABLES; i++)
-    if(i%Table->LOCAL_STATE_VARIABLES == j) x += Y[i]; 
+    if(i%Table->LOCAL_STATE_VARIABLES == j) 
+      x += Y[i]; 
   
   return(x);
 }

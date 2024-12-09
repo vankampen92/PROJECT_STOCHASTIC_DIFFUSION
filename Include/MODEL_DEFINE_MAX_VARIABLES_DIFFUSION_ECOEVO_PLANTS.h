@@ -8,7 +8,7 @@
                                             (S = 100), but each of them can be in two stages (RP or R) 
                                          */
 
-#define MODEL_STATE_VARIABLES_MAXIMUM 8000000  /* If M is the number of cells, then */
+#define MODEL_STATE_VARIABLES_MAXIMUM 8000000   /* If M is the number of cells, then */
                                                 /* Model dimension maximum is 2 * S * M */
 #define OUTPUT_VARIABLES_TRUE_DERIVED 9         /* See definition_OutPut_Variables.c */
 

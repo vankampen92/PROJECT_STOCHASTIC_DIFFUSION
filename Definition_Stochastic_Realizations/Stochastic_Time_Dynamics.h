@@ -11,6 +11,12 @@ void Initial_Conditions_Stochastic_Dynamics( Parameter_Table * Table, double * y
 void Get_Initial_y_INI_Random_Vector_into_Integer_Values(Parameter_Table * Table,
 							 double * y_INI); 
 
+void Initial_Conditions_Global_Populations (Parameter_Table * Table, double * Vector_Model_Variables );
+
+double Bacterial_Type_Population_per_Cell (Parameter_Table * Table, int i_Strain, int j_Patch);
+
+double Plasmid_Type_Population_per_Cell (Parameter_Table * Table, int i_Plasmid, int j_Patch);
+
 void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, double * y_INI);
 
 int Advance_Current_Time( Parameter_Table * Table, 
@@ -66,3 +72,4 @@ void Event_Adjacence_List_Initialization(Community ** PATCH,
 
 void Event_Delta_Matrix_Initialization(Community ** PATCH,
 				       Parameter_Model * P); 
+

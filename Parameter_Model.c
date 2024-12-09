@@ -93,6 +93,7 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
+  P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
 
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
@@ -220,6 +221,7 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Metapop_Connectivity_Matrix = Table->Metapop_Connectivity_Matrix;
 
   P->No_of_RESOURCES = Table->No_of_RESOURCES;
+  P->No_of_PLASMIDS  = Table->No_of_PLASMIDS;
 
   /* Master Equation Numerical Integration */
   P->TOTAL_No_of_RESOURCES = Table->TOTAL_No_of_RESOURCES;
@@ -343,6 +345,7 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
+  P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
 
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
@@ -463,7 +466,8 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->Metapop_Connectivity_Matrix = P_Source->Metapop_Connectivity_Matrix;
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
-
+  P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
+  
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
   P_Destination->TOTAL_No_of_CONSUMERS = P_Source->TOTAL_No_of_CONSUMERS;

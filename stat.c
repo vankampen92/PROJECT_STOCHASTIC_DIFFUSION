@@ -290,6 +290,29 @@ int potencia(int a, int n)
   return R;
 }
 
+int CombiNumber(int n, int k)
+{
+  int a;
+  double logof_a, x; 
+
+  if(n < k){
+    printf("No Combinatorial Number Exists...\n");
+    printf("n = %d\tk = %d\n",n, k);
+    printf("n is less than k!!!!\n");
+    exit(0);
+  }
+  else if(k == n)
+    a = 1;
+  else{
+    x       = (double)n;
+    logof_a = logCombiNumber(x, k);     
+  }
+
+  a = (int)exp(logof_a);
+
+  return(a);
+}
+
 double logCombiNumber(double x, int y)
 {
   double a;

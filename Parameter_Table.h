@@ -19,3 +19,13 @@ void Resetting_Multiresource_Levels (Parameter_Table * Table);
 void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table);
 
 void Ressetting_Species_Characteristic_Parameters (Parameter_Table * Table);
+
+void Setting_Interaction_Matrices (Parameter_Table * Table);
+
+int Determining_actual_No_of_RESOURCES(Parameter_Table * Parameter_Table);
+
+void Setting_Adjacency_Lists_from_Interaction_Matrices (Parameter_Table *Table);
+
+void Calculate_Strain_and_Profile(Parameter_Table * Table, int n, int * i_Strain, int * k_Profile);
+
+void Printing_Strains_Profiles_and_Lists(Parameter_Table * Table);

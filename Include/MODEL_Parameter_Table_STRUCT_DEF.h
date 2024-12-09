@@ -130,22 +130,54 @@ typedef struct Parameter_Tableinfo
   int TOTAL_No_of_MODEL_PARAMETERS;
   
   double * Lambda_R;
-  double * Delta_R; 
+  double * Delta_R;     
   
-  double * Alpha_C;
   double * Nu_Consumers;
-  
   double * Theta_Consumers;
   double * y_R_i;
 
-  double * Delta_RP; /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS) */
-  double * Eta_RP;   /* Propagule Establishment Rate  (DIFFUSION_ECOEVO_PLANTS) */
+  double * Delta_RP;  /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS)              */
 
-  double * Beta_AP;   /* Propagule Production Rate of Adult Plants (DIFFUSION_ECOEVO_PLANTS) */
-  double * Delta_AP;  /* Death Rate of Adult Plants                (DIFFUSION_ECOEVO_PLANTS) */
+  double * Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
+                      /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS)                  */
 
-  double * Mu_RP;     /* Species-specific Diffusion/Movement Rate (DIFFUSION_ECOEVO_PLANTS)  */   
+  double * Nu_C;      /* Plasmid Resistance (DIFFUSION_ECO_PLASMIDS)                          */
+                     
+  double * Eta_RP;    /* Propagule Establishment Rate  (DIFFUSION_ECOEVO_PLANTS)              */
+                      /* Strain-Specific Conjugation/Encounter Rates (DIFFUSION_ECO_PLASMIDS) */
+
+  double * Beta_AP;   /* Propagule Production Rate of Adult Plants (DIFFUSION_ECOEVO_PLANTS)  */
+                      /* Cell Division Rate of Single Bacterial Cell (DIFFUSION_ECO_PLASMIDS) */
   
+  double * Delta_AP;  /* Death Rate of Adult Plants                (DIFFUSION_ECOEVO_PLANTS)  */
+                      /* Per Capita Death Rates (DIFFUSION_ECO_PLASMIDS) */     
+  
+  double * Mu_RP;     /* Species-specific Diffusion/Movement Rate (DIFFUSION_ECOEVO_PLANTS)   */   
+                      /* Bacterial Cell Diffusion/Movement Rates (DIFFUSION_ECO_PLASMIDS)     */
+
+  double * Segregation_Error; /* Strain specific segregation errors (DIFFUSION_ECO_PLASMIDS) */
+  
+                      /* Interaction Matrices (DIFFUSION_ECO_PLASMIDS) */        
+  double ** ABB;      /* Strain-Strain Competition Matrix              */
+  double ** HBB;      /* Strain-Strain Conjugation Matrix              */
+  double ** IBP;      /* Interaction Infection Bacteria-Plasmid        */
+  double ** CPP;      /* Plasmid-Plasmid Compatibility Matrix          */
+                      /* Adjancency lists corresponding to these matrices */
+  
+  double ** Competition_Induced_Death;
+  int ** Competition_List_Indeces; 
+  int ** Conjugation_List_Indeces;     
+  int ** Recipient_List_Indeces;
+  int ** Donor_List_Indeces;
+  int ** Plasmid_Compatibility_Indeces; 
+
+  /* No of actual viable profiles per strain. It can be different per each strain */
+  int * n;                             /* (DIFFUSION_ECO_PLASMIDS) */
+  int * n_0;                           /* (DIFFUSION_ECO_PLASMIDS) */
+  int * n_R;                           /* (DIFFUSION_ECO_PLASMIDS) */
+  int *** Strain_Profiles;             /* (DIFFUSION_ECO_PLASMIDS) */
+  int ** No_of_Event_Conjugation_Pair; /* (DIFFUSION_ECO_PLASMIDS) */
+
 #if defined CPGPLOT_REPRESENTATION
 #include <include.CPG.global.h>
   Parameter_CPGPLOT * CPG;
@@ -169,6 +201,7 @@ typedef struct Parameter_Tableinfo
   /* Number of common events that can occur to every Species: */
   int No_of_EVENTS;                               /* Stochastic Dynamics */
   int TOTAL_GRAND_No_of_EVENTS;                   /* TOTAL_No_of_EVENTS * No_of_CELLS */ 
+  int No_of_CONJUGATION_EVENTS;                   /* DIFFUSION_ECO_PLASMIDS */
   /* 
      TOTAL_No_of_EVENTS = No_of_EVENTS * No_of_RESOURCES if all species can undergo 
      exactly the same processes 
@@ -182,7 +215,11 @@ typedef struct Parameter_Tableinfo
   int TOTAL_No_of_HANDLING_CONSUMERS; 
 
   /* Used in MODEL = DIFFUSION_HII_nD */
-  double Tiempo_Propio; 
+  double Tiempo_Propio;
+
+  double * Global_Strains_Population;  /* Only in use in DIFFUSION_ECO_PLASMIDS */
+  double * Global_Plasmid_Population;  /* Only in use in DIFFUSION_ECO_PLASMICS */
+ 
 }Parameter_Table;
 
 // void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * );

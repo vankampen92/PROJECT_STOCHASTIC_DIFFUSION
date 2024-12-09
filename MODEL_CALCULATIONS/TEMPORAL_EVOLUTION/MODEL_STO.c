@@ -30,6 +30,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   Parameter_Model * P = (Parameter_Model *)malloc( 1 * sizeof(Parameter_Model) );
   P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N (Table, P);
   Table->P  = P;
+
   P->CPG    = Table->CPG_STO; 
   printf(" Parameter_Model structure has been correctly allocated and initiated\n");
   I_Time    = Table->T->I_Time;
@@ -51,29 +52,40 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   if (Table->No_of_CELLS == 1)
     if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
-						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
-						   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
+						                                                  Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
+						                                                  Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
     }
     else {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
-							 Table->INITIAL_TOTAL_POPULATION,
-							 Table->INITIAL_TOTAL_POPULATION);
+							                                                Table->INITIAL_TOTAL_POPULATION,
+							                                                Table->INITIAL_TOTAL_POPULATION); /* -xN  (INITIAL_TOTAL_POPULATION) */
+                                                                                                /* -HN  (No_of_INDIVIDUALS)  */
+                                                              /* INITIAL_TOTAL_POPULATION::Initial_Conditions */
+                                                              /* No_of_INDIVIDUALS::Parameter_Model           */                                  
     }
   else if(Table->No_of_CELLS <= 4)
     Initial_Condition_All_Patches_the_Same_into_Parameter_Table (Table,
-								      Table->INITIAL_TOTAL_POPULATION);
+								                                                 Table->INITIAL_TOTAL_POPULATION);
+    /* All types and cells take the same initial total population */                                                          
   else 
     Initial_Condition_Centered_into_Parameter_Table (Table, 
                                                      Table->INITIAL_TOTAL_POPULATION); 
                                                      /* -xN [] */
   /* END ----------------------------------------------------------------------------
+     ('Table->Vector_Model_Variables_Time_0' has been initialized!!!)
    */
+  
   /* BEGIN : -------------------------------------------------------------------------
    * Stochastic Community Set Up
    */
-  Community ** PATCH = (Community **)malloc( P->No_of_CELLS * sizeof(Community *) );
+  Community ** PATCH = (Community **)calloc( P->No_of_CELLS, sizeof(Community *) );
   Community_Allocation( PATCH, P ); 
   Community_Initialization (PATCH, P);
+#if defined DIFFUSION_ECO_PLASMIDS
+  Community_Plasmids_Initialization (PATCH, P);
+  Community_Strains_Initialization (PATCH, P);  
+#endif
+
   /* The Parameter Model structure also keeps the three memmory addresses pointing to 
    * the Patch System, the Time Control structure, and the CPG structure to plot   
    */
@@ -174,6 +186,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   free( Table->Vector_Model_Int_Variables );
   free( Table->Vector_Model_Int_Variables_Time_0 );
   
+  Community_Strains_Free(PATCH, P);
   Community_Free(PATCH, P);
   free ( P ); 
 
@@ -191,5 +204,6 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     free(Table->Tree_Node_Index); /* Priority array of indexed pointers to all tree nodes */
   #endif
   
+
   return(0);
 }

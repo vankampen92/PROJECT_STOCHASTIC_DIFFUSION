@@ -50,7 +50,7 @@ void Temporal_Dynamics_Update( Community ** My_Community,
   Community * Pa;
   double OutMigration; 
 
-  n = Table->TOTAL_No_of_EVENTS;
+  n = Table->No_of_EVENTS;
   
   x = Patch[0]; y = Patch[1]; Sp_Out = Patch[2];
 
@@ -614,8 +614,8 @@ void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, int Sp, int 
     break;
     
     case 2: /* 2: Propagule Death  */
-      Delta_Matrix[1][4] = -Table->Eta_RP[Sp]*(1.0-2.0*Table->p_1)/K_R * (double)m_0; 
-      Delta_Matrix[1][5] = -Table->Eta_RP[Sp]*(2.0*Table->p_1)    /K_R * (double)m_0;
+      Delta_Matrix[2][4] = -Table->Eta_RP[Sp]*(1.0-2.0*Table->p_1)/K_R * (double)m_0; 
+      Delta_Matrix[2][5] = -Table->Eta_RP[Sp]*(2.0*Table->p_1)    /K_R * (double)m_0;
       
     break;
     

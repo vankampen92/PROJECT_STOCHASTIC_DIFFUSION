@@ -13,6 +13,8 @@
         "variant": "c",
         "model.h": "c",
         "model_define_max_variables_diffusion_azteca_4d_1.h": "c",
-        "gsl_linalg.h": "c"
+        "gsl_linalg.h": "c",
+        "bp_strainsprofiles.h": "c",
+        "random": "c"
     }
 }

@@ -37,6 +37,7 @@ void AssignLabel_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Paramet
 void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Table *P); 
 
 void AssignLabel_to_Model_Variables(int j, char * Label, Parameter_Table *P);
+void Calculate_Strain_and_Profile(Parameter_Table * Table, int n, int * i_Strain, int * k_Profile); /* DIFFUSION_ECO_PLASMIDS */
 
 void AssignLabel_to_Output_Variables(int j, char * Label, Parameter_Table * P);
 

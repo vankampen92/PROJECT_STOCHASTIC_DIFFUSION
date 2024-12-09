@@ -54,7 +54,7 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
        of size No_of_EVENTS x No_of_EVENTS, where this is the number of events each species 
        can undergo 
     */
-    if(P->TYPE_of_MODEL == 20) {
+    if(P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 21) {
       PATCH[i]->Event_Delta_Tensor = (double ***)calloc(P->No_of_RESOURCES, sizeof(double **) );
       for(a=0; a<P->No_of_RESOURCES; a++) {
         PATCH[i]->Event_Delta_Tensor[a] = (double **)calloc(P->No_of_EVENTS, sizeof(double *) );
@@ -75,6 +75,20 @@ void Community_Allocation ( Community ** PATCH, Parameter_Model * P )
       for(a=0; a<N; a++)
         PATCH[i]->Event_Adjacence_List[a] = (int *)calloc(N+1, sizeof(int) );
     }
+
+#if defined DIFFUSION_ECO_PLASMIDS
+    PATCH[i]->Local_Strain_Population = (Strain **)calloc(P->No_of_RESOURCES, sizeof(Strain *));     
+    for(a=0; a<P->No_of_RESOURCES; a++){  
+      PATCH[i]->Local_Strain_Population[a] = (Strain *)calloc(1, sizeof(Strain));
+    }
+    
+    PATCH[i]->Local_Plasmid_Population = (Plasmid **)calloc(P->No_of_PLASMIDS, sizeof(Plasmid *));
+    for(a=0; a<P->No_of_PLASMIDS; a++)
+      PATCH[i]->Local_Plasmid_Population[a] = (Plasmid *)calloc(1, sizeof(Plasmid));
+
+    PATCH[i]->Bacterial_Type_Population = (int *)calloc(P->No_of_STRAINS, sizeof(int)); 
+    PATCH[i]->Plasmid_Type_Population   = (int *)calloc(P->No_of_PLASMIDS, sizeof(int));  
+#endif
   }
 }
 
@@ -119,7 +133,7 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
       free(PATCH[i]->Imm_Rates_Preassure[a]);
     free(PATCH[i]->Imm_Rates_Preassure);
 
-    if(P->TYPE_of_MODEL == 20) {
+    if(P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 21) {
       for(a=0; a<P->No_of_RESOURCES; a++) {
         for(j=0; j<P->No_of_EVENTS; j++)
           free(PATCH[i]->Event_Delta_Tensor[a][j]);
@@ -145,10 +159,24 @@ void Community_Free (Community ** PATCH, Parameter_Model * P)
       free(PATCH[i]->Event_Adjacence_List);
     }  
     
+#if defined DIFFUSION_ECO_PLASMIDS
+    for(a=0; a<P->No_of_RESOURCES; a++) 
+      free(PATCH[i]->Local_Strain_Population[a]);
+    free(PATCH[i]->Local_Strain_Population);  
+
+    for(a=0; a<P->No_of_PLASMIDS; a++)
+      free(PATCH[i]->Local_Plasmid_Population[a]); 
+    free(PATCH[i]->Local_Plasmid_Population);
+
+    free(PATCH[i]->Bacterial_Type_Population);
+    free(PATCH[i]->Plasmid_Type_Population); 
+#endif
+
     free(PATCH[i]);
   }
 
   free( PATCH );
+
   /*   END: Patch Total Destruction */
 }
 
@@ -213,10 +241,11 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_AZTECA_4D_0      TYPE_of_MODEL = 18
      . MODEL=DIFFUSION_AZTECA_4D_1      TYPE_of_MODEL = 19
      . MODEL=DIFFUSION_ECOEVO_PLANTS    TYPE_of_MODEL = 20
+     . MODEL=DIFFUSION_ECO_PLASMIDS     TYPE_of_MODEL = 21
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
+  if(P->TYPE_of_MODEL == 21 || P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
     Event_Delta_Matrix_Initialization(PATCH, P);
     Event_Adjacence_List_Initialization(PATCH, P);
   }
@@ -600,4 +629,76 @@ void Community_Priority_Queue_Tree_Initialization (Parameter_Table * Table)
     Table->Leaves[i]->index = m++;  
     Table->Leaves[i]->value = INFINITY; 
   } 
+}
+
+void Community_Plasmids_Initialization (Community ** PATCH, Parameter_Model * P)
+{
+  int i, j;
+ 
+  Parameter_Table * Table = (Parameter_Table *)P->Table; 
+
+  for (j = 0; j < Table->No_of_CELLS; j++) {
+
+    for(i=0; i < Table->No_of_PLASMIDS; i++){
+
+      PATCH[j]->Local_Plasmid_Population[i]->ID = i;
+
+      PATCH[j]->Local_Plasmid_Population[i]->n  = 0; 
+        
+      PATCH[j]->Local_Plasmid_Population[i]->Cost = Table->Alpha_C_0;     /* Alpha_C_0 = 1.0: Full Cost: No reproduction!!! */
+
+      PATCH[j]->Local_Plasmid_Population[i]->Resistance = Table->Nu_C_0;  /* Nu_C_0 = 1.0: Full Resistance */
+
+      PATCH[j]->Local_Plasmid_Population[i]->Compatibility_Profile = Table->Plasmid_Compatibility_Indeces[i];
+    }
+  }
+}
+
+void Community_Strains_Initialization (Community ** PATCH, Parameter_Model * P )
+{
+  int i, j, i_Strain, k_Profile;
+  int Sp;
+  double COST, RESISTANCE; 
+
+  Sp    = P->LOCAL_STATE_VARIABLES;  /* Total Number of Species 
+					                              potentially coexisting locally,
+					                              and, therefore, also the
+					                              Total Number of State Variables
+					                              fully determining the local state
+  				                            */ 
+  Parameter_Table * Table = (Parameter_Table *)P->Table; 
+
+  for (j = 0; j < Table->No_of_CELLS; j++) {
+
+    for(i=0; i < Sp; i++){
+
+      Calculate_Strain_and_Profile(Table, i, &i_Strain, &k_Profile);
+
+      PATCH[j]->Local_Strain_Population[i]->ID = i;
+
+      PATCH[j]->Local_Strain_Population[i]->n  = 0;  
+
+      PATCH[j]->Local_Strain_Population[i]->Death_0 = Table->Death_AP[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Death_1 = Table->Death_R_1; 
+
+      PATCH[j]->Local_Strain_Population[i]->Beta = Table->Beta_R[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Segregation_Error = Table->Segregation_Error[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Gamma = Table->Eta_RP[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Mu_0 = Table->Mu_RP[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Competition_List = Table->Competition_List_Indeces[i]; 
+
+      PATCH[j]->Local_Strain_Population[i]->Conjugation_List = Table->Conjugation_List_Indeces[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Recipient_List = Table->Recipient_List_Indeces[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Donor_List = Table->Donor_List_Indeces[i];
+
+      PATCH[j]->Local_Strain_Population[i]->Profile = Table->Strain_Profiles[i_Strain][k_Profile];
+    }
+  }
 }

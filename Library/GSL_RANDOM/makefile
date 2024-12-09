@@ -13,7 +13,7 @@ CFLAGS=-g -fPIE -DHAVE_INLINE ${EXTRA_INCLUDE_PATH}
 ###CFLAGS= -Wall -O21 
 COMPILER=gcc
 
-OBJECTS = GSL_Discrete_Sampling.o GSL_Init_Random_Seed.o GSL_stat.o Percentile_Calculation_Simple.o  
+OBJECTS = GSL_Discrete_Sampling.o GSL_Init_Random_Seed.o GSL_stat.o Percentile_Calculation_Simple.o Create_Binary_Combination.o 
 
 .c.o: 
 	${COMPILER} $(CFLAGS) -c $<

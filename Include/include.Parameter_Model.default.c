@@ -6,7 +6,12 @@ No_of_CELLS_X = 10;
 
 No_of_CELLS_Y = 10;
 
-No_of_RESOURCES = No_of_RESOURCES_MAXIMUM; 
+No_of_RESOURCES = No_of_RESOURCES_MAXIMUM;
+
+#if defined DIFFUSION_ECO_PLASMIDS
+ No_of_PLASMIDS  = No_of_PLASMIDS_MAXIMUM; /* Used in DIFFUSION_ECO_PLASMIDS */
+ No_of_STRAINS   = No_of_STRAINS_MAXIMUM;  /* Used in DIFFUSION_ECO_PLASMIDS */
+#endif 
 
 Mu      = 0.0;         /* -Hu  *//* Resources: Movement Per Capita Rate Between Patches */ 
 Mu_C    = 0.0;         /* -H13 *//* Consumers: Movement Per Capita Rate Between Patches */ 

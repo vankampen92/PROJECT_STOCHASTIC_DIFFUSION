@@ -222,6 +222,8 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
 void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 {
   int i; 
+  int i_Strain;
+  int k_Profile;
   char * p;
   char * q; 
 
@@ -373,7 +375,28 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
       free(sp);
 
       break;
-      
+
+    case  21:
+
+      char * sp = (char *)calloc(10, sizeof(char));
+      for(i=0; i<Table->No_of_RESOURCES; i++){
+
+        Calculate_Strain_and_Profile(Table, i, &i_Strain, &k_Profile);
+
+        sprintf(sp, "%d,", i_Strain);
+
+        p = strcat(L[i], "S_");
+        p = strcat(L[i], sp);
+        p = strcat(L[i], "[");
+        p = strcat(L[i], k_Profile);
+        p = strcat(L[i], "]");           
+
+      } 
+      free(sp);
+
+      break;
+    
+
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);
       printf(".... The permited correspondences are: 0 to 19\n");
