@@ -163,7 +163,6 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
 
     printf("Printing Strains, Profiles and Lists:\n"); 
     // getchar();
-
     Printing_Strains_Profiles_and_Lists(Table);
   
     printf("\n");
