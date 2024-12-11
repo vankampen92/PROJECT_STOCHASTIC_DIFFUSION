@@ -58,7 +58,7 @@ both in you home directory.
 
 		+ ~/PROJECT/CPGPLOT_EXAMPLES/PLOT -G29 ?
 
-	and see the different avaiable graphic formats in which plots can be saved. Notice that sometimes the value for these input arguments is overriden by the internal program code. When this happens, it is for a good reason. Please check the code to understand why and make moodgodfications at your own risk. Be creative.   
+	and see the different available graphic formats in which plots can be saved. Notice that sometimes the value for these input arguments is overriden by the internal program code. When this happens, it is for a good reason. Please check the code to understand why and make moodgodfications at your own risk. Be creative.   
 
 	+ #### 7. Examples:
 	See, for instance, ./MODEL_CALCULATIONS/TEMPORAL_EVOLUTION_STOCHASTICS/main.c, and follow the directions to compile and run the code:
