@@ -2,7 +2,7 @@
 
 extern gsl_rng * r; /* Global generator defined in main.c */
 
-void Setting_Putatitive_Recipient_Lists_of_Potential_Trasconjugants (Parameter_Table * Table)
+void Setting_Putative_Recipient_Lists_of_Potential_Trasconjugants (Parameter_Table * Table)
 {
   int L, N, i, k, l, i_Strain_ID, k_Strain_ID, ni; 
   int i_Focal, k_Focal;  

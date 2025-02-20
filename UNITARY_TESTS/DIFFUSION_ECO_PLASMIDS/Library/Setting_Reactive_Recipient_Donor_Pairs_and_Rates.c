@@ -14,8 +14,9 @@ void Setting_Reactive_Recipient_Donor_Pairs_and_Rates(Parameter_Table * Table)
   int Strain_ID_R, Strain_ID_D;
   int * Profile;   
 
-    for(k = 0; k < Table->No_of_RESOURCES; k++) {
-        for(l = 0; l < Table->Putative_Recipient_List_Indeces[k][Table->No_of_PROFILES]; l++) { 
+  for(k = 0; k < Table->No_of_RESOURCES; k++) {
+    
+    for(l = 0; l < Table->Putative_Recipient_List_Indeces[k][Table->No_of_PROFILES]; l++) { 
 
           Strain_ID_R = Table->Putative_Recipient_List_Indeces[k][l]; 
 
@@ -25,6 +26,7 @@ void Setting_Reactive_Recipient_Donor_Pairs_and_Rates(Parameter_Table * Table)
                                                sizeof(double));                                  
           N = 0; 
           for(n = 0; n < Table->Donor_List_Indeces[Strain_ID_R][Table->No_of_RESOURCES]; n++) {
+            
             Strain_ID_D = Table->Donor_List_Indeces[Strain_ID_R][n];  
 
             /* . k:           Transconjugant Strain ID */
@@ -35,24 +37,32 @@ void Setting_Reactive_Recipient_Donor_Pairs_and_Rates(Parameter_Table * Table)
             if(n_Effective_Pair == 1) {
               Donor_List_Subset[N] = Strain_ID_D; 
               Donor_Rate_Subset[N] = Rate;
-              N++; 
+              N++;
+              printf(" Success: Effective Conjugation will produce the required transconjugant:\n"); 
             }
             else{
-              printf(" Effective Conjugation would never produce the required transconjugant:\n");
+              printf(" Failure: Effective Conjugation would never produce the required transconjugant:\n");
+              //getchar();
+            }
+
+            Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[k][0]][Table->StrainType_and_Profile[k][1]];
+            printf(" Transconjugant Strain TYPE (%d): \t", Table->StrainType_and_Profile[k][0]);
+            printf(" Transconjugant Profile: \t\t\t");
+            Print_Strain_Profile(Profile, Table->No_of_PLASMIDS); 
+            printf("\n");
               
-              Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[k][0]][Table->StrainType_and_Profile[k][1]];
-              Print_Strain_Profile(Profile, Table->No_of_PLASMIDS); 
-              printf("\t Transconjugant Profile");; printf("\n");
+            Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_D][0]][Table->StrainType_and_Profile[Strain_ID_D][1]];
+            printf(" Donor Strain TYPE (%d): \t\t", Table->StrainType_and_Profile[Strain_ID_D][0]);
+            printf(" Donor Profile (when infecting the recipient): \t");
+            Print_Infection_Profile(Profile, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
+            printf("\n");
               
-              Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_D][0]][Table->StrainType_and_Profile[Strain_ID_D][1]];
-              Printf_Infection_Profile(Profile, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
-              printf("\t\t Donor Profile (when infecting the recipient)"); printf("\n");
-              
-              Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_R][0]][Table->StrainType_and_Profile[Strain_ID_R][1]]; 
-              Print_Strain_Profile(Profile, Table->No_of_PLASMIDS);
-              printf("\t Recipient Profile."); printf("\n\n"); 
-              // getchar(); 
-            }            
+            Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_R][0]][Table->StrainType_and_Profile[Strain_ID_R][1]];
+            printf(" Recipient Strain TYPE (%d): \t\t", Table->StrainType_and_Profile[Strain_ID_R][0]); 
+            printf(" Recipient Profile: \t\t\t\t"); 
+            Print_Strain_Profile(Profile, Table->No_of_PLASMIDS);
+            printf("\n\n"); 
+
           }
 
           Table->DoRe[k][l] = (Donor_Recipient_Pair **)calloc(N, sizeof(Donor_Recipient_Pair *));              
@@ -67,9 +77,8 @@ void Setting_Reactive_Recipient_Donor_Pairs_and_Rates(Parameter_Table * Table)
           // printf(" Number of effective donors of the %d-th putative recipient of strain ID %d:\t %d (out of %d)\n", l, k,  
           //          Table->DoRe[k][l][0]->N, 
           //          Table->Donor_List_Indeces[Strain_ID_R][Table->No_of_RESOURCES]); 
-
           free(Donor_List_Subset);
           free(Donor_Rate_Subset);                                                    
-        }
     }
+  }
 }

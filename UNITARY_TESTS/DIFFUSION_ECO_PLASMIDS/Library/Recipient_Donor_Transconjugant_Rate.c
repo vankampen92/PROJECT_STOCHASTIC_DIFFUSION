@@ -7,8 +7,8 @@ int Recipient_Donor_Transconjugant_Rate( int Trans_ID, int Strain_ID_R, int Stra
   ///   encounter between a Strain Type and Profile of the recipeint (specified by a given Strain_ID_R) 
   ///   and a donor (Strain_ID_D) as result of an efficient conjugation process.
   
-  ///   Notice that this rate, (* Rate), is a probability, which will multiply the ecounter rate to build the 
-  ///   effecitve rate of formation of the transconjugant as a result of the effective conjugation of a given 
+  ///   Notice that this rate, (* Rate), is a probability, which will multiply the encounter rate to build the 
+  ///   effective rate of formation of the transconjugant as a result of the effective conjugation of a given 
   ///   reactive donor-recipient pair.  
 
   int n_bool; 
@@ -115,7 +115,7 @@ int Recipient_Donor_Transconjugant_Rate( int Trans_ID, int Strain_ID_R, int Stra
               Print_Strain_Profile(Profile_R, Table->No_of_PLASMIDS);
               printf("\t Recipient Profile Sp: %d ID: %d", Strain_Sp_R, Strain_ID_R); printf("\n");
 
-              Printf_Infection_Profile(Profile_D, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
+              Print_Infection_Profile(Profile_D, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
               printf("\t\t Donor Profile (when infecting the recipient) Sp: %d ID: %d", Strain_Sp_D, Strain_ID_D); 
               printf("\n\n");
 

@@ -60,13 +60,13 @@ int Potential_Donor_Recipient_Pair_Assert(Parameter_Table * Table,
             change the recipient's profile 
           */
           printf("Donor: "); 
-          printf(" Y\t"); Printf_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
+          printf(" Y\t"); Print_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
           printf("Recipient: "); 
           Print_Strain_Profile(Table->Strain_Profiles[Recip_Sp][k_R], Table->No_of_PLASMIDS); printf("\n\n");
         }
         else {
           printf("Donor: "); 
-          printf(" N\t"); Printf_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
+          printf(" N\t"); Print_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
           printf("Recipient: "); 
           Print_Strain_Profile(Table->Strain_Profiles[Recip_Sp][k_R], Table->No_of_PLASMIDS); printf("\n\n"); 
         } 

@@ -225,7 +225,8 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
   int i_Strain;
   int k_Profile;
   char * p;
-  char * q; 
+  char * q;
+  char * sp;  
 
   switch(Table->TYPE_of_MODEL)
     {
@@ -362,7 +363,7 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 
     case  20:
 
-      char * sp = (char *)calloc(5, sizeof(char));
+      sp = (char *)calloc(5, sizeof(char));
       for(i=0; i<Table->No_of_RESOURCES; i++){
         sprintf(sp, "%d", i);
  
@@ -376,26 +377,32 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 
       break;
 
+    #if defined DIFFUSION_ECO_PLASMIDS  
     case  21:
 
-      char * sp = (char *)calloc(10, sizeof(char));
+      sp = (char *)calloc(10, sizeof(char));
       for(i=0; i<Table->No_of_RESOURCES; i++){
 
+        
         Calculate_Strain_and_Profile(Table, i, &i_Strain, &k_Profile);
+        
+        p = strcat(L[i], "S_");
 
         sprintf(sp, "%d,", i_Strain);
-
-        p = strcat(L[i], "S_");
         p = strcat(L[i], sp);
-        p = strcat(L[i], "[");
-        p = strcat(L[i], k_Profile);
-        p = strcat(L[i], "]");           
 
-      } 
+        p = strcat(L[i], "[");
+
+        sprintf(sp, "%d,", k_Profile);
+        p = strcat(L[i], sp);
+
+        p = strcat(L[i], "]");
+
+      }
       free(sp);
 
       break;
-    
+    #endif  
 
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);

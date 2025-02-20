@@ -168,7 +168,7 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
     printf("\n");
     printf("Calculating Putatitive Recipient Lists of Potential Transconjugants...\n");
     getchar();
-    Setting_Putatitive_Recipient_Lists_of_Potential_Trasconjugants (Table);    
+    Setting_Putative_Recipient_Lists_of_Potential_Trasconjugants (Table);    
     getchar();
     Printing_Putative_Recipient_Lists(Table);
 

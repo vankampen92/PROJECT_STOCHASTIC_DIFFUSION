@@ -159,11 +159,11 @@ void Initial_Conditions_Global_Populations (Parameter_Table * Table, double * Ve
   for(k=0; k<Table->No_of_RESOURCES; k++) {
     Table->Focal_Resource = k;
     np[k] = Total_Population_Resource_Species (Vector_Model_Variables, Table); /* across cells */
-    printf("Global Population (ID=%d) = ", k, np[k]);
+    printf("Global Population (ID=%d) = %g\n", k, np[k]);
   }
   printf("\n");
 
-  if(Table->TYPE_ofl_MODEL == 21) {
+  if(Table->TYPE_of_MODEL == 21) {
     /* Per Strain (suming over profiles) */
     j = 0;
     for(k=0; k<Table->No_of_STRAINS; k++) {
@@ -173,7 +173,7 @@ void Initial_Conditions_Global_Populations (Parameter_Table * Table, double * Ve
         N += np[j++];
 
       Table->Global_Strains_Population[k] = N;
-      printf("Global Population Strain (over profiles) (Strain ID=%d) = ", k, N); 
+      printf("Global Population Strain (over profiles) (Strain ID=%d) = %g\n", k, N); 
     }
 
     assert(j == Table->No_of_RESOURCES);
@@ -226,7 +226,7 @@ void Initial_Conditions_Global_Populations (Parameter_Table * Table, double * Ve
     }
     free(Total_Strain_Population);
 
-    double Total_Plasmid_Population = (double *)calloc(Table->No_of_PLASMIDS, sizeof(double));
+    double * Total_Plasmid_Population = (double *)calloc(Table->No_of_PLASMIDS, sizeof(double));
     for(k=0; k<Table->No_of_CELLS; k++) {
       
       for(n=0; n<Table->No_of_PLASMIDS; n++) { 
@@ -266,6 +266,8 @@ double Bacterial_Type_Population_per_Cell (Parameter_Table * Table, int i_Strain
   double N; 
   int i, l; 
 
+  Community ** PATCH = Table->Patch_System;
+
   assert(i_Strain >= 0 && i_Strain < Table->No_of_STRAINS);
   
   l = 0;
@@ -293,6 +295,8 @@ double Plasmid_Type_Population_per_Cell (Parameter_Table * Table, int i_Plasmid,
 
   double N; 
   int i, j, l; 
+
+  Community ** PATCH = Table->Patch_System;
 
   l = 0; N = 0.0; 
   for(j=0; j<Table->No_of_STRAINS; j++) {

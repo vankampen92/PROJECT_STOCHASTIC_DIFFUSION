@@ -631,6 +631,7 @@ void Community_Priority_Queue_Tree_Initialization (Parameter_Table * Table)
   } 
 }
 
+#if defined DIFFUSION_ECO_PLASMIDS
 void Community_Plasmids_Initialization (Community ** PATCH, Parameter_Model * P)
 {
   int i, j;
@@ -702,3 +703,4 @@ void Community_Strains_Initialization (Community ** PATCH, Parameter_Model * P )
     }
   }
 }
+#endif

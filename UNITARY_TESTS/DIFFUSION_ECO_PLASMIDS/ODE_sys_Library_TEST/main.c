@@ -66,7 +66,6 @@ int main(int argc, char **argv)
             4.  Plasmid-Plasmid Compatibility Matrix, CPP
   */
   Parameter_Table * Table = (Parameter_Table *)calloc(1, sizeof(Parameter_Table));
-    
   Preparing_Initial_System_Configuration( Table );  /* Allocating and initializing data structures */
 
   Time_Control * Time = (Time_Control *)calloc(1, sizeof(Time_Control));  
@@ -86,8 +85,8 @@ int main(int argc, char **argv)
   De_Allocating_Initial_System_Configuration ( Table );
 
   printf("\n ------------------------------------------------------------------------------ \n");
-  printf("No of RESOURCES (No of STRAIN IDs): %d\n", Table->No_of_RESOURCES);
-  printf("No of STRAIN TYPES: %d\n", Table->No_of_STRAINS);
+  printf("No of STRAIN IDs: %d\n", Table->No_of_RESOURCES);
+  printf("No of STRAIN TYPEs: %d\n", Table->No_of_STRAINS);
   printf("No of PLASMIDS: %d\n", Table->No_of_PLASMIDS);
   printf("No of TOTAL EVENTS: %d\n", Table->No_of_STRAINS * 6 + Table->No_of_CONJUGATION_EVENTS);
   printf("No of Conjugation Pairs (Donor, Recipient): %d\n", Table->No_of_CONJUGATION_EVENTS);

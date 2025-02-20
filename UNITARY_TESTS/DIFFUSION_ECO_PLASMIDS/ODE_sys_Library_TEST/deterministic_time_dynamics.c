@@ -15,6 +15,8 @@
 */
 #define BIO_NEGATIVE_VALUE -1.0E-10
 
+#include <include.CPG.extern.h>
+
 int Deterministic_Time_Dynamics( Parameter_Table * Table )
 {
   /* This function performs a numerical integration of a the system avancing from a time 
@@ -36,7 +38,8 @@ int Deterministic_Time_Dynamics( Parameter_Table * Table )
   */
   int NEGATIVE_VALUE; 
   int i; int State;
-  
+  int TimeEvoPlot; 
+
   int j, k, kk;
   int TIMES;
   Time_Control * Time;
@@ -48,7 +51,7 @@ int Deterministic_Time_Dynamics( Parameter_Table * Table )
   /* BEGIN : Initial Conditions * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
   printf(" Before Initial_Conditions_Numerical_Integration (...)\n");
   Initial_Conditions_Numerical_Integration( Table, Table->Vector_Model_Variables );
-  printf(" After Initial_Conditions_Numerical_Integration (...). Initial Conditions:  ");
+  printf(" After Initial_Conditions_Numerical_Integration (...)\n");
 
   assert( Table->LOCAL_STATE_VARIABLES == Table->No_of_RESOURCES );
   assert( Table->MODEL_STATE_VARIABLES == Table->No_of_RESOURCES );  
@@ -91,21 +94,45 @@ int Deterministic_Time_Dynamics( Parameter_Table * Table )
     
 #if defined CPGPLOT_REPRESENTATION
     /* This should be only activated in case we want to animate ODE time evolution by
-	     representing the solution as time progresses                                       */
+	     representing the solution as time progresses */
+  if(Table->CPG->CPG_SCALE_X == 0) {                                       
     Table->CPG->CPG_RANGE_X_0 = Table->T->Time_0; 
     Table->CPG->CPG_RANGE_X_1 = Table->T->Time_1;
-    
+  }
+  if(Table->CPG->CPG_SCALE_Y == 0) {    
     Table->CPG->CPG_RANGE_Y_0 = 0.0;              
     Table->CPG->CPG_RANGE_Y_1 = (double)Table->K_R;
+  }
+  if(Table->CPG->CPG_SCALE_X == 1) {
+    Table->CPG->CPG_RANGE_X_0 = CPG_RANGE_X_0; 
+    Table->CPG->CPG_RANGE_X_1 = CPG_RANGE_X_1; 
+  }
+  if(Table->CPG->CPG_SCALE_Y == 1) {    
+    Table->CPG->CPG_RANGE_Y_0 = CPG_RANGE_Y_0; 
+    Table->CPG->CPG_RANGE_Y_1 = CPG_RANGE_Y_1; 
+  }
 
-    int TimeEvoPlot =  CPGPLOT___X_Y_n___P_L_O_T_T_I_N_G( Table->CPG,
-                                                          j, Table->No_of_RESOURCES,
-                                                          Table->CPG->x_Time, Table->CPG->y_Time,
-                                                          "Time", "Abundance", "",
-                                                          1, 1 );             
-    getchar();
+  /* TimeEvoPlot =  CPGPLOT___X_Y_n___P_L_O_T_T_I_N_G( Table->CPG,
+                                                        j, Table->No_of_RESOURCES,
+                                                        Table->CPG->x_Time, Table->CPG->y_Time,
+                                                        "Time", "Abundance", "",
+                                                        1, 1 );             
+    //getchar();
+  */
 #endif
   }/* ------> go further to the next time step */
+
+  if (State)
+    printf(" Numerical Integration successfully done!\n");
+
+#if defined CPGPLOT_REPRESENTATION
+  printf(" \n Plotting Resulting Temporal Evolution (press key)\n"); getchar();   
+
+  TimeEvoPlot =  CPGPLOT___X_Y_n___P_L_O_T_T_I_N_G( Table->CPG,
+                                                    j, Table->No_of_RESOURCES,
+                                                    Table->CPG->x_Time, Table->CPG->y_Time,
+                                                    "Time", "Abundance", "", 1, 1 );
+#endif
 
   return(State);
 }

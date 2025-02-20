@@ -49,7 +49,7 @@ int Advance_Current_Time( Parameter_Table * Table,
      Patch[1] Patch receiving the immigrant if a movement event has occurred 
      Patch[2] Index of an extra species involved in the event
      Patch[3] Index of a second extra species also involved in the event
-     (Sp_ID equal to Table->No_of_RESOURCES is impossible, becasue 0 <= Sp_ID <= Table->No_of_RESOURCES-1)
+     (Sp_ID equal to Table->No_of_RESOURCES is impossible, because 0 <= Sp_ID <= Table->No_of_RESOURCES-1)
   */
   
   Parameter_Model * P        = Table->P; 
@@ -93,7 +93,13 @@ int Advance_Current_Time( Parameter_Table * Table,
       /* Advance time... */
       /* Tree_Node_Index: Priority array of indexed pointers to all tree nodes */
       int Index_Node_x = Table->TOTAL_No_of_EVENTS * Patch[0] + Event;
-    
+      
+      if( Table->Tree_Node_Index[Index_Node_x] != Table->Treeroot ) {
+	     printf("Table->TOTAL_No_of_EVENTS = %d\n", Table->TOTAL_No_of_EVENTS); 
+	     printf("Event    = %d\n", Event); 
+	     printf("Patch[0] = %d\n", Patch[0]);
+      }
+
       assert(Table->Tree_Node_Index[Index_Node_x] == Table->Treeroot);
       
       (*Time_Current)  = Table->Tree_Node_Index[Index_Node_x]->value;

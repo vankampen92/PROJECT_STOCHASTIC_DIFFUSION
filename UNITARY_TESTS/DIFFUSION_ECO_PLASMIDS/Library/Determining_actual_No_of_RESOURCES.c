@@ -70,7 +70,7 @@ int Determining_actual_No_of_RESOURCES(Parameter_Table * Table)
     for(j = 0; j < n[i]; j++) {
       printf("Strain ID [%d]: Bacterial Type [%d]\t Profile: ", N, i );
 
-      Printf_Infection_Profile (Strain_Profiles[i][j], i, Table);
+      Print_Infection_Profile (Strain_Profiles[i][j], i, Table);
 
       printf("[ ");      
       for(k=0; k<Table->No_of_PLASMIDS; k++)

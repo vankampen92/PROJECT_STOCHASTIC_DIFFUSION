@@ -1,3 +1,5 @@
+#include <MODEL.h>
+
 void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 {
   char * p;
@@ -52,8 +54,10 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
 #ifdef DIFFUSION_AZTECA_4D                                            /* -HK  */
     case 10:  p = strcat(Label, "Nest Carrying Capacity (Workers)");  /* Working Carrying Carrying Capacity per Nest */
+      break;
 #elif DIFFUSION_AZTECA_4D_0
     case 10:  p = strcat(Label, "Max No of Potential Nesting Trees");  /* Potential Number of Nesting Trees (per local Cell) */
+      break;
 #else
     case 10:  p = strcat(Label, "Patch Carrying Capacity (Resources)");   /* Patch Carrying Capacity */
       break;

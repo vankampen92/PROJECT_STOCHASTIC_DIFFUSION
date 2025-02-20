@@ -17,19 +17,19 @@ void Initial_Conditions_Numerical_Integration( Parameter_Table * Table, double *
  
   if(Table->TYPE_of_INITIAL_CONDITION == 0) {
      
-	  printf("Initial Conditions: alls species a the lowest abundance(see Initial_Conditions_Lower_Bound(...))\n");
-    getchar(); 
+	  printf(" Initial Conditions: alls species a the lowest abundance(see Initial_Conditions_Lower_Bound(...))\n");
+    // getchar(); 
     Initial_Condition_Lower_Bound( Table, y_INI );
   }
   else if (Table->TYPE_of_INITIAL_CONDITION == 1) {
   
-	  printf("Initial Conditions are random between 0.0 and system size (or carring capacity K)\n");
-    getchar(); 
+	  printf(" Initial Conditions are random between 0.0 and system size (or carring capacity K)\n");
+    // getchar(); 
     Random_Initial_Condition( Table, y_INI );
   }
   else if (Table->TYPE_of_INITIAL_CONDITION == 2) {
     
-    printf("Initial Conditions are defined as the fixed points of the system\n");
+    printf(" Initial Conditions are defined as the fixed points of the system\n");
     printf(" Not yet implemented...\n");
     exit(0); 
     // Fixed Points should have been already calculated in a previous call 

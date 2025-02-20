@@ -2,6 +2,30 @@
     "version": "0.2.0",
     "configurations": [ 
         {
+            "name": "(gdb) Launch BP_SrainProfile_Library",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/UNITARY_TESTS/DIFFUSION_ECO_PLASMIDS/ODE_sys_Library_TEST/plot",
+            "args": ["-G0", "1", "-G1", "1", "-G2", "1", "-G3", "0.0", "-G4", "50.0", "-G5", "1", "-G6", "0.0", "-G7", "200"],                    
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "(gdb) Launch BP_SrainProfile",
             "type": "cppdbg",
             "request": "launch",

@@ -50,11 +50,15 @@ int S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( int i,
   // Table->Vector_Model_Variables is assigned correct initial values: 
   // Table->Vector_Model_Variables takes the values in Table->Vector_Model_Variables_Time_0
   // which will be the initial configuration for the whole system.
+  //
+#if defined DIFFUSION_ECO_PLASMIDS
   /* Check: Global Populations and Initiatilization: 
             1. No of individual bacteria per Strain (regardless profile) for every cell in the patch systeem  
             2. No of individual bacteria carrying the same plasmid type for every cell in the patch system
   */
-  Initial_Conditions_Global_Populations (Table, Table->Vector_Model_Variables ); 
+  Initial_Conditions_Global_Populations (Table, Table->Vector_Model_Variables );
+#endif
+
   printf(" After Initial_Conditions_Stochastic_Dynamics(...) and Initial_Conditions_Global_Populations(...)\n");
 
   Time_Current = Time->Time_Vector[0];

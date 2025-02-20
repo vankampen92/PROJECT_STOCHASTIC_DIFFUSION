@@ -172,7 +172,7 @@ int Determining_actual_No_of_RESOURCES(Parameter_Table * Table)
     for(j = 0; j < n[i]; j++) {
       printf("Strain ID [%d]: Bacterial Type [%d]\t Profile: ", N, i );
 
-      Printf_Infection_Profile (Strain_Profiles[i][j], i, Table);
+      Print_Infection_Profile (Strain_Profiles[i][j], i, Table);
 
       printf("[ ");      
       for(k=0; k<Table->No_of_PLASMIDS; k++)
@@ -260,7 +260,7 @@ int Profile_Selfconsistency_Assert(int i_Strain_Sp, int * Profile, Parameter_Tab
     }
 }
 
-void Setting_Putatitive_Recipient_Lists_of_Potential_Trasconjugants (Parameter_Table * Table)
+void Setting_Putative_Recipient_Lists_of_Potential_Trasconjugants (Parameter_Table * Table)
 {
   int L, N, i, k, l, i_Strain_ID, k_Strain_ID, ni; 
   int i_Focal, k_Focal;  
@@ -546,13 +546,13 @@ int Potential_Donor_Recipient_Pair_Assert(Parameter_Table * Table,
             change the recipient's profile 
           */
           printf("Donor: "); 
-          printf(" Y\t"); Printf_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
+          printf(" Y\t"); Print_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
           printf("Recipient: "); 
           Print_Strain_Profile(Table->Strain_Profiles[Recip_Sp][k_R], Table->No_of_PLASMIDS); printf("\n\n");
         }
         else {
           printf("Donor: "); 
-          printf(" N\t"); Printf_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
+          printf(" N\t"); Print_Infection_Profile(Table->Strain_Profiles[Donor_Sp][k_D], Recip_Sp, Table); printf("\t"); 
           printf("Recipient: "); 
           Print_Strain_Profile(Table->Strain_Profiles[Recip_Sp][k_R], Table->No_of_PLASMIDS); printf("\n\n"); 
         } 
@@ -822,7 +822,7 @@ void Print_Strain_Profile(int * Profile, int No_of_PLASMIDS)
       printf("[[ %d ]]", Profile[No_of_PLASMIDS]);   
 }
 
-void Printf_Infection_Profile(int * Profile, int i_List, Parameter_Table * Table)
+void Print_Infection_Profile(int * Profile, int i_List, Parameter_Table * Table)
 {
   int k;
       printf("[ ");
@@ -1094,7 +1094,7 @@ void Setting_Reactive_Recipient_Donor_Pairs_and_Rates(Parameter_Table * Table)
               printf("\t Transconjugant Profile");; printf("\n");
               
               Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_D][0]][Table->StrainType_and_Profile[Strain_ID_D][1]];
-              Printf_Infection_Profile(Profile, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
+              Print_Infection_Profile(Profile, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
               printf("\t\t Donor Profile (when infecting the recipient)"); printf("\n");
               
               Profile = Table->Strain_Profiles[Table->StrainType_and_Profile[Strain_ID_R][0]][Table->StrainType_and_Profile[Strain_ID_R][1]]; 
@@ -1279,7 +1279,7 @@ int Recipient_Donor_Transconjugant_Rate( int Trans_ID, int Strain_ID_R, int Stra
               Print_Strain_Profile(Profile_R, Table->No_of_PLASMIDS);
               printf("\t Recipient Profile Sp: %d ID: %d", Strain_Sp_R, Strain_ID_R); printf("\n");
 
-              Printf_Infection_Profile(Profile_D, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
+              Print_Infection_Profile(Profile_D, Table->StrainType_and_Profile[Strain_ID_R][0], Table); 
               printf("\t\t Donor Profile (when infecting the recipient) Sp: %d ID: %d", Strain_Sp_D, Strain_ID_D); 
               printf("\n\n");
 

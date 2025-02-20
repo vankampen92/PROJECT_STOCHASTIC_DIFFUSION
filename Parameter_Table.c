@@ -101,7 +101,6 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
   Table->Lambda_R  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Delta_R   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Nu_Consumers      = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-  Table->Nu_C              = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) ); /* DIFFUSION_ECO_PLASMIDS */
   Table->Alpha_C   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->Theta_Consumers = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
   Table->y_R_i     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
@@ -114,6 +113,8 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___A_L_L_O_C( Parameter_Table * Table )
 
 #if defined DIFFUSION_ECO_PLASMIDS
   Table->Nu_C   = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+#else
+  Table->Nu_C   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) ); 
 #endif
 
   /* BEGIN: Allocating and Setting up Connectivity Matrix */
@@ -252,13 +253,10 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( Parameter_Table * Table )
   free(Table->Delta_R);
   free(Table->Alpha_C);
   free(Table->Nu_Consumers);
-  free(Table->Nu_C);             /* DIFFUSION_ECO_PLASMIDS */
   free(Table->Theta_Consumers);
   free(Table->y_R_i);
 
-#if defined DIFFUSION_ECO_PLASMIDS
   free(Table->Nu_C);
-#endif
 
   free(Table->Delta_RP); 
   free(Table->Eta_RP);
@@ -623,7 +621,7 @@ void P_A_R_A_M_E_T_E_R___T_A_B_L_E___U_P_L_O_A_D( Parameter_Table * Table, int *
   /* This function should be called always after having called 
      void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   */
-  #ifndef DIFFUSiON_ECO_PLASMIDS
+  #ifndef DIFFUSION_ECO_PLASMIDS
     Resetting_Lambda_Delta_Vectors (Table);
   #endif 
   /* END -------------------------------------------------*/
@@ -808,7 +806,7 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
 /*   for(i=0; i<N; i++) P->Index[i] = Index[i];                               */
 /* }                                                                          */
 /* -------------------------------------------------------------------------- */
-
+#if defined DIFFUSION_ECO_PLASMIDS
 void Setting_Interaction_Matrices (Parameter_Table * Table) 
 {
     int i, j;
@@ -1220,6 +1218,7 @@ void Printing_Strains_Profiles_and_Lists(Parameter_Table * Table)
     printf("]\n");
   }        
 }
+#endif
 
 void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 {
@@ -1300,10 +1299,16 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
 				                          More network structures under construction 
 			                          */
   P->No_of_NEIGHBORS  = No_of_NEIGHBORS;
-
+  
+#if defined DIFFUSION_ECO_PLASMIDS
+  
   P->No_of_STRAINS    = No_of_RESOURCES;   /* -HS 100, for instance */
-
   P->No_of_PLASMIDS   = No_of_INDIVIDUALS; /* -HN 10, for instance  */
-
   P->No_of_RESOURCES  = P->No_of_STRAINS * pow(2.0, P->No_of_PLASMIDS); /* Potential number of different species */
+
+#else
+  
+  P->No_of_RESOURCES    = No_of_RESOURCES; 
+
+#endif
 }

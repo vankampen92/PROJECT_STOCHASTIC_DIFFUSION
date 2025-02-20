@@ -19,7 +19,7 @@ void Printing_Putative_Recipient_Lists(Parameter_Table * Table)
 
       Calculate_Strain_and_Profile(Table, Table->Putative_Recipient_List_Indeces[i][j], &i_List, &k_List);   
 
-      printf("Strain ID %d:\t Bacterial Type (%d) and Profile (%d): [ ", 
+      printf("Strain ID %d:\t Strain TYPE (%d) and Profile (%d): [ ", 
         Table->Putative_Recipient_List_Indeces[i][j], i_List, k_List);
       for(k=0; k<Table->No_of_PLASMIDS; k++) 
         printf("%d ", Table->Strain_Profiles[i_List][k_List][k]);

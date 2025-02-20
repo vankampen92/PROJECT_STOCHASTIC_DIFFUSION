@@ -36,15 +36,16 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
     Table->K_R            = SYSTEM_SIZE; 
     Table->p_2            = SPARSITY_PARAMETER;
     Table->Delta_C_0      = COMPETITION_INDUCED_MORTALITY; 
-    Table->Lambda_R_1     = COMMON_CONJUGATION_RATE; 
-    Table->Alpha_C_0      = REPRODUCTION_COST;        /* Plasmid reproduction costs */
-    Table->Nu_C_0         = PLASMID_RESISTANCE;       /* Plasmid resistance         */      
+    Table->Lambda_R_1     = COMMON_CONJUGATION_RATE;       
     Table->Beta_R         = CELL_DIVISION_RATE; 
     Table->Delta_R_0      = BASAL_DEATH_RATE; 
     Table->Delta_R_1      = STRESS_INDUCED_DEATH; 
     Table->p_1            = SEGREGATION_ERROR;
     Table->Mu             = DIFFUSION_RATE;
+
     Table->Chi_C_0        = PLASMID_TRASMISSION_PROBABILITY;
+    Table->Alpha_C_0      = REPRODUCTION_COST;        /* Plasmid reproduction costs */
+    Table->Nu_C_0         = PLASMID_RESISTANCE;       /* Plasmid resistance         */
 
     Table->Eta_RP    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
     Table->Mu_RP     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
@@ -118,7 +119,8 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
       printf("Plasmid-plasmid compatibilty matrix: \n");
       show_DoubleMatrix(Table->CPP, Table->No_of_PLASMIDS, Table->No_of_PLASMIDS);
       printf("\n");
-
+      getchar();
+      
       /* Determining actual No_of_RESOURCES after considering the constraints established 
        by the plasmid-plasmid compatibilty matrix (certain plasmids are incompatible in the same 
        bacterial cell), and infection matrix (certain strains are immune to certain plasmids) 
@@ -169,7 +171,7 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
     printf("\n");
     printf("Calculating Putatitive Recipient Lists of Potential Transconjugants...\n");
     getchar();
-    Setting_Putatitive_Recipient_Lists_of_Potential_Trasconjugants (Table);    
+    Setting_Putative_Recipient_Lists_of_Potential_Trasconjugants (Table);    
     getchar();
     Printing_Putative_Recipient_Lists(Table);
 
@@ -285,7 +287,6 @@ void De_Allocating_Initial_System_Configuration ( Parameter_Table * Table )
                           
                           which also stores the length of the recipient list 
                           for the i-th Strain ID. 
-                        */
-    
+                        */    
 }      
 
