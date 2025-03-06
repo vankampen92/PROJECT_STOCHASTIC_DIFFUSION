@@ -70,22 +70,23 @@ NR=NUMERICAL_RECIPES###############################
 ## BINARY_TREE_OPTIMIZATION requires setting up a binary tree for all the spatial individual cells
 ## BINARY_TREE_SUPER_OPTIMIZATION requires setting up a bigger binary tree of every event at each cell 
 STO=STOCHASTIC_OPTIMIZATION###################### Possibilities: 'STOCHASTIC_OPTIMIZATION' / 'NON'
-BT=PRIORITY_QUEU_SUPER_OPTIMIZATION#################### Possibilities: 
-##################################################### (0) 'NON'
+BT=BINARY_TREE_SUPER_OPTIMIZATION#################### Possibilities: 
+##################################################### (0) 'NON' (compulsary if STO=NON)
 ##################################################### (1) 'BINARY_TREE_OPTIMIZATION'
 ##################################################### (2) 'BINARY_TREE_SUPER_OPTIMIZATION'
 ##################################################### (3) 'PRIORITY_QUEU_SUPER_OPTIMIZATION'
-RE=NON_REUSE_RANDOM_NUMBER############################### (22) Possibilities;
+RE=REUSE_RANDOM_NUMBER############################### (22) Possibilities;
 #####################################################      'NON_REUSE_RANDOM_NUMBER'
 #####################################################      'REUSE_RANDOM_NUMBER'
 # The optimation option of reusing random numbers is only available in case 
-# BT=BINARY_TREE_SUPER_OPTIMIZATION (otherwise does not make sense)
+# BT=BINARY_TREE_SUPER_OPTIMIZATION (otherwise does not make any sense)
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P R O G R A M   O U T P U T
-V=NON_VERBOSE###################################### Possibilities: 'VERBOSE' / 'NON_VERBOSE'
+V=NON_VERBOSE################################# Possibilities: 'VERBOSE' / 'NON_VERBOSE'
 FILE=FILE_REPRESENTATION###################### Possibilities: 'FILE_REPRESENTATION' / 'NON_FILE_REPRESENTATION'
-CPG=CPGPLOT_REPRESENTATION############## Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
-STATIONARITY=NON_STATIONARY_POINT_REPRESENTATION# Possibilitites: 'STATIONARY_POINT_REPRESENTATION' / 'NON_STATIONARY_POINT_REPRESENTATION'
+CPG=CPGPLOT_REPRESENTATION#################### Possibilities: 'CPGPLOT_REPRESENTATION' / 'NON_CPGPLOT_REPRESENTATION'
+STATIONARITY=STATIONARY_POINT_REPRESENTATION## Possibilitites:'STATIONARY_POINT_REPRESENTATION' / 
+##############################################                'NON_STATIONARY_POINT_REPRESENTATION'
 ##############################################################################################################
 ## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   P A R A M E T E R   S P A C E ###############
 TYPE_of_BOUNDARY=###
@@ -141,19 +142,30 @@ LIBS=-L/usr/lib -lX11
 PGPLOT_LIB=-L/usr/lib -lpgplot -L/usr/lib -lpng
 CPGPLOT_LIB=-L/usr/lib -lcpgplot -lpgplot -L/usr/lib -lpng
 ##############################################################################################################
-OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Community_Scatter_Plot_Representation.o assert_right_model_definition.o  \
-	Parameter_Model.o Time_Control.o Parameter_Table.o  assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o assignStructValue_to_VectorEntry.o assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o assignVectorEntry_to_Structure.o Model_Variable_Initial_Condition_into_Vector_Entry.o Vector_Entry_into_Model_Variable_Initial_Condition.o fprintf_Model_Parameters.o fprintf_Output_Variables.o          \
+OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Community_Scatter_Plot_Representation.o           \
+	Parameter_Model.o Time_Control.o Parameter_Table.o Setting_up_Constant_Metacommunity_Matrix.o                             \
+	assignCodes_to_Model_Parameters.o assignLabel_to_Model_Parameters.o                                                       \
+	assignLabel_to_Model_Variables.o assignLabel_to_Output_Variables.o                                                        \
+	assignStructValue_to_VectorEntry.o assignVectorEntry_to_Structure.o                                                       \
+	Vector_Entry_into_Model_Variable_Initial_Condition.o Model_Variable_Initial_Condition_into_Vector_Entry.o                 \
+	assert_right_model_definition.o                                                                                           \
+	assignSymbol_to_Model_Parameters.o assignSymbol_to_Model_Variables.o assignSymbol_to_Output_Variables.o                   \
 	assignLatex_Label_to_Model_Parameters.o  Latex_Write_Parameter_Table.o                                                    \
+	fprintf_Model_Parameters.o fprintf_Output_Variables.o                                                                     \
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o           \
-	deterministic_time_dynamics.o numerical_Integration_Driver.o Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o  Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                                                                                   \
-	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o Advance_Current_Time.o Choose_Village.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o                                                \
+	deterministic_time_dynamics.o numerical_Integration_Driver.o                                                              \
+	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o Stability_2D_Systems.o Function_Type_of_Stability.o          \
+	Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o                                       \
+	Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                          \
+	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o                         \
+	Choose_Village.o Advance_Current_Time.o Temporal_Dynamics.o Temporal_Dynamics_Update.o Execute_One_Step.o                 \
+	Event_Delta_Matrix_Initialization.o Event_Adjacence_List_Initialization.o Temporal_Dynamics_Aux_Functions.o               \
 	Model_Variables_Code.o definition_OutPut_Variables.o definition_OutPut_Variables_Functions.o In_Out_Migration_Functions.o \
 	stat.o                                                                                                                    \
 	CPGPLOT___X_Y___Parameter_Table.o                                                                                         \
 	CPGPLOT___GRID___Parameter_Table.o                                                                                        \
-	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               \
-	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o
-# \ # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
+	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               
+# # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
 # Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
 ### Example:
 
@@ -211,6 +223,9 @@ Time_Dependence_Resolve.o: ${TIME_TREND_DIR}Time_Dependence_Resolve.c ${HEAD.H}
 
 Time_Dependence_Control.o: ${TIME_TREND_DIR}Time_Dependence_Control.c ${HEAD.H}
 	${CC} -c ${TIME_TREND_DIR}Time_Dependence_Control.c $(CXXFLAGS)
+
+Setting_up_Constant_Metacommunity_Matrix.o: ${PROJECT_DIR}Setting_up_Constant_Metacommunity_Matrix.c ${HEAD.H}
+	${CC} -c ${PROJECT_DIR}Setting_up_Constant_Metacommunity_Matrix.c $(CXXFLAGS)	
 
 Parameter_Table.o: ${PROJECT_DIR}Parameter_Table.c ${HEAD.H}
 	${CC} -c ${PROJECT_DIR}Parameter_Table.c $(CXXFLAGS)
@@ -329,6 +344,9 @@ Event_Delta_Matrix_Initialization.o: ${STO_DIR}Event_Delta_Matrix_Initialization
 Event_Adjacence_List_Initialization.o: ${STO_DIR}Event_Adjacence_List_Initialization.c ${HEAD.H}
 	${CC} -c ${STO_DIR}Event_Adjacence_List_Initialization.c $(CXXFLAGS)
 
+Temporal_Dynamics_Aux_Functions.o: ${STO_DIR}Temporal_Dynamics_Aux_Functions.c ${HEAD.H}
+	${CC} -c ${STO_DIR}Temporal_Dynamics_Aux_Functions.c $(CXXFLAGS)
+
 Stochastic_Time_Dynamics.o: ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c ${HEAD.H}
 	${CC} -c ${STO_DIR_GENERAL}Stochastic_Time_Dynamics.c $(CXXFLAGS)
 
@@ -358,6 +376,12 @@ Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
 Stationary_Solution_Feasibility_Control.o: ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c ${HEAD.H}
 	$(CC) -c ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c $(CXXFLAGS)
 
+Stability_2D_Systems.o: ${FIXED_POINTS_DIR}Stability_2D_Systems.c ${HEAD.H}
+	${CC} -c ${FIXED_POINTS_DIR}Stability_2D_Systems.c $(CXXFLAGS)
+
+Function_Type_of_Stability.o: ${FIXED_POINTS_DIR}Function_Type_of_Stability.c ${HEAD.H}
+	${CC} -c ${FIXED_POINTS_DIR}Function_Type_of_Stability.c $(CXXFLAGS)
+			
 # fixed_ALL_Points_Intersection.o: ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c ${HEAD.H}
 #	$(CC) -c ${ODE_FIXED_POINTS}fixed_ALL_Points_Intersection.c $(CXXFLAGS)
 
@@ -399,11 +423,15 @@ clean:
 	rm -f *.o *~ core
 #
 COMPILATION_OPTIONS:
-	echo "Main model definition compilation options:" > ${EXE}_COMPILATION_OPTIONS.txt
-	echo "${ODE_MODEL}"                            >> ${EXE}_COMPILATION_OPTIONS.txt
-	echo "I${TYPE_of_INDEX}_B${TYPE_of_BOUNDARY}"  >> ${EXE}_COMPILATION_OPTIONS.txt
-	echo "${CPG}"                                  >> ${EXE}_COMPILATION_OPTIONS.txt
-	echo "${TYPE_NUMERICAL_INTEGRATION}"           >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Main model definition compilation options:"                        > ${EXE}_COMPILATION_OPTIONS.txt
+	echo "ODE algorithm: ${TYPE_NUMERICAL_INTEGRATION}"                      >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Graphical representation: ${CPG}"                                  >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Stochastic optimization: "
+	echo "Binary tree optimization: ${BT}"                                   >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Random number reuse: ${RE}"                                        >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Stochastic Optimzation: ${STO}"                                    >> ${EXE}_COMPILATION_OPTIONS.txt	 	
+	echo "Stationarity Calculation: ${STATIONARITY}"                         >> ${EXE}_COMPILATION_OPTIONS.txt	 	
+	echo ""           			              			 >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "---------------------------------------" >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "All compilation options as passed to the compiler through CXXFLAGS:" >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "${CXXFLAGS}"                             >> ${EXE}_COMPILATION_OPTIONS.txt

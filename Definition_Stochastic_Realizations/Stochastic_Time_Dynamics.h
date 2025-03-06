@@ -42,8 +42,8 @@ void Execute_One_Step(Community ** SP,
 void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stochastic_Rate * Rate);
 
 void Temporal_Dynamics_Update( Community ** My_Community,
-			       Parameter_Table * Table, Stochastic_Rate * Rate,
-			       int Type_of_Event, int * Patch);
+			       			   Parameter_Table * Table, Stochastic_Rate * Rate,
+			       			   int Type_of_Event, int * Patch);
 
 void Local_Population_Decrease ( int n, Community * Patch );
 
@@ -65,11 +65,34 @@ void Boundness_Control_Local_Patch(int Event, Parameter_Table * Table,
                                    int x, int jS, double Y, int J);							 
 
 void Positivity_Control( int Event, Parameter_Table * Table,
-			 int x, int jS, double Y, int J);
+			 			 int x, int jS, double Y, int J);
 
+void Carrying_Capacity_Control( int Event, Parameter_Table * Table, 
+						        int x, int jS, double Y, int J );
+
+int Carrying_Capacity_Control_Check( int Event, Parameter_Table * Table, 
+									 int x, int jS, double Y, int J );
+
+void Update_Event_Rate_Structure( Community * Pa, int x, int Type_of_Event, int Sp, 
+								  Stochastic_Rate * Rate, Parameter_Table * Table, int flag );
+
+void Priority_Queu_Super_Optimization( Community * Pa, int x, 
+									   int n, int Sp, int k ,
+									   double time_current, 
+									   double lambda_old,
+									   Parameter_Table * Table,
+									   bool * bool_Next_Time );
+ 
 void Event_Adjacence_List_Initialization(Community ** PATCH,
 					 Parameter_Model * P); 
 
 void Event_Delta_Matrix_Initialization(Community ** PATCH,
-				       Parameter_Model * P); 
+				       Parameter_Model * P);
+
+void Updating_Event_Delta_Matrix(Community * Pa, int Type_of_Event, Parameter_Table * Table);
+
+void Print_Discrete_Probability_Distribution(Parameter_Table * Table, int Event, int x);
+
+void Print_Meta_Community_Patch_System (Parameter_Table * Table);
+					   
 

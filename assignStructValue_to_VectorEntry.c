@@ -55,7 +55,7 @@ double AssignStructValue_to_VectorEntry(int j, Parameter_Table * P)
       break;
     case  7: value = P->Delta_R_0; 
       break;
-    case  8: value = P->Lambda_R_1; 
+    case  8: value = P->Lambda_R_1;    /* Lambda_R_1 correspond to $\gamma_0$ in LaTex: the pair formation rate*/ 
       break;
     case  9: value = P->Delta_R_1; 
       break;

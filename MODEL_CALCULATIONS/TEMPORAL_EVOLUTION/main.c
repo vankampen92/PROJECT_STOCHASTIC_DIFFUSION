@@ -350,18 +350,51 @@ Relevant input arguments for model DIFFUSION_HII_nD:
    -H9 and -H10 [Alpha_C_0 and Nu_C_0 for 1st Resource Type. Alpha_C_0 is the same for all resource types, but this can be changed.  
    -H0 and -H2 are Lambda_R_0 and Lambda_R1, which are overloaded to create extra handling rates (Nu), for the 2nd and 3rd resource type. 
    Notice that for this model -H5 should be always zero (No immigration of consumers: No of CONSUMERS is constant). 
-   -H11 and H12 [Xhi_C_0 and Eta_C_0 are not relevant here. They are only in models with predator interference]. 
+   -H11 and H12 [Xhi_C_0 and Eta_C_0 are not relevant here. They are only in models with predator interference].
    
-In general:
-   -HuR -HuC are the jumping rates (only relevant if there are more than one cell or patch in the system)
-   -H0 -H2 -H5 are the external immigration (Lambda_R_0, Lambda_R_1 and Lambda_C_0)
-   -H20 is the establishment rate 
-   -H1 -H3 are the death rates, Delta_R_0, Delta_R_1, for propagules/resources. 
-   -H6  is Delta_C_0, the death rate for both searching and handling consumers.
-   -H9  and -H10 are the Alpha_C_0 and Nu_C_0  Holling Type II model parameters 
-   -H4  and -H17 are the production rates of propagules (Beta_R) and searching animals (Beta_C), respectively.  
-   More examples in ./command_line_examples.txt.
-*/
+   MODEL = DIFFUSION_ECO_1B1P (-y2 22)  
+  .~$ ./DIFFUSION_ECO_1B1P -y0 22 -y2 1 -HS 1 -HN 1 -HM 1 -HX 1 -HY 1 \
+                              -n 2 -v0 0 -v1 1 -G0 1 -G1 2 \
+                              -G2 1 -G3 0.0 -G4 10.0 -G5 1 -G6 0.0 -G7 1000 \
+                              -tn 100 -t0 0.0 -t1 10.0 -t4 0 -tR 10 -xn 0 -xN 50.0  \
+                              -HK 1000 -H4 2.5 -H1 1.0 -H3 1.0 -H2 1.0\
+                              -H9 0.5 -H10 0.5 \
+                              -Hp1 0.01 -Hp2 0.5 -H11 0.3 \
+                              -HuR 0.0 -HuC 0.0 -H0 0.0
+                              
+  .~$ ./ECO_1B1P_4 -y0 22 -y2 1 -HS 1 -HN 1 -HM 2500 -HX 50 -HY 50 \
+                     -n 2 -v0 0 -v1 1 -G0 1 -G1 2 \
+                     -G2 1 -G3 0.0 -G4 1000.0 -G5 1 -G6 0.0 -G7 300 \
+                     -tn 500 -t0 0.0 -t1 1000.0 -t4 0 -tR 20 -xn 0 -xN 40.0 \
+                     -HK 100 -H4 2.5 -H1 1.0 -H3 1.0 -H2 1.0 \
+                     -H9 0.25 -H10 0.7 \
+                     -Hp1 0.1 -Hp2 0.5 -H11 0.5 \
+                     -HuR 2.0 -HuC 4.0 -H0 0.0
+
+  (see COMPILATION_OPTIMIZATION_LEVELS.sh for compilation optiopns)               
+  Relevant input arguments for model DIFFUSION_1B1P:  
+   -HN 1 [No_of_PLASMIDS]: always 1 plasmid (for this model, 1B1P) (As input arg, coded as No_of_INDIVIDUALS) 
+   -HS 1 [No_of_STRAINS]:  always 1 strain (for this model, 1B1P) (As input arg, coded as No_of_RESOURCES)
+   -HM 1 [No_of_PATCHES]:  it could be more than one, but keep it between 1 and 10000 maximum
+   -HX 1 [No_of_CELLS_X]:  it could be more than one, but keep it between 1 and 100 maximum, accordingly to the number of patches
+   -HY 1 [No_of_CELLS_Y]:  it could be more than one, but keep it between 1 and 100 maximum, accordingly to the number of patches
+   -HK  Total Carrying Capacity in every local population
+   -H1:  Delta_R_0,  basal per capita death rate for both plasmid-free and plasmid-carrying cells                                                                               
+   -H3:  Delta_R_1,  stress-induced per capita death rate for both plasmid-free and plasmid-carrying cells
+   -H4:  Beta_R, cell reproduction rate
+   -Hp1 Segregation error at reproduction
+   -Hp2 Competition-induced Death Probability
+   -H11: Plasmid Transmission Probability  (coded as Chi_C_0, but labeled as $\Xhi$ in the paper)
+   -H9 Alpha_C_0, Reproduction Cost (associated to the presence of the plasmid) 
+   -H10 Nu_C_0, Resistance to stress-induced death (associated to the presence of a plasmid)    
+   -H0 Lambda_R_0 is the external immigration rate for both plasmid free and plasmid carrying cells.
+   -H2 Lambda_R_1  Conjugation/encounter rate (coded as Lambda_R_1, but labeled as $\gamma_0$ in the paper)
+   -HuR -HuC are the jumping rates for plasmid free and plasmid carrying cells (only relevant if there are more than one cell or patch in the system)
+   -y2 Type of network: 1 for a 2D lattice, with periodic boundary conditions.
+   -H12 Eta_C_0 is not relevant here. They is only in models with predator interference.
+   -H5 is not relevant here. (Lambda_C_0, an external immigration of a second species,
+       but both free plamsid and carrying cells have the same external immigration rate, Lambda_R_0)
+   */
 
 int main(int argc, char **argv)
 {
@@ -439,8 +472,8 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  // Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, "/TPNG");
-  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, "/TPNG");
+  //Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
   
   printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
   printf(" These will open two windows (or two ploting devices of the same kind)\n");
@@ -483,35 +516,19 @@ int main(int argc, char **argv)
 
   // Some models (such as DIFFUSION_1R1C_2D and so on) do not have a stochastic
   // counter-part implemented yet!
-#ifndef DIFFUSION_1R1C_2D
-#ifndef DIFFUSION_DRAG
-#ifndef DIFFUSION_VRG
-#ifndef DIFFUSION_MR
-#ifndef DIFFUSION_ECOEVO_PLANTS  /* Implemeted, but only tested 1st without stochastic realizations */
 
-  /* Stochastic Time Dynamics: A number of stochastic realizations will be produced */
-  int No_of_RESOURCES_ACTUAL = Table.No_of_RESOURCES; 
-  Parameter_Values_into_Parameter_Table(&Table);
-
-  if(Table.TYPE_of_MODEL == 20) // DIFFUSION_ECOEVO_PLANTS
-  	Ressetting_Species_Characteristic_Parameters (&Table);
-
-  if(Table.TYPE_of_MODEL == 21) // DIFFUSION_ECO_PLASMIDS
-    Table->No_of_RESOURCES = Determining_actual_No_of_RESOURCES (&Table); /* No_of_LOCAL_VARIABLES, 
-                                                                             this is, for instance, 
-                                                                             No of SPECIES. In Ying-Jie 
-                                                                             style of labelling, 
-                                                                             No of SUBPOPULATIONS 
-                                                                          */
-  assert(No_of_RESOURCES_ACTUAL == Table.No_of_RESOURCES);
+  if (Table.TYPE_of_MODEL == 21 || Table.TYPE_of_MODEL == 17 || Table.TYPE_of_MODEL == 18 || 
+      Table.TYPE_of_MODEL == 19 || Table.TYPE_of_MODEL == 20 || Table.TYPE_of_MODEL == 2  || 
+      Table.TYPE_of_MODEL == 8  || Table.TYPE_of_MODEL == 10 || Table.TYPE_of_MODEL == 15 || 
+      Table.TYPE_of_MODEL == 12 || Table.TYPE_of_MODEL == 13 || Table.TYPE_of_MODEL == 14 || 
+      Table.TYPE_of_MODEL == 9  || Table.TYPE_of_MODEL == 16 || Table.TYPE_of_MODEL == 22){
+    
+    M_O_D_E_L___S_T_O( &Table );
+  }
+  else{
+    Print_Press_Key(1,1,"Stochastic optimization has not been implemented for this model.\n");
+  }
   
-  M_O_D_E_L___S_T_O( &Table );
-#endif
-#endif
-#endif
-#endif
-#endif
-
   /* BEGIN : -------------------------------------------------------------------------
    */
   char boundary_File[80];

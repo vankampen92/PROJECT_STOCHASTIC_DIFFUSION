@@ -7,10 +7,18 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    
-    case  0:  p = strcat(Label , "Diffusion Jumping Rate");    /*  0 */
-      break;
+#ifdef DIFFUSION_ECO_1B1P
+      case 0: p=strcat(Label, "Plasmid-Free Movement Rate (0)");        /* -H13 */
+        break;
+#else 
+      case 0: p=strcat(Label,  "Diffusion Jumping Rate");        /* -H13 */
+        break;
+#endif
+      
 #ifdef DIFFUSION_ECO_PLASMIDS
+    case  1:  p = strcat(Label, "No of PLASMIDS");  
+      break;
+#elif defined DIFFUSION_ECO_1B1P
     case  1:  p = strcat(Label, "No of PLASMIDS");  
       break;
 #else
@@ -35,10 +43,13 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
     case  7:  p = strcat(Label, "Decaying Rate (0)");
       break;
 #ifdef DIFFUSION_HII_nD
-    case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
+    case  8:  p = strcat(Label, "Nu = 1/Tau\t One over the handling time (2)");  
       break;
-#elif DIFFUSION_ECO_PLASMIDS
-    case  8:  p = strcat(Label, " Conjugation or Pair-Formation Rate "); /* Lambda_R_1 */ 
+#elif defined DIFFUSION_ECO_PLASMIDS
+    case  8:  p = strcat(Label, "Conjugation or Pair-Formation Rate"); /* Lambda_R_1 */ 
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case  8:  p = strcat(Label, "Conjugation or Pair-Formation Rate"); /* \gamma in the LaTeX document */
       break;
 #else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
@@ -47,6 +58,9 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 
 #ifdef DIFFUSION_ECO_PLASMIDS
     case  9:  p = strcat(Label, "Stressed Induced Mortality (i.e., presence of antibiotics)");
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case  9:  p = strcat(Label, "Stressed Induced Mortality (i.e., presence of antibiotics)");  
       break;
 #else
     case  9:  p = strcat(Label, "Decaying Rate (1)");
@@ -70,8 +84,8 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_ECOEVO_PLANTS
     case 13: p=strcat(Label,  "min Parameter Value (i.e, Eta_min)");      /* -H6 */
       break;
-#elif DIFFUSION_ECO_PLASMIDS 
-    case 13:  p = strcat(Label, "Competition-Induced Mortality");  /* Working Carrying Carrying Capacity per Nest */
+#elif defined DIFFUSION_ECO_PLASMIDS 
+    case 13:  p = strcat(Label, "Competition-Induced Mortality");  
       break;
 #else
     case 13: p=strcat(Label,  "Consumer Death Rate (0)");      /* -H6 */
@@ -81,7 +95,7 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_AZTECA_4D
     case 14: p=strcat(Label,  "Max No of Nests per Patch");     /* -H7 */
       break;
-#elif DIFFUSION_AZTECA_4D_1
+#elif defined DIFFUSION_AZTECA_4D_1
     case 14: p=strcat(Label,  "Jumpling/Diffusion rate of queens (1)");     /* -HuQ*/
       break;
 #else
@@ -96,8 +110,11 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_AZTECA_4D
     case 17: p=strcat(Label,  "Nu, Larva (Flies) Develpment Rate");  /* -H10 */
       break;
-#elif DIFFUSION_ECO_PLASMIDS 
+#elif defined DIFFUSION_ECO_PLASMIDS 
     case 17:  p = strcat(Label, "Resistance to Stress (confered by a plasmid)");  /* Working Carrying Carrying Capacity per Nest */
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case 17:  p = strcat(Label, "Resistance to Stress (confered by a plasmid)");  
       break;
 #else
     case 17: p=strcat(Label,  "Nu = 1/Tau (One over the handling time)");  /* -H10 */
@@ -107,6 +124,9 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_ECO_PLASMIDS
     case  18:  p = strcat(Label, "Plasmid Transmission Probability");  /* -H11 */ 
       break;
+#elif defined DIFFUSION_ECO_1B1P
+    case  18:  p = strcat(Label, "Plasmid Transmission Probability (upon encounter and conjugation)");  
+      break;
 #else
     case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
       break;
@@ -115,8 +135,13 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
     case 19: p=strcat(Label,  "Triplet desintegration (0)");        /* -H12 */
       break;
 
+#ifdef DIFFUSION_ECO_1B1P
+    case 20: p=strcat(Label, "Plasmid-Carrying Movement Rate (1)");        /* -H13 */
+      break;
+#else 
     case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
       break;
+#endif
 
     case 21:  p = strcat(Label, "Number of Energy Levels ");   
       break;
@@ -137,11 +162,14 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #elif defined DIFFUSION_VGR
     case 27:  p = strcat(Label, "Guano Conversion Factor");   
       break;
-#elif defined DIFFUSiON_ECOEVO_PLANTS
+#elif defined DIFFUSION_ECOEVO_PLANTS
     case 27:  p = strcat(Label, "Mutation Probability");   
       break;
 #elif defined DIFFUSION_ECO_PLASMIDS
     case 27:  p = strcat(Label, "Segregation Error at Reproduction");   
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case 27:  p = strcat(Label, "Segregation Error at Reproduction");  
       break;
 #else 	      
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
@@ -154,6 +182,9 @@ void Label_to_Model_Parameters__LATEX(int j, char * Label, Parameter_Table *P)
 #elif defined DIFFUSION_ECO_PLASMIDS
     case 28:  p = strcat(Label, "Sparsity Parameter (Interaction Matrices)");   
       break;
+#elif defined DIFFUSION_ECO_1B1P
+    case 28:  p = strcat(Label, "Probablity of Competition-Induced Death (upon encounter)");   
+      break;      
 #else 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");
       break;
@@ -205,8 +236,14 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
   switch(j)
     {
 
-    case  0:  p = strcat(Label, "$\\mu$");
-      break;
+#ifdef DIFFUSION_ECO_1B1P
+      case 0: p=strcat(Label, "$\\mu_0$");        /* -H13 */
+        break;
+#else 
+      case 0: p=strcat(Label,  "$\\mu$");        /* -H13 */
+        break;
+#endif
+
     case  1:  p = strcat(Label, "$N$");      
       break;
     case  2:  p = strcat(Label, "$M$");        
@@ -228,6 +265,9 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
       break;
 #ifdef DIFFUSION_HII_nD
     case  8:  p=strcat(Label,"$\\nu^{(C)}_2$");
+    break;
+#elif defined DIFFUSION_ECO_1B1P
+    case  8:  p = strcat(Label, "$\\gamma_0$");   
     break;
 #else
     case  8:  p = strcat(Label, "$\\lambda^{(R)}_1$");  
@@ -264,8 +304,13 @@ void Label_to_Model_Parameters__LATEX__SYMBOL(int j, char * Label, Parameter_Tab
     case 19: p=strcat(Label,"$\\eta^{(C)}_0$");        /* -H12 */
       break; 
 
-    case 20: p=strcat(Label,"$\\mu^{(C)}$");           /* -H13 */
-      break; 
+#ifdef DIFFUSION_ECO_1B1P
+    case 20: p=strcat(Label, "$\\mu_1$");        /* -H13 */
+      break;
+#else 
+    case 20: p=strcat(Label,  "$\\mu^{(C)}$");        /* -H13 */
+      break;
+#endif
 
     case 21:  p = strcat(Label, "$N_E$");   
       break;

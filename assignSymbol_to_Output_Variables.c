@@ -4,8 +4,8 @@ void AssignSymbol_to_Output_Variables(int j, char * Label, Parameter_Table * Tab
 {
   int k, i, n, m; 
   char * p;
-  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
 
+  char ** L = (char **)calloc(Table->LOCAL_STATE_VARIABLES, sizeof(char *));
   for(i = 0; i<Table->LOCAL_STATE_VARIABLES; i++) L[i] = (char *)calloc(5, sizeof(char));
 
   Defining_Output_Variables_Labels (Table, L);

@@ -1,5 +1,15 @@
 #include <MODEL.h>
 
+/* This is only a simple function to assert that 
+ * the environmetal variable defining the model  
+ * at pre-compilation time will match the number tag 
+ * defined through the input argument list for every 
+ * model (-y0 [MODEL NUMBER TAG])
+ *
+ * It also allows to give you an idea of the different 
+ * models coded so far in a quick glimpse.  
+ */
+
 void assert_right_model_definition( Parameter_Table * P )
 {
 
@@ -111,6 +121,11 @@ void assert_right_model_definition( Parameter_Table * P )
 #if defined  DIFFUSION_ECO_PLASMIDS
   
     assert ( P->TYPE_of_MODEL == 21 );
+  
+#endif
+#if defined  DIFFUSION_ECO_1B1P
+  
+    assert ( P->TYPE_of_MODEL == 22 );
   
 #endif
 }

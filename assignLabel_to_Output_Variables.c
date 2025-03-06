@@ -403,6 +403,20 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
 
       break;
     #endif  
+    #if defined DIFFUSION_ECO_1B1P
+    case  22:
+
+    sp = (char *)calloc(10, sizeof(char));
+    for(i=0; i<Table->No_of_RESOURCES; i++){
+
+      sprintf(sp, "%d,", i);
+      p = strcat(L[i], sp);
+
+    }
+    free(sp);
+
+    break; 
+    #endif
 
     default:
       printf(".... INVALID PARAMETER KEY (key = %d)\n", Table->TYPE_of_MODEL);

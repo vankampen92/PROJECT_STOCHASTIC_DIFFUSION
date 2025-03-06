@@ -128,19 +128,19 @@ typedef struct Parameter_Tableinfo
   /* * * C P G   P L O T * * */
 
   int TOTAL_No_of_MODEL_PARAMETERS;
-  
-  double * Lambda_R;
-  double * Delta_R;     
-  
-  double * Nu_Consumers;
-  double * Theta_Consumers;
-  double * y_R_i;
 
+  double * Lambda_R;
+  double * Delta_R; 
+
+  double * Nu_Consumers;   
+  double * Theta_Consumers;
+
+  double * y_R_i;
+ 
   double * Delta_RP;  /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS)              */
 
   double * Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
                       /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS)                  */
-
   double * Nu_C;      /* Plasmid Resistance (DIFFUSION_ECO_PLASMIDS)                          */
                      
   double * Eta_RP;    /* Propagule Establishment Rate  (DIFFUSION_ECOEVO_PLANTS)              */
@@ -148,16 +148,14 @@ typedef struct Parameter_Tableinfo
 
   double * Beta_AP;   /* Propagule Production Rate of Adult Plants (DIFFUSION_ECOEVO_PLANTS)  */
                       /* Cell Division Rate of Single Bacterial Cell (DIFFUSION_ECO_PLASMIDS) */
-  
   double * Delta_AP;  /* Death Rate of Adult Plants                (DIFFUSION_ECOEVO_PLANTS)  */
                       /* Per Capita Death Rates (DIFFUSION_ECO_PLASMIDS) */     
   
   double * Mu_RP;     /* Species-specific Diffusion/Movement Rate (DIFFUSION_ECOEVO_PLANTS)   */   
                       /* Bacterial Cell Diffusion/Movement Rates (DIFFUSION_ECO_PLASMIDS)     */
-
-  double * Segregation_Error; /* Strain specific segregation errors (DIFFUSION_ECO_PLASMIDS) */
+  double * Segregation_Error; /* Strain specific segregation errors (DIFFUSION_ECO_PLASMIDS)  */ 
   
-                      /* Interaction Matrices (DIFFUSION_ECO_PLASMIDS) */        
+  /* Interaction Matrices (DIFFUSION_ECO_PLASMIDS) */        
   double ** ABB;      /* Strain-Strain Competition Matrix              */
   double ** HBB;      /* Strain-Strain Conjugation Matrix              */
   double ** IBP;      /* Interaction Infection Bacteria-Plasmid        */

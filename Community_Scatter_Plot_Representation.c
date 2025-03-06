@@ -144,7 +144,6 @@ void Community_Scatter_Plot_Representation( Parameter_Table * Table,
     
     float * x_Data = (float *)calloc( N, sizeof(float) );
     float * y_Data = (float *)calloc( N, sizeof(float) );
-
     char ** Y_label = (char **)malloc( sizeof(char *) * Table->SUB_OUTPUT_VARIABLES );
     for(i=0; i < Table->SUB_OUTPUT_VARIABLES; i++){
       k = Table->OUTPUT_VARIABLE_INDEX[i];

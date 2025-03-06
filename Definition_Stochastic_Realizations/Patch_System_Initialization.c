@@ -63,7 +63,9 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
   }
 #endif 
 
-#if defined DIFFUSION_ECO_PLASMIDS
+#if defined(DIFFUSION_ECO_PLASMIDS) || defined(DIFFUSION_ECO_1B1P)
+    assert(Table->TYPE_of_MODEL == 21 || Table->TYPE_of_MODEL == 22); 
+
   for (j = 0; j < Table->No_of_CELLS; j++) {
     x_S = 0;      
     for(i=0; i < S; i++) {
@@ -72,6 +74,7 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
     PATCH[j]->m_0 = Table->K_R - x_S; 
   }
 
+  #if defined DIFFUSION_ECO_PLASMIDS
   for(i=0; i < Table->No_of_STRAINS; i++) {    
     for (j = 0; j < Table->No_of_CELLS; j++) {
       /* Local total number of individual cells per bacterial type (regardless profile) in PATCH 'j' */
@@ -86,6 +89,7 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
       PATCH[j]->Local_Plasmid_Population[i]->n = PATCH[j]->Plasmid_Type_Population[i];
     }
   }  
+  #endif
 #endif 
 
 #if defined DIFFUSION_HII_nD
@@ -103,7 +107,7 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
 #else
   printf("\n");
   printf("Initial Total Population (for some Species Types at Time 0): %g\t", Table->INITIAL_TOTAL_POPULATION);
-  pripntf("Total Community Size  (across Species): %g\n", x);
+  printf("Total Community Size  (across Species): %g\n", x);
 #endif
 
 // printf("Patch system successfully initialized\n");

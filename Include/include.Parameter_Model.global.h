@@ -1,8 +1,9 @@
 int No_of_NEIGHBORS; 
 int No_of_INDIVIDUALS;   
 
-int No_of_PLASMIDS; /* Used in DIFFUSION_ECO_PLASMIDS */
-int No_of_STRAINS;  /* Used in DIFFUSION_ECO_PLASMIDS */
+int No_of_PLASMIDS; /* Used in DIFFUSION_ECO_PLASMIDS and DIFFUSION_ECO_1B1P */
+int No_of_STRAINS;  /* Used in DIFFUSION_ECO_PLASMIDS and DIFFUSION_ECO_1B1P */
+int No_of_PROFILES; /* Used in DIFFUSION_ECO_PLASMIDS and DIFFUSION_ECO_1B1P */
 
 double Mu;                  /* Jumping Rate                    */
 

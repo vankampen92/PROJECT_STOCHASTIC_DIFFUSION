@@ -9,8 +9,14 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    case  0: p=strcat(Label,"\\gm");    
-      break;
+#ifdef DIFFUSION_ECO_1B1P
+    case 0: p=strcat(Label, "$\\gm\\d0\\u");        /* -Hu */
+        break;
+#else 
+    case  0: p=strcat(Label,"\\gm");                /* -Hu */
+        break;
+#endif
+  
     case  1: p=strcat(Label,"N");    
       break;
     case  2: p=strcat(Label,"M");       
@@ -33,14 +39,20 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #ifdef DIFFUSION_HII_nD
     case  8: p=strcat(Label, "\\gn\\u(C)\\d\\d2\\u");  
       break;
+#elif DIFFUSION_ECO_1B1P
+    case  8:  p = strcat(Label, "\\gg\\d0\\u"); /* $\gamma_0$ */
+      break;
 #else
     case  8: p=strcat(Label, "\\gl\\u(R)\\d\\d1\\u");        
       break;
 #endif
+
     case  9: p=strcat(Label, "\\gd\\u(R)\\d\\d1\\u");    
       break; 
+
     case 10: p=strcat(Label, "K\\dR\\u");       
       break; 
+    
     case 11: p=strcat(Label,"\\gb\\dR\\u");
       break;
 
@@ -60,17 +72,34 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       
     case 16: p=strcat(Label, "\\ga\\u(C)\\d\\d0\\u");    
       break;
+
+#ifdef DIFFUSION_ECO_1B1P
+    case 17:  p = strcat(Label, "r");  
+        break;
+#else
     case 17: p=strcat(Label, "\\gn\\u(C)\\d\\d0\\u");    
       break;
+#endif 
 
+#ifdef DIFFUSION_ECO_1B1P
+    case  18:  p = strcat(Label, "\\x");  /* $\chi$ in LaTeX */
+      break;
+#else
     case 18: p=strcat(Label, "\\gx\\u(C)\\d\\d0\\u");     
       break;
+#endif
+
     case 19: p=strcat(Label, "\\gy\\u(C)\\d\\d0\\u");     
       break;
 
-    case 20: p=strcat(Label, "\\gm\\u(C)\\d");
-      break; 
-
+#ifdef DIFFUSION_ECO_1B1P
+    case 20: p=strcat(Label, "$\\gm\\d1\\u");        /* -H13 */
+      break;
+#else 
+    case 20: p=strcat(Label, "\\gm\\u(C)\\d" );      /* -H13 */
+      break;
+#endif
+  
     case 21:  p = strcat(Label, "N\\d_E\\u");   
       break;
     case 22:  p = strcat(Label, "f");   
@@ -146,8 +175,15 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    case  0: p=strcat(Label,"Mu");    
-      break;
+
+  #ifdef DIFFUSION_ECO_1B1P
+      case 0: p=strcat(Label, "Mu_0");     /* -Hu */
+        break;
+  #else 
+      case 0: p=strcat(Label, "Mu" );      /* -Hu */
+        break;
+  #endif
+  
     case  1: p=strcat(Label,"N");    
       break;
     case  2: p=strcat(Label,"M");       
@@ -172,6 +208,9 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
 #ifdef DIFFUSION_HII_nD
     case  8: p=strcat(Label, "Nu_C_2");  
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case  8:  p = strcat(Label, "Gamma_0");   
       break;
 #else
     case  8: p=strcat(Label,"Lambda_R_1");    /* -H2 */
@@ -209,9 +248,13 @@ void Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 19: p=strcat(Label,"Eta_C_0");        /* -H12 */
       break;
 
-    case 20: p=strcat(Label, "Mu_C");          /* -H13 */
-      break;
-
+  #ifdef DIFFUSION_ECO_1B1P
+      case 20: p=strcat(Label, "Mu_1");        /* -H13 */
+        break;
+  #else 
+      case 20: p=strcat(Label, "Mu" );      /* -H13 */
+        break;
+  #endif
       
     case 21:  p = strcat(Label, "N_E");   
       break;

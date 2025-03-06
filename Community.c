@@ -242,12 +242,18 @@ void Community_Initialization (Community ** PATCH,
      . MODEL=DIFFUSION_AZTECA_4D_1      TYPE_of_MODEL = 19
      . MODEL=DIFFUSION_ECOEVO_PLANTS    TYPE_of_MODEL = 20
      . MODEL=DIFFUSION_ECO_PLASMIDS     TYPE_of_MODEL = 21
+     . MODEL=DIFFUSION_ECO_1B1P         TYPE_of_MODEL = 22
      Therefore, I will make sure these are the models at work
      when the program comes to this point. 
   */
-  if(P->TYPE_of_MODEL == 21 || P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 2 || P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16){
-    Event_Delta_Matrix_Initialization(PATCH, P);
-    Event_Adjacence_List_Initialization(PATCH, P);
+  if (P->TYPE_of_MODEL == 21 || P->TYPE_of_MODEL == 17 || P->TYPE_of_MODEL == 18 || 
+      P->TYPE_of_MODEL == 19 || P->TYPE_of_MODEL == 20 || P->TYPE_of_MODEL == 2 || 
+      P->TYPE_of_MODEL == 8 || P->TYPE_of_MODEL == 10 || P->TYPE_of_MODEL == 15 || 
+      P->TYPE_of_MODEL == 12 || P->TYPE_of_MODEL == 13 || P->TYPE_of_MODEL == 14 || 
+      P->TYPE_of_MODEL == 9 || P->TYPE_of_MODEL == 16 || P->TYPE_of_MODEL == 22){
+
+      Event_Delta_Matrix_Initialization(PATCH, P);
+      Event_Adjacence_List_Initialization(PATCH, P);
   }
   else{
     Print_Press_Key(1,1,"Stochastic optimization has not been implemented for this model.\n");

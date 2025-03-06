@@ -24,16 +24,19 @@ int M_O_D_E_L( Parameter_Table * Table )
   /* Definition of the state vector numerical order, from 0 to K, of model variables */
   #include <Model_Variables_Code.Include.c>
 
-  int MODEL_STATE_VARIABLES = K+1;
-  Table->MODEL_STATE_VARIABLES = MODEL_STATE_VARIABLES;
-  Table->Vector_Model_Variables_Time_0 = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double)); 
   /* BEGIN : -------------------------------------------------------------------------
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
+  int MODEL_STATE_VARIABLES = K+1;
+  Table->MODEL_STATE_VARIABLES = MODEL_STATE_VARIABLES;
+  Table->Vector_Model_Variables_Time_0 = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double)); 
+
   if(Table->No_of_CELLS > 4) /* For instance, models DIFFUSION_AZTECA_4D and DIFFUSION_STOLLENBERG_4D */
     Initial_Condition_Centered_into_Parameter_Table (Table, Table->INITIAL_TOTAL_POPULATION);
+    
   else if (Table->No_of_CELLS == 1)
-    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
+    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || 
+       Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16   ) {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
 						   Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
 						   Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
@@ -92,7 +95,7 @@ int M_O_D_E_L( Parameter_Table * Table )
 
         include.JAC_sys_[TYPE_of_MODEL].c
   */
-  x = Function_to_Type_of_Stability( Table );
+  x = Function_to_Type_of_Stability_Double( Table );
   Print_Press_Key(1,0,"."); 
   
   printf("Lower Fixed Point (model variables):\t");
@@ -152,10 +155,10 @@ int M_O_D_E_L( Parameter_Table * Table )
     int Input_Parameter = 0; /* The value of this model parameter appears in the title */
     // C_P_G___S_U_B___P_L_O_T_T_I_N_G ( Table, TIMES, Table->CPG->x_Time, Table->CPG->y_Time );
     C_P_G___S_U_B___P_L_O_T_T_I_N_G___C_U_S_T_O_M_I_Z_E_D___T_I_T_L_E ( Table,
-   								      TIMES,
-   								      Table->CPG->x_Time,
-   								      Table->CPG->y_Time,
-   								      Input_Parameter );
+   								                                                      TIMES,
+   								                                                      Table->CPG->x_Time,
+   								                                                      Table->CPG->y_Time,
+   								                                                      Input_Parameter );
                         
   }
 #endif

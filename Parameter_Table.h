@@ -29,3 +29,9 @@ void Setting_Adjacency_Lists_from_Interaction_Matrices (Parameter_Table *Table);
 void Calculate_Strain_and_Profile(Parameter_Table * Table, int n, int * i_Strain, int * k_Profile);
 
 void Printing_Strains_Profiles_and_Lists(Parameter_Table * Table);
+
+void Setting_Plasmid_Characteristic_Parameters (Parameter_Table * Table);
+
+void Setting_Strain_Characteristic_Parameters (Parameter_Table * Table);
+
+void Setting_up_Constant_Metapopulation_Connectivity_Matrix (Parameter_Table * Table);

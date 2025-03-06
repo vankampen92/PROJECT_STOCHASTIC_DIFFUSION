@@ -7,7 +7,7 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    case  0:  p = strcat(Label, "-Hu");   /* Mu Per Capita Movement Rate */  
+    case  0:  p = strcat(Label, "-Hu");   /* Mu Per Capita Movement Rate */ /* Nu o be Nu_0 */  
 	   break;
     case  1:  p = strcat(Label, "-HN");  
       break;
@@ -48,6 +48,7 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       
     case 16:  p = strcat(Label, "-H9");    /* Alpha_C_0 */
       break;
+    
     case 17:  p = strcat(Label, "-H10");   /* Nu_C_0    */
       break;
 
@@ -57,7 +58,7 @@ void AssignCodes_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 19:  p = strcat(Label, "-H12");   /* Eta_C_0 */
       break;
 
-    case 20:  p = strcat(Label, "-H13");   
+    case 20:  p = strcat(Label, "-H13");   /* Mu_C */ /* Nu_1 */  
       break;
 
     case 21:  p = strcat(Label, "-H14");   

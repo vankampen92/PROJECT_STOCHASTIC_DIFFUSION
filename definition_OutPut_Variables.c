@@ -18,11 +18,22 @@ double definition_OutPut_Variables(int j, double * y, const double t, Parameter_
   if (j < Table->LOCAL_STATE_VARIABLES) {
     Table->Focal_Resource = j;
     x = Total_Population_Resource_Species (y, Table);
-    /* Total Populations across the Spatial Metapopulation for every species type 
-       Total Populations for every species type if there is only a single site 
+    /* These are Global State Variables, this is, they are simply the sum of 
+       Total Populations across the entire Spatial Metapopulation for every 
+       species type. In other words, GLOBAL STATE VARIABLES are the LOCAL 
+       STATE VARIABLES summed over the whole network of interconnected local 
+       communities. 
+       
+       Of course, the number of global variables is equal to then number of 
+       LOCAL_STATE_VARIABLES. 
     */
   }
-  else if (j < Table->OUTPUT_VARIABLES_GENUINE) {
+  else if (j < (Table->OUTPUT_VARIABLES_GENUINE) ) {
+    /* Recall what Table->OUTPUT_VARIABLES_GENUINE stores: 
+
+        OUTPUT_VARIABLES_GENUINE = LOCAL_STATE_VARIABLES + OUTPUT_VARIABLES_TRUE_DERIVED
+    
+    */
     /* Derived output variables from model dynamic variables and parameters */
     j -= Table->LOCAL_STATE_VARIABLES;
    

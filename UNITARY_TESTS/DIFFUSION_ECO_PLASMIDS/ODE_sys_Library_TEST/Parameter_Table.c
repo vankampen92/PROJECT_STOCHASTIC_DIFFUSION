@@ -47,14 +47,15 @@ void Preparing_Initial_System_Configuration ( Parameter_Table * Table )
     Table->Alpha_C_0      = REPRODUCTION_COST;        /* Plasmid reproduction costs */
     Table->Nu_C_0         = PLASMID_RESISTANCE;       /* Plasmid resistance         */
 
+    Table->Nu_C      = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+    Table->Alpha_C   = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
+
+    Table->Segregation_Error = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
     Table->Eta_RP    = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
     Table->Mu_RP     = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
     Table->Beta_AP   = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
     Table->Delta_AP  = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-    Table->Segregation_Error = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double) );
-    Table->Nu_C      = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
-    Table->Alpha_C   = (double *)calloc(No_of_PLASMIDS_MAXIMUM, sizeof(double) );
-
+    
     Table->Vector_Model_Variables = (double *)calloc(No_of_RESOURCES_MAXIMUM, sizeof(double));
 
     /* BEGIN: Allocating and Setting up Connectivity Matrix */

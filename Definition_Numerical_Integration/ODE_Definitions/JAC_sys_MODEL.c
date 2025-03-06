@@ -11,7 +11,7 @@
 
 int 
 jacobian (double t, const double y[], double *dfdy, double dfdt[],
-	  void *params)
+	        void *params)
 {
 
   void JACOBIAN_Matrix(gsl_matrix *, const double *, double, int, Parameter_Table *);
@@ -30,12 +30,10 @@ jacobian (double t, const double y[], double *dfdy, double dfdt[],
   
   m = &dfdy_mat.matrix;
 
-  /* Setting the Jacobian matrix evaluated at (y[0], ..., y[W], y[A]) */
-
- /* Setting the Jacobian matrix evaluated at (y[0], ..., y[W]) */
+  /* Setting the Jacobian matrix evaluated at (y[0], ..., y[K]) */
   /* Optimally, this Function should be inline... */
   JACOBIAN_Matrix(m, y, t, K, Table);
-  /* End of setting the Jacobian matrix evaluated at (y[0], ..., y[W]) */
+  /* End of setting the Jacobian matrix evaluated at (y[0], ..., y[K]) */
 
   return GSL_SUCCESS;
 }

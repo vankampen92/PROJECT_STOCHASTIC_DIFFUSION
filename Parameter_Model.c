@@ -94,6 +94,8 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
   P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
+  P_Destination->No_of_STRAINS  = P_Source->No_of_STRAINS;
+  P_Destination->No_of_PROFILES = P_Source->No_of_PROFILES;
 
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
@@ -103,15 +105,28 @@ void Parameter_Model_Copy (Parameter_Model * P_Destination, Parameter_Model * P_
   P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
-  /* Pointers assignation */
+  /* Pointers alineation between P and Table */
   P_Destination->Lambda_R = P_Source->Lambda_R;
-  P_Destination->Delta_R = P_Source->Delta_R; 
+  P_Destination->Delta_R  = P_Source->Delta_R; 
 
-  P_Destination->Alpha_C = P_Source->Alpha_C;
   P_Destination->Nu_Consumers    = P_Source->Nu_Consumers;
+  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 
   P_Destination->y_R_i     = P_Source->y_R_i;
-  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
+
+  P_Destination->Delta_RP  = P_Source->Delta_RP;  /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS)              */
+
+  P_Destination->Alpha_C  = P_Source->Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
+  P_Destination->Nu_C     = P_Source->Nu_C;      /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS) */
+
+  P_Destination->Eta_RP   = P_Source->Eta_RP;                           /* Bacteria Conjugation Rate   */
+
+  P_Destination->Beta_AP  = P_Source->Beta_AP;                          /* Bacteria Cell Division Rate */
+  P_Destination->Delta_AP = P_Source->Delta_AP;                         /* Bacteria Death Rate         */
+
+  P_Destination->Mu_RP    = P_Source->Mu_RP;                            /* Bacteria Diffusion Rates    */
+  P_Destination->Segregation_Error = P_Source->Segregation_Error;                    
+  /* End of pointer assignation */ 
 
   P_Destination->Time = P_Source->Time;
   P_Destination->Treeroot = P_Source->Treeroot; 
@@ -128,7 +143,12 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 {
   /* This function transfer a subset of table parameters
      into the Parameter_Model structure. Parameter_Model parameters
-     control the dynamical model.
+     control the dynamical model. For back compatibilty, here 
+      
+     Model Parameter <--- Table Parameters, 
+
+     when usually the first argument is the one being initialized (the destination) 
+     and the second the one being copied (the source). 
   */
 
   P->Mu_C       = Table->Mu_C;
@@ -222,6 +242,8 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
 
   P->No_of_RESOURCES = Table->No_of_RESOURCES;
   P->No_of_PLASMIDS  = Table->No_of_PLASMIDS;
+  P->No_of_STRAINS   = Table->No_of_STRAINS;
+  P->No_of_PROFILES  = Table->No_of_PROFILES;
 
   /* Master Equation Numerical Integration */
   P->TOTAL_No_of_RESOURCES = Table->TOTAL_No_of_RESOURCES;
@@ -231,15 +253,28 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->TOTAL_No_of_FREE_CONSUMERS = Table->TOTAL_No_of_FREE_CONSUMERS;
   P->TOTAL_No_of_HANDLING_CONSUMERS = Table->TOTAL_No_of_HANDLING_CONSUMERS;
 
-  /* Pointers assignation */
+  /* Pointers alineation between P and Table */
   P->Lambda_R = Table->Lambda_R;
   P->Delta_R  = Table->Delta_R; 
 
-  P->Alpha_C = Table->Alpha_C;
   P->Nu_Consumers    = Table->Nu_Consumers;
+  P->Theta_Consumers = Table->Theta_Consumers;
 
   P->y_R_i     = Table->y_R_i;
-  P->Theta_Consumers = Table->Theta_Consumers;
+  
+  P->Delta_RP = Table->Delta_RP;      
+  
+  P->Alpha_C  = Table->Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
+  P->Nu_C     = Table->Nu_C;      /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS)                  */
+
+  P->Eta_RP   = Table->Eta_RP;    /* Propagule Establishment Rate  (DIFFUSION_ECOEVO_PLANTS)              */
+                                  /* Strain-Specific Conjugation/Encounter Rates (DIFFUSION_ECO_PLASMIDS) */ 
+  P->Beta_AP  = Table->Beta_AP;                          /* Bacteria Cell Division Rate */
+  P->Delta_AP = Table->Delta_AP;                         /* Bacteria Death Rate         */
+
+  P->Mu_RP    = Table->Mu_RP;                            /* Bacteria Diffusion Rates    */
+  P->Segregation_Error = Table->Segregation_Error;   
+  /* End of pointer assignation */
 
   P->Time = Table->T;
   P->Treeroot = Table->Treeroot;
@@ -253,7 +288,8 @@ void  P_A_R_A_M_E_T_E_R___I_N_I_T_I_A_L_I_Z_A_T_I_O_N ( Parameter_Table * Table,
   P->Table = (void *)Table; 
 }
 
-void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, Parameter_Model * P_Source)
+void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination, 
+                                                Parameter_Model * P_Source)
 {
   P_Destination->Mu_C       = P_Source->Mu_C;
   P_Destination->Mu         = P_Source->Mu;       /*  0 */
@@ -346,6 +382,8 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
   P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
+  P_Destination->No_of_STRAINS  = P_Source->No_of_STRAINS;
+  P_Destination->No_of_PROFILES = P_Source->No_of_PROFILES;
 
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
@@ -355,16 +393,29 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
-  /* Pointers assignation */
+  /* Pointers alineation between P and Table */
   P_Destination->Lambda_R = P_Source->Lambda_R;
-  P_Destination->Delta_R = P_Source->Delta_R; 
+  P_Destination->Delta_R  = P_Source->Delta_R; 
 
-  P_Destination->Alpha_C = P_Source->Alpha_C;
-  P_Destination->Nu_Consumers = P_Source->Nu_Consumers;
-
-  P_Destination->y_R_i     = P_Source->y_R_i;
+  P_Destination->Nu_Consumers    = P_Source->Nu_Consumers;
   P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 
+  P_Destination->y_R_i     = P_Source->y_R_i;
+
+  P_Destination->Delta_RP  = P_Source->Delta_RP;  /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS)              */
+
+  P_Destination->Alpha_C  = P_Source->Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
+  P_Destination->Nu_C     = P_Source->Nu_C;      /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS) */
+
+  P_Destination->Eta_RP   = P_Source->Eta_RP;                           /* Bacteria Conjugation Rate   */
+
+  P_Destination->Beta_AP  = P_Source->Beta_AP;                          /* Bacteria Cell Division Rate */
+  P_Destination->Delta_AP = P_Source->Delta_AP;                         /* Bacteria Death Rate         */
+
+  P_Destination->Mu_RP    = P_Source->Mu_RP;                            /* Bacteria Diffusion Rates    */
+  P_Destination->Segregation_Error = P_Source->Segregation_Error;                    
+  /* End of pointer assignation */
+ 
   P_Destination->T = P_Source->Time;
   P_Destination->Treeroot = P_Source->Treeroot; 
   P_Destination->Leaves = P_Source->Leaves; 
@@ -375,7 +426,8 @@ void Parameter_Model_Copy_into_Parameter_Table (Parameter_Table * P_Destination,
   /* (No_of_LEAVES == 2*No_of_TREE_LEVELS)      */
 }
 
-void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, Parameter_Table * P_Source)
+void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination, 
+                                                Parameter_Table * P_Source)
 {
   P_Destination->Mu_C       = P_Source->Mu_C;
   P_Destination->Mu         = P_Source->Mu;       /*  0 */
@@ -467,6 +519,8 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
 
   P_Destination->No_of_RESOURCES = P_Source->No_of_RESOURCES;
   P_Destination->No_of_PLASMIDS = P_Source->No_of_PLASMIDS;
+  P_Destination->No_of_STRAINS  = P_Source->No_of_STRAINS;
+  P_Destination->No_of_PROFILES = P_Source->No_of_PROFILES;
   
   /* Master Equation Numerical Integration */
   P_Destination->TOTAL_No_of_RESOURCES = P_Source->TOTAL_No_of_RESOURCES;
@@ -476,15 +530,29 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
   P_Destination->TOTAL_No_of_FREE_CONSUMERS = P_Source->TOTAL_No_of_FREE_CONSUMERS;
   P_Destination->TOTAL_No_of_HANDLING_CONSUMERS = P_Source->TOTAL_No_of_HANDLING_CONSUMERS;
 
-  /* Pointers assignation */
+  /* Pointers alineation between P and Table */
   P_Destination->Lambda_R = P_Source->Lambda_R;
-  P_Destination->Delta_R = P_Source->Delta_R; 
+  P_Destination->Delta_R  = P_Source->Delta_R; 
 
-  P_Destination->Alpha_C = P_Source->Alpha_C;
-  P_Destination->Nu_Consumers = P_Source->Nu_Consumers;
+  P_Destination->Nu_Consumers    = P_Source->Nu_Consumers;
+  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
 
   P_Destination->y_R_i     = P_Source->y_R_i;
-  P_Destination->Theta_Consumers = P_Source->Theta_Consumers;
+
+  P_Destination->Delta_RP  = P_Source->Delta_RP;  /* Resource Propagule Death Rate (DIFFUSION_ECOEVO_PLANTS)              */
+
+  P_Destination->Alpha_C  = P_Source->Alpha_C;   /* Attack rates in Consumer-Resouce models                              */
+  P_Destination->Nu_C     = P_Source->Nu_C;      /* Plasmid Reproduction Costs (DIFFUSION_ECO_PLASMIDS) */
+
+  P_Destination->Eta_RP   = P_Source->Eta_RP;                           /* Bacteria Conjugation Rate   */
+
+  P_Destination->Beta_AP  = P_Source->Beta_AP;                          /* Bacteria Cell Division Rate */
+  P_Destination->Delta_AP = P_Source->Delta_AP;                         /* Bacteria Death Rate         */
+
+  P_Destination->Mu_RP    = P_Source->Mu_RP;                            /* Bacteria Diffusion Rates    */
+  P_Destination->Segregation_Error = P_Source->Segregation_Error;                    
+  /* End of pointer assignation */
+ 
 
   P_Destination->Time = P_Source->T;
   P_Destination->Treeroot = P_Source->Treeroot;  
@@ -497,7 +565,7 @@ void Parameter_Table_Copy_into_Parameter_Model (Parameter_Model * P_Destination,
 }
 
 void Vector_Entries_into_Parameter_Model ( const gsl_vector * X, Parameter_Model * P,
-					   int * Parameter_Index, int No_of_PARAMETERS )
+					                                  int * Parameter_Index, int No_of_PARAMETERS )
 {
   int i;
   int key;

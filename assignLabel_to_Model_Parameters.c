@@ -7,9 +7,19 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 
   switch(j)
     {
-    case  0:  p = strcat(Label, "Jumping Rate");  
-	    break;
+
+#ifdef DIFFUSION_ECO_1B1P
+    case 0: p=strcat(Label, "Plasmid-Free Movement Rate (0)");        /* -H13 */
+      break;
+#else 
+    case 0: p=strcat(Label,  "Diffusion Jumping Rate");        /* -H13 */
+      break;
+#endif
+  
 #ifdef DIFFUSION_ECO_PLASMIDS
+    case  1:  p = strcat(Label, "No of PLASMIDS");  
+      break;
+#elif DIFFUSION_ECO_1B1P
     case  1:  p = strcat(Label, "No of PLASMIDS");  
       break;
 #else
@@ -34,11 +44,14 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case  7:  p = strcat(Label, "Decaying Rate (0)");
       break;
 #ifdef DIFFUSION_HII_nD
-    case  8:  p = strcat(Label, " Nu = 1/Tau\t One over the handling time (2)");  
+    case  8:  p = strcat(Label, "Nu = 1/Tau\t One over the handling time (2)");  
       break;
 #elif DIFFUSION_ECO_PLASMIDS
-    case  8:  p = strcat(Label, " Conjugation or Pair-Formation Rate "); /* Lambda_R_1 */ 
+    case  8:  p = strcat(Label, "Conjugation or Pair-Formation Rate"); /* Lambda_R_1 */ 
       break;
+#elif DIFFUSION_ECO_1B1P
+    case  8:  p = strcat(Label, "Conjugation or Pair-Formation Rate"); /* Lambda_R_1 */  
+        break;
 #else
     case  8:  p = strcat(Label, "External Immigration Rate (1)");  
       break;
@@ -46,6 +59,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 	      
 #ifdef DIFFUSION_ECO_PLASMIDS
     case  9:  p = strcat(Label, "Stressed Induced Mortality (i.e., presence of antibiotics)");
+      break;
+#elif DIFFUSION_ECO_1B1P
+    case  9:  p = strcat(Label, "Stressed Induced Mortality (i.e., presence of antibiotics)"); /* Delta_R_1 */  
       break;
 #else
     case  9:  p = strcat(Label, "Decaying Rate (1)");
@@ -111,13 +127,19 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #elif DIFFUSION_ECO_PLASMIDS 
     case 17:  p = strcat(Label, "Resistance to Stress (confered by a plasmid)");  /* Working Carrying Carrying Capacity per Nest */
       break;
+#elif DIFFUSION_ECO_1B1P
+    case 17:  p = strcat(Label, "Resistance to Stress (confered by a plasmid)"); /* r in the LaTeX document */  
+      break;
 #else 
     case 17: p=strcat(Label,  "Nu = 1/Tau\t One over the handling time (0)");/* -H10 */
       break;
 #endif
 
 #ifdef DIFFUSION_ECO_PLASMIDS
-    case  18:  p = strcat(Label, "Plasmid Transmission Probability");  /* -H11 */ 
+    case 18:  p = strcat(Label, "Plasmid Transmission Probability");  /* -H11 */ 
+      break;
+#elif DIFFUSION_ECO_1B1P
+    case 18:  p = strcat(Label, "Plasmid Transmission Probability during Conjugation"); /* \chi in the LaTeX document */  
       break;
 #else
     case 18: p=strcat(Label,  "Triplet formation rate (0)");        /* -H11 */
@@ -127,8 +149,13 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
     case 19: p=strcat(Label,  "Triplet desintegration (0)");        /* -H12 */
       break;
 
+#ifdef DIFFUSION_ECO_1B1P
+    case 20: p=strcat(Label, "Plasmid-Carrying Movement Rate (1)");        /* -H13 */
+      break;
+#else 
     case 20: p=strcat(Label,  "Consumer Movement Rate (0)");        /* -H13 */
       break;
+#endif
 
     case 21:  p = strcat(Label, "Number of Energy Levels ");   
       break;
@@ -154,7 +181,10 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
 #elif defined DIFFUSION_ECO_PLASMIDS
     case 27:  p = strcat(Label, "Segregation Error at Reproduction");   
-      break;
+      break;  
+#elif defined DIFFUSION_ECO_1B1P
+    case 27:  p = strcat(Label, "Segregation Error at Reproduction");   
+      break;      
 #else 	      
     case 27:  p = strcat(Label, "Cooperation probability 1st position in the triplet");   
       break;
@@ -165,6 +195,9 @@ void Label_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
 #elif defined DIFFUSION_ECO_PLASMIDS
     case 28:  p = strcat(Label, "Sparsity Parameter (Connectance of the Interaction Matrices)");   
+      break;
+#elif defined DIFFUSION_ECO_1B1P
+    case 28:  p = strcat(Label, "Probablity of Competition-Induced Death (upon encounter)"); /* -p_2  (p_C in LaTeX document) */   
       break;
 #else 
     case 28:  p = strcat(Label, "Cooperation probability 2on position in the triplet");

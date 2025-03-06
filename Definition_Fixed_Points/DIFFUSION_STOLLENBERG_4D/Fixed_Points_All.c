@@ -195,7 +195,7 @@ double Coexistence_Condition_Double ( Parameter_Table * Table )
   return(Condition_Double);
 }
 
-double Function_to_Type_of_Stability( Parameter_Table * Table )
+double Calculate_Stability_Stationary_Point( Parameter_Table * Table )
 {
  /*
   *  Input arguments:

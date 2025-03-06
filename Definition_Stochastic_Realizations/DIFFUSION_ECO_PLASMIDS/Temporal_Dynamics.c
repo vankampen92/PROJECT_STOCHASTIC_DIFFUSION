@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MODEL.h>
 
-double Competition_Induced_Mortality_Calculation(Parameter_Table * , int , int );
+double Competition_Induced_Death_Based_Calculation(Parameter_Table * , int , int );
 double  Conjugation_Percapita_Rate_Calculation(Parameter_Table * , int , int );
 
 void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stochastic_Rate * Rate)
@@ -11,13 +11,13 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   /* This function calculates the rates of all possible events from scratch, across and within cells 
      given certain system confituration as defined in My_Community 
   */
-  /* This function is calling hierarchy at this level... 
+  /* For this function, the calling hierarchy up to this level is: 
      main() (main.c) 
         --->  M_O_D_E_L___S_T_O( &Table ); (MODEL_STO.c) 
             --->  S_T_O_C_H_A_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S (...); (Stochastic_Time_Dynamics.c)
                 ---> Temporal_Dynamics(...) (./Definition_Stochastic_Realizations/DIFFUSION_ECO_PLASMIDS/Temporal_Dynamics.c) 
   */
-  int i,j,k,n, Sp;
+  int i,j,k,n, N, Sp;
   Community * P;
   int No_of_CELLS;
   int GRAND_No_of_EVENTS;
@@ -55,18 +55,23 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
     y_S = Local_Population_Resources(i, Y, Table);
     m_0 = K_R-y_S;                                /* Total empty microsites (local sites) in the i-th cell */
 
+    assert( (double)P->m_0 == m_0 );
+
     P->ratePatch = 0; 
     n = 0;
     for(k=0; k<Sp; k++) {
 
       assert(Table->R == 0);
-      R  = k + Table->R; /* Strain-profile type (from 0 to Sp-1). Notice that Table->R should be zero!!! */
+      R  = k + Table->R; 
+      /* Strain-profile type (from 0 to Sp-1). Notice that Table->R should be zero!!! */
+      assert(R == k);
 
       /* 0: Bacteria Out-Migration (R --> R-1) and some other patch gains one */ 
       OutMigration = P->Total_Per_Capita_Out_Migration_Rate[R];                    
       assert( 4 * Table->Mu ==  OutMigration );                 /* Movements on a squared lattice */
           
-      P->rate[n] = OutMigration;       P->rToI[n]  = OutMigration * (double)P->n[R]; 
+      P->rate[n] = OutMigration;       
+      P->rToI[n] = OutMigration * (double)P->n[R]; 
       P->ratePatch += P->rToI[n];
 
       #if defined BINARY_TREE_SUPER_OPTIMIZATION
@@ -78,7 +83,8 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
       n++;
 
       /* 1: Bacteria External Immigration event */
-      P->rate[n] = Table->Lambda_R_0;  P->rToI[n]  = Table->Lambda_R_0 * m_0; 
+      P->rate[n] = Table->Lambda_R_0;  
+      P->rToI[n] = Table->Lambda_R_0 * m_0; 
       P->ratePatch += P->rToI[n]; 
 
       #if defined BINARY_TREE_SUPER_OPTIMIZATION
@@ -103,7 +109,7 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
       n++;
 
       /* 3: Competition induced mortality on Species R  (R --> R-1) */
-      Competition_Induced_Percapita_Mortality_Rate = Competition_Induced_Mortality_Calculation(Table, R, i);
+      Competition_Induced_Percapita_Mortality_Rate = Competition_Induced_Death_Based_Calculation(Table, R, i);
       P->rate[n] = Competition_Induced_Percapita_Mortality_Rate;  
       P->rToI[n] = Competition_Induced_Percapita_Mortality_Rate * (double)P->n[R];
       P->ratePatch += P->rToI[n];
@@ -117,8 +123,8 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
       n++;
 
       /* 4: Cell dividion (without error) */
-      P->rate[n] = Table->Beta_AP[k] * (1.0 - Table->p_1) * m_0/K_R;     
-      P->rToI[n] = Table->Beta_AP[k] * (1.0 - Table->p_1) * m_0/K_R * (double)P->n[R];
+      P->rate[n] = Table->Beta_AP[k] * (1.0 - Table->Segregation_Error[R]) * m_0/K_R;     
+      P->rToI[n] = Table->Beta_AP[k] * (1.0 - Table->Segregation_Error[R]) * m_0/K_R * (double)P->n[R];
       P->ratePatch += P->rToI[n];
 
       #if defined BINARY_TREE_SUPER_OPTIMIZATION
@@ -141,24 +147,44 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
         Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
       #endif
       n++;
-
-      /* 6: Cell to Cell Conjugation  */  /* Donor (k, p) + Recipient (l, q) --->  Donor (k, p) + Transconjugant (l, r) */
-      /* Calculation of the conjugation percapita rate of individual bacteria belonging to strain type R on the i-th cell 
-         from the patch system
-      */
-      Conjugation_Percapita_Rate = Conjugation_Percapita_Rate_Calculation(Table, R, i); 
-      P->rate[n] = Conjugation_Percapita_Rate; // ( Table->Lambda_R_1 );        
-      P->rToI[n] = Conjugation_Percapita_Rate * (double)P->n[R];
-
-      P->ratePatch += P->rToI[n];
-      #if defined BINARY_TREE_SUPER_OPTIMIZATION
-        Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
-      #endif
-      #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
-        Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
-      #endif
-      n++;
     }
+
+    N = 0; 
+    for(k=0; k<Sp; k++) {
+      /* 6: Cell to Cell Conjugation Events */  
+      /* Donor (k, p) + Recipient (j, q) --->  Donor (k, p) + Transconjugant (l, r) */
+      R = k; 
+
+      for(j=0; j<P->Local_Strain_Population[k]->Recipient_List[Sp]; j++) {
+        
+        /* Event: 6.j: Conjugation of the donor Strain ID = k (or R) with j-th recipient 
+           (Strain ID = Strain_ID_1) in the recipent list of Strain ID = k (or R)
+        */
+        Strain_ID_1  = P->Local_Strain_Population[k]->Recipient_List[j];   
+
+        /* Per capita rate: */
+        P->rate[n] = P->Local_Strain_Population[k]->Gamma * (double)P->Local_Strain_Population[Strain_ID_1]->n / K_R;  
+        /* Propensity (or total transition rate for the event 6.j): */  
+        P->rToI[n]  = P->rate[n] * (double)P->n[R];
+        P->ratePatch += P->rToI[n];
+
+        Table->No_of_Event_Conjugation_Pair[k][Strain_ID_1] = n;  /* n >= 0  and n < Table->TOTAL_No_of_EVENTS */
+        
+        Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs[N][0] = k;            /* DONOR     */
+        Table->Event_Conjugation_Donor_Recipient_Pair_Strain_IDs[N][1] = Strain_ID_1;  /* RECIPIENT */
+
+        #if defined BINARY_TREE_SUPER_OPTIMIZATION
+          Table->Leaves[GRAND_No_of_EVENTS++]->value = P->rToI[n];
+        #endif
+        #if defined PRIORITY_QUEU_SUPER_OPTIMIZATION
+          Table->T->Vector_of_Rates[GRAND_No_of_EVENTS++] = P->rToI[n];  
+        #endif
+        n++;
+
+        N++; 
+      }        
+    }
+    assert( N == Table->No_of_CONJUGATIONS_EVENTS );
 
     #if defined BINARY_TREE_OPTIMIZATION
       Table->Leaves[i]->value = P->ratePatch;
@@ -189,7 +215,8 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   }
 }
 
-double Competition_Induced_Mortality_Calculation(Parameter_Table * Table, int Strain_ID, int Patch)
+double Competition_Induced_Death_Based_Calculation(Parameter_Table * Table, 
+                                                   int Strain_ID, int Patch)
 {
   double Rate; 
   int i,j, Sp;
@@ -204,41 +231,11 @@ double Competition_Induced_Mortality_Calculation(Parameter_Table * Table, int St
   Sp = pa->No_of_RESOURCES; 
   
   Rate = 0.0; 
-
-  Calculate_Strain_and_Profile(Table, Strain_ID, &i_Str, &i_Pro);
-
   for(j=0; j<P->Local_Strain_Population[Strain_ID]->Competition_List[Sp]; j++) {
+    Strain_ID_1  = P->Local_Strain_Population[Strain_ID]->Competition_List[j];
 
-    Strain_ID_1  = P->Local_Strain_Population[Strain_ID]->Competition_List[j];   
-
-    Calculate_Strain_and_Profile(Table, Strain_ID_1, &j_Str, &j_Pro);
-
-    Rate += Table->ABB[i_Str][j_Str] * (double)P->Local_Strain_Population[Strain_ID_1]->n / K_R;  
+    Rate += Table->Competition_Induced_Death[Strain_ID][j]*(double)P->Local_Strain_Population[Strain_ID_1]->n / K_R;  
   }  
     
-  return(Rate);
-}
-
-double  Conjugation_Percapita_Rate_Calculation(Parameter_Table * Table, int Strain_ID, int Patch)
-{
-  double Rate; 
-  int i,j, Sp;
-  int Strain_ID_1; 
-  double K_R; 
-
-  Parameter_Model * pa  = Table->P;
-  Community * P         = Table->Patch_System[Patch];
-
-  K_R = (double)Table->K_R; /* Total Number of Local Sites in each Local Population                      */
-  Sp = pa->No_of_RESOURCES; 
-  
-  Rate = 0.0; 
-  for(j=0; j<P->Local_Strain_Population[Strain_ID]->Recipient_List[Sp]; j++) {
-
-    Strain_ID_1  = P->Local_Strain_Population[Strain_ID]->Recipient_List[j];   
-
-    Rate +=  P->Local_Strain_Population[Strain_ID]->Gamma * (double)P->Local_Strain_Population[Strain_ID_1]->n / K_R;  
-  }  
-
   return(Rate);
 }

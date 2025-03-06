@@ -16,19 +16,19 @@ double Local_Population_Resources(int i, const double * Y, Parameter_Table * Tab
   double y_S; 
   int k, n; 
 
-  assert(Table->TYPE_of_MODEL == 20 || Table->TYPE_of_MODEL == 21); 
-
   y_S = 0.0;
   for(k = 0; k < Table->No_of_RESOURCES; k++) {
       if(Table->TYPE_of_MODEL == 20)
         n   = i*Table->LOCAL_STATE_VARIABLES + 2*k+1;
       else if (Table->TYPE_of_MODEL == 21)
         n   = i*Table->LOCAL_STATE_VARIABLES + k;
+      else if (Table->TYPE_of_MODEL == 22)
+        n   = i*Table->LOCAL_STATE_VARIABLES + k;  
       else {
-        printf(" Only Table->TYPE_of_MODEL == 20 and Table->TYPE_of_MODEL == 21  can make use\n"); 
+        printf(" Only Table->TYPE_of_MODEL from 20 to 22 can make use\n"); 
         printf(" of the Local_Population_Resources (...); (definition_OutPut_Variables_Functions.c)\n");
         printf(" at this state\n");
-        assert(Table->TYPE_of_MODEL == 20 || Table->TYPE_of_MODEL == 21); 
+        exit(0); 
       }       
 
       y_S += Y[n];

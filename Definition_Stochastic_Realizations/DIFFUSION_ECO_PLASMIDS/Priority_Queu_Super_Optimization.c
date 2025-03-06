@@ -2,8 +2,6 @@
 
 #define TOLERANCE 1.0E-9
 
-/* This functions allocate, initialize and free a number of local communities,
-   which make up our total patch system or metapopulation */
 extern gsl_rng * r; /* Global generator defined in main.c */
 #define RANDOM gsl_rng_uniform_pos(r)
 

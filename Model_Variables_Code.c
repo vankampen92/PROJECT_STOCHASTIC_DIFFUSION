@@ -1,8 +1,10 @@
 #include <MODEL.h>
 
+void calculate_n_model(Parameter_Model * P, int * n);
+ 
 void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 {
-  int i, j, n;
+  int n, i, j;
   int TYPE_of_MODEL;
 
   TYPE_of_MODEL = Table->TYPE_of_MODEL;
@@ -21,7 +23,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       for(i=0; i<Table->No_of_CELLS; i++)
 	      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
 	        n++;
-	    
+	             
       /* Conventions */
       Table->K   = n-1;     /* Label last class            */
 
@@ -456,9 +458,8 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
     case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * * * * * * */
 
       /* No_of_EVENTS, i.e, common events that can occur to every Species: */
-      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) 
-				          R and A can undergo these three same processes 
-				      */
+      Table->No_of_EVENTS       = 3;  /* (Only Diffusion + External Immigration + Death) */
+                  /* R and A can undergo these three same processes */
       Table->TOTAL_No_of_EVENTS = 2 * Table->No_of_EVENTS + 5;
       Table->LOCAL_STATE_VARIABLES = 3; /* 1 R + 1 C + 1 D                 */
                                         /* D \equiv RC (handling consumer) */
@@ -899,8 +900,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
             
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
-
-  
+ 
   case 20: /* ECOEVO_PLANTS * * * * * * * * * */
 
       /* No_of_EVENTS, i.e, common events that can occur to every/some of the species: */
@@ -954,7 +954,10 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       /* No_of_EVENTS, i.e, common events that can occur to every species: */
       Table->No_of_EVENTS = 7;  /* All species (strains or phenotypes) can undergo the 
                                    same 7 processes  */
-      Table->TOTAL_No_of_EVENTS = (Table->No_of_EVENTS-1)*Table->No_of_RESOURCES + Table->No_of_CONJUGATION_EVENTS; 
+      Table->TOTAL_No_of_EVENTS = (Table->No_of_EVENTS-1)*Table->No_of_RESOURCES + Table->No_of_CONJUGATION_EVENTS;
+      /* Conjugation involved two strain IDs. All possible conjugation pairs ara organized at the end of the total 
+         list of events (of length, TOTAL_No_of_EVENTS)
+      */ 
   #else 
       /* No_of_EVENTS, i.e, common events that can occur to every species: */
       Table->No_of_EVENTS = 7;  /* All species (strains or phenotypes) can undergo the 
@@ -993,7 +996,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
       Table->Index[n++] = 9;  /* Death Rate (1) */ /* Delta_R_1 */                                             /* -H3:  Delta_R_1 */
 
-      Table->Index[n++] = 13; /* Competition induced Death Rate (competition matrix) */                        /* -H6:  Delta_C_0 */      
+      Table->Index[n++] = 13;  /* Competition induced Death Rate (competition matrix) */                        /* -H6:  Delta_C_0 */      
       
       Table->Index[n++] = 11; /* Cell division rate *//* R ---> R + 1 */                                       /* -H4:  Beta_R */
 
@@ -1016,9 +1019,84 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
+  case 22: /* ECO_1B1P * * * * * * * * * */
+
+    /* No_of_EVENTS, i.e, common events that can occur to every species: */
+    Table->No_of_EVENTS = 5;  /* All species (strains or phenotypes) can undergo the 
+                                same 5 processes (Outmigration, Immigration, Death, Competition-induced Death, 
+                                and Cell Division) */
+    Table->TOTAL_No_of_EVENTS = Table->No_of_EVENTS * Table->No_of_RESOURCES + 2;  /* 12 Events */
+    
+    /* The two extra events are 'Cell Division with Error' and 'Conjugation' */
+    
+    Table->No_of_CONJUGATION_EVENTS = 1 ; /* Conjugation of a Plasmid Carrying Cell with 
+                                             a Plasmid Free Cell 
+                                          */        
+    Table->LOCAL_STATE_VARIABLES = Table->No_of_RESOURCES; /* No of different subpopulations */
+
+    /* This model considers the interaction of a plasmid-free strain 
+       with its plasmid-carrying counterpart. Only 1 bacterial type or 
+       strain and 1 plasmid. Therefore, 2 possible profiles: the plasmid
+       free and the plasmid carrying strain.  
+    */
+    assert(Table->No_of_RESOURCES == 2); 
+    assert(Table->No_of_STRAINS == 1);
+    assert(Table->No_of_PLASMIDS == 1);
+    assert(Table->No_of_PROFILES == 2);
+
+    n = 0;
+    for(i=0; i<Table->No_of_CELLS; i++)
+      for(j=0; j<Table->LOCAL_STATE_VARIABLES; j++)
+        n++;
+          
+        /* Conventions */
+        Table->K   = n-1; /* Label last class */
+        Table->R   = 0;   /* Plasmid-free Strain     */
+        Table->A   = 1;   /* Plasmid-carrying Strain */ 
+    
+        /* List of the 15 (potentially searcheable) model parameters:  */
+          /* MODEL_PARAMETER_SPACE_MAXIMUM (see MODEL_DEFINE_MAX....h) */
+          n = 0;
+          Table->Index[n++] = 10; /* Carrying  Capacity */ /* K_R */                                               /* -HK:  K_R */
+    
+          Table->Index[n++] = 7;  /* Death Rate (0) */ /* Delta_R_0 */                                             /* -H1:  Delta_R_0 */                                  
+                                  
+          Table->Index[n++] = 8;  /* Conjugation/encounter rate */                                                 /* -H2:  Coded as Lambda_R_1, but labeled as Gamma_0 */    
+            
+          Table->Index[n++] = 9;  /* Death Rate (1) */ /* Delta_R_1 */                                             /* -H3:  Delta_R_1 */
+    
+          Table->Index[n++] = 11; /* Cell division rate *//* R ---> R + 1 */                                       /* -H4:  Beta_R */
+        
+          Table->Index[n++] = 16; /* Reproduction Cost (associated to the presence of the plasmid) */              /* -H9:  Alpha_C_0 */ 
+    
+          Table->Index[n++] = 17; /* Resistance to stress-induced death (associated to the presence of a plasmid)*//* -H10: Nu_C_0    */
+
+          /* Notice that the true death rate is: 
+                            Delta = Delta_R_0 + Delta_R_1 * (1.0-Resistance)
+             and the true cell division rate is: 
+                            Beta = Beta_R * (1.0 - Cost) (for the plasmid carrying strain), and 
+                            Beta = Beta_R                 (for the plasmid free strain).  
+          */
+
+          Table->Index[n++] = 0;  /* Bacteria Movement/Diffusion Rate */ /* Plasmid free Strain (0) */             /* -Hu:   Coded as Mu, but labeled as Mu_0 */ 
+          
+          Table->Index[n++] = 20;  /* Bacteria Movement/Diffusion Rate */ /* Plasmid Carrying Strain (1) */        /* -H13:  Coded as Mu_C, but labeled as Mu_1 */
+          
+          Table->Index[n++] = 6;  /* External Immigration Rate, a properity of the bacterial type or strain */     /* -H0:  Lambda_R_0 */
+                    
+          Table->Index[n++] = 18; /* Plasmid Transmission Probability, x */                                        /* -H11:  Coded as Xhi_C_0, but labeled as Xhi */
+          
+          Table->Index[n++] = 27; /* Segregation error at reproduction */                                          /* -Hp1:  Coded as p_1, but labeled as \epsilon */
+           
+          Table->Index[n++] = 28; /* Competition-induced Death Probability  */                                     /* -Hp2:  Coded as p_2, but labeled as p_C */ 
+                
+          Table->TOTAL_No_of_MODEL_PARAMETERS = n;
+      break;
+
     default:
       printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
-      printf(" Models (0 to 10): Check input argument list!!!\n");
+      printf(" Models (0 to 22): Check input argument list!\n");
+      printf(" Ensure TYPE_of_MODEL is within the range 0 to 22.\n");
       exit(0);
    }
    
@@ -1037,293 +1115,51 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
 
 void Model_Variables_Code_into_Parameter_Model (Parameter_Model * P)
 {
+/*
+ * Function: Model_Variables_Code_into_Parameter_Model
+ * ---------------------------------------------------
+ * This function initializes the model variables into the parameter model structure.
+ *
+ * Parameters:
+ * - P: A pointer to the Parameter_Model structure that will be initialized.
+ */
   int i, j, n;
   int TYPE_of_MODEL;
 
   TYPE_of_MODEL = P->TYPE_of_MODEL;
 
-  switch( TYPE_of_MODEL )
-    {
-
-    case 0: /* DIFFUSION * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 1: /* DIFFUSION_S_RESOURCES * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
-	    
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-
-      break;
-
-    case 2: /* DIFFUSION_1R1C * * * * * * * * * * * * * * * * * * * * * * */
-      
-      assert(P->No_of_RESOURCES == 1);
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	  n++;
-	    
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 3: /* DIFFUSION_1RnC_E * * * * * * * * * * * * * * * * * * * * * * */
+  if( P->TYPE_of_MODEL >= 0 && P->TYPE_of_MODEL <= 22) {
     
-      assert(P->No_of_RESOURCES == 1);
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;	    
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
+    calculate_n_model(P, &n);
 
-      break; 
+   /* Conventionally, the last label in list of model variables
+      should be the label of the last model state variable.
+      Notice that, then, (*K) + 1 becomes de total number of 
+      dynamic variables.
+   */
+    P->K   = n-1;     /* Label last class            */
 
-    case 4: /* DIFFUSION_1R1C_2D * * * * * * * * * * * * * * * * * * * * * * */
-                                  
-      assert(P->No_of_RESOURCES == 1);
-
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-        for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-          n++;
-
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-
-      break;
-
-    case 5: /* DIFFUSION_DRAG * * * * * * * * * * * * * * * * * * * * * * */
-                                  
-      assert(P->No_of_RESOURCES == 1);
-
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-        for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-          n++;
-
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-
-      break; 
-
-    case 6: /* DIFFUSION_VRG * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 7: /* DIFFUSION_MR* * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 8: /* DIFFUSION_1R1C_2D_STO_4D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 9: /* DIFFUSION_HII_2D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 10: /* DIFFUSION_STOLLENBERG_3D * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 11: /* DIFFUSION_HII_AC_2D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 12: /* DIFFUSION_HII_1D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 13: /* DIFFUSION_BD_2D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break; 
-
-    case 14: /* DIFFUSION_BD_3D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 15: /* DIFFUSION_STOLLENBERG_4D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 16: /* DIFFUSION_HII_nD * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 17: /* DIFFUSION_AZTECA_4D * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 18: /* DIFFUSION_AZTECA_4D_0 * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 19: /* DIFFUSION_AZTECA_4D_0 * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    case 20: /* DIFFUSION_ECOEVO_PLANTS * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-    
-    case 21: /* DIFFUSION_ECO_PLASMIDS * * * * * * * * * * * * * * * * * * * * * * */
-      
-      n = 0;
-      for(i=0; i<P->No_of_CELLS; i++)
-	      for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
-	        n++;
-       
-      /* Conventions */
-      P->K   = n-1;     /* Label last class            */
-      
-      break;
-
-    default:
-      printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
-      printf(" Check input argument list\n");
-      exit(0);
-    }
-  
-  /* Conventionally, the last label in the argument list of
-     (*K), should be the label of the last model state variable.
-     Then ( * K) + 1 becomes de total number of dynamic variables.
-  */
+   /* Notice that in several parts of the code, you will find:
+   
+      Table->MODEL_STATE_VARIABLES = Table->K + 1;
+      or 
+      P->MODEL_STATE_VARIABLES = P->K + 1;
+   */
+  }
+  else{
+    printf(" This TYPE_of_MODEL (%d) code is not defined.\n", TYPE_of_MODEL);
+    printf(" Models (0 to 22): Check input argument list!\n");
+    printf(" Ensure TYPE_of_MODEL is within the range of 0 to 22.\n");
+    exit(0);
+  }
 }
+
+void calculate_n_model(Parameter_Model * P, int * n)
+{
+  int i, j;
+  *n = 0;
+  for(i=0; i<P->No_of_CELLS; i++)
+    for(j=0; j<P->LOCAL_STATE_VARIABLES; j++)
+      (*n)++;
+}
+

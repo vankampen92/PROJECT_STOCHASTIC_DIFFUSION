@@ -50,16 +50,17 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
    * Definition Initial Condition (initializing 'Table->Vector_Model_Variables_Time_0' vector):
    */
   if (Table->No_of_CELLS == 1)
-    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
+    if(Table->TYPE_of_MODEL == 12 || Table->TYPE_of_MODEL == 13 || 
+       Table->TYPE_of_MODEL == 14 || Table->TYPE_of_MODEL == 16) {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
-						                                                  Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
-						                                                  Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
+                                  Table->TOTAL_No_of_FREE_CONSUMERS_TIME_0,
+                                  Table->TOTAL_No_of_HANDLING_CONSUMERS_TIME_0);
     }
     else {
       Initial_Condition_One_Single_Cell_into_Parameter_Table (Table,
 							                                                Table->INITIAL_TOTAL_POPULATION,
-							                                                Table->INITIAL_TOTAL_POPULATION); /* -xN  (INITIAL_TOTAL_POPULATION) */
-                                                                                                /* -HN  (No_of_INDIVIDUALS)  */
+							                                                Table->INITIAL_TOTAL_POPULATION); 
+                                                              /* -xN  (INITIAL_TOTAL_POPULATION) */
                                                               /* INITIAL_TOTAL_POPULATION::Initial_Conditions */
                                                               /* No_of_INDIVIDUALS::Parameter_Model           */                                  
     }
@@ -72,7 +73,6 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
                                                      Table->INITIAL_TOTAL_POPULATION); 
                                                      /* -xN [] */
   /* END ----------------------------------------------------------------------------
-     ('Table->Vector_Model_Variables_Time_0' has been initialized!!!)
    */
   
   /* BEGIN : -------------------------------------------------------------------------
@@ -185,8 +185,11 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   free( Table->Vector_Model_Variables_Time_0 ); 
   free( Table->Vector_Model_Int_Variables );
   free( Table->Vector_Model_Int_Variables_Time_0 );
-  
+
+#if defined DIFFUSION_ECO_PLASMIDS  
   Community_Strains_Free(PATCH, P);
+#endif
+
   Community_Free(PATCH, P);
   free ( P ); 
 

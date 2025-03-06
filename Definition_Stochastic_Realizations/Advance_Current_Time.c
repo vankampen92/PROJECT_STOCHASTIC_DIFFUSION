@@ -37,19 +37,22 @@ int Advance_Current_Time( Parameter_Table * Table,
   */
   
   int * Patch                = (int *)calloc(5, sizeof(int));
+  Patch[0]                   = 0; /* Single central cell system (always true when No_of_CELLS = 1 (-HM 1) */
+  Patch[1]                   = 0; /* Single central cell system (always true when No_of_CELLS = 1 (-HM 1) */
   Patch[2]                   = Table->No_of_RESOURCES; /* Impossible Species ID */
   Patch[3]                   = Table->No_of_RESOURCES; /* Impossible Species ID */
+  /* (Sp_ID equal to Table->No_of_RESOURCES is impossible, because 0 <= Sp_ID <= Table->No_of_RESOURCES-1)*/
   Patch[4]                   = 1;                      /* 0: No configurational change has occured */
-                                                       /* 1: A configuration change has occured, and
-                                                             the update of the array of rates 
-                                                             is required    
-                                                       */
+                                                       /* 1: A configuration change has occured    */
+                                                       
   /* This array stores information about the event that has occurred: 
-     Patch[0] Local Patch (where the event has occurred ) 
-     Patch[1] Patch receiving the immigrant if a movement event has occurred 
+     Patch[0] Local Patch (where the event has occurred ) Default: 0, when No_of_CELLS = 1 (-HM 1) 
+     Patch[1] Patch receiving the immigrant if a movement event has occurred. Default: 0, 0, when No_of_CELLS = 1 (-HM 1) 
      Patch[2] Index of an extra species involved in the event
      Patch[3] Index of a second extra species also involved in the event
-     (Sp_ID equal to Table->No_of_RESOURCES is impossible, because 0 <= Sp_ID <= Table->No_of_RESOURCES-1)
+     Patch[4] Flag indicating that a configurational change has occured. 
+             0: No configurational change has occured
+             1: A configuration change has occured, and the update of the array of rates is required
   */
   
   Parameter_Model * P        = Table->P; 
@@ -129,25 +132,27 @@ int Advance_Current_Time( Parameter_Table * Table,
     Temporal_Dynamics(Village, Table, Rate);
   #endif
 
-#if defined VERBOSE
   if( * Time_Current < 1.0) { 
     /* Only initial times are printed out...just for a check!!! */
     printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
             * Time_Current, Event, Patch[0], Patch[1]);
-    // Print_Meta_Community_Patch_System (Table);
+    if (Table->No_of_CELLS == 1) 
+      Print_Meta_Community_Patch_System (Table);
+      
     printf("\n");
   } 
-#endif 
-
-  free(Patch); 
-  /*   END: Calculation of Total Rate of Change */
 
 #if defined VERBOSE
-  printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
+  if( * Time_Current >= 1.0) { 
+    printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
           * Time_Current, Event, Patch[0], Patch[1]);
-  printf(" Current system configurtion (t = %g):\n",  (*Time_Current) );
-  Print_Meta_Community_Patch_System (Table);
+    printf(" Current system configurtion (t = %g):\n",  (*Time_Current) );
+    Print_Meta_Community_Patch_System (Table);
+    printf("\n");
+    getchar();
+  }
 #endif
-  
+
+  free(Patch);
   return(0);
 }
