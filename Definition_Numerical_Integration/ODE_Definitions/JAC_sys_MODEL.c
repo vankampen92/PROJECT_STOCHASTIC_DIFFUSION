@@ -10,7 +10,7 @@
 #define BETA_DERIVATIVE (Beta_Derivative_1(P,y[W]))
 
 int 
-jacobian (double t, const double y[], double *dfdy, double dfdt[],
+jacobian (double t, const double y[], double * dfdy, double dfdt[],
 	        void *params)
 {
 

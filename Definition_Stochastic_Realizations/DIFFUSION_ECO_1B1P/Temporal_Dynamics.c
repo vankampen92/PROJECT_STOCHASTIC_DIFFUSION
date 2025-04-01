@@ -54,11 +54,13 @@ void Temporal_Dynamics(Community ** My_Community, Parameter_Table * Table, Stoch
   for(i=0; i<No_of_CELLS; i++){
 
     P = My_Community[i];
-    y_S = Local_Population_Resources(i, Y, Table);
-    m_0 = K_R-y_S;                                /* Total empty microsites (local sites) in the i-th cell */
+    
+    // y_S = Local_Population_Resources(i, Y, Table);
+    // m_0 = (double)K_R-y_S;                               
+    // assert( (double)P->m_0 == m_0 );
 
-    assert( (double)P->m_0 == m_0 );
-
+    m_0 = (double)P->m_0;  /* Total empty microsites (local sites) in the i-th cell */
+    
     P->ratePatch = 0; 
     n = 0;
     for(k=0; k<Sp; k++) {

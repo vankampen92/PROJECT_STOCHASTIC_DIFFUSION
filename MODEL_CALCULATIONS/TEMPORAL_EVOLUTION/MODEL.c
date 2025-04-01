@@ -66,6 +66,8 @@ int M_O_D_E_L( Parameter_Table * Table )
    */
 			  							   
   Table->Vector_Model_Variables = (double *)calloc( MODEL_STATE_VARIABLES, sizeof(double) );
+
+#if defined STATIONARY_POINT_REPRESENTATION  
   Table->Vector_Model_Variables_Stationarity = (double *)calloc( MODEL_STATE_VARIABLES,
 								 sizeof(double) );
   Table->Vector_Model_Variables_MultiStability[0] = (double *)calloc( MODEL_STATE_VARIABLES,
@@ -75,10 +77,9 @@ int M_O_D_E_L( Parameter_Table * Table )
   Table->Vector_Model_Variables_MultiStability[2] = (double *)calloc( MODEL_STATE_VARIABLES,
 								   sizeof(double) );
 
-#if defined STATIONARY_POINT_REPRESENTATION
-#ifndef DIFFUSION_1R1C_2D
-  /* B E G I N : Calculation of Stationary Points */
-  Fixed_Points_All( Table,
+  #ifndef DIFFUSION_1R1C_2D
+  /* B E G I N : Calculation of Stationary Points */  
+  Fixed_Points_All( Table,                           
 		    Table->Vector_Model_Variables_MultiStability[0],
 		    Table->Vector_Model_Variables_MultiStability[1],
 		    Table->Vector_Model_Variables_MultiStability[2],
@@ -96,25 +97,21 @@ int M_O_D_E_L( Parameter_Table * Table )
         include.JAC_sys_[TYPE_of_MODEL].c
   */
   x = Function_to_Type_of_Stability_Double( Table );
-  Print_Press_Key(1,0,"."); 
+
+  if (x == 0.0) printf("The Fixed Point is a Unstable Node\n");
+  if (x == 1.0) printf("The Fixed Point is a Unstable Focus\n");
+  if (x == 2.0) printf("The Fixed Point is a Stable Node\n");
+  if (x == 3.0) printf("The Fixed Point is a Stable Focus\n");
   
-  printf("Lower Fixed Point (model variables):\t");
-  for (k=0; k < Table->MODEL_STATE_VARIABLES; k++)
-    printf("y_LOWER[%d] = %g\t", k, Table->Vector_Model_Variables_MultiStability[0][k]);
-  printf("\n");
-  printf("Inter Fixed Point (model variables):\t");
-  for (k=0; k < Table->MODEL_STATE_VARIABLES; k++)
-    printf("y_INTER[%d] = %g\t", k, Table->Vector_Model_Variables_MultiStability[1][k]);
-  printf("\n");
-  printf("Upper Fixed Point (model variables):\t");
-  for (k=0; k < Table->MODEL_STATE_VARIABLES; k++)
-    printf("y_UPPER[%d] = %g\t", k, Table->Vector_Model_Variables_MultiStability[2][k]);
-  printf("\n");
+  Print_Press_Key(1, 1, "Success: Fixed point and type of stability calculated!!!");  
   /*    E N D : --------------------------------- */
+  #endif
 #endif
-#endif
+
+  printf("\n");
   printf(" Entering deterministic dynamics. Parameter time dependencies will be\n");
   printf(" de-activated if -t4 0 (TYPE_of_TIME_DEPENDENCE = 0).\n");
+  getchar();
 
   D_E_T_E_R_M_I_N_I_S_T_I_C___T_I_M_E___D_Y_N_A_M_I_C_S( Table ) ;
 
@@ -162,12 +159,25 @@ int M_O_D_E_L( Parameter_Table * Table )
                         
   }
 #endif
+
   free( Table->Vector_Model_Variables_Time_0);
   free( Table->Vector_Model_Variables );
-  free( Table->Vector_Model_Variables_MultiStability[0] );
-  free( Table->Vector_Model_Variables_MultiStability[1] );
-  free( Table->Vector_Model_Variables_MultiStability[2] );
-  free( Table->Vector_Model_Variables_Stationarity );
+
+
+#if defined STATIONARY_POINT_REPRESENTATION 
+  // Fixed Points Calculations   
+  #ifndef STO_REALIZATIONS
+  /* De-allocation happens in MODEL_STO.c !!!
+     If MODEL_STO.c is not used, then the following de-allocation should 
+     be done here: 
+  */
+     free( Table->Vector_Model_Variables_MultiStability[0] );
+     free( Table->Vector_Model_Variables_MultiStability[1] );
+     free( Table->Vector_Model_Variables_MultiStability[2] );
+     free( Table->Vector_Model_Variables_Stationarity );     
+  #endif
+#endif
+
 
   Community_Free(PATCH, P);
   free ( P );

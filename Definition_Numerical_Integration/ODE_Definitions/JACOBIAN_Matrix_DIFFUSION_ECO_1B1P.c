@@ -23,8 +23,11 @@
 
 #define BETA_DERIVATIVE (Beta_Derivative_1(P,y[W]))
 
-void JACOBIAN_Matrix( gsl_matrix * m, const double *y, double t, int W_DUMMY,
-		      Parameter_Table * Table)
+void JACOBIAN_Matrix( gsl_matrix * m, 
+                      const double * y, 
+                      double t, 
+                      int W_DUMMY,
+                      Parameter_Table * Table)
 {
   int i,k;
 

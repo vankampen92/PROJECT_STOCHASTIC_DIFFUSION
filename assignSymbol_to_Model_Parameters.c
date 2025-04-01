@@ -10,7 +10,7 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
   switch(j)
     {
 #ifdef DIFFUSION_ECO_1B1P
-    case 0: p=strcat(Label, "$\\gm\\d0\\u");        /* -Hu */
+    case 0: p=strcat(Label, "\\gm\\d0\\u");        /* -Hu */
         break;
 #else 
     case  0: p=strcat(Label,"\\gm");                /* -Hu */
@@ -69,9 +69,14 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
 #endif
     case 15: p=strcat(Label, "\\gd\\u(C)\\d\\d1\\u");    
       break; 
-      
+
+#ifdef DIFFUSION_ECO_1B1P
+    case 16:  p = strcat(Label, "c"); /* H9: [cost] (Alpha_C_0)*/  
+        break;
+#else
     case 16: p=strcat(Label, "\\ga\\u(C)\\d\\d0\\u");    
       break;
+#endif     
 
 #ifdef DIFFUSION_ECO_1B1P
     case 17:  p = strcat(Label, "r");  
@@ -93,7 +98,7 @@ void CPGPLOT_Symbol_to_Model_Parameters(int j, char * Label, Parameter_Table *P)
       break;
 
 #ifdef DIFFUSION_ECO_1B1P
-    case 20: p=strcat(Label, "$\\gm\\d1\\u");        /* -H13 */
+    case 20: p=strcat(Label, "\\gm\\d1\\u");        /* -H13 */
       break;
 #else 
     case 20: p=strcat(Label, "\\gm\\u(C)\\d" );      /* -H13 */

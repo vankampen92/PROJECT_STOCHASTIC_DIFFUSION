@@ -361,6 +361,15 @@ Relevant input arguments for model DIFFUSION_HII_nD:
                               -H9 0.5 -H10 0.5 \
                               -Hp1 0.01 -Hp2 0.5 -H11 0.3 \
                               -HuR 0.0 -HuC 0.0 -H0 0.0
+
+  .~$ ./ECO_1B1P_4 -y0 22 -y2 1 -HS 1 -HN 1 -HM 1 -HX 1 -HY 1 \
+                   -n 2 -v0 0 -v1 1 -G0 1 -G1 2  \
+                   -G2 1 -G3 0.0 -G4 100.0 -G5 1 -G6 0.0 -G7 200 \
+                   -tn 100 -t0 0.0 -t1 100.0 -t4 0 -tR 10 -xn 0 -xN 50.0 \
+                   -HK 500 -H4 5.5 -H1 0.1 -H3 0.1 -H2 10.0 \
+                   -H9 0.1 -H10 0.2 \
+                   -Hp1 0.01 -Hp2 0.005 -H11 0.00025 \
+                   -HuR 0.0 -HuC 0.0 -H0 0.0
                               
   .~$ ./ECO_1B1P_4 -y0 22 -y2 1 -HS 1 -HN 1 -HM 2500 -HX 50 -HY 50 \
                      -n 2 -v0 0 -v1 1 -G0 1 -G1 2 \
@@ -368,7 +377,7 @@ Relevant input arguments for model DIFFUSION_HII_nD:
                      -tn 500 -t0 0.0 -t1 1000.0 -t4 0 -tR 20 -xn 0 -xN 40.0 \
                      -HK 100 -H4 2.5 -H1 1.0 -H3 1.0 -H2 1.0 \
                      -H9 0.25 -H10 0.7 \
-                     -Hp1 0.1 -Hp2 0.5 -H11 0.5 \
+                     -Hp1 0.01 -Hp2 0.17 -H11 0.51 \
                      -HuR 2.0 -HuC 4.0 -H0 0.0
 
   (see COMPILATION_OPTIMIZATION_LEVELS.sh for compilation optiopns)               
@@ -472,8 +481,8 @@ int main(int argc, char **argv)
 
 #if defined CPGPLOT_REPRESENTATION
   Table.CPG = A_C_T_I_V_A_T_E___C_P_G_P_L_O_T ( SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
-  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, "/TPNG");
-  //Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
+  //Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, "/TPNG");
+  Table.CPG_STO = A_C_T_I_V_A_T_E___2nd___C_P_G_P_L_O_T (1, SUB_OUTPUT_VARIABLES, I_Time, 0, CPG_DRIVER_NAME);
   
   printf(" Two Parameterh_CPGPLOT plotting structures have been correctly allocated and initiated\n");
   printf(" These will open two windows (or two ploting devices of the same kind)\n");

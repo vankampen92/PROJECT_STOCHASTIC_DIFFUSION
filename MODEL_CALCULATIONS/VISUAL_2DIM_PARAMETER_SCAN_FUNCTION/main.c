@@ -17,7 +17,7 @@
    are defined as input arguments. 
 
    If the parametric function is a likelihood, it also depends on some data and 
-   a Observed_Data structure should be defined and a corresponding data file read. 
+   an Observed_Data structure should be defined and a corresponding data file read. 
    See an example of this in: 
 
    ~/PROJECT_STOCHASTIC_DIFFUSION/MODEL_CALCULATIONS/VISUAL_2DIM_PARAMETER_SCAN/main.c
@@ -30,16 +30,16 @@
    regimes that this function distinguish should coincide with the dimension of the
    Color_States[] array.  
 
-   In this example, for the consumer-resource models, a five-valued parametric function 
+   In the example for the consumer-resource models, a five-valued parametric function 
    is defined representing the qualitative different dynamic regimes obtained for 
-   different parameteric configurations (collapse, only resources, stable end point wint 
+   different parameteric configurations (collapse, only resources, stable end point with 
    non-damped oscillations, stable points with damped oscillatins, and limit cycles): 
 
    . Function (Parameter_Table * Table) == 0, for no resources nor consumres
 
    . Function (Parameter_Table * Table) == 1, for only resources 
 
-   . Function (Parameter_Table * Table) == 2, for stable coexistce of resources
+   . Function (Parameter_Table * Table) == 2, for stable coexistence of resources
    and consumers with non-damped tendency to the stable point 
 
    . Function (Parameter_Table * Table) == 3, for stable coexistce of resources
@@ -75,7 +75,7 @@ Index  Argument   Parameter Definition
 29:   -H20 5.0    Resource Establishment Rate (Eta_R, only DIFFUSION_STOLLENBERG_4D)
 
 Index is the number key in full list of model parameters (see assig_ functions). 
-They are main function input arguments, for instnace:  
+They are main function input arguments, for instance:  
              -I0 16 Consumer Attack Rate 
              -I1 17 Consumer Handling Time
 which here define the 2D parameter space to explore. 
@@ -100,7 +100,7 @@ which here define the 2D parameter space to explore.
 
    . ~$ ./DIFFUSION_STOLLENBERG_4D -y0 15 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 -G0 1 -G1 1 -sT 1.0E-06 -sN 300  -sP 2 -I1 11 -m1 0.9 -M1 2.0 -A1 0.01 -d1 500  -I0 17 -m0 0.001 -M0 50.0 -A0 0.01 -d0 500 -iP 0 -en 0 -HuR 0.0 -HuC 0.0 -H0 0.0 -H2 0.0 -H5 0.0 -HK 2000 -H4 3.5 -H20 20.0 -H17 1.0 -H1 1.0 -H3 5.0 -H6 0.5 -H9 10.0 -H10 2.0
 
-. ~$ ./DIFFUSION_AZTECA_4D_0 -y0 18 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
+   . ~$ ./DIFFUSION_AZTECA_4D_0 -y0 18 -y2 1 -HS 1 -HM 1 -HX 1 -HY 1 \
 		                         -G0 1 -G1 1 \
 			                       -sT 1.0E-06 -sN 300 -sP 2 \
 			                       -I1 11 -m1 1.0 -M1 100.0 -A1 0.01 -d1 500 \
@@ -110,6 +110,29 @@ which here define the 2D parameter space to explore.
                              -HK 1 \
                              -H1 5.0 -H3 0.5 -H6 2.5 -H8 10.0 \
                              -H9 15.5 -H10 2.0 -H4 5.0 -H20 20.0
+
+    . ~$ ./DIFFUSION_ECO_1B1P -y0 22 -y2 1 -HS 1 -HN 1 -HM 1 -HX 1 -HY 1 \
+                                     -G0 1 -G1 1 \
+                                    -sT 1.0E-06 -sN 300 -sP 2 \
+                                    -I1 11 -m1 0.0001 -M1 6.0 -A1 0.01 -d1 500 \
+                                    -I0 7  -m0 000.1 -M0 5 -A0 0.01 -d0 500 \
+                                    -iP 0 -en 0  \
+                                    -HuR 0.0 -HuC 0.0 -H0 0.0 \
+                                    -HK 500 -H4 2.5 -H1 0.1 -H3 0.5 -H2 10.0 \
+                                    -H9 0.1 -H10 0.5 \
+                                    -Hp1 0.01 -Hp2 0.3 -H11 0.1
+
+    Searching for Turing instability in the system: 
+    . ~$ ./DIFFUSION_ECO_1B1P -y0 22 -y2 1 -HS 1 -HN 1 -HM 1 -HX 1 -HY 1 \
+                                     -G0 1 -G1 1 \
+                                    -sT 1.0E-06 -sN 300 -sP 2 \
+                                    -I1 11 -m1 0.0001 -M1 6.0 -A1 0.01 -d1 500 \
+                                    -I0 7  -m0 000.1 -M0 5 -A0 0.01 -d0 500 \
+                                    -iP 0 -en 0  \
+                                    -HuR 2.0 -HuC 5.0 -H0 0.0 \
+                                    -HK 500 -H4 2.5 -H1 0.1 -H3 0.5 -H2 10.0 \
+                                    -H9 0.1 -H10 0.5 \
+                                    -Hp1 0.01 -Hp2 0.3 -H11 0.1
 */			     
 gsl_rng * r; /* Global generator defined in main.c */
 
@@ -186,8 +209,11 @@ int main(int argc, char **argv)
   /* This vector is used by Fixed_Points_All(...) function, 
      which is called by Function_to_Type_of_Stability 
   */
-  Table.Vector_Model_Variables_Stationarity = (double *)calloc(Table.MODEL_STATE_VARIABLES,
-							       sizeof(double) );
+  Table.Vector_Model_Variables_Stationarity = (double *)calloc(Table.MODEL_STATE_VARIABLES, sizeof(double) );
+  Table.Vector_Model_Variables_MultiStability[0] = (double *)calloc( Table.MODEL_STATE_VARIABLES, sizeof(double) );
+  Table.Vector_Model_Variables_MultiStability[1] = (double *)calloc( Table.MODEL_STATE_VARIABLES, sizeof(double) );
+  Table.Vector_Model_Variables_MultiStability[2] = (double *)calloc( Table.MODEL_STATE_VARIABLES, sizeof(double) ); 
+
   /* B E G I N : Main Function Call -------------------------------------------------*/  
   double * W_GRID = (double *)malloc( No_of_POINTS_1 * No_of_POINTS_2 * sizeof(double) );
   /* int Status =  generic_Function_Parameter_2Dim_Scan(&Table,                      */
@@ -196,18 +222,17 @@ int main(int argc, char **argv)
   /* 						     Function_to_Type_of_Stability,        */
   /* 						     W_GRID, "Coexistence_Condition.dat"); */
   int X_LINEAR, Y_LINEAR;
-  // X_LINEAR = 0; Y_LINEAR = 0; /* Both axes linear */
+  // X_LINEAR = 0; Y_LINEAR = 0 ; /* Both axes linear */
   // X_LINEAR = 0; Y_LINEAR = 1; /* X axis linear and Y axis logarithmic */
-  X_LINEAR = 1; Y_LINEAR = 0; /* X axis logarithmic and Y axis linear */
-  // X_LINEAR = 1; Y_LINEAR = 1; /* Both axes logarithmic */
+  // X_LINEAR = 1; Y_LINEAR = 0; /* X axis logarithmic and Y axis linear */
+  X_LINEAR = 1; Y_LINEAR = 1; /* Both axes logarithmic */
   int Status =  generic_Function_Parameter_2Dim_Scan_Improved(&Table, 
-							      No_of_POINTS_1, Input_Parameter_1,
-							      No_of_POINTS_2, Input_Parameter_2,
-							      Function_to_Type_of_Stability, 
-							      W_GRID, "Coexistence_Condition.dat",
-							      X_LINEAR, Y_LINEAR);
+							                                                No_of_POINTS_1, Input_Parameter_1,
+							                                                No_of_POINTS_2, Input_Parameter_2,
+							                                                Calculate_Turing_Instabilities, // Calculate_Type_of_Coexistence_Bis,   // Function_to_Type_of_Stability, 
+							                                                W_GRID, "Coexistence_Condition_Bis.dat",
+							                                                X_LINEAR, Y_LINEAR);
   /*   E N D : ----------------------------------------------------------------------*/
-  free(Table.Vector_Model_Variables_Stationarity);
   
 #if defined CPGPLOT_REPRESENTATION
   /* BEGIN : 2D GRID cpgplot representation */
@@ -290,21 +315,37 @@ int main(int argc, char **argv)
   int FIRST_PLOT = 0;
   double i_PLOT  = 0.0;
   C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S( Table.CPG,
-								W_GRID, 
-								FIRST_PLOT,
-								No_of_COLOR_STATES,
-								Color_States,
-								0 );
-  FIRST_PLOT = 1;
-  C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S___F_R_A_M_E(Table.CPG,
-									   W_GRID,
-									   FIRST_PLOT,
-									   No_of_COLOR_STATES,
-									   Color_States,
-									   0 );
-  free(Color_States);
+								                                                W_GRID, 
+								                                                FIRST_PLOT,
+								                                                No_of_COLOR_STATES,
+								                                                Color_States,
+								                                                0 );
+  FIRST_PLOT = 1; 
+  C_P_G___P_L_O_T_T_I_N_G___2d___G_R_I_D___R_E_C_T_A_N_G_L_E_S___F_R_A_M_E( Table.CPG,
+									                                                          W_GRID,
+									                                                          FIRST_PLOT,
+									                                                          No_of_COLOR_STATES,
+									                                                          Color_States,
+									                                                          0 );
+  free(Color_States); 
 #endif    
   /*   END : 2D GRID cpgplot representation */
+
+  printf("\n ---> Model Parameters:\n");
+  /* Allocate memory for the label again */
+  double value; 
+  char * Label = (char *)calloc( 20, sizeof(char) );
+  /* Print all model parameters */
+  for (k=0; k < Table.TOTAL_No_of_MODEL_PARAMETERS; k++) {
+      i = Table.Index[k]; 
+      AssignSymbol_to_Model_Parameters(i, Label, &Table);
+      value = AssignStructValue_to_VectorEntry(i, &Table);
+      printf("%s = %g\n", Label, value);
+  }
+  printf("\n");
+  /* Free the allocated memory for Label */
+  free(Label);
+
   free(W_GRID);
   free(Par_Values);
   
@@ -320,6 +361,11 @@ int main(int argc, char **argv)
   free(Error_Space);  
  
   #include <include.Output_Variables.default.free.c>
+
+  free(Table.Vector_Model_Variables_Stationarity);
+  free( Table.Vector_Model_Variables_MultiStability[0] );
+  free( Table.Vector_Model_Variables_MultiStability[1] );
+  free( Table.Vector_Model_Variables_MultiStability[2] );
 
   P_A_R_A_M_E_T_E_R___T_A_B_L_E___F_R_E_E( &Table );
   /*  END : Freeing  All Memmory * * * * * * * * * * * * * * */

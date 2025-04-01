@@ -2,19 +2,54 @@
     "version": "0.2.0",
     "configurations": [ 
         {
-            "name": "(gdb) Launch ECO_1B1P_NONSTA_4",
+            "name": "(gdb) Launch DIFFUSION_ECO_1B1P_SCAN",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/ECO_1B1P_NONSTA_4",
+            "program": "${workspaceFolder}/MODEL_CALCULATIONS/VISUAL_2DIM_PARAMETER_SCAN_FUNCTION/DIFFUSION_ECO_1B1P",
             "args": [
-                "-y0", "22", "-y2", "1", "-HS", "1", "-HN", "1", "-HM", "6400", "-HX", "80-", "-HY", "80",
+                "-y0", "22", "-y2", "1", "-HS", "1", "-HN", "1", "-HM", "1", "-HX", "1", "-HY", "1",
+                "-G0", "1", "-G1", "1",
+                "-sT", "1.0E-06", "-sN", "300", "-sP", "2",
+                "-I1", "11", "-m1", "0.001", "-M1", "2.0", "-A1", "0.01", "-d1", "500",
+                "-I0", "7", "-m0", "0.001", "-M0", "2.0", "-A0", "0.01", "-d0", "500",
+                "-iP", "0", "-en", "0",
+                "-HuR", "0.0", "-HuC", "0.0", "-H0", "0.0",
+                "-HK", "500", "-H4", "2.5", "-H1", "0.1", "-H3", "0.1", "-H2", "10.0",
+                "-H9", "0.1", "-H10", "0.5",
+                "-Hp1", "0.01", "-Hp2", "0.1", "-H11", "0.5"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) Launch ECO_1B1P_4",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/MODEL_CALCULATIONS/TEMPORAL_EVOLUTION/DIFFUSION_ECO_1B1P",
+            "args": [
+                "-y0", "22", "-y2", "1", "-HS", "1", "-HN", "1", "-HM", "1", "-HX", "1", "-HY", "1",
                 "-n", "2", "-v0", "0", "-v1", "1", "-G0", "1", "-G1", "2",
-                "-G2", "1", "-G3", "0.0", "-G4", "50.0", "-G5", "1", "-G6", "0.0", "-G7", "100000",
-                "-tn", "50", "-t0", "0.0", "-t1", "50.0", "-t4", "0", "-tR", "4", "-xn", "0", "-xN", "5.0",
-                "-HK", "50", "-H4", "0.5", "-H1", "0.3", "-H3", "0.2", "-H2", "1.0",
-                "-H9", "0.1", "-H10", "0.2",
-                "-Hp1", "0.1", "-Hp2", "0.5", "-H11", "0.2",
-                "-HuR", "2.0", "-HuC", "4.0", "-H0", "0.0"
+                "-G2", "1", "-G3", "0.0", "-G4", "500.0", "-G5", "1", "-G6", "0.0", "-G7", "200",
+                "-tn", "100", "-t0", "0.0", "-t1", "500.0", "-t4", "0", "-tR", "4", "-xn", "0", "-xN", "50.0",
+                "-HK", "1000", "-H4", "0.5", "-H1", "0.3", "-H3", "0.2", "-H2", "1.0",
+                "-H9", "0.2", "-H10", "0.8",
+                "-Hp1", "0.01", "-Hp2", "0.5", "-H11", "0.4",
+                "-HuR", "0.0", "-HuC", "0.0", "-H0", "0.0"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

@@ -366,12 +366,10 @@ int Stochastic_Time_Dynamics_Numerical( int i,
        Note: When the system is frozen (FROZEN_SYSTEM = 1), then
              this loop does not advance the system any more
     */
+   
     /* B E G I N :
      *     CENTRAL PROGRAM CORE HERE: Stochastic Dynamics Loop While (up to the next time)
      */
-
-    
-
     new = 0;
     while( Time_Current < Time->Time_Vector[j] && FROZEN_SYSTEM == 0 )
       {

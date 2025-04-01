@@ -30,8 +30,26 @@ void Fixed_Points_OneCell(Parameter_Table * Table,
 	                      double * Vector_Stationarity_Lower,
 		                  double * Vector_Stationarity_Inter,
 		                  double * Vector_Stationarity_Upper );
-	  
-double Calculate_Type_of_Coexistence(Parameter_Table * Table );                            
+
+void Fixed_Points_OneCell_Bis(Parameter_Table * Table, 
+						  double * Vector_Stationarity_Lower,
+						  double * Vector_Stationarity_Inter,
+						  double * Vector_Stationarity_Upper);
+
+double Calculate_Plasmid_Free_Solution(double beta_0, double D_0,
+							double * Vector_Stationarity_Lower,
+							double * Vector_Stationarity_Inter,
+							double * Vector_Stationarity_Upper, 
+							Parameter_Table * Table);
+						 
+void Plasmid_Free_Solution(Parameter_Table * Table, 
+								double * Vector_Stationarity_Lower,
+								double * Vector_Stationarity_Inter,
+								double * Vector_Stationarity_Upper);						
+
+double Calculate_Type_of_Coexistence(Parameter_Table * Table );
+
+double Calculate_Type_of_Coexistence_Bis(Parameter_Table * Table );                            
 
 double Calculate_Type_of_Stability_2D( Parameter_Table * Table);
 

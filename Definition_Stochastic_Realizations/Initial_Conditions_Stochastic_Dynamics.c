@@ -37,11 +37,13 @@ void Initial_Conditions_Stochastic_Dynamics( Parameter_Table * Table, double * y
     Print_Press_Key (STAT_BOOL_VERBOSE, 0,
 	  "Initial Conditions are defined as the fixed points of the system\n");
     #if defined STATIONARY_POINT_REPRESENTATION
-    assert(P->No_of_CELLS == 1);                        /* Stationary Points work only for single patch systems */
-    Fixed_Points_All(Table, y_INI, y_INI, y_INI, EPSILON);  /* Calculating Lower/Single point... */
-				                                                /* (see fixed_Points_All.c)              */
+    assert(P->No_of_CELLS == 1); /* Stationary Points work only for single patch systems */
+    /* If Fixed Points have been calculated, comment out the following line:  */
+    // Fixed_Points_All(Table, y_INI, y_INI, y_INI, EPSILON);  /* Calculating Lower/Single point... */
+		//
+    // Otherwise, if Fixed_Points_all is called in this function, you don't need the following two lines: */
     for( i = 0; i < Table->MODEL_STATE_VARIABLES; i++ )                    
-      Table->Vector_Model_Variables_Stationarity[i] = y_INI[i] ;
+         y_INI[i] = Table->Vector_Model_Variables_Time_0[i];
     #endif          
   }
   else {

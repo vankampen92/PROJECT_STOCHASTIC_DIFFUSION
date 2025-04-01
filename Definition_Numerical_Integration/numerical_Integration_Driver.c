@@ -17,14 +17,13 @@ int numerical_Integration_Driver( Parameter_Table * Table,
                                   int j, double * Time_Current )
 {
   int status;
-#if defined GSL_BSIMP
+
+#ifdef GSL_BSIMP
   const gsl_odeiv_step_type * T = gsl_odeiv_step_bsimp; /* This 'bsimp' uses the Jacobian */
-#else
-#if defined GSL_RK4
+#elif defined GSL_RK4
   const gsl_odeiv_step_type * T = gsl_odeiv_step_rk4;
 #else
-  const gsl_odeiv_step_type * T = gsl_odeiv_step_rkf45;
-#endif
+  const gsl_odeiv_step_type * T = gsl_odeiv_step_rkf45; /* Default Numerical Integrator   */
 #endif
   
   int MODEL_STATE_VARIABLES = Table->MODEL_STATE_VARIABLES;
@@ -55,10 +54,10 @@ int numerical_Integration_Driver( Parameter_Table * Table,
      
       if (status != GSL_SUCCESS) break;
 
-      // #if defined VERBOSE
+      #if defined VERBOSE
           if (Table->MODEL_STATE_VARIABLES >= 4 )
 	          printf ("t = %.5g (%.5g, %.5g, %.5g, %.5g)\n", *t, y[0], y[1], y[2], y[3]);
-      // #endif
+      #endif
     }
      
   gsl_odeiv_evolve_free (e);

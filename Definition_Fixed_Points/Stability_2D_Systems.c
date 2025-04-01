@@ -29,7 +29,7 @@ double Calculate_Type_of_Stability_2D( Parameter_Table * Table)
    
   if (Det < 0.0) {
     /* The system is unstable */
-    Type_of_Stability = 0;
+    Type_of_Stability = 0; /* There is always one positive and one negative eigen value */
   }
   else {
     /* */
@@ -110,16 +110,11 @@ double Calculate_Turing_Instabilities( Parameter_Table * Table)
 double Trace_Diffusion_Matrix( Parameter_Table * Table, double * Y)
 {
   double Tra, d;
-  gsl_matrix_view dfdy_mat;
-  gsl_matrix * m;
-  double * dfdy; 
 
   assert(Table->MODEL_STATE_VARIABLES == 2);
-
-  dfdy_mat = gsl_matrix_view_array(dfdy, Table->MODEL_STATE_VARIABLES, Table->MODEL_STATE_VARIABLES);
+  gsl_matrix * m = gsl_matrix_alloc( Table->MODEL_STATE_VARIABLES, 
+                                     Table->MODEL_STATE_VARIABLES); /* allocating matrix m */
   
-  m = &dfdy_mat.matrix;
-
   /* Setting the Jacobian matrix evaluated at (y[0], ..., y[K]) */
   /* Optimally, this Function should be inline... */
   JACOBIAN_Matrix(m, Y, 0.0, Table->K, Table);
@@ -129,21 +124,17 @@ double Trace_Diffusion_Matrix( Parameter_Table * Table, double * Y)
 
   Tra = d * gsl_matrix_get(m, 0, 0) + gsl_matrix_get(m, 1, 1);
 
+  gsl_matrix_free(m); /* releasing memory */
   return(Tra);
 }
 
 double Trace( Parameter_Table * Table, double * Y)
 {
   double Tra; 
-  gsl_matrix_view dfdy_mat;
-  gsl_matrix * m;
-  double * dfdy; 
 
   assert(Table->MODEL_STATE_VARIABLES == 2);
-
-  dfdy_mat = gsl_matrix_view_array(dfdy, Table->MODEL_STATE_VARIABLES, Table->MODEL_STATE_VARIABLES);
-  
-  m = &dfdy_mat.matrix;
+  gsl_matrix * m = gsl_matrix_alloc( Table->MODEL_STATE_VARIABLES, 
+                                     Table->MODEL_STATE_VARIABLES); /* allocating matrix m */
 
   /* Setting the Jacobian matrix evaluated at (y[0], ..., y[K]) */
   /* Optimally, this Function should be inline... */
@@ -152,21 +143,17 @@ double Trace( Parameter_Table * Table, double * Y)
   
   Tra = gsl_matrix_get(m, 0, 0) + gsl_matrix_get(m, 1, 1);
 
+  gsl_matrix_free(m); /* releasing memory */
   return(Tra);
 }
 
 double Determinant( Parameter_Table * Table, double * Y)
 {
   double Det; 
-  gsl_matrix_view dfdy_mat;
-  gsl_matrix * m;
-  double * dfdy;
 
   assert(Table->MODEL_STATE_VARIABLES == 2);
-
-  dfdy_mat = gsl_matrix_view_array(dfdy, Table->MODEL_STATE_VARIABLES, Table->MODEL_STATE_VARIABLES);
-  
-  m = &dfdy_mat.matrix;
+  gsl_matrix * m = gsl_matrix_alloc( Table->MODEL_STATE_VARIABLES, 
+                                     Table->MODEL_STATE_VARIABLES); /* allocating matrix m */
 
   /* Setting the Jacobian matrix evaluated at (y[0], ..., y[K]) */
   /* Optimally, this Function should be inline... */
@@ -175,6 +162,7 @@ double Determinant( Parameter_Table * Table, double * Y)
   
   Det = gsl_matrix_get(m, 0, 0) * gsl_matrix_get(m, 1, 1) - gsl_matrix_get(m, 0, 1) * gsl_matrix_get(m, 1, 0);
 
+  gsl_matrix_free(m); /* releasing memory */
   return(Det);
 }
 

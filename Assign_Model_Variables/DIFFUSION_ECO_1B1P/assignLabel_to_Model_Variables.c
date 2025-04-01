@@ -12,9 +12,11 @@ void AssignLabel_to_Model_Variables(int j, char * Label, Parameter_Table * Table
   Label[0]='\0';
   if(m < Table->No_of_CELLS ) { 
     
+    pCell[0]='\0';
     sprintf(pCell, "%d", m);
     pFile = strcat(Label, "n_");
     pFile = strcat(Label, pCell);
+    
     pFile = strcat(Label, "[");
     pCell[0]='\0';
     sprintf(pCell, "%d", n);

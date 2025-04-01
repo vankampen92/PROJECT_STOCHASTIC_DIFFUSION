@@ -132,6 +132,8 @@ int Advance_Current_Time( Parameter_Table * Table,
     Temporal_Dynamics(Village, Table, Rate);
   #endif
 
+
+  #if defined VERBOSE
   if( * Time_Current < 1.0) { 
     /* Only initial times are printed out...just for a check!!! */
     printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
@@ -141,8 +143,9 @@ int Advance_Current_Time( Parameter_Table * Table,
       
     printf("\n");
   } 
+  #endif
 
-#if defined VERBOSE
+  #if defined VERBOSE
   if( * Time_Current >= 1.0) { 
     printf("Time = %g\t Type of Event = %d in Patches (%d, %d)\n", 
           * Time_Current, Event, Patch[0], Patch[1]);
@@ -151,7 +154,7 @@ int Advance_Current_Time( Parameter_Table * Table,
     printf("\n");
     getchar();
   }
-#endif
+  #endif
 
   free(Patch);
   return(0);

@@ -125,8 +125,8 @@ void AssignLongLabel_to_Output_Variables(int j, char * Label, Parameter_Table * 
   Defining_Output_Variables_Labels (Table, L);
 
   char * n_Label = (char *)calloc(10, sizeof(char) );
-  Label[0] = '\0';
 
+  Label[0] = '\0';
   if (j >= Table->OUTPUT_VARIABLES_GENUINE) {
     j -= Table->OUTPUT_VARIABLES_GENUINE;
     /* The first output variables are the model variables */
@@ -409,7 +409,7 @@ void Defining_Output_Variables_Labels (Parameter_Table * Table, char ** L)
     sp = (char *)calloc(10, sizeof(char));
     for(i=0; i<Table->No_of_RESOURCES; i++){
 
-      sprintf(sp, "%d,", i);
+      sprintf(sp, "%d", i);
       p = strcat(L[i], sp);
 
     }

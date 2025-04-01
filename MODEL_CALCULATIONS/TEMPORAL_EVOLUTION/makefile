@@ -103,7 +103,7 @@ ODE_DIR_GENERAL=${PROJECT_DIR}Definition_Numerical_Integration/#########
 ODE_DIR=${ODE_DIR_GENERAL}${ODE_MODEL}/#########
 ODE_DEF=${ODE_DIR_GENERAL}ODE_Definitions/###########################
 ODE_FIXED_POINTS=${PROJECT_DIR}Definition_Fixed_Points/${ODE_MODEL}/###########
-TYPE_NUMERICAL_INTEGRATION=GSL_RK45#############################
+TYPE_NUMERICAL_INTEGRATION=GSL_RKF45#############################
 ######################################## Possibilities:
 ######################################## 'GSL_BSIMP' uses the Jacobian matrix which has to be 
 ########################################  provided in JAC_sys${SYS}.c.
@@ -117,8 +117,9 @@ TYPE_NUMERICAL_INTEGRATION=GSL_RK45#############################
 JACOBIAN=ODE# Options: 'ODE'
 EXTRA_INCLUDE_PATH+=-I${ODE_DEF}Include_${JACOBIAN}/#####
 ###################################o###########################################################################
-################################################### (see rainTemperature.c) ##################################
-## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   N U M E R I C A L   I N T E G R A T I O N  ##
+################################################### (see rainTemperature.c) ###################################
+## C O M P I L A T I O N   O P T I O N S   C O N T R O L I N G   S T O C H A S T I C   R E A L I Z A T I O N S#
+STO_REA=STO_REALIZATIONS################ Possibilities: 'NON_STO_REALIZATIONS' or 'STO_REALIZATIONS'
 STO_DIR_GENERAL=${PROJECT_DIR}Definition_Stochastic_Realizations/#########
 STO_DIR=${STO_DIR_GENERAL}${ODE_MODEL}/#########
 ## D E F I N I T I O N   N A M E   E X E C U T B L E   C O D E ###############################################
@@ -127,7 +128,7 @@ EXE=${ODE_MODEL}
 EXTERN=#Possibilities: void (to be locally executed) / -static (to be non-locally executed) #
 ######################################## Possibilities: GA (locally executed) / GA_EXTERN (non-locally executed)
 LDFLAGS+=-lm -lgsl -lgslcblas -lDa_GSL_UTL -lda_IO -lda_Optimization -lda_Error -lNumRec -lNRUTL  -lda_cpgplot_XY_GRID_FILE -lda_cpgplot_BASIC ${EXTRA_LIBRARY_PATH}
-CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${RANDOM_SEED}  -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -D${BT} -D${RE} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
+CXXFLAGS+=${EXTRA_INCLUDE_PATH} -D${V} -D${CPG} -D${FILE}  -D${TYPE_NUMERICAL_INTEGRATION} -D${STO_REA} -D${RANDOM_SEED} -D${MODEL} -D${JACOBIAN} -D${NR} -D${STATIONARITY} -D${STO} -D${BT} -D${RE} -DHAVE_INLINE ${EXTERN} -g #-Wall -D${ERROR}
 ##############################################################################################################
 # either -g or some optimization opiton, for instance, -O3
 # This makefile uses full power of conditional compilation. There is a bunch of variables that control this and
@@ -154,7 +155,8 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Comm
 	fprintf_Model_Parameters.o fprintf_Output_Variables.o                                                                     \
 	Parameter_Space.o Parameter_Space_Boundary_for_Trends${TYPE_of_BOUNDARY}.o  Initial_Condition_Boundary_Values.o           \
 	deterministic_time_dynamics.o numerical_Integration_Driver.o                                                              \
-	Fixed_Points_All.o Stationary_Solution_Feasibility_Control.o Stability_2D_Systems.o Function_Type_of_Stability.o          \
+	Fixed_Points_All.o Stationary_Solution_dydt_Check.o Stationary_Solution_Feasibility_Control.o Stability_2D_Systems.o      \
+	Function_Type_of_Stability.o                                                                                              \
 	Initial_Conditions_Numerical_Integration.o Initial_Condition_from_Parameter_Table.o                                       \
 	Random_Initial_Condition.o ODE_sys_${ODE_MODEL}.o JAC_sys_MODEL.o JACOBIAN_Matrix_${ODE_MODEL}.o                          \
 	Stochastic_Time_Dynamics.o Initial_Conditions_Stochastic_Dynamics.o Patch_System_Initialization.o                         \
@@ -166,10 +168,10 @@ OBJECTS = main.o report.o argumentControl.o MODEL.o MODEL_STO.o Community.o Comm
 	CPGPLOT___GRID___Parameter_Table.o                                                                                        \
 	Time_Dependence_Apply.o Time_Dependence_Resolve.o Time_Dependence_Control.o Trend_Control.o                               
 # # index.Definition${TYPE_of_INDEX}.o Error_Function.o 
-# Fixed_Points_All.o Steady_State_x_Fraction.o x_y_Fixed_Points_Functions.o Feasibility_Condition.o Steady_State_y_Fraction.o intermediateRoot_x_Fraction.o Stable_Solution.o Stable_Solution_x.o Stable_Solution_y.o Generic_Root_Finder.o                                                         
 ### Example:
 
-RUN_ARGS =-y0 1 -y2 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 1 -v0 0 -G0 1 -G1 1 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
+RUN_ARGS =-y0 1 -y2 1 -HM 100 -HX 10 -HY 10 -Hu 0.1 -n 1 -v0 0 -G0 1 -G1 1 -tn 50 -t0 0.0 -t1 50.0 -t4 0 -tR 10 -xn 0 -xN 1000 \
+		   -HN 1000 -G2 1 -G3 0.0 -G4 50.0 -G5 1 -G6 0.0 -G7 6000.0
 
 CC=gcc##
 FF=gfortran##
@@ -373,6 +375,9 @@ In_Out_Migration_Functions.o: ${PROJECT_DIR}In_Out_Migration_Functions.c ${HEAD.
 Fixed_Points_All.o: ${ODE_FIXED_POINTS}Fixed_Points_All.c ${HEAD.H}
 	$(CC) -c ${ODE_FIXED_POINTS}Fixed_Points_All.c $(CXXFLAGS)
 
+Stationary_Solution_dydt_Check.o: ${FIXED_POINTS_DIR}Stationary_Solution_dydt_Check.c ${HEAD.H}
+	$(CC) -c ${FIXED_POINTS_DIR}Stationary_Solution_dydt_Check.c $(CXXFLAGS)
+
 Stationary_Solution_Feasibility_Control.o: ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c ${HEAD.H}
 	$(CC) -c ${FIXED_POINTS_DIR}Stationary_Solution_Feasibility_Control.c $(CXXFLAGS)
 
@@ -429,9 +434,10 @@ COMPILATION_OPTIONS:
 	echo "Stochastic optimization: "
 	echo "Binary tree optimization: ${BT}"                                   >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "Random number reuse: ${RE}"                                        >> ${EXE}_COMPILATION_OPTIONS.txt
-	echo "Stochastic Optimzation: ${STO}"                                    >> ${EXE}_COMPILATION_OPTIONS.txt	 	
-	echo "Stationarity Calculation: ${STATIONARITY}"                         >> ${EXE}_COMPILATION_OPTIONS.txt	 	
-	echo ""           			              			 >> ${EXE}_COMPILATION_OPTIONS.txt
+	echo "Stochastic Optimization: ${STO}"                                   >> ${EXE}_COMPILATION_OPTIONS.txt	 	
+	echo "Fixed Points Calculation: ${STATIONARITY}"                         >> ${EXE}_COMPILATION_OPTIONS.txt	
+	echo "Stochastic Realizations: ${STO_REA}"                               >> ${EXE}_COMPILATION_OPTIONS.txt	
+	echo ""           			              	                             >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "---------------------------------------" >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "All compilation options as passed to the compiler through CXXFLAGS:" >> ${EXE}_COMPILATION_OPTIONS.txt
 	echo "${CXXFLAGS}"                             >> ${EXE}_COMPILATION_OPTIONS.txt

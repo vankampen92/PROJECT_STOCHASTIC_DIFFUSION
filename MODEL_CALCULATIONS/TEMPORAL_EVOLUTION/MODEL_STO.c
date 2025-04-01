@@ -72,6 +72,28 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     Initial_Condition_Centered_into_Parameter_Table (Table, 
                                                      Table->INITIAL_TOTAL_POPULATION); 
                                                      /* -xN [] */
+  
+  /* Initial condition: a stationary point (only when Table->No_of_CELLS is 1) */
+  if (Table->TYPE_of_INITIAL_CONDITION == 2) {
+    Print_Press_Key (1, 0, "Initial Conditions are defined as the fixed points of the 2D system\n");
+    // Fixed Points should have been already calculated in a previous call 
+    // to the function 'Fixed_Points_All();
+    if (Table->No_of_CELLS == 1 && Table->TYPE_of_MODEL == 22) {
+      for (i=0; i<MODEL_STATE_VARIABLES; i++) {
+        Table->Vector_Model_Variables_Time_0[i] = Table->Vector_Model_Variables_Stationarity[i];
+        
+        // Table->Vector_Model_Variables_Time_0[i] = Table->Vector_Model_Variables_MultiStability[0][i];
+        // Table->Vector_Model_Variables_Time_0[i] = Table->Vector_Model_Variables_MultiStability[0][i];
+        // Table->Vector_Model_Variables_Time_0[i] = Table->Vector_Model_Variables_MultiStability[0][i];    
+      }
+    }
+    else {
+      printf("The system is not a single patch model (Table->No_of_CELLS = %d)\n", Table->No_of_CELLS);
+      printf("The system is not a model of type 22 (Table->TYPE_of_MODEL = %d)\n", Table->TYPE_of_MODEL);
+      printf("The program will safely exit\n");   
+      exit(0);
+    }
+  }
   /* END ----------------------------------------------------------------------------
    */
   
@@ -186,6 +208,16 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
   free( Table->Vector_Model_Int_Variables );
   free( Table->Vector_Model_Int_Variables_Time_0 );
 
+#if defined STATIONARY_POINT_REPRESENTATION 
+  // Fixed Points Calculations    
+  /* De-allocating variables allocated in MODEL.c to calculate Fixed Points 
+     that M_O_D_E_L___S_T_O( Parameter_Table * Table ) may require */
+  free( Table->Vector_Model_Variables_MultiStability[0] );
+  free( Table->Vector_Model_Variables_MultiStability[1] );
+  free( Table->Vector_Model_Variables_MultiStability[2] );
+  free( Table->Vector_Model_Variables_Stationarity );
+#endif
+
 #if defined DIFFUSION_ECO_PLASMIDS  
   Community_Strains_Free(PATCH, P);
 #endif
@@ -205,8 +237,7 @@ int M_O_D_E_L___S_T_O( Parameter_Table * Table )
     Binary_Tree_Free ( Table->Treeroot, Table->Leaves, Table->Parent, 
                        Table->No_of_LEAVES );
     free(Table->Tree_Node_Index); /* Priority array of indexed pointers to all tree nodes */
-  #endif
-  
+  #endif 
 
   return(0);
 }

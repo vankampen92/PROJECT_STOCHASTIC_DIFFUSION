@@ -59,7 +59,7 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
     for(i=0; i < S; i++) {
       x_S += PATCH[j]->n[i];
     }
-    PATCH[j]->m_0 = (int)Table->K_R - (int)x_S; 
+    PATCH[j]->m_0 = Table->K_R - (int)x_S; 
   }
 #endif 
 
@@ -71,7 +71,7 @@ void Patch_System_Initialization (Community ** PATCH, Parameter_Table * Table, d
     for(i=0; i < S; i++) {
       x_S += PATCH[j]->n[i];
     }
-    PATCH[j]->m_0 = Table->K_R - x_S; 
+    PATCH[j]->m_0 = Table->K_R - (int)x_S; 
   }
 
   #if defined DIFFUSION_ECO_PLASMIDS

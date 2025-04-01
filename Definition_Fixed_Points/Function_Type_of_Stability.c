@@ -36,9 +36,9 @@ double Function_to_Type_of_Stability_Double( Parameter_Table * Table )
    *  . Type_of_Stability, the value that takes this function for parameters values 
    *  as defined in input Table. 
 */  
-double Type_of_Stability; 
+  double Type_of_Stability; 
     
-       Type_of_Stability = Calculate_Stability_Stationary_Point( Table );    
+  Type_of_Stability = Calculate_Stability_Stationary_Point( Table );    
   
 return(Type_of_Stability);
 }

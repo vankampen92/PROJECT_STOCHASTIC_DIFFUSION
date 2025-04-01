@@ -714,7 +714,7 @@ void Writing_Alpha_Nu_Theta_Vectors(Parameter_Table * Table)
   Print_Press_Key(0,0,".");
 } 
 
-/* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
+ /* void Parameter_Table_Index_Update(int * Index, int N, Parameter_Table * P) */
 /* {                                                                          */
 /*   int i;                                                                   */
 /*   for(i=0; i<N; i++) P->Index[i] = Index[i];                               */
@@ -1252,7 +1252,7 @@ void Parameter_Values_into_Parameter_Table(Parameter_Table * P)
   P->No_of_RESOURCES  = P->No_of_STRAINS * pow(2.0, P->No_of_PLASMIDS); /* Potential number of different species */
   P->No_of_PROFILES   = pow(2.0, P->No_of_PLASMIDS); /* Potential number of different profiles per strain */
 
-  #elif defined DIFFUSION_ECO_1B1P
+#elif defined DIFFUSION_ECO_1B1P
 
   P->No_of_STRAINS    = No_of_RESOURCES;   /* -HS 1, always, please */
   P->No_of_PLASMIDS   = No_of_INDIVIDUALS; /* -HN 1, always, please */

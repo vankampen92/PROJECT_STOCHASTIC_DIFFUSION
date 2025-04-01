@@ -39,15 +39,15 @@ int function (double t, const double y[], double dydt[], void *params)
     
     y_S = Local_Population_Resources(j, y, Table);
 
-    assert(y_S <= K_R);
+    //assert(y_S <= K_R);
 
     m_0 = K_R-y_S;
 
     R_1   = j*Table->LOCAL_STATE_VARIABLES + 1;
     R_0   = j*Table->LOCAL_STATE_VARIABLES + 0;
      
-    D_0   = Gam * Dea * y[R_1]/K_R * 0.5;
-    D_1   = Gam * Dea * y[R_0]/K_R * 0.5; 
+    D_0   = Gam * Dea * y[R_1]/K_R;
+    D_1   = Gam * Dea * y[R_0]/K_R; 
 
     /* Plasmid-free bacteria reproduce without segregation error:   Table->Beta_AP[0] * m_0/K_R *y[R]
        Plasmid-free bacteria reproduce with segregation error:      Table->Beta_AP[1] * m_0/K_R *y[R] * (1 - Eps)

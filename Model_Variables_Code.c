@@ -1019,7 +1019,7 @@ void Model_Variables_Code_into_Parameter_Table (Parameter_Table * Table)
       Table->TOTAL_No_of_MODEL_PARAMETERS = n;
       break;
 
-  case 22: /* ECO_1B1P * * * * * * * * * */
+  case 22: /* ECO_1B1P * * * * * * * * * * */
 
     /* No_of_EVENTS, i.e, common events that can occur to every species: */
     Table->No_of_EVENTS = 5;  /* All species (strains or phenotypes) can undergo the 
